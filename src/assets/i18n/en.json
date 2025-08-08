@@ -1,0 +1,13 @@
+{
+  "common": { "welcome": "Welcome", "logout": "Log out" },
+  "comps": {
+    "header": {
+      "member": "Member area"
+    },
+    "footer": {},
+    "public_site": {
+      "home": {}
+    },
+    "back_office": {}
+  }
+}

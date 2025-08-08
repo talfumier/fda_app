@@ -1,0 +1,13 @@
+{
+  "common": { "welcome": "Bienvenue", "logout": "Déconnexion" },
+  "comps": {
+    "header": {
+      "member": "Espace membre"
+    },
+    "footer": {},
+    "public_site": {
+      "home": {}
+    },
+    "back_office": {}
+  }
+}
