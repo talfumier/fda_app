@@ -55,10 +55,9 @@ app.use(Quasar, {
 // 💡 Watch and update Quasar lang on language change
 watch(
   () => i18n.global.locale.value,
-  async (newLocale) => {
+  (newLocale) => {
     localStorage.setItem('locale', newLocale)
-    const langModule = await import(`quasar/lang/${newLocale}`)
-    app.config.globalProperties.$q.lang.set(langModule.default)
+    app.config.globalProperties.$q.lang.set(quasarLangs[newLocale])
   },
 )
 

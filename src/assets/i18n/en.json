@@ -2,9 +2,16 @@
   "common": { "welcome": "Welcome", "logout": "Log out" },
   "comps": {
     "header": {
-      "member": "Member area"
+      "member-btn": { "text": "Member area", "tip": "Sign-in to your account" },
+      "settings-ico": { "tip": "Account settings" },
+      "power-ico": { "tip": "Log-out" }
     },
-    "footer": {},
+    "footer": {
+      "privacy": "Privacy policy",
+      "legal": "Legal notice",
+      "map": "Site map",
+      "contact": "Contact"
+    },
     "public_site": {
       "home": {}
     },

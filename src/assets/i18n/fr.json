@@ -2,9 +2,16 @@
   "common": { "welcome": "Bienvenue", "logout": "Déconnexion" },
   "comps": {
     "header": {
-      "member": "Espace membre"
+      "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
+      "settings-ico": { "tip": "Paramêtres du compte" },
+      "power-ico": { "tip": "Déconnexion" }
     },
-    "footer": {},
+    "footer": {
+      "privacy": "Confidentialité",
+      "legal": "Mentions légales",
+      "map": "Plan du site",
+      "contact": "Contact"
+    },
     "public_site": {
       "home": {}
     },

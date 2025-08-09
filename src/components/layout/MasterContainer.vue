@@ -2,12 +2,12 @@
 import MasterLayout from "./MasterLayout.vue";
 import Footer from './Footer.vue';
 
-const loggedIn=false
+const loggedIn=!false
 </script>
 
 <template>
   <MasterLayout :loggedIn="loggedIn">
-    <template #footer  v-if="!loggedIn">
+    <template #footer>
       <Footer></Footer> 
     </template>
   </MasterLayout>
