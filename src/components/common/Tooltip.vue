@@ -1,13 +1,20 @@
 <script setup>
-const {tt_text}=defineProps({
-  tt_text:String
-})
-
+  defineProps({
+    tt_text:String,
+    small:{
+      type:Boolean,
+      default:true
+    },
+    wrap:{
+      type:Boolean,
+      default:false
+    },
+  })
 </script>
 
 <template>
 <q-tooltip 
-      class="tooltip"
+      :class="['tooltip', small ? 'small' : 'large', wrap?'':'nowrap']"
       anchor="bottom middle"
       self="center middle"
       >
@@ -21,6 +28,14 @@ const {tt_text}=defineProps({
     color: var(--white);
     padding: 5px 12px;
     border-radius: 6px;
+  }
+  .nowrap {
+    white-space: nowrap;
+  }
+  .large {    
     font-size: 1.5rem;
   }
-</style>
+  .small {    
+    font-size: 1.2rem;
+  }
+  </style>

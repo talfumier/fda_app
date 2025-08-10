@@ -12,6 +12,10 @@
       "map": "Site map",
       "contact": "Contact"
     },
+    "navbar": {
+      "dashboard": "Dashboard",
+      "expos": "Exhibitions"
+    },
     "public_site": {
       "home": {}
     },

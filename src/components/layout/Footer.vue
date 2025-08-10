@@ -1,6 +1,6 @@
 <script setup>
-defineProps({
-})
+  defineProps({
+  })
 
 </script>
 
@@ -44,8 +44,8 @@ defineProps({
   }
   img {
     width:70px;
-    height:50px;
-    padding-top:10px;
+    height:calc(100% - 10px);
+    padding-top: 5px;
   }
   p {
     display: inline-block;

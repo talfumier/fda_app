@@ -1,13 +1,14 @@
 <script setup>
 import { useSlots } from 'vue'
-import HeaderMember from './HeaderMember.vue'
-import LangSwitcher from './LangSwitcher.vue';
+  import HeaderMember from './HeaderMember.vue'
+  import LangSwitcher from './LangSwitcher.vue';
+  import NavBar from './navbar/NavBar.vue';
 
-const {loggedIn}=defineProps({
-  loggedIn:Boolean
-})
-const slots = useSlots()
-</script>
+  const {loggedIn}=defineProps({
+    loggedIn:Boolean
+  })
+  const slots = useSlots()
+  </script>
 
 <template>
   <div class="layout">
@@ -24,6 +25,9 @@ const slots = useSlots()
         </div>
       </div>
     </header>
+    <aside>
+      <NavBar></NavBar>
+    </aside>
     <main>
       <router-view ></router-view>
     </main>
@@ -34,13 +38,22 @@ const slots = useSlots()
 </template>
 
 <style scoped>
+  div.layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height:100vh;
+    min-width:525px;
+  }
   header { 
+    grid-column: span 2;
     position:relative;
     display: flex;
     justify-content:space-around;
     align-items: center;
     background-color: var(--green);
-    border: 1px solid #ddd;
+    border: solid #ddd;
+    border-width:0 1px;
     border-radius: 8px 8px 0 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     height:130px;
@@ -82,19 +95,13 @@ const slots = useSlots()
     justify-content: center;
     gap: 20px;
   }
-  div.layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-    min-height:100vh;
-    min-width:525px;
-  }
   main {
     font-family: "Roboto", sans-serif;
     background-color: var(--grey-light);
     overflow-y:auto;
   }
   footer {    
+    grid-column: span 2;
     min-width:525px;
   }
   @media screen and (min-width: 600px) {

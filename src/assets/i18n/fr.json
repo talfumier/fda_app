@@ -12,6 +12,10 @@
       "map": "Plan du site",
       "contact": "Contact"
     },
+    "navbar": {
+      "dashboard": "Tableau de bord",
+      "expos": "Expositions"
+    },
     "public_site": {
       "home": {}
     },

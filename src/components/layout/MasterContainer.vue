@@ -1,8 +1,8 @@
 <script setup>
-import MasterLayout from "./MasterLayout.vue";
-import Footer from './Footer.vue';
+  import MasterLayout from "./MasterLayout.vue";
+  import Footer from './Footer.vue';
 
-const loggedIn=!false
+  const loggedIn=false
 </script>
 
 <template>
