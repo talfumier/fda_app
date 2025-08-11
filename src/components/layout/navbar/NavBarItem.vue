@@ -1,23 +1,22 @@
 <script setup>
   import Tooltip from '../../common/Tooltip.vue';
+
   defineProps({
     url:{type:String},
-    icon:{type:String},
+    icon:{type:String,required:false},
     text:{type:String},
-    isRotated:{type:Boolean},
-    wrap:{
-      type:Boolean,
-      default:false,
-    },
+    isRotated:{type:Boolean,default:false}, 
+    wrap:{ type:Boolean,default:false},  //tooltip wrap
   })
-
 </script>
 
 <template>
   <RouterLink :to="url">
-    <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="$t(text)" ></Tooltip>
-    <q-icon :name="icon" size="3rem"></q-icon>
-    <p :class="[isRotated?'folded':'',wrap?'':'nowrap']">{{ $t(text) }}</p>
+    <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="$t(text)" :wrap="wrap"></Tooltip>
+    <div :class="[isRotated?'folded':'']">
+      <q-icon v-if="icon" :name="icon" size="3rem"></q-icon>
+      <p>{{ $t(text) }}</p>
+    </div>
   </RouterLink>
 </template>
 
@@ -30,19 +29,27 @@
   }
 </style>
 <style scoped>
-  .q-icon {    
-    padding: 0 10px;
+  div {
+    display:flex;
+    align-items: center;
+    justify-content:left;
+  }
+  div.folded {
+    justify-content:center;
+  }
+  .q-icon {  
+    padding-right: 10px;  
+    padding-left: 5px;
     text-align: center;
   }
+  div.folded .q-icon {
+    padding:0;
+  }
   p {
-    display:inline-block;  
     margin:0;
     transition: display 0.6s ease;
   }
-  p.nowrap {
-    white-space: nowrap;
-  }
-  p.folded {
+  div.folded p {
     display:none;
   }
   a {

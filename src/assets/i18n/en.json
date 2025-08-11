@@ -6,15 +6,13 @@
       "settings-ico": { "tip": "Account settings" },
       "power-ico": { "tip": "Log-out" }
     },
-    "footer": {
+    "navbar": {
+      "dashboard": "Dashboard",
+      "expos": "Exhibitions",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
       "map": "Site map",
       "contact": "Contact"
-    },
-    "navbar": {
-      "dashboard": "Dashboard",
-      "expos": "Exhibitions"
     },
     "public_site": {
       "home": {}

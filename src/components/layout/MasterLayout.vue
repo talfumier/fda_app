@@ -1,5 +1,5 @@
 <script setup>
-import { useSlots } from 'vue'
+  import { useSlots } from 'vue'
   import HeaderMember from './HeaderMember.vue'
   import LangSwitcher from './LangSwitcher.vue';
   import NavBar from './navbar/NavBar.vue';

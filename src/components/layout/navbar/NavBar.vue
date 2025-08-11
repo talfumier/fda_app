@@ -1,8 +1,9 @@
 <script setup>
   import { ref } from 'vue';
   import Tooltip from '../../common/Tooltip.vue';
-  import items from "./nav_items.json"
+  import items from "./items.json"
   import NavBarItem from './NavBarItem.vue';
+  
   defineProps({
     wrap:{
       type:Boolean,
@@ -76,7 +77,6 @@
     position: relative;
     display:flex;
     flex-direction: column;
-    align-items:center;
     list-style: none;
     padding: 0;
     margin: 0;

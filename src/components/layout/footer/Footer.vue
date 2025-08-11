@@ -1,4 +1,7 @@
 <script setup>
+  import items from "./items.json"
+  import NavBarItem from "../navbar/NavBarItem.vue";
+
   defineProps({
   })
 
@@ -6,11 +9,10 @@
 
 <template>
   <ul>
-    <li class="lh"><img src="../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></li>
-    <li><p>{{$t('comps.footer.privacy')}}</p> </li>
-    <li><p>{{$t('comps.footer.legal')}}</p></li>
-    <li><p>{{$t('comps.footer.map')}}</p></li>
-    <li><p>{{$t('comps.footer.contact')}}</p></li>
+    <li class="lh"><img src="../../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></li>
+    <li v-for="(item, idx) in items" :key="idx">
+      <NavBarItem :url="item.url" :text="'comps.navbar.'+item.text" />
+    </li>
     <li class="rh">
       <p>©&nbsp;</p>2025<p></p><p class="q-pl-sm">ht&nbsp; consultant</p>
     </li>
@@ -49,9 +51,16 @@
   }
   p {
     display: inline-block;
-    margin:0;
     line-height: 25px;
-    text-align: center;
+    margin:0;
+  }
+   a {
+    color: var(--orange);
+  }
+  a:hover {
+    color: var(--white-light);
+    font-weight:normal;
+    background-color:transparent;
   }
   @media screen and (min-width: 600px) {
     ul {

@@ -1,6 +1,6 @@
 <script setup>
   import MasterLayout from "./MasterLayout.vue";
-  import Footer from './Footer.vue';
+  import Footer from './footer/Footer.vue';
 
   const loggedIn=false
 </script>

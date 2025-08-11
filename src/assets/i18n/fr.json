@@ -6,15 +6,13 @@
       "settings-ico": { "tip": "Paramêtres du compte" },
       "power-ico": { "tip": "Déconnexion" }
     },
-    "footer": {
+    "navbar": {
+      "dashboard": "Tableau de bord",
+      "expos": "Expositions",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
       "map": "Plan du site",
       "contact": "Contact"
-    },
-    "navbar": {
-      "dashboard": "Tableau de bord",
-      "expos": "Expositions"
     },
     "public_site": {
       "home": {}
