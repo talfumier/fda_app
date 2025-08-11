@@ -1,0 +1,22 @@
+{
+  "common": { "welcome": "Bienvenue", "logout": "Déconnexion" },
+  "comps": {
+    "header": {
+      "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
+      "settings-ico": { "tip": "Paramêtres du compte" },
+      "power-ico": { "tip": "Déconnexion" }
+    },
+    "navbar": {
+      "dashboard": "Tableau de bord",
+      "expos": "Expositions",
+      "privacy": "Confidentialité",
+      "legal": "Mentions légales",
+      "map": "Plan du site",
+      "contact": "Contact"
+    },
+    "public_site": {
+      "home": {}
+    },
+    "back_office": {}
+  }
+}
