@@ -41,4 +41,5 @@ jobs:
                         
             rm -rf /var/www/fda.fr/front/test/dist
             mv dist /var/www/fda.fr/front/test
+            rm -rf /var/www/fda.fr/front/temp/dist
           EOF
