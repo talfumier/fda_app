@@ -29,7 +29,6 @@ jobs:
             --exclude='.gitignore' \
             --exclude='node_modules' \
             -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SERVER_SSH_PORT }}" \
-
             ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/fda.fr/front/test/temp
 
       - name: Build and restart remotely
