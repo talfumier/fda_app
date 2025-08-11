@@ -39,6 +39,6 @@ jobs:
             npm install
             npm run build
             
-            rm -rf /var/www/fda.fr/front/test
             mv dist /var/www/fda.fr/front/test
+            rm -rf /var/www/fda.fr/front/temp/dist
           EOF
