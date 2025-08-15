@@ -40,13 +40,9 @@ app.use(Quasar, {
   config: {
     //placeholder for further Quasar config (default colors, default component settings, brand palette, dark mode, global input defaults, etc.)
     brand: {
-      primary: '#027be3',
+      primary: '#3c66af',
       secondary: '#26a69a',
       accent: '#9c27b0',
-    },
-    notify: {
-      position: 'top-right',
-      timeout: 2500,
     },
   },
   lang: quasarLangs[locale], //translate Quasar UI elements (dialogs, calendars, etc.) to match the current locale

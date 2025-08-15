@@ -1,10 +1,25 @@
 {
-  "common": { "welcome": "Welcome", "logout": "Log out" },
+  "common": {
+    "welcome": "Welcome",
+    "logout": "Log out",
+    "select": "Please select an item ..."
+  },
   "comps": {
     "header": {
       "member-btn": { "text": "Member area", "tip": "Sign-in to your account" },
       "settings-ico": { "tip": "Account settings" },
       "power-ico": { "tip": "Log-out" }
+    },
+    "login": {
+      "user_id": "User ID",
+      "role": "Role",
+      "pwd": "Password",
+      "pwd_check": "Password check",
+      "sign_in": "Sign in",
+      "register": "Register",
+      "pwd_forgot": "forgot password ?",
+      "no_account": "don't have an account ?",
+      "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>"
     },
     "navbar": {
       "dashboard": "Dashboard",
@@ -14,9 +29,26 @@
       "map": "Site map",
       "contact": "Contact"
     },
+    "validation": {
+      "fields": {
+        "not_null": "<span><strong>Non-zero</strong> value required !</span>",
+        "pwd": "<span>Invalid password {'>>>'} at least 8 characters,</span><br/><span> 1 special character, 1 uppercase, 1 number !</span>",
+        "pwd_match": "<span>Passwords don't match !</span>",
+        "email": "<span>Invalid email !</span>",
+        "checked": "<span>Checkbox must be checked !</span>",
+        "unchecked": "<span>Checkbox must be un-checked !</span>",
+        "int": "<span>Invalid integer !</span>",
+        "date": "<span>Format <strong>dd.MM.yyyy</strong> required !</span>",
+        "date_time": "<span>Format <strong>jj.MM.yyyy HH.mm</strong> required !</span>"
+      }
+    },
     "public_site": {
       "home": {}
     },
     "back_office": {}
+  },
+  "errors": {
+    "network": "Network or connection not available !",
+    "unexpected": "Oups ... an unexpected error has occured !"
   }
 }

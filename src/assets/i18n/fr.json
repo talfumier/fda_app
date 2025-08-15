@@ -1,10 +1,25 @@
 {
-  "common": { "welcome": "Bienvenue", "logout": "Déconnexion" },
+  "common": {
+    "welcome": "Bienvenue",
+    "logout": "Déconnexion",
+    "select": "Choisir un élément de la liste ..."
+  },
   "comps": {
     "header": {
       "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
       "settings-ico": { "tip": "Paramêtres du compte" },
       "power-ico": { "tip": "Déconnexion" }
+    },
+    "login": {
+      "user_id": "Identifiant",
+      "role": "Rôle",
+      "pwd": "Mot de passe",
+      "pwd_check": "Vérification mot de passe",
+      "sign_in": "Connexion",
+      "register": "Créer le compte",
+      "pwd_forgot": "mot de passe oublié ?",
+      "no_account": "pas encore de compte ?",
+      "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>"
     },
     "navbar": {
       "dashboard": "Tableau de bord",
@@ -14,9 +29,26 @@
       "map": "Plan du site",
       "contact": "Contact"
     },
+    "validation": {
+      "fields": {
+        "not_null": "<span>Valeur <strong>non nulle</strong> obligatoire !</span>",
+        "pwd": "<span>Mot de passe non valide {'>>>'} 8 caractères minimum,</span><br/><span>1 caractère spécial, 1 majuscule, 1 chiffre !</span>",
+        "pwd_match": "<span>Les mots de passe saisis sont différents !</span>",
+        "email": "<span>Email non valide !</span>",
+        "checked": "<span>La case à cocher doit être cochée !</span>",
+        "unchecked": "<span>La case à cocher doit être décochée !</span>",
+        "int": "<span>Nombre entier non valide !</span>",
+        "date": "<span>Format <strong>jj.MM.aaaa</strong> non respecté !</span>",
+        "date_time": "<span>Format <strong>jj.MM.aaaa HH.mm</strong> non respecté !</span>"
+      }
+    },
     "public_site": {
       "home": {}
     },
     "back_office": {}
+  },
+  "errors": {
+    "network": "réseau ou connexion non disponible!",
+    "unexpected": "Oups ... une errur inattendue est survenue !"
   }
 }

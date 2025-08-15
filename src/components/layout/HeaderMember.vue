@@ -1,30 +1,34 @@
-
 <script setup>
+  import { ref } from 'vue';
   import Tooltip from '../common/Tooltip.vue';
+  import FormLogin from '../login/FormLogin.vue';
+
   const {loggedIn}=defineProps({
     loggedIn:Boolean
   })
+  const openLogin=ref(false)
 </script>
 
 <template>
   <q-btn 
-  class="btn bg-grey-3" 
-  :class="loggedIn ? 'hidden' : 'visible'"
-  rounded standout
-  icon="login" 
-  no-wrap
-  :label="$t('comps.header.member-btn.text')">
-    <Tooltip :tt_text="$t('comps.header.member-btn.tip')" :small="false"></Tooltip>
+    class="btn bg-grey-3" 
+    :class="loggedIn ? 'hidden' : 'visible'"
+    rounded standout
+    icon="login" 
+    no-wrap
+    :label="$t('comps.header.member-btn.text')"
+    @click="openLogin=true">
+      <Tooltip :tt_text="$t('comps.header.member-btn.tip')" :small="false"></Tooltip>
   </q-btn>
-<div class="icons" :class="loggedIn ? 'visible' : 'hidden'">
-  <q-icon name="settings">
-    <Tooltip :tt_text="$t('comps.header.settings-ico.tip')" :small="false"></Tooltip>
-  </q-icon>  
-  <q-icon name="power_settings_new">    
-    <Tooltip :tt_text="$t('comps.header.power-ico.tip')" :small="false"></Tooltip>
-  </q-icon>
-
-</div>
+  <FormLogin v-if="openLogin" @closeForm="openLogin=false"></FormLogin>
+  <div class="icons" :class="loggedIn ? 'visible' : 'hidden'">
+    <q-icon name="settings">
+      <Tooltip :tt_text="$t('comps.header.settings-ico.tip')" :small="false"></Tooltip>
+    </q-icon>  
+    <q-icon name="power_settings_new">    
+      <Tooltip :tt_text="$t('comps.header.power-ico.tip')" :small="false"></Tooltip>
+    </q-icon>
+  </div>
 </template>
 
 <style scoped>
