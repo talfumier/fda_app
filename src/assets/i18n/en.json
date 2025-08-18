@@ -8,7 +8,10 @@
     "header": {
       "member-btn": { "text": "Member area", "tip": "Sign-in to your account" },
       "settings-ico": { "tip": "Account settings" },
-      "power-ico": { "tip": "Log-out" }
+      "power-ico": {
+        "tip": "Log-out",
+        "dialog": "Your are about to be logged-out,<br/>please confirm."
+      }
     },
     "login": {
       "user_id": "User ID",
@@ -47,8 +50,5 @@
     },
     "back_office": {}
   },
-  "errors": {
-    "network": "Network or connection not available !",
-    "unexpected": "Oups ... an unexpected error has occured !"
-  }
+  "errors": {}
 }

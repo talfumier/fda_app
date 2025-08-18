@@ -1,5 +1,5 @@
 import { createApp, watch } from 'vue'
-import { Quasar, Notify } from 'quasar'
+import { Quasar, Notify, Dialog, ClosePopup } from 'quasar'
 import './assets/css/global.css'
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
@@ -46,7 +46,8 @@ app.use(Quasar, {
     },
   },
   lang: quasarLangs[locale], //translate Quasar UI elements (dialogs, calendars, etc.) to match the current locale
-  plugins: { Notify },
+  plugins: { Notify, Dialog },
+  directives: { ClosePopup },
 })
 // 💡 Watch and update Quasar lang on language change
 watch(

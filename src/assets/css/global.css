@@ -65,3 +65,9 @@ body {
   height: 100vh;
   position:relative;
 }
+.toast.no-cap {
+  text-transform: none;
+}
+.q-dialog__inner--minimized>.q-card {
+  max-width: 300px;
+}

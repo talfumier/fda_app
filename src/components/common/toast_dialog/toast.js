@@ -1,5 +1,4 @@
 import { Notify } from 'quasar'
-
 export function toastInfo(message) {
   toast(message, 'primary', 'check')
 }
@@ -12,13 +11,7 @@ export function toastWarning(message) {
 export function toastError(message) {
   toast(message, 'negative', 'error')
 }
-export function toast(
-  message,
-  color = 'primary',
-  icon = 'check',
-  position = 'top-right',
-  timeout = 2500,
-) {
+function toast(message, color = 'primary', icon = 'check', position = 'top-right', timeout = 2500) {
   // Give this toast a unique root class so we can reliably target it
   const uid = `q-notif-${Date.now()}-${Math.random().toString(36).slice(2)}`
   const rootClass = `hoverable-${uid}`
@@ -29,6 +22,7 @@ export function toast(
     icon,
     position,
     timeout: 0, // keep it until we say so
+    html: true,
     classes: rootClass, // attaches to the toast root element
   })
   // Get a dismiss function compatible with both Quasar return styles

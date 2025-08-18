@@ -52,6 +52,7 @@ const selectedOption = computed(() => {
     options-dense
     dense
     bg-color="grey-3"
+    tabindex="-1"
   >
     <template v-slot:selected >
       <div class="row items-center no-wrap q-pa-xs q-selected" >

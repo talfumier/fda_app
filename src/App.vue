@@ -6,8 +6,7 @@ import MasterContainer from './components/layout/MasterContainer.vue';
   <MasterContainer ></MasterContainer>
 </template>
 
-<style scoped>
-
+<style>
 </style>
 
 

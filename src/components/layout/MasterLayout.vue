@@ -1,19 +1,22 @@
 <script setup>
-  import { useSlots } from 'vue'
+  import cookies from 'js-cookie'
+  import { ref, useSlots } from 'vue'
   import HeaderMember from './HeaderMember.vue'
   import LangSwitcher from './LangSwitcher.vue';
   import NavBar from './navbar/NavBar.vue';
 
-  const {loggedIn}=defineProps({
-    loggedIn:Boolean
-  })
+  const loggedIn=ref(cookies.get('user')!==undefined)
   const slots = useSlots()
+
+  function handleLogInOut(val){
+    loggedIn.value=val
+  }  
   </script>
 
 <template>
   <div class="layout">
     <header>
-      <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo" />
+      <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo"/>
       <div class="container">
         <h1 >
           <span class="span-lh"style="color:#fcb414;">Festival des Arts</span>
@@ -21,12 +24,14 @@
         </h1>
         <div class="container-lang-icons">
           <LangSwitcher ></LangSwitcher>
-          <HeaderMember :loggedIn="loggedIn" ></HeaderMember>
+          <HeaderMember :logged-in="loggedIn" @log-out="handleLogInOut(false)" @log-in="handleLogInOut(true)"></HeaderMember>
         </div>
       </div>
     </header>
     <aside>
-      <NavBar></NavBar>
+      <Transition name="fade">
+        <NavBar v-if="loggedIn"></NavBar>
+      </Transition>
     </aside>
     <main>
       <router-view ></router-view>
@@ -38,6 +43,12 @@
 </template>
 
 <style scoped>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.6s ease;
+  }
+  .fade-enter-from, .fade-leave-to {
+    opacity: 0;
+  }
   div.layout {
     display: grid;
     grid-template-columns: auto 1fr;

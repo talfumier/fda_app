@@ -3,7 +3,7 @@
   import { ref,reactive } from 'vue';
   import {validate,strToDate} from"./validation.js"
   
-  const { t } = useI18n()
+  const { t,locale } = useI18n()
   const props=defineProps({
     name:String,
     field_type:{type:String,default:"input"},
@@ -22,7 +22,7 @@
   const data=ref(""), dirty=ref(false), type=ref(props.data_type)
   const fieldValid=reactive({valid: true, msg: null})
 
-  const emit = defineEmits(['onHandleChange','onHandleEnter'])
+  const emit = defineEmits(['change'])
 
 
   if(props.value.toString().length>0) {  //initial value if present
@@ -45,7 +45,7 @@
     if (props.required && props.field_type !== 'select') 
       valid = validate(val,props.name.includes('pwd')?'pwd':props.format,t);
     Object.assign(fieldValid, valid)
-    emit('onHandleChange', //notify the parent component
+    emit('change', //notify the parent component
       props.name,
       valid.valid,
       props.format !== "date" && props.format !== "date-time" ? val : strToDate(val),
@@ -55,9 +55,6 @@
   function handleVisibility(){
      if(type.value==='text') type.value='password'
      else  type.value='text'
-  }
-  function handleEnter(e){
-    if (e.key === 'Enter') emit('onHandleEnter');
   }
 
 </script>
@@ -89,7 +86,6 @@
       @input="(e) => {
         if(dirty && data_type!=='checkbox') handleChange(e.target.value)
       }"
-      @keydown="handleEnter"
     />
     <q-icon  v-if="data_type==='password'"
       :name="type==='text'?'visibility_off':'visibility'" size="3rem"
@@ -111,7 +107,6 @@
       @input="(e) => {
         if(dirty)handleChange(e.target.value)
       }"
-      @keydown="handleEnter"
     >
     </textarea>
     
@@ -119,12 +114,11 @@
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid']"
       :value="data.toString().length>0?data:'-1)'"
       :disabled="disabled"
-      @change="handleChange($event.target.value)"      
-      @keydown="handleEnter"
+      @change="handleChange($event.target.value)"     
     >
       <option key="-1" value="-1" disabled hidden>{{ t('common.select') }}</option>
       <option v-for="(option,idx) in options" :key="idx":value="option[0]">
-        {{option[1]}}
+        {{option[option.length===3?locale==='fr'?1:2:1]}}
       </option>
     </select>
     <!-- validatiion message -->

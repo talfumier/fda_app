@@ -8,7 +8,10 @@
     "header": {
       "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
       "settings-ico": { "tip": "Paramêtres du compte" },
-      "power-ico": { "tip": "Déconnexion" }
+      "power-ico": {
+        "tip": "Déconnexion",
+        "dialog": "Vous êtes sur le point d'être déconnecté,<br/>merci de confirmer."
+      }
     },
     "login": {
       "user_id": "Identifiant",
@@ -47,8 +50,5 @@
     },
     "back_office": {}
   },
-  "errors": {
-    "network": "réseau ou connexion non disponible!",
-    "unexpected": "Oups ... une errur inattendue est survenue !"
-  }
+  "errors": {}
 }

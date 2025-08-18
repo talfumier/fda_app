@@ -26,7 +26,7 @@
           @click="rotateIcon">
         </q-icon>
         <li>
-          <RouterLink to="/">
+          <RouterLink to="/" tabindex="-1">
             <img class="avatar" src="../../../assets/images/Egyptien.jpg" alt="avatar">
             <Tooltip :tt_text="$t('comps.header.settings-ico.tip')"></Tooltip>
           </RouterLink>

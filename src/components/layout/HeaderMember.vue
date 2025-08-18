@@ -1,37 +1,129 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref,defineEmits} from 'vue';
+  import { useI18n } from 'vue-i18n';
+  import cookies from 'js-cookie'
+  import { decodeJWT } from '@/services/httpUsers.js';
   import Tooltip from '../common/Tooltip.vue';
   import FormLogin from '../login/FormLogin.vue';
-
+  import { useQuasar } from 'quasar'
+  import { confirm } from '../common/toast_dialog/dialog.js';
+  
   const {loggedIn}=defineProps({
-    loggedIn:Boolean
+    loggedIn: { type: Boolean, default: false }
   })
+  
+  const {t}=useI18n()
+  const $q=useQuasar()
   const openLogin=ref(false)
+  const user=cookies.get('user')?decodeJWT(cookies.get('user')):null
+  const showPopup = ref(false)
+
+  const emit=defineEmits(['logOut','logIn']) 
+
+  async function handleLogOut(){    
+    if (!(await confirm($q,t('comps.header.power-ico.dialog'),'ok'))) return
+    cookies.remove('user')
+    emit('logOut')
+  }
+
+let closeTimer = null
+function openMenu () {
+  clearTimeout(closeTimer)
+  showPopup.value = true
+}
+function scheduleClose () {
+  clearTimeout(closeTimer)
+  // small delay so the cursor can travel into the menu without closing it
+  closeTimer = setTimeout(() => (showPopup.value = false), 120)
+}
+function cancelClose () {
+  clearTimeout(closeTimer)
+}
+function forceClose () {
+  showPopup.value = false
+}
 </script>
 
 <template>
   <q-btn 
-    class="btn bg-grey-3" 
-    :class="loggedIn ? 'hidden' : 'visible'"
+    :class="['btn', 'bg-grey-3', !loggedIn?'visible':'hidden']" 
     rounded standout
     icon="login" 
     no-wrap
     :label="$t('comps.header.member-btn.text')"
-    @click="openLogin=true">
+    @click="openLogin=true"
+    tabindex="-1"
+    >
       <Tooltip :tt_text="$t('comps.header.member-btn.tip')" :small="false"></Tooltip>
   </q-btn>
-  <FormLogin v-if="openLogin" @closeForm="openLogin=false"></FormLogin>
-  <div class="icons" :class="loggedIn ? 'visible' : 'hidden'">
-    <q-icon name="settings">
-      <Tooltip :tt_text="$t('comps.header.settings-ico.tip')" :small="false"></Tooltip>
+  <Transition name="fade">
+    <FormLogin v-if="openLogin" @close-form="openLogin=false" @log-in="emit('logIn')"></FormLogin>
+  </Transition>
+  <div :class="['icons',loggedIn?'visible':'hidden']" 
+      @mouseenter="openMenu"
+      @mouseleave="scheduleClose"
+      @click="openMenu"
+    >     
+    <q-icon 
+      name="account_circle"
+      role="button"
+      tabindex="-1"
+      class="cursor-pointer"
+      >
+      <q-menu
+        v-model="showPopup"
+        no-parent-event   
+        transition-show="fade"
+        transition-hide="fade"
+        :offset="[0, 10]" 
+      >
+        <div @mouseenter="cancelClose" @mouseleave="forceClose">
+        <q-list dense >
+          <q-item 
+            clickable 
+            v-close-popup
+            class="hover-bg-grey-3 hover-text-primary">
+            <div class='btn no-cap'>
+              <q-icon name="account_circle" size="2.5rem" />
+              {{user.email}}
+            </div>
+          </q-item>
+          <q-separator />     
+          <q-item 
+            clickable 
+            v-close-popup 
+            class="hover-bg-grey-3 hover-text-primary "
+            @click="">
+            <div class='text-bolder color-std'>
+              <q-icon name="settings" size="2.5rem" />
+              {{t('comps.header.settings-ico.tip')}}
+            </div>            
+          </q-item>   
+          <q-separator />    
+          <q-item 
+            clickable 
+            v-close-popup 
+            class="hover-bg-grey-3 hover-text-primary "
+            @click="handleLogOut">
+            <div class='text-bolder log-out'>
+              <q-icon name="power_settings_new" size="2.5rem" />
+              {{t('comps.header.power-ico.tip')}}
+            </div>            
+          </q-item>
+        </q-list>
+      </div>
+      </q-menu>
     </q-icon>  
-    <q-icon name="power_settings_new">    
-      <Tooltip :tt_text="$t('comps.header.power-ico.tip')" :small="false"></Tooltip>
-    </q-icon>
   </div>
 </template>
 
 <style scoped>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.6s ease;
+  }
+  .fade-enter-from, .fade-leave-to {
+    opacity: 0;
+  }
   .btn {
     color:var(--white);
     font-size: 1.5rem;
@@ -40,11 +132,14 @@
     text-transform: capitalize;
     padding:0 15px;
   }
+  .no-cap {
+    text-transform:lowercase;
+  }
   .icons {
     display:flex;
-    gap:20px;
     color:var(--orange);
-    font-size:3.5rem;
+    font-size:4rem;
+    z-index: 5000;
     cursor: pointer;
   }
   .visible {
@@ -52,5 +147,17 @@
   }
   .hidden {
     visibility: hidden;
+  }
+  .q-item div {
+    display:flex;
+    justify-content: left;
+    padding:5px;
+    gap:5px;
+  }
+  .text-bolder {
+    font-weight: bolder;
+  }
+  .log-out {
+    color:var(--red-opaque9);
   }
 </style>

@@ -1,14 +1,19 @@
 <script setup>
-import {ref,reactive,defineEmits,computed,onMounted,onUnmounted} from 'vue'
+import {reactive,defineEmits,computed,onMounted,onUnmounted} from 'vue'
+import { useI18n } from 'vue-i18n'
 import _ from 'lodash'
+import cookies from 'js-cookie'
 import items from "./items.json"
 import {zipToObject} from "../../utilityFunctions.js"
-import InputField from '../common/fields/InputField.vue';
-import { toastInfo } from '../common/toast/toast.js';
-import { getEntities } from '@/services/httpEntities.js';
+import InputField from '../common/fields/InputField.vue'
+import { getEntities } from '@/services/httpEntities.js'
+import { register,login } from '@/services/httpUsers.js'
+import { decodeJWT } from '@/services/httpUsers.js'
+import { toastInfo } from '../common/toast_dialog/toast.js'
+import { translate } from '@/services/httpGoogleServices.js'
 
-defineProps({
-})
+defineProps({})
+const{locale}=useI18n()
 let obj={}
 items.map((item) => {
   obj[item.name]=item.value!==undefined?item.value:""
@@ -24,7 +29,7 @@ const disabled=computed(() => {
   return JSON.stringify(formValid).indexOf(false) !== -1;
 })
 
-const emit=defineEmits(['closeForm']) 
+const emit=defineEmits(['closeForm','logIn']) 
 
 function handleChange(name,valid,val){
   state.data[name]=val
@@ -39,43 +44,59 @@ function handleClick(cs){
       break
   }
 }
-function handleSubmit(){
-  toastInfo('xxxxxx')
+async function handleSubmit(){
+  if (!cookies.get('user')) {
+    let res = null;
+    switch (state.creation) {
+      case true: //register case
+        res = await register(  //error handling and success message managed by axios interceptor in httpService.js
+          state.data.user_id,
+          state.data.role,
+          state.data.pwd
+        );
+        break;
+      case false: //login case
+        res = await login(state.data.user_id, state.data.pwd);
+        if(res.headers) {
+          const {exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
+          cookies.set('user', res.headers['x-auth-token'], { expires: new Date(exp * 1000) })  
+          emit('logIn')         
+        }
+    }
+    emit('closeForm')
+  }
+  else {
+    const {data:text}=await translate({text:`User '${state.data.user_id}' is already signed-in.`,to:locale.value,from:'en'})
+    toastInfo(text)
+  }
 }
-function onHandleClose(){
+function handleClose(){
   emit('closeForm') //notify parent (HeaderMember)
 }
 // role data loading
-const roles = ref([])
 let ctrl // current AbortController
 let alive = true // guard against updates after unmount
-const loading = ref(false)
 async function fetch() {
   if (ctrl) ctrl.abort()
   ctrl = new AbortController()
-  loading.value = true
-  const res=await getEntities('Role',ctrl.signal)
-  if (!alive) return                // component gone? don't touch state
-  roles.value = _.filter(res.data.data,(item) => {
+  const {data}=(await getEntities('Role',ctrl.signal)).data
+  if (!alive) return                // component gone? don't touch state  
+  return _.filter(data,(item) => {
     return [1,3,5].includes(item.idRole)    //artist, partner, organisation
   })
-  loading.value = false
 }
 let roleOptions=[];
-onMounted(async () => {
-  await fetch()
-  roleOptions = computed(() =>
-    roles.value.map(r => [r.idRole, r[`role_${localStorage.getItem('locale')}`]])
-  )
+onMounted(async () => {  
+  roleOptions = (await fetch()).map(r => [r.idRole, r.role_fr, r.role_en])
 })
 onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 </script>
 
 <template>
-  <div class="modal">
+  <div :class="['modal']">
     <div class="modal-content">
       <div class="icon">
-        <q-icon name="cancel" size="3.5rem" color='blue-grey-9' @click="onHandleClose">
+        <q-icon name="cancel" size="3.5rem" color='blue-grey-9' @click="handleClose" tabindex="-1">
         </q-icon>
       </div>
       <div v-for="(item, idx) in items">
@@ -90,11 +111,7 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
           :default="state.data[item.default]"
           :equal="item.name==='pwd_check'?state.data.pwd:null"
           :options="roleOptions"
-          @onHandleChange="handleChange"
-          @onHandleEnter="() => {
-            if (disabled) return;
-            handleSubmit();
-          }"
+          @change="handleChange"
         >
         </InputField>
       </div>
@@ -104,7 +121,8 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
         no-wrap
         :label="$t('comps.login.sign_in')"
         :disabled="disabled"
-        @click="handleSubmit">
+        @click="handleSubmit"
+      >
       </q-btn>
       <div v-if="!state.creation" class="bottom-actions">
         <div

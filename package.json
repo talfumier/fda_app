@@ -17,6 +17,8 @@
     "date-fns": "^4.1.0",
     "joi": "^18.0.0",
     "joi-password": "^4.2.0",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "quasar": "^2.18.2",
     "translate": "^3.0.1",
