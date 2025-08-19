@@ -14,7 +14,7 @@
       }
     },
     "login": {
-      "user_id": "Identifiant",
+      "email": "Identifiant",
       "role": "Rôle",
       "pwd": "Mot de passe",
       "pwd_check": "Vérification mot de passe",
@@ -22,7 +22,8 @@
       "register": "Créer le compte",
       "pwd_forgot": "mot de passe oublié ?",
       "no_account": "pas encore de compte ?",
-      "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>"
+      "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>",
+      "execute": "Exécuter"
     },
     "navbar": {
       "dashboard": "Tableau de bord",

@@ -12,7 +12,16 @@ const router = createRouter({
     //   path: '/about',
     //   name: 'about',
     //   component: () => import('./components/about/About.vue'), //lazy loading
-    // },
+    // }
+    {
+      path: '/resetpassword',
+      name: 'resetpassword',
+      component: () => import('../login/FormRecover.vue'), //lazy loading
+      props: (route) => ({
+        id: route.query.id ?? null,
+        random: route.query.random ?? null,
+      }),
+    },
   ],
 })
 

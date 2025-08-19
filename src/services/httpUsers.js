@@ -13,8 +13,8 @@ export function register(email, idRole, pwd) {
     pwd,
   })
 }
-export function forgotPassword(email) {
-  return http.post(`${api}/resetpassword/forgotPassword`, { email })
+export function forgotPassword(email, lang) {
+  return http.post(`${api}/resetpassword/forgotPassword`, { email, lang })
 }
 export function resetPassword(id, resetToken, pwd) {
   return http.patch(`${api}/resetpassword/forgotPassword/${id}/${resetToken}`, {

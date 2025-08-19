@@ -14,7 +14,7 @@
       }
     },
     "login": {
-      "user_id": "User ID",
+      "email": "User ID",
       "role": "Role",
       "pwd": "Password",
       "pwd_check": "Password check",
@@ -22,7 +22,8 @@
       "register": "Register",
       "pwd_forgot": "forgot password ?",
       "no_account": "don't have an account ?",
-      "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>"
+      "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>",
+      "execute": "Execute"
     },
     "navbar": {
       "dashboard": "Dashboard",

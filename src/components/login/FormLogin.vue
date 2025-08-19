@@ -7,15 +7,15 @@ import items from "./items.json"
 import {zipToObject} from "../../utilityFunctions.js"
 import InputField from '../common/fields/InputField.vue'
 import { getEntities } from '@/services/httpEntities.js'
-import { register,login } from '@/services/httpUsers.js'
+import { register,login, forgotPassword } from '@/services/httpUsers.js'
 import { decodeJWT } from '@/services/httpUsers.js'
-import { toastInfo } from '../common/toast_dialog/toast.js'
+import { toastError, toastInfo } from '../common/toast_dialog/toast.js'
 import { translate } from '@/services/httpGoogleServices.js'
 
 defineProps({})
-const{locale}=useI18n()
+const{locale,t}=useI18n()
 let obj={}
-items.map((item) => {
+items.login.map((item) => {
   obj[item.name]=item.value!==undefined?item.value:""
 })
 const state=reactive({
@@ -31,7 +31,7 @@ const disabled=computed(() => {
 
 const emit=defineEmits(['closeForm','logIn']) 
 
-function handleChange(name,valid,val){
+function onChange(name,valid,val){
   state.data[name]=val
   formValid[name]=valid 
 }
@@ -50,25 +50,28 @@ async function handleSubmit(){
     switch (state.creation) {
       case true: //register case
         res = await register(  //error handling and success message managed by axios interceptor in httpService.js
-          state.data.user_id,
+          state.data.email,
           state.data.role,
           state.data.pwd
         );
         break;
       case false: //login case
-        res = await login(state.data.user_id, state.data.pwd);
+        res = await login(state.data.email, state.data.pwd);
         if(res.headers) {
-          const {exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
-          cookies.set('user', res.headers['x-auth-token'], { expires: new Date(exp * 1000) })  
-          emit('logIn')         
+          const {email,exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
+          cookies.set('user', res.headers['x-auth-token'], { expires: new Date(exp * 1000) }) 
+          emit('logIn',email)         
         }
     }
     emit('closeForm')
   }
   else {
-    const {data:text}=await translate({text:`User '${state.data.user_id}' is already signed-in.`,to:locale.value,from:'en'})
+    const {data:text}=await translate({text:`User '${state.data.email}' is already signed-in.`,to:locale.value,from:'en'})
     toastInfo(text)
   }
+}
+async function requestNewPwd(){
+  await forgotPassword(state.data.email,locale.value)
 }
 function handleClose(){
   emit('closeForm') //notify parent (HeaderMember)
@@ -99,7 +102,7 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
         <q-icon name="cancel" size="3.5rem" color='blue-grey-9' @click="handleClose" tabindex="-1">
         </q-icon>
       </div>
-      <div v-for="(item, idx) in items">
+      <div v-for="(item, idx) in items.login">
         <InputField  v-if="item.creation.includes(state.creation)"
           :key=idx 
           :name="item.name" 
@@ -111,7 +114,7 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
           :default="state.data[item.default]"
           :equal="item.name==='pwd_check'?state.data.pwd:null"
           :options="roleOptions"
-          @change="handleChange"
+          @change="onChange"
         >
         </InputField>
       </div>
@@ -126,10 +129,8 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
       </q-btn>
       <div v-if="!state.creation" class="bottom-actions">
         <div
-          class="action forgot-pwd "
-          @click="() => {
-            // requestNewPwd(data.data.user_id);
-          }"
+          :class="['action', 'forgot-pwd',!formValid.email?'disabled':'']"
+          @click="formValid.email && requestNewPwd()"
         >
           {{ $t('comps.login.pwd_forgot') }}
         </div>
@@ -189,6 +190,9 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
     font-weight: 550;
     padding-top:7px;
     cursor: pointer;
+  }
+  div.action.disabled {
+    cursor:not-allowed;
   }
   div.action:hover{
     font-weight:900;

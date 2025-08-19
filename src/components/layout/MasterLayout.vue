@@ -8,7 +8,7 @@
   const loggedIn=ref(cookies.get('user')!==undefined)
   const slots = useSlots()
 
-  function handleLogInOut(val){
+  function onLogInOut(val){
     loggedIn.value=val
   }  
   </script>
@@ -24,7 +24,7 @@
         </h1>
         <div class="container-lang-icons">
           <LangSwitcher ></LangSwitcher>
-          <HeaderMember :logged-in="loggedIn" @log-out="handleLogInOut(false)" @log-in="handleLogInOut(true)"></HeaderMember>
+          <HeaderMember :logged-in="loggedIn" @log-out="onLogInOut(false)" @log-in="onLogInOut(true)"></HeaderMember>
         </div>
       </div>
     </header>

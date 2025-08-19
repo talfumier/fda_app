@@ -1,39 +1,55 @@
-[
-  {
-    "name": "user_id",
-    "field_type": "input",
-    "data_type": "email",
-    "format": "email",
-    "creation": [false, true]
-  },
-  {
-    "name": "role",
-    "field_type": "select",
-    "data_type": "text",
-    "value": 1,
-    "format": "",
-    "creation": [true]
-  },
-  {
-    "name": "pwd",
-    "field_type": "input",
-    "data_type": "password",
-    "format": "password-not-null",
-    "creation": [false, true]
-  },
-  {
-    "name": "pwd_check",
-    "field_type": "input",
-    "data_type": "password",
-    "format": "password-not-null",
-    "creation": [true]
-  },
-  {
-    "name": "cgu_cgv",
-    "field_type": "input",
-    "data_type": "checkbox",
-    "value": false,
-    "format": "checked",
-    "creation": [true]
-  }
-]
+{
+  "login": [
+    {
+      "name": "email",
+      "field_type": "input",
+      "data_type": "email",
+      "format": "email",
+      "creation": [false, true]
+    },
+    {
+      "name": "role",
+      "field_type": "select",
+      "data_type": "text",
+      "value": 1,
+      "format": "",
+      "creation": [true]
+    },
+    {
+      "name": "pwd",
+      "field_type": "input",
+      "data_type": "password",
+      "format": "password-not-null",
+      "creation": [false, true]
+    },
+    {
+      "name": "pwd_check",
+      "field_type": "input",
+      "data_type": "password",
+      "format": "password-not-null",
+      "creation": [true]
+    },
+    {
+      "name": "cgu_cgv",
+      "field_type": "input",
+      "data_type": "checkbox",
+      "value": false,
+      "format": "checked",
+      "creation": [true]
+    }
+  ],
+  "recover": [
+    {
+      "name": "pwd",
+      "field_type": "input",
+      "data_type": "password",
+      "format": "password-not-null"
+    },
+    {
+      "name": "pwd_check",
+      "field_type": "input",
+      "data_type": "password",
+      "format": "password-not-null"
+    }
+  ]
+}
