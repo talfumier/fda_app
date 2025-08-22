@@ -9,50 +9,62 @@
       "orderBy": { "field": "lastName", "order": "asc" },
       "fileYes": "image/png, image/jpeg, image/webp"
     },
-    "fields": [
+    "fieldsets": [
       {
-        "name": "lastName",
-        "label_fr": "Nom de famille",
-        "label_en": "Last name",
-        "type": "textarea",
-        "rows": 2,
-        "required": true
+        "name": "personalia",
+        "type": "standard",
+        "fields": [
+          {
+            "name": "lastName",
+            "label_fr": "Nom de famille",
+            "label_en": "Last name",
+            "type": "textarea",
+            "rows": 2,
+            "required": true
+          },
+          {
+            "name": "firstName",
+            "label_fr": "Prénom",
+            "label_en": "First name",
+            "type": "textarea",
+            "rows": 2,
+            "required": true
+          },
+          {
+            "name": "email",
+            "label_fr": "Courriel",
+            "label_en": "Email",
+            "type": "textarea",
+            "rows": 2,
+            "format": "email",
+            "required": true,
+            "listMaster": true
+          }
+        ]
       },
       {
-        "name": "firstName",
-        "label_fr": "Prénom",
-        "label_en": "First name",
-        "type": "textarea",
-        "rows": 2,
-        "required": true
-      },
-      {
-        "name": "email",
-        "label_fr": "Courriel",
-        "label_en": "Email",
-        "type": "textarea",
-        "rows": 2,
-        "format": "email",
-        "required": true,
-        "listMaster": true
-      },
-      {
-        "name": "role",
-        "label_fr": "Role",
-        "label_en": "Role",
-        "type": "textarea",
-        "disabled": true,
-        "rows": 1
-      },
-      {
-        "name": "validated",
-        "label_fr": "Compte Validé",
-        "label_en": "",
-        "type": "textarea",
-        "format": "date-time",
-        "disabled": true,
-        "rows": 1,
-        "required": false
+        "name": "account",
+        "type": "standard",
+        "fields": [
+          {
+            "name": "idRole",
+            "label_fr": "Role",
+            "label_en": "Role",
+            "type": "textarea",
+            "disabled": true,
+            "rows": 1
+          },
+          {
+            "name": "validated",
+            "label_fr": "Compte Validé",
+            "label_en": "",
+            "type": "textarea",
+            "format": "date-time",
+            "disabled": true,
+            "rows": 1,
+            "required": false
+          }
+        ]
       }
     ]
   }

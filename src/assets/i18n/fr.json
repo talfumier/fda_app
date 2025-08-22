@@ -43,8 +43,8 @@
         "checked": "<span>La case à cocher doit être cochée !</span>",
         "unchecked": "<span>La case à cocher doit être décochée !</span>",
         "int": "<span>Nombre entier non valide !</span>",
-        "date": "<span>Format <strong>jj.MM.aaaa</strong> non respecté !</span>",
-        "date_time": "<span>Format <strong>jj.MM.aaaa HH.mm</strong> non respecté !</span>"
+        "date": "<span>Format <strong>jj/mm/aaaa</strong> non respecté !</span>",
+        "date_time": "<span>Format <strong>jj/mm/aaaa hh.mm</strong> non respecté !</span>"
       }
     },
     "list_items": {

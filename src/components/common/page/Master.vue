@@ -2,26 +2,48 @@
   import { ref,computed,onMounted,onUnmounted  } from 'vue';
   import _ from 'lodash'
   import { getEntities } from '@/services/httpEntities.js';
-  import ListItems from './ListItems.vue';
-  import FormDetails from './FormDetails.vue';
+  import ListItems from './list/ListItems.vue';
+  import FormDetails from './details/FormDetails.vue';
 
-  const {entity,fields}=defineProps({
+  const {entity,fieldsets}=defineProps({
     entity:{type:Object},
-    fields:{type:Array},
+    fieldsets:{type:Array},
   })
-
+  //field_master definition, formValid initialization
   const field_master=ref([])
-  field_master.value=_.filter(fields, (fld) => {
-    return fld.listMaster !== undefined
+  let fltr=null
+  const obj={}
+  fieldsets.map((fldset) => {
+    fltr=null
+    fltr=_.filter(fldset.fields, (fld) => {
+      return fld.listMaster !== undefined
+    })    
+    if(fltr.length>0) field_master.value=[...field_master.value,...fltr]
+    fldset.fields.map((fld) => {
+      obj[fld.name]=false
+    })
+  })
+  const formValid=ref({...obj})
+  const disabled=computed(() => {
+    return JSON.stringify(formValid).indexOf(false) !== -1;
   })
   
-  const data=ref(null)
-  const filtered=ref([])  
+  const state=ref(null)
+  const selectedId = ref(null)
+  const filtered = computed(() => {
+    const arr = state.value || []
+    const id = selectedId.value
+    if (id === null) return null
+    return arr.find(item => item[`id${entity.name}`] === id)
+  })
 
   function handleOpenDetails(id){
-    filtered.value= _.filter(data.value,(item) => {
-      return item[`id${entity.name}`]==id
-    })
+    selectedId.value=id
+  }
+  function handleChange(id,name,valid,val){
+    const idx=state.value.findIndex(record => record[`id${entity.name}`] === id)
+    state.value[idx][name]=val
+    formValid.value[name]=valid
   }
 
   // data loading
@@ -35,7 +57,7 @@
     return res.data.data
   }  
   onMounted(async () => {  
-    data.value =  _.orderBy(await fetch(),[entity.orderBy.field],[entity.orderBy.order])  
+    state.value =  _.orderBy(await fetch(),[entity.orderBy.field],[entity.orderBy.order])  
   })
   onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 
@@ -47,7 +69,7 @@
 </script>
 
 <template>
-  <div v-if="data" :class="['master-container',isRotated?'folded':'']">
+  <section v-if="state" :class="['master-container',isRotated?'folded':'']">
     <q-icon 
       class="btn-fold" 
       name="keyboard_double_arrow_left" 
@@ -55,20 +77,27 @@
       @click="rotateIcon"
     >
     </q-icon>
-    <div :class="['list-container',isRotated?'folded':'']">
+    <aside :class="['list-container',isRotated?'folded':'']">
       <ListItems 
         :name="entity.name"
         :master="field_master"
-        :data="data"
+        :data="state"
         @open-details="handleOpenDetails"
       >
       </ListItems>
-    </div>
-    <div v-if="filtered.length>0" class="details-container">
-      <FormDetails :entity="entity" :fields="fields" :filtered="filtered">
+    </aside>
+    <main class="details-container">
+      <FormDetails 
+        v-if="selectedId" 
+        :key="selectedId"
+        :entity="entity" 
+        :fieldsets="fieldsets" 
+        :record="filtered"
+        @change="handleChange"
+        >
       </FormDetails>
-    </div>
-  </div>
+    </main>
+  </section>
 </template>
 
 <style scoped>

@@ -22,7 +22,7 @@
 
   const emit=defineEmits(['logOut','logIn']) 
 
-  function onLogIn(val){
+  function handleLogIn(val){
     email.value=val
     emit('logIn')
   }
@@ -63,7 +63,7 @@
       <Tooltip :tt_text="$t('comps.header.member-btn.tip')" :small="false"></Tooltip>
   </q-btn>
   <Transition v-if="openLogin" name="fade">
-    <FormLogin  @close-form="openLogin=false" @log-in="onLogIn"></FormLogin>
+    <FormLogin  @close-form="openLogin=false" @log-in="handleLogIn"></FormLogin>
   </Transition>
   <div :class="['icons',loggedIn?'visible':'hidden']" 
       @mouseenter="openMenu"

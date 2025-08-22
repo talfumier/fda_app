@@ -3,12 +3,12 @@ import _, { isBoolean } from 'lodash'
 import Joi from 'joi'
 import { joiPasswordExtendCore } from 'joi-password'
 
-export function validate(value, format, t, equal) {
+export function validate(value, format, equal) {
   if ((!value || value.length === 0) && !isBoolean(value))
     //boolean value from checkbox input
     return {
       valid: false,
-      msg: t('comps.validation.fields.not_null'),
+      msg: 'comps.validation.fields.not_null',
     }
   let result = { valid: true, msg: null }
   switch (format) {
@@ -19,56 +19,56 @@ export function validate(value, format, t, equal) {
       if (!isValidEmail(value))
         result = {
           valid: false,
-          msg: t('comps.validation.fields.email'),
+          msg: 'comps.validation.fields.email',
         }
       break
     case 'pwd':
       if (!isValidPwd(value))
         result = {
           valid: false,
-          msg: t('comps.validation.fields.pwd'),
+          msg: 'comps.validation.fields.pwd',
         }
       break
     case 'pwd_check':
       if (equal && value !== equal)
         result = {
           valid: false,
-          msg: t('comps.validation.fields.pwd_match'),
+          msg: 'comps.validation.fields.pwd_match',
         }
       break
     case 'checked':
       if (!value)
         result = {
           valid: false,
-          msg: null, //t('comps.validation.fields.checked'),
+          msg: null, //'comps.validation.fields.checked',
         }
       break
     case 'unchecked':
       if (value)
         result = {
           valid: false,
-          msg: t('comps.validation.fields.checked'),
+          msg: 'comps.validation.fields.checked',
         }
       break
     case 'integer':
       if (!isValidInteger(value))
         result = {
           valid: false,
-          msg: t('comps.validation.fields.int'),
+          msg: 'comps.validation.fields.int',
         }
       break
     case 'date':
       if (!isValidDate(value))
         result = {
           valid: false,
-          msg: t('comps.validation.fields.date'),
+          msg: 'comps.validation.fields.date',
         }
       break
     case 'date-time':
       if (!isValidDateTime(value))
         result = {
           valid: false,
-          msg: t('comps.validation.fields.date_time'),
+          msg: 'comps.validation.fields.date_time',
         }
       break
   }
@@ -124,16 +124,4 @@ export function isValidDateTime(str) {
   if (!isValidTime(arr[1])) return false
   arr = [...arr[0].split('.'), ...arr[1].split(':')]
   return !isNaN(new Date(`${arr[2]}/${arr[1]}/${arr[0]} ${arr[3]}:${arr[4]}`))
-}
-export function getFormattedDate(date, frmt) {
-  if (typeof frmt === 'undefined') frmt = 'dd.MM.yyyy HH:mm'
-  try {
-    if (_.isString(date)) {
-      if (date.length > 0) return format(parseISO(date), frmt)
-      else return ''
-    }
-    if (isDate(date)) return format(date, frmt)
-  } catch (error) {
-    console.log('Error in getFormattedDate - utilityFunctions', error)
-  }
 }

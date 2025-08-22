@@ -6,12 +6,12 @@ import Master from '../common/page/Master.vue'
 
 const routes = content.map((item) => {
   return {
-    path: `/${item.entity.name}s`,
+    path: `/${item.entity.name.toLowerCase()}s`,
     name: `${item.entity.name.toLowerCase()}s`,
     component: Master,
     props: {
       entity: item.entity,
-      fields: item.fields,
+      fieldsets: item.fieldsets,
     },
   }
 })

@@ -43,8 +43,8 @@
         "checked": "<span>Checkbox must be checked !</span>",
         "unchecked": "<span>Checkbox must be un-checked !</span>",
         "int": "<span>Invalid integer !</span>",
-        "date": "<span>Format <strong>dd.MM.yyyy</strong> required !</span>",
-        "date_time": "<span>Format <strong>jj.MM.yyyy HH.mm</strong> required !</span>"
+        "date": "<span>Format <strong>dd/mm/yyyy</strong> required !</span>",
+        "date_time": "<span>Format <strong>dd/mm/yyyy hh.mm</strong> required !</span>"
       }
     },
     "list_items": {

@@ -1,7 +1,7 @@
-export function zipToObject(keys, values) {
+export function zipToObject(keys, values, dflt = null) {
   //construct an object based on keys and values
   return keys.reduce((obj, key, i) => {
-    obj[key] = values[i]
+    obj[key] = values[i] ? values[i] : dflt
     return obj
   }, {})
 }

@@ -14,6 +14,7 @@ import { translate } from '@/services/httpGoogleServices.js'
 
 defineProps({})
 const{locale}=useI18n()
+// state initialization
 let obj={}
 items.login.map((item) => {
   obj[item.name]=item.value!==undefined?item.value:""

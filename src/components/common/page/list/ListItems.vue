@@ -1,9 +1,9 @@
 <script setup>
   import {ref,defineEmits} from 'vue'
-  import CheckBox from '../fields/CheckBox.vue';
+  import CheckBox from '../../fields/CheckBox.vue';
   import EditMenu from './EditMenu.vue';
 
-  const {name,master,data}=defineProps({
+  const props=defineProps({
     name:{type:String},
     master:{type:Array},
     data:{type:Array},
@@ -12,8 +12,8 @@
   const emit=defineEmits(['openDetails'])
 
   const selected=ref({})
-  data.map((item) => {
-    selected.value={...selected.value,[item[`id${name}`]]:false}
+  props.data.map((item) => {
+    selected.value={...selected.value,[item[`id${props.name}`]]:false}
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)

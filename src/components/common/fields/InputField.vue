@@ -1,9 +1,9 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
   import { ref,reactive } from 'vue';
-  import {validate,strToDate} from"./validation.js"
-  
-  const { t,locale } = useI18n()
+  import { useFormatDate } from '@/composable/useFormatDate.js';
+  import {validate} from"./validation.js"
+
   const props=defineProps({
     name:String,
     field_type:{type:String,default:"input"},
@@ -11,44 +11,44 @@
     label:String,
     required:{type:Boolean,default:true},
     disabled:{type:Boolean,default:false},
-    format:{type:String},
+    format:{type:String,default:'text'},
     placeholder:{type:String},
     value:{type:[String, Number, Boolean,Date],default:""},  
     equal:{type:[String]},
-    rows:{type:String},
+    rows:{type:Number},
     options:{type:Array}
-  })  
+  })    
+  const { t,locale } = useI18n()  
+  const { formatDate, formatDateTime } = useFormatDate()
   
   const data=ref(""), dirty=ref(false), type=ref(props.data_type)
   const fieldValid=reactive({valid: true, msg: null})
 
   const emit = defineEmits(['change'])
-
-
-  if(props.value.toString().length>0) {  //initial value if present
-    let format = null;
-    switch (props.format) {
-      case "date":
-        format = "dd.MM.yyyy";
-        break;
-      case "date-time":
-        format = "dd.MM.yyyy HH:mm";
-    }
-    data.value=format?getFormattedDate(props.value, format):props.value
-    handleChange(data.value)
+  //initial value processing >>> when no initial value, props.value="" (set in parent component :value)
+  switch (props.format) {
+    case "date":
+      data.value=formatDate(props.value)
+      break;
+    case "date-time":
+      data.value=formatDateTime(props.value)
+      break
+    default:
+      data.value=props.value
   }
+  handleChange(data.value)
   
   function handleChange(val){
     dirty.value=true
     data.value=val
     let valid = {valid: true, msg: null};
-    if (props.required && props.field_type !== 'select') 
-      valid = validate(val,props.name.includes('pwd')?'pwd':props.format,t);
+    if (props.required && props.field_type !== 'select') {
+      valid = validate(val,props.name.includes('pwd')?'pwd':props.format);}
     Object.assign(fieldValid, valid)
     emit('change', //notify the parent component
       props.name,
       valid.valid,
-      props.format !== "date" && props.format !== "date-time" ? val : strToDate(val),
+      val,// props.format !== "date" && props.format !== "date-time" ? val : strToDate(val),
       props.name==='pwd_check'?data:undefined
     ) 
   }
@@ -60,7 +60,7 @@
 </script>
 
 <template>
-  <div className="input-container">
+  <div :className="['input-container']">
     <label 
       :class="type==='checkbox'?'checkbox':''" 
       v-html="`${label}${required && type !== 'checkbox' ? ' *' : ''}`"
@@ -79,7 +79,7 @@
       @change="handleChange($event.target[data_type!=='checkbox'?'value':'checked'])"
       @blur="(e) => {
         if(name === 'pwd_check' && fieldValid.valid) {
-          const valid = validate(e.target.value, name, t, equal)          
+          const valid = validate(e.target.value, name, equal)          
           Object.assign(fieldValid, valid)
         }    
       }"
@@ -124,7 +124,7 @@
     <!-- validatiion message -->
     <div v-if="dirty && !fieldValid.valid && fieldValid.msg" 
       className="alert" 
-      v-html="fieldValid.msg"
+      v-html="t(fieldValid.msg)"
     >
     </div>
   </div>
