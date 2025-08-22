@@ -32,6 +32,9 @@
   }
   async function handleSubmit(){
     await resetPassword(id,random,state.data.pwd)
+    handleClose()
+  }
+  function handleClose(){
     router.push('/')
   }
 
@@ -40,6 +43,10 @@
 <template>
   <div :class="['modal']">
     <div class="modal-content">
+      <div class="icon">
+        <q-icon name="cancel" size="3.5rem" color='blue-grey-9' @click="handleClose" tabindex="-1">
+        </q-icon>
+      </div>
       <div v-for="(item, idx) in items.recover">
         <InputField  
           :key=idx 
@@ -85,6 +92,15 @@
     border: 1px solid #888;
     border-radius: 10px;
     min-width:350px;
+  }
+  div.icon {
+    display:flex;
+    justify-content: right;
+  }
+  .q-icon {
+    margin:-15px;
+    cursor: pointer;
+    z-index: 5000;
   }
   .q-btn {
     margin-top: 2rem;

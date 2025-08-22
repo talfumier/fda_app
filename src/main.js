@@ -1,5 +1,5 @@
 import { createApp, watch } from 'vue'
-import { Quasar, Notify, Dialog, ClosePopup } from 'quasar'
+import { Quasar, Notify, Dialog, ClosePopup, date as qdate } from 'quasar'
 import './assets/css/global.css'
 import 'quasar/src/css/index.sass'
 import '@quasar/extras/material-icons/material-icons.css'
@@ -57,5 +57,13 @@ watch(
     app.config.globalProperties.$q.lang.set(quasarLangs[newLocale])
   },
 )
+
+// --- global date formatting helpers ---
+app.config.globalProperties.$formatDate = (d, mask = 'DD/MM/YYYY') => {
+  return qdate.formatDate(d, mask)
+}
+app.config.globalProperties.$formatDateTime = (d, mask = 'DD/MM/YYYY HH:mm') => {
+  return qdate.formatDate(d, mask)
+}
 
 app.mount('#app')

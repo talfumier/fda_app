@@ -7,6 +7,7 @@
   "comps": {
     "header": {
       "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
+      "account-type": "Type de compte:",
       "settings-ico": { "tip": "Paramêtres du compte" },
       "power-ico": {
         "tip": "Déconnexion",
@@ -23,7 +24,7 @@
       "pwd_forgot": "mot de passe oublié ?",
       "no_account": "pas encore de compte ?",
       "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>",
-      "execute": "Exécuter"
+      "execute": "Changer le mot de passe"
     },
     "navbar": {
       "dashboard": "Tableau de bord",
@@ -44,6 +45,13 @@
         "int": "<span>Nombre entier non valide !</span>",
         "date": "<span>Format <strong>jj.MM.aaaa</strong> non respecté !</span>",
         "date_time": "<span>Format <strong>jj.MM.aaaa HH.mm</strong> non respecté !</span>"
+      }
+    },
+    "list_items": {
+      "edit_menu": {
+        "last_change": "Mis à jour",
+        "edit": "Modifier",
+        "delete": "Supprimer"
       }
     },
     "public_site": {

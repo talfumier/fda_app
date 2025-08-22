@@ -16,7 +16,7 @@
     value:{type:[String, Number, Boolean,Date],default:""},  
     equal:{type:[String]},
     rows:{type:String},
-    options:{type:[[String]]}
+    options:{type:Array}
   })  
   
   const data=ref(""), dirty=ref(false), type=ref(props.data_type)

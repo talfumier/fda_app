@@ -5,11 +5,11 @@ const api = 'http://localhost:3000/api'
 export function login(email, pwd) {
   return http.post(`${api}/login`, { email, pwd })
 }
-export function register(email, idRole, pwd) {
+export function register(email, idRole, lang, pwd) {
   return http.post(`${api}/register`, {
     email,
     idRole,
-    lang: localStorage.getItem('locale'),
+    lang,
     pwd,
   })
 }

@@ -1,6 +1,5 @@
 <script setup>
   import { ref,defineEmits} from 'vue';
-  import { useRoute } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import cookies from 'js-cookie'
   import { decodeJWT } from '@/services/httpUsers.js';
@@ -8,8 +7,6 @@
   import FormLogin from '../login/FormLogin.vue';
   import { useQuasar } from 'quasar'
   import { confirm } from '../common/toast_dialog/dialog.js';
-
-  const route = useRoute()
   
   const {loggedIn}=defineProps({
     loggedIn: { type: Boolean, default: false }
@@ -18,7 +15,8 @@
   const {t}=useI18n()
   const $q=useQuasar()
   const openLogin=ref(false)
-  const email=ref(cookies.get('user')?decodeJWT(cookies.get('user')).email:null)
+  const decoded=cookies.get('user')?decodeJWT(cookies.get('user')):null
+  const email=ref(decoded?decoded.email:null)
   
   const showPopup = ref(false)
 
@@ -33,7 +31,7 @@
     cookies.remove('user')
     emit('logOut')
   }
-
+  //Dropdown menu opening - closing
   let closeTimer = null
   function openMenu () {
     clearTimeout(closeTimer)
@@ -94,7 +92,7 @@
             <div class='btn no-cap'>
               <q-icon name="account_circle" size="2.5rem" />
               {{email}}
-            </div>
+            </div>    
           </q-item>
           <q-separator />     
           <q-item 

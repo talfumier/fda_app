@@ -7,6 +7,7 @@
   "comps": {
     "header": {
       "member-btn": { "text": "Member area", "tip": "Sign-in to your account" },
+      "account-type": "Account type:",
       "settings-ico": { "tip": "Account settings" },
       "power-ico": {
         "tip": "Log-out",
@@ -23,7 +24,7 @@
       "pwd_forgot": "forgot password ?",
       "no_account": "don't have an account ?",
       "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>",
-      "execute": "Execute"
+      "execute": "Change password"
     },
     "navbar": {
       "dashboard": "Dashboard",
@@ -44,6 +45,13 @@
         "int": "<span>Invalid integer !</span>",
         "date": "<span>Format <strong>dd.MM.yyyy</strong> required !</span>",
         "date_time": "<span>Format <strong>jj.MM.yyyy HH.mm</strong> required !</span>"
+      }
+    },
+    "list_items": {
+      "edit_menu": {
+        "last_change": "Updated",
+        "edit": "Edit",
+        "delete": "Delete"
       }
     },
     "public_site": {

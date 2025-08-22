@@ -9,11 +9,11 @@ import InputField from '../common/fields/InputField.vue'
 import { getEntities } from '@/services/httpEntities.js'
 import { register,login, forgotPassword } from '@/services/httpUsers.js'
 import { decodeJWT } from '@/services/httpUsers.js'
-import { toastError, toastInfo } from '../common/toast_dialog/toast.js'
+import { toastInfo } from '../common/toast_dialog/toast.js'
 import { translate } from '@/services/httpGoogleServices.js'
 
 defineProps({})
-const{locale,t}=useI18n()
+const{locale}=useI18n()
 let obj={}
 items.login.map((item) => {
   obj[item.name]=item.value!==undefined?item.value:""
@@ -31,7 +31,7 @@ const disabled=computed(() => {
 
 const emit=defineEmits(['closeForm','logIn']) 
 
-function onChange(name,valid,val){
+function handleChange(name,valid,val){
   state.data[name]=val
   formValid[name]=valid 
 }
@@ -52,6 +52,7 @@ async function handleSubmit(){
         res = await register(  //error handling and success message managed by axios interceptor in httpService.js
           state.data.email,
           state.data.role,
+          locale.value,
           state.data.pwd
         );
         break;
@@ -114,7 +115,7 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
           :default="state.data[item.default]"
           :equal="item.name==='pwd_check'?state.data.pwd:null"
           :options="roleOptions"
-          @change="onChange"
+          @change="handleChange"
         >
         </InputField>
       </div>
