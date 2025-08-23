@@ -1,14 +1,15 @@
 import axios from 'axios'
 import { translate } from './httpGoogleServices.js'
-import { toastError, toastSuccess } from '@/components/common/toast_dialog/toast.js'
+import { toastError, toastSuccess, toastWarning } from '@/components/common/toast_dialog/toast.js'
 
 axios.interceptors.response.use(
   async (res) => {
+    const { statusCode, general, message, msgType, display } = res.data
     let text = ''
     //catching successful response from API (200 status) returning BadRequest, Unauthorized... custom expected 'errors'
     //message returned from API in english
-    if (res.data.statusCode >= 400 && res.data.statusCode < 500) {
-      text = `${res.data.general}<br/>${res.data.message}`
+    if (statusCode >= 400 && statusCode < 500) {
+      text = `${general}<br/>${message}`
       if (localStorage.getItem('locale') === 'fr') {
         text = (
           await translate({
@@ -18,12 +19,12 @@ axios.interceptors.response.use(
           })
         ).data
       }
-      toastError(text)
+      toastError(text, msgType)
       return Promise.reject('expected error returned from API')
     }
-    if (res.data.statusCode === 200) {
-      if (res.data.display) {
-        text = res.data.message
+    if (statusCode === 200) {
+      if (display) {
+        text = message
         if (localStorage.getItem('locale') === 'fr')
           text = (
             await translate({

@@ -24,7 +24,11 @@
       "pwd_forgot": "mot de passe oublié ?",
       "no_account": "pas encore de compte ?",
       "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>",
-      "execute": "Changer le mot de passe"
+      "execute": "Changer le mot de passe",
+      "token_expiry": {
+        "warning": "Votre jeton d'authentification va expirer dans 5 mns à",
+        "error": "Votre jeton d'authentification a expiré. Merci de vous authentifier à nouveau."
+      }
     },
     "navbar": {
       "dashboard": "Tableau de bord",

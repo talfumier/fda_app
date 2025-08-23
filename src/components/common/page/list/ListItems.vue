@@ -52,7 +52,7 @@
     flex-direction: column;
     font-size: 1.6rem;
     font-weight: bolder;
-    margin: 10px 10px 0;
+    margin: 0 10px;
   }
 
 </style>

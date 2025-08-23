@@ -26,17 +26,19 @@
 
   const emit = defineEmits(['change'])
   //initial value processing >>> when no initial value, props.value="" (set in parent component :value)
-  switch (props.format) {
-    case "date":
-      data.value=formatDate(props.value)
-      break;
-    case "date-time":
-      data.value=formatDateTime(props.value)
-      break
-    default:
-      data.value=props.value
+  if(props.value.length>0){
+    switch (props.format) {
+      case "date":
+        data.value=formatDate(props.value)
+        break;
+      case "date-time":
+        data.value=formatDateTime(props.value)
+        break
+      default:
+        data.value=props.value
+    }
+    handleChange(data.value)
   }
-  handleChange(data.value)
   
   function handleChange(val){
     dirty.value=true

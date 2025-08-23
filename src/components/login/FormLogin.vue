@@ -9,11 +9,13 @@ import InputField from '../common/fields/InputField.vue'
 import { getEntities } from '@/services/httpEntities.js'
 import { register,login, forgotPassword } from '@/services/httpUsers.js'
 import { decodeJWT } from '@/services/httpUsers.js'
-import { toastInfo } from '../common/toast_dialog/toast.js'
+import { toastInfo, toastWarning } from '../common/toast_dialog/toast.js'
 import { translate } from '@/services/httpGoogleServices.js'
+import { useFormatDate } from '@/composable/useFormatDate.js'
 
 defineProps({})
-const{locale}=useI18n()
+const{locale,t}=useI18n()
+const {formatTime}=useFormatDate()
 // state initialization
 let obj={}
 items.login.map((item) => {
@@ -24,7 +26,7 @@ const state=reactive({
   creation: false
 })
 
-obj=zipToObject(Object.keys(obj),[false,true,false, state.creation ? false : true,state.creation ? false : true])
+obj=zipToObject(Object.keys(obj),[false,true,false, state.creation ? false : true,state.creation ? false : true],false)
 const formValid=reactive({...obj})
 const disabled=computed(() => {
   return JSON.stringify(formValid).indexOf(false) !== -1;
@@ -62,6 +64,15 @@ async function handleSubmit(){
         if(res.headers) {
           const {email,exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
           cookies.set('user', res.headers['x-auth-token'], { expires: new Date(exp * 1000) }) 
+          //set-up warnings for token expiry
+          setTimeout(() => {
+            const msg=`${t(t('comps.login.token_expiry.warning'))} ${formatTime(new Date(Date.now()+5*60*1000))}`
+            toastWarning(msg,'persistent')
+          }, exp*1000-Date.now()-5*60*1000)
+          setTimeout(() => {
+            toastWarning(t('comps.login.token_expiry.error'),'persistent')
+          },exp*1000-Date.now())
+          
           emit('logIn',email)         
         }
     }

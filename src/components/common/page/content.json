@@ -2,6 +2,7 @@
   {
     "entity": {
       "name": "User",
+      "sql": "details",
       "label_fr": "Compte",
       "label_en": "Account",
       "labels_fr": "Comptes",
@@ -47,12 +48,20 @@
         "type": "standard",
         "fields": [
           {
-            "name": "idRole",
+            "name": "role_fr",
             "label_fr": "Role",
+            "type": "textarea",
+            "disabled": true,
+            "rows": 1,
+            "optional": true
+          },
+          {
+            "name": "role_en",
             "label_en": "Role",
             "type": "textarea",
             "disabled": true,
-            "rows": 1
+            "rows": 1,
+            "optional": true
           },
           {
             "name": "validated",

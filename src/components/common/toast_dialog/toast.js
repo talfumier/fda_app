@@ -1,15 +1,48 @@
 import { Notify } from 'quasar'
-export function toastInfo(message) {
-  toast(message, 'primary', 'check')
+export function toastSuccess(message, msgType = 'non-persistent') {
+  switch (msgType) {
+    case 'persistent':
+      toastPersistent(message, 'positive', 'check')
+      break
+    case 'non-persistent':
+      toast(message, 'positive', 'check')
+  }
 }
-export function toastSuccess(message) {
-  toast(message, 'positive', 'check')
+export function toastInfo(message, msgType = 'non-persistent') {
+  switch (msgType) {
+    case 'persistent':
+      toastPersistent(message, 'primary', 'check')
+      break
+    case 'non-persistent':
+      toast(message, 'primary', 'check')
+  }
 }
-export function toastWarning(message) {
-  toast(message, 'warning', 'warning')
+export function toastWarning(message, msgType = 'non-persistent') {
+  switch (msgType) {
+    case 'persistent':
+      toastPersistent(message, 'warning', 'warning')
+      break
+    case 'non-persistent':
+      toast(message, 'warning', 'warning')
+  }
 }
-export function toastError(message) {
-  toast(message, 'negative', 'error')
+export function toastError(message, msgType = 'non-persistent') {
+  switch (msgType) {
+    case 'persistent':
+      toastPersistent(message, 'negative', 'error')
+    case 'non-persistent':
+      toast(message, 'negative', 'error')
+  }
+}
+function toastPersistent(message, color, icon) {
+  Notify.create({
+    message,
+    icon,
+    color,
+    timeout: 0,
+    spinner: true,
+    actions: [{ label: 'Close', color: 'white' }],
+  })
 }
 function toast(message, color = 'primary', icon = 'check', position = 'top-right', timeout = 2500) {
   // Give this toast a unique root class so we can reliably target it

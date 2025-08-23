@@ -15,10 +15,7 @@
 </script>
 
 <template>
-  <form 
-    v-for="(item,idx) in fieldsets"
-    action=""  
-  >
+  <fieldset v-for="(item,idx) in fieldsets">
     <FieldsetStandard
       :key="idx"
       v-if="item.type==='standard'"
@@ -29,9 +26,8 @@
       }"
     >
     </FieldsetStandard>
-  </form>
+  </fieldset>
 </template>
 
 <style scoped>
-
 </style>

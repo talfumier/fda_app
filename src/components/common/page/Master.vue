@@ -1,7 +1,7 @@
 <script setup async>
   import { ref,computed,onMounted,onUnmounted  } from 'vue';
   import _ from 'lodash'
-  import { getEntities } from '@/services/httpEntities.js';
+  import { getEntitiesBySql } from '@/services/httpEntities.js';
   import ListItems from './list/ListItems.vue';
   import FormDetails from './details/FormDetails.vue';
 
@@ -52,12 +52,12 @@
   async function fetch() {
     if (ctrl) ctrl.abort()
     ctrl = new AbortController()
-    const res=(await getEntities(entity.name,ctrl.signal))
+    const res=(await getEntitiesBySql(entity.name,entity.sql,ctrl.signal))
     if (!alive) return                // component gone? don't touch state  
     return res.data.data
   }  
   onMounted(async () => {  
-    state.value =  _.orderBy(await fetch(),[entity.orderBy.field],[entity.orderBy.order])  
+    state.value = await fetch() 
   })
   onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 
@@ -70,13 +70,16 @@
 
 <template>
   <section v-if="state" :class="['master-container',isRotated?'folded':'']">
-    <q-icon 
-      class="btn-fold" 
-      name="keyboard_double_arrow_left" 
-      size="md"
-      @click="rotateIcon"
-    >
-    </q-icon>
+    <aside class="top-container" >
+      <p>NNNNNNNN</p>
+      <q-icon 
+        class="btn-fold"
+        name="keyboard_double_arrow_left" 
+        size="md"
+        @click="rotateIcon"
+      >
+      </q-icon>
+    </aside>
     <aside :class="['list-container',isRotated?'folded':'']">
       <ListItems 
         :name="entity.name"
@@ -86,7 +89,7 @@
       >
       </ListItems>
     </aside>
-    <main class="details-container">
+    <form class="details-container">
       <FormDetails 
         v-if="selectedId" 
         :key="selectedId"
@@ -96,11 +99,12 @@
         @change="handleChange"
         >
       </FormDetails>
-    </main>
+    </form>
   </section>
 </template>
 
 <style scoped>
+
   .master-container {
     display: grid;
     grid-template-columns: auto auto;
@@ -111,10 +115,13 @@
   .master-container.folded {
     grid-template-columns: 40px auto;
   }
-  .btn-fold {    
+  .top-container {    
     grid-area: 1/1;
-    justify-self: right;
-    align-self: self-end;
+    align-self: self-end;   
+    display:flex;
+    justify-content:right;
+  }
+  .q-icon {
     width:40px;
     height:30px;    
     border-radius: 5px;    

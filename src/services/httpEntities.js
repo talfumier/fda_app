@@ -10,6 +10,11 @@ export function getEntities(entity, signal) {
     signal,
   })
 }
+export function getEntitiesBySql(entity, id, signal) {
+  return http.get(`${api}/entities/sql/${getRouteElement(entity)}/${id}`, {
+    signal,
+  })
+}
 export function getEntity(entity, id, signal) {
   return http.get(`${api}/entities/${getRouteElement(entity)}/${id}`, {
     signal,

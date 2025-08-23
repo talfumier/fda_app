@@ -10,7 +10,7 @@
       "account-type": "Account type:",
       "settings-ico": { "tip": "Account settings" },
       "power-ico": {
-        "tip": "Log-out",
+        "tip": "Sign-out",
         "dialog": "Your are about to be logged-out,<br/>please confirm."
       }
     },
@@ -24,7 +24,11 @@
       "pwd_forgot": "forgot password ?",
       "no_account": "don't have an account ?",
       "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>",
-      "execute": "Change password"
+      "execute": "Change password",
+      "token_expiry": {
+        "warning": "Your token is going to expire in 5 mns at",
+        "error": "Your token has expired. Please sign-in again."
+      }
     },
     "navbar": {
       "dashboard": "Dashboard",
