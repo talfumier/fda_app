@@ -1,7 +1,10 @@
 [
   {
     "entity": {
-      "name": "User",
+      "url": "/users",
+      "name": "users",
+      "roles": [5, 6],
+      "model": "User",
       "sql": "details",
       "label_fr": "Compte",
       "label_en": "Account",

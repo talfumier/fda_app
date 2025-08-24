@@ -34,14 +34,14 @@
     const arr = state.value || []
     const id = selectedId.value
     if (id === null) return null
-    return arr.find(item => item[`id${entity.name}`] === id)
+    return arr.find(item => item[`id${entity.model}`] === id)
   })
 
   function handleOpenDetails(id){
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){
-    const idx=state.value.findIndex(record => record[`id${entity.name}`] === id)
+    const idx=state.value.findIndex(record => record[`id${entity.model}`] === id)
     state.value[idx][name]=val
     formValid.value[name]=valid
   }
@@ -52,7 +52,7 @@
   async function fetch() {
     if (ctrl) ctrl.abort()
     ctrl = new AbortController()
-    const res=(await getEntitiesBySql(entity.name,entity.sql,ctrl.signal))
+    const res=(await getEntitiesBySql(entity.model,entity.sql,ctrl.signal))
     if (!alive) return                // component gone? don't touch state  
     return res.data.data
   }  
@@ -82,7 +82,7 @@
     </aside>
     <aside :class="['list-container',isRotated?'folded':'']">
       <ListItems 
-        :name="entity.name"
+        :name="entity.model"
         :master="field_master"
         :data="state"
         @open-details="handleOpenDetails"

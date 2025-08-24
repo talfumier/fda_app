@@ -1,35 +1,32 @@
 <script setup>
-  import { ref,defineEmits} from 'vue';
+  import { inject,ref,computed} from 'vue';
   import { useI18n } from 'vue-i18n';
-  import cookies from 'js-cookie'
   import { decodeJWT } from '@/services/httpUsers.js';
   import Tooltip from '../common/Tooltip.vue';
   import FormLogin from '../login/FormLogin.vue';
   import { useQuasar } from 'quasar'
   import { confirm } from '../common/toast_dialog/dialog.js';
   
-  const {loggedIn}=defineProps({
-    loggedIn: { type: Boolean, default: false }
-  })
-  
+  const {value,remove} = inject('userCookie')
+  const token = computed(() => value.value)
+
   const {t}=useI18n()
   const $q=useQuasar()
+
   const openLogin=ref(false)
-  const decoded=cookies.get('user')?decodeJWT(cookies.get('user')):null
-  const email=ref(decoded?decoded.email:null)
+  const decoded=computed(() => {
+    return token.value?decodeJWT(token.value):null
+  })
+  const email=ref(decoded.value?decoded.value.email:null)  //initial value when a cookie is already set (reload, connection to the site)
   
   const showPopup = ref(false)
 
-  const emit=defineEmits(['logOut','logIn']) 
-
   function handleLogIn(val){
     email.value=val
-    emit('logIn')
   }
   async function handleLogOut(){    
     if (!(await confirm($q,t('comps.header.power-ico.dialog'),'ok'))) return
-    cookies.remove('user')
-    emit('logOut')
+    remove('user')
   }
   //Dropdown menu opening - closing
   let closeTimer = null
@@ -52,7 +49,7 @@
 
 <template>
   <q-btn 
-    :class="['btn', 'bg-grey-3', !loggedIn?'visible':'hidden']" 
+    :class="['btn', 'bg-grey-3', !token?'visible':'hidden']" 
     rounded standout
     icon="login" 
     no-wrap
@@ -65,7 +62,7 @@
   <Transition v-if="openLogin" name="fade">
     <FormLogin  @close-form="openLogin=false" @log-in="handleLogIn"></FormLogin>
   </Transition>
-  <div :class="['icons',loggedIn?'visible':'hidden']" 
+  <div :class="['icons',token?'visible':'hidden']" 
       @mouseenter="openMenu"
       @mouseleave="scheduleClose"
       @click="openMenu"
@@ -84,40 +81,40 @@
         :offset="[0, 10]" 
       >
         <div @mouseenter="cancelClose" @mouseleave="forceClose">
-        <q-list dense >
-          <q-item 
-            clickable 
-            v-close-popup
-            class="hover-bg-grey-3 hover-text-primary">
-            <div class='btn no-cap'>
-              <q-icon name="account_circle" size="2.5rem" />
-              {{email}}
-            </div>    
-          </q-item>
-          <q-separator />     
-          <q-item 
-            clickable 
-            v-close-popup 
-            class="hover-bg-grey-3 hover-text-primary "
-            @click="">
-            <div class='text-bolder color-std'>
-              <q-icon name="settings" size="2.5rem" />
-              {{t('comps.header.settings-ico.tip')}}
-            </div>            
-          </q-item>   
-          <q-separator />    
-          <q-item 
-            clickable 
-            v-close-popup 
-            class="hover-bg-grey-3 hover-text-primary "
-            @click="handleLogOut">
-            <div class='text-bolder log-out'>
-              <q-icon name="power_settings_new" size="2.5rem" />
-              {{t('comps.header.power-ico.tip')}}
-            </div>            
-          </q-item>
-        </q-list>
-      </div>
+          <q-list dense >
+            <q-item 
+              clickable 
+              v-close-popup
+              class="hover-bg-grey-3 hover-text-primary">
+              <div class='btn no-cap'>
+                <q-icon name="account_circle" size="2.5rem" />
+                {{email}}
+              </div>    
+            </q-item>
+            <q-separator />     
+            <q-item 
+              clickable 
+              v-close-popup 
+              class="hover-bg-grey-3 hover-text-primary "
+              @click="">
+              <div class='text-bolder color-std'>
+                <q-icon name="settings" size="2.5rem" />
+                {{t('comps.header.settings-ico.tip')}}
+              </div>            
+            </q-item>   
+            <q-separator />    
+            <q-item 
+              clickable 
+              v-close-popup 
+              class="hover-bg-grey-3 hover-text-primary "
+              @click="handleLogOut">
+              <div class='text-bolder log-out'>
+                <q-icon name="power_settings_new" size="2.5rem" />
+                {{t('comps.header.power-ico.tip')}}
+              </div>            
+            </q-item>
+          </q-list>
+        </div>
       </q-menu>
     </q-icon>  
   </div>

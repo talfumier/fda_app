@@ -1,8 +1,7 @@
 <script setup>
-import {reactive,defineEmits,computed,onMounted,onUnmounted} from 'vue'
+import {inject,reactive,defineEmits,computed,onMounted,onUnmounted} from 'vue'
 import { useI18n } from 'vue-i18n'
 import _ from 'lodash'
-import cookies from 'js-cookie'
 import items from "./items.json"
 import {zipToObject} from "../../utilityFunctions.js"
 import InputField from '../common/fields/InputField.vue'
@@ -16,6 +15,7 @@ import { useFormatDate } from '@/composable/useFormatDate.js'
 defineProps({})
 const{locale,t}=useI18n()
 const {formatTime}=useFormatDate()
+const {read, set} = inject('userCookie')
 // state initialization
 let obj={}
 items.login.map((item) => {
@@ -48,7 +48,7 @@ function handleClick(cs){
   }
 }
 async function handleSubmit(){
-  if (!cookies.get('user')) {
+  if (!read()) {
     let res = null;
     switch (state.creation) {
       case true: //register case
@@ -63,11 +63,11 @@ async function handleSubmit(){
         res = await login(state.data.email, state.data.pwd);
         if(res.headers) {
           const {email,exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
-          cookies.set('user', res.headers['x-auth-token'], { expires: new Date(exp * 1000) }) 
+          set(res.headers['x-auth-token'], { expires: new Date(exp * 1000) })
           //set-up warnings for token expiry
           setTimeout(() => {
             const msg=`${t(t('comps.login.token_expiry.warning'))} ${formatTime(new Date(Date.now()+5*60*1000))}`
-            toastWarning(msg,'persistent')
+            toastWarning(msg,'persistent',true)
           }, exp*1000-Date.now()-5*60*1000)
           setTimeout(() => {
             toastWarning(t('comps.login.token_expiry.error'),'persistent')

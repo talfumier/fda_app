@@ -26,8 +26,8 @@
       "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>",
       "execute": "Change password",
       "token_expiry": {
-        "warning": "Your token is going to expire in 5 mns at",
-        "error": "Your token has expired. Please sign-in again."
+        "warning": "Your authentication token is going to expire at",
+        "error": "Your authentication token has expired. Please sign-in again."
       }
     },
     "navbar": {

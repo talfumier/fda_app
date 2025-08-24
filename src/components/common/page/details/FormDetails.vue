@@ -22,7 +22,7 @@
       :fields="item.fields"
       :data="record"
       @change="(name,valid,val) => {
-        handleChange(record[`id${entity.name}`],name,valid,val)
+        handleChange(record[`id${entity.model}`],name,valid,val)
       }"
     >
     </FieldsetStandard>

@@ -1,16 +1,14 @@
 <script setup>
-  import cookies from 'js-cookie'
-  import { ref, useSlots } from 'vue'
+  import { ref, useSlots, watch, inject, computed } from 'vue'
   import HeaderMember from './HeaderMember.vue'
   import LangSwitcher from './LangSwitcher.vue';
   import NavBar from './navbar/NavBar.vue';
-
-  const loggedIn=ref(cookies.get('user')!==undefined)
+  
+  const { value } = inject('userCookie')
+  const token = computed(() => value.value)
+  
   const slots = useSlots()
 
-  function onLogInOut(val){
-    loggedIn.value=val
-  }  
   </script>
 
 <template>
@@ -24,13 +22,13 @@
         </h1>
         <div class="container-lang-icons">
           <LangSwitcher ></LangSwitcher>
-          <HeaderMember :logged-in="loggedIn" @log-out="onLogInOut(false)" @log-in="onLogInOut(true)"></HeaderMember>
+          <HeaderMember></HeaderMember>
         </div>
       </div>
     </header>
     <aside>
       <Transition name="fade">
-        <NavBar v-if="loggedIn"></NavBar>
+        <NavBar v-if="token"></NavBar>
       </Transition>
     </aside>
     <main>

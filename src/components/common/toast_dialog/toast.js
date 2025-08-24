@@ -1,46 +1,47 @@
 import { Notify } from 'quasar'
-export function toastSuccess(message, msgType = 'non-persistent') {
+export function toastSuccess(message, msgType = 'non-persistent', spinner = false) {
   switch (msgType) {
     case 'persistent':
-      toastPersistent(message, 'positive', 'check')
+      toastPersistent(message, 'positive', 'check', spinner)
       break
     case 'non-persistent':
       toast(message, 'positive', 'check')
   }
 }
-export function toastInfo(message, msgType = 'non-persistent') {
+export function toastInfo(message, msgType = 'non-persistent', spinner = false) {
   switch (msgType) {
     case 'persistent':
-      toastPersistent(message, 'primary', 'check')
+      toastPersistent(message, 'primary', 'check', spinner)
       break
     case 'non-persistent':
       toast(message, 'primary', 'check')
   }
 }
-export function toastWarning(message, msgType = 'non-persistent') {
+export function toastWarning(message, msgType = 'non-persistent', spinner = false) {
   switch (msgType) {
     case 'persistent':
-      toastPersistent(message, 'warning', 'warning')
+      toastPersistent(message, 'warning', 'warning', spinner)
       break
     case 'non-persistent':
       toast(message, 'warning', 'warning')
   }
 }
-export function toastError(message, msgType = 'non-persistent') {
+export function toastError(message, msgType = 'non-persistent', spinner = false) {
   switch (msgType) {
     case 'persistent':
-      toastPersistent(message, 'negative', 'error')
+      toastPersistent(message, 'negative', 'error', spinner)
     case 'non-persistent':
       toast(message, 'negative', 'error')
   }
 }
-function toastPersistent(message, color, icon) {
+function toastPersistent(message, color, icon, spinner) {
   Notify.create({
     message,
     icon,
     color,
     timeout: 0,
-    spinner: true,
+    spinner,
+    position: 'top-right',
     actions: [{ label: 'Close', color: 'white' }],
   })
 }
