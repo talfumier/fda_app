@@ -1,7 +1,8 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref,inject,computed } from 'vue';
+  import _ from 'lodash'
   import Tooltip from '../../common/Tooltip.vue';
-  import items from "./items.json"
+  import items from "./nav-items.json"
   import NavBarItem from './NavBarItem.vue';
   
   defineProps({
@@ -14,6 +15,12 @@
   function rotateIcon() {
     isRotated.value=!isRotated.value
   }
+  const {decoded} = inject('userCookie')
+  const roleFilteredItems=computed(() => {
+    return _.filter(items,(item) => {
+      return item.roles.includes(decoded.value.idRole)
+    })
+  })
 </script>
 
 <template>
@@ -32,8 +39,13 @@
           </RouterLink>
         </li>
         <hr></hr>
-        <li v-for="(item, idx) in items" :key="idx">
-          <NavBarItem :url="item.url" :icon="item.icon" :isRotated="isRotated" :text="'comps.navbar.'+item.text" :wrap="item.wrap"/>
+        <li v-for="(item, idx) in roleFilteredItems" :key="idx">
+          <NavBarItem 
+            :url="item.url" 
+            :icon="item.icon" 
+            :isRotated="isRotated" 
+            :text="'comps.navbar.'+item.text" 
+            :wrap="item.wrap"/>
         </li>
       </ul>
     </nav>

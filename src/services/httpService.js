@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { translate } from './httpGoogleServices.js'
-import { toastError, toastSuccess, toastWarning } from '@/components/common/toast_dialog/toast.js'
+// import { toastError, toastSuccess, toastWarning } from '@/components/common/toast_dialog/toast.js'
+import { toastError, toastSuccess } from '@/composable/toast.js'
 
 axios.interceptors.response.use(
   async (res) => {

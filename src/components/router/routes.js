@@ -2,21 +2,20 @@ import { createRouter, createWebHistory } from 'vue-router'
 import cookies from 'js-cookie'
 import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
-import content from '../common/page/content.json'
+import content from '../common/page/master-content.json'
 import Home from '../home/Home.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
 
-function userIsAuthenticated() {
-  if (!cookies.get('user')) return [false]
+function getUserRole() {
+  if (!cookies.get('user')) return -1
   const { idRole, idStatus } = decodeJWT(cookies.get('user'))
-  console.log(idRole, idStatus)
-  if (idStatus !== 2) return [false]
-  return [true, parseInt(idRole)]
+  if (idStatus === 2) return parseInt(idRole)
+  return -1
 }
 const routes = content.map((item) => {
   return {
-    path: `/${item.entity.url}`,
+    path: `${item.entity.url}`,
     name: item.entity.name,
     component: Master,
     props: {
@@ -32,35 +31,37 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: () => (userIsAuthenticated()[0] ? { name: 'dashboard' } : { name: 'home' }),
+      redirect: () => {
+        return getUserRole() >= 1 ? { name: 'member home' } : { name: 'public home' }
+      },
     },
-    { path: '/home', name: 'home', component: Home, meta: { roles: [] } },
+    { path: '/public/home', name: 'public home', component: Home, meta: { roles: [-1] } }, //no specific role requirement, nor authentication
     {
-      path: '/dashboard',
-      name: 'dashboard',
+      path: '/member/home',
+      name: 'member home',
       component: Dashboard,
       meta: { roles: [1, 5, 6] },
     },
-    ...routes, //protected pages
+    ...routes, //member pages
     {
-      path: '/resetpassword',
-      name: 'resetpassword',
+      path: '/public/resetpassword',
+      name: 'public resetpassword',
       component: () => import('../login/FormRecover.vue'), //lazy loading
       props: (route) => ({
         id: route.query.id ?? null,
         random: route.query.random ?? null,
       }),
-      meta: { roles: [] }, //no specific role requirement, nor authentication
+      meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
   ],
 })
-router.beforeEach((to) => {
-  const [isAuthed, role] = userIsAuthenticated()
-  // Public routes → always allow (even if authenticated)
-  if (to.meta.roles.length === 0) return true //all public pages have meta.roles=[] >>> return the page regardless of authentication
-  // Protected routes → allow only if authenticated with a matching role
-  if (isAuthed && to.meta.roles.includes(role)) return true
-  // Otherwise → send to public home
-  return { name: 'home', query: { redirect: to.fullPath } }
-})
+// router.beforeEach((to) => {
+//   const role = getUserRole()
+//   // Public routes → always allow (even if authenticated)
+//   if (to.meta.roles.includes(-1)) return true //all public pages have meta.roles=[-1] >>> return the page regardless of authentication
+//   // Protected routes → allow only if authenticated with a matching role
+//   if (role !== -1 && to.meta.roles.includes(role)) return true
+//   // Otherwise → send to public home
+//   if (to.name !== 'home') return { name: 'home', query: { redirect: to.fullPath } }
+// })
 export default router

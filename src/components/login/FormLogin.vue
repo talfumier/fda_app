@@ -1,6 +1,7 @@
 <script setup>
 import {inject,reactive,defineEmits,computed,onMounted,onUnmounted} from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import _ from 'lodash'
 import items from "./items.json"
 import {zipToObject} from "../../utilityFunctions.js"
@@ -8,14 +9,16 @@ import InputField from '../common/fields/InputField.vue'
 import { getEntities } from '@/services/httpEntities.js'
 import { register,login, forgotPassword } from '@/services/httpUsers.js'
 import { decodeJWT } from '@/services/httpUsers.js'
-import { toastInfo, toastWarning } from '../common/toast_dialog/toast.js'
+// import { toastInfo, toastWarning } from '../common/toast_dialog/toast.js'
+import { toastInfo,toastWarning,closeToast } from '@/composable/toast.js'
 import { translate } from '@/services/httpGoogleServices.js'
 import { useFormatDate } from '@/composable/useFormatDate.js'
 
 defineProps({})
 const{locale,t}=useI18n()
 const {formatTime}=useFormatDate()
-const {read, set} = inject('userCookie')
+const {read, set, decoded} = inject('userCookie')
+const router=useRouter()
 // state initialization
 let obj={}
 items.login.map((item) => {
@@ -63,16 +66,18 @@ async function handleSubmit(){
         res = await login(state.data.email, state.data.pwd);
         if(res.headers) {
           const {email,exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
-          set(res.headers['x-auth-token'], { expires: new Date(exp * 1000) })
+          set(res.headers['x-auth-token'], { expires: new Date(exp * 1000) })          
+          router.replace({ name: 'member home' })  //send to dashboard page (logic in route.js)
           //set-up warnings for token expiry
           setTimeout(() => {
             const msg=`${t(t('comps.login.token_expiry.warning'))} ${formatTime(new Date(Date.now()+5*60*1000))}`
             toastWarning(msg,'persistent',true)
           }, exp*1000-Date.now()-5*60*1000)
           setTimeout(() => {
+            closeToast()  //close previous persistent toast
             toastWarning(t('comps.login.token_expiry.error'),'persistent')
+            router.push({name:'public home'})
           },exp*1000-Date.now())
-          
           emit('logIn',email)         
         }
     }

@@ -1,13 +1,20 @@
 [
   {
-    "url": "/dashboard",
+    "url": "/member/home",
     "icon": "home",
     "text": "dashboard",
     "wrap": false,
     "roles": [1, 5, 6]
   },
   {
-    "url": "/expos",
+    "url": "/member/users",
+    "icon": "account_circle",
+    "text": "users",
+    "wrap": false,
+    "roles": [5, 6]
+  },
+  {
+    "url": "/member/expos",
     "icon": "photo_frame",
     "text": "expos",
     "wrap": false,

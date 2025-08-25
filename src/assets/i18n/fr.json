@@ -6,7 +6,12 @@
   },
   "comps": {
     "header": {
-      "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
+      "member-btn": {
+        "text": "Espace membre",
+        "tip1": "Connexion à votre compte",
+        "tip2": "Basculer vers espace membre"
+      },
+      "public-btn": { "text": "Site public", "tip": "Basculer vers le site public" },
       "account-type": "Type de compte:",
       "settings-ico": { "tip": "Paramêtres du compte" },
       "power-ico": {
@@ -32,6 +37,7 @@
     },
     "navbar": {
       "dashboard": "Tableau de bord",
+      "users": "Comptes utilisateur",
       "expos": "Expositions",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",

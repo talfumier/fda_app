@@ -6,7 +6,12 @@
   },
   "comps": {
     "header": {
-      "member-btn": { "text": "Member area", "tip": "Sign-in to your account" },
+      "member-btn": {
+        "text": "Member area",
+        "tip1": "Sign-in to your account",
+        "tip2": "Switch to member area"
+      },
+      "public-btn": { "text": "Public site", "tip": "Switch to public site" },
       "account-type": "Account type:",
       "settings-ico": { "tip": "Account settings" },
       "power-ico": {
@@ -32,6 +37,7 @@
     },
     "navbar": {
       "dashboard": "Dashboard",
+      "users": "User accounts",
       "expos": "Exhibitions",
       "privacy": "Privacy policy",
       "legal": "Legal notice",

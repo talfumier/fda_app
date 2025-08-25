@@ -1,11 +1,11 @@
 <script setup>
-  import { ref, useSlots, watch, inject, computed } from 'vue'
+  import {useSlots} from 'vue'
+  import { useRoute } from 'vue-router';
   import HeaderMember from './HeaderMember.vue'
   import LangSwitcher from './LangSwitcher.vue';
   import NavBar from './navbar/NavBar.vue';
   
-  const { value } = inject('userCookie')
-  const token = computed(() => value.value)
+  const route=useRoute()
   
   const slots = useSlots()
 
@@ -27,8 +27,8 @@
       </div>
     </header>
     <aside>
-      <Transition name="fade">
-        <NavBar v-if="token"></NavBar>
+      <Transition v-if="route.name?.includes('member')" name="fade">
+        <NavBar ></NavBar>
       </Transition>
     </aside>
     <main>

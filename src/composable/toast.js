@@ -1,4 +1,10 @@
-import { Notify } from 'quasar'
+let create = null
+let closeHandle = null
+export function initToast(Notify) {
+  //static Notify is initialized globally in App.js in order that messages survive page navigation
+  // >>> don't survive page hard reload (F5)
+  create = Notify.create
+}
 export function toastSuccess(message, msgType = 'non-persistent', spinner = false) {
   switch (msgType) {
     case 'persistent':
@@ -35,7 +41,7 @@ export function toastError(message, msgType = 'non-persistent', spinner = false)
   }
 }
 function toastPersistent(message, color, icon, spinner) {
-  Notify.create({
+  closeHandle = create({
     message,
     icon,
     color,
@@ -44,13 +50,18 @@ function toastPersistent(message, color, icon, spinner) {
     position: 'top-right',
     actions: [{ label: 'Close', color: 'white' }],
   })
+  return closeHandle
+}
+export function closeToast() {
+  closeHandle?.()
+  closeHandle = null
 }
 function toast(message, color = 'primary', icon = 'check', position = 'top-right', timeout = 2500) {
   // Give this toast a unique root class so we can reliably target it
   const uid = `q-notif-${Date.now()}-${Math.random().toString(36).slice(2)}`
   const rootClass = `hoverable-${uid}`
   // Create as persistent; we'll dismiss via our own timer
-  const handle = Notify.create({
+  const handle = create({
     message,
     color,
     icon,

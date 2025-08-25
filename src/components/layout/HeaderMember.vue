@@ -1,22 +1,20 @@
 <script setup>
-  import { inject,ref,computed} from 'vue';
+  import { inject,ref} from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
   import { useI18n } from 'vue-i18n';
-  import { decodeJWT } from '@/services/httpUsers.js';
   import Tooltip from '../common/Tooltip.vue';
   import FormLogin from '../login/FormLogin.vue';
   import { useQuasar } from 'quasar'
-  import { confirm } from '../common/toast_dialog/dialog.js';
+  import { confirm } from '../common/dialog/dialog.js';
   
-  const {value,remove} = inject('userCookie')
-  const token = computed(() => value.value)
+  const {token,decoded, remove} = inject('userCookie')
 
   const {t}=useI18n()
+  const router=useRouter()
+  const route=useRoute()
   const $q=useQuasar()
 
   const openLogin=ref(false)
-  const decoded=computed(() => {
-    return token.value?decodeJWT(token.value):null
-  })
   const email=ref(decoded.value?decoded.value.email:null)  //initial value when a cookie is already set (reload, connection to the site)
   
   const showPopup = ref(false)
@@ -27,6 +25,19 @@
   async function handleLogOut(){    
     if (!(await confirm($q,t('comps.header.power-ico.dialog'),'ok'))) return
     remove('user')
+    router.push({ name: 'public home' })
+  }
+  function handleClick(){
+    if(route.name.includes('member')) router.push({ name: 'public home' })
+    else if(route.name.includes('public')) {
+      if(!token.value) openLogin.value=true
+      else router.push({ name: 'member home' })
+    }
+  }
+  function getTooltipText(){
+    if(route.name?.includes('member')) return t('comps.header.public-btn.tip')
+    else if(token.value) return t('comps.header.member-btn.tip2')
+    return t('comps.header.member-btn.tip1')
   }
   //Dropdown menu opening - closing
   let closeTimer = null
@@ -45,24 +56,25 @@
   function forceClose () {
     showPopup.value = false
   }
+
 </script>
 
 <template>
   <q-btn 
-    :class="['btn', 'bg-grey-3', !token?'visible':'hidden']" 
+    :class="['btn', 'bg-grey-3']" 
     rounded standout
     icon="login" 
     no-wrap
-    :label="$t('comps.header.member-btn.text')"
-    @click="openLogin=true"
+    :label="$t(`comps.header.${route.name?.includes('member')?'public-btn':'member-btn'}.text`)"
+    @click="handleClick"
     tabindex="-1"
     >
-      <Tooltip :tt_text="$t('comps.header.member-btn.tip')" :small="false"></Tooltip>
+      <Tooltip :tt_text="getTooltipText()" :small="false"></Tooltip>
   </q-btn>
   <Transition v-if="openLogin" name="fade">
     <FormLogin  @close-form="openLogin=false" @log-in="handleLogIn"></FormLogin>
   </Transition>
-  <div :class="['icons',token?'visible':'hidden']" 
+  <div :key="token" :class="['icons',token?'visible':'hidden']" 
       @mouseenter="openMenu"
       @mouseleave="scheduleClose"
       @click="openMenu"
@@ -145,12 +157,6 @@
     z-index: 5000;
     cursor: pointer;
   }
-  .visible {
-    visibility: visible;
-  }
-  .hidden {
-    visibility: hidden;
-  }
   .q-item div {
     display:flex;
     justify-content: left;
@@ -162,5 +168,11 @@
   }
   .log-out {
     color:var(--red-opaque9);
+  }
+  .visible {
+    visibility: visible;
+  }
+  .hidden {
+    visibility: hidden;
   }
 </style>
