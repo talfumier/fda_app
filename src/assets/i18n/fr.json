@@ -2,7 +2,8 @@
   "common": {
     "welcome": "Bienvenue",
     "logout": "Déconnexion",
-    "select": "Choisir un élément de la liste ..."
+    "select": "Choisir un élément de la liste ...",
+    "search": "Rechercher ..."
   },
   "comps": {
     "header": {
@@ -58,10 +59,22 @@
       }
     },
     "list_items": {
-      "edit_menu": {
+      "actions_menu": {
         "last_change": "Mis à jour",
         "edit": "Modifier",
-        "delete": "Supprimer"
+        "user": {
+          "created": "Créé",
+          "validated": "Validé",
+          "deactivated": "Désactivé",
+          "validation": "Validation compte utilisateur",
+          "deactivation": "Désactivation compte utilisateur",
+          "delete": "Suppresion compte utilisateur",
+          "filter": {
+            "indeterminate": "statut du compte ?",
+            "pending": "en attente",
+            "validated": "validé"
+          }
+        }
       }
     },
     "public_site": {

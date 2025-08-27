@@ -55,13 +55,13 @@ const router = createRouter({
     },
   ],
 })
-// router.beforeEach((to) => {
-//   const role = getUserRole()
-//   // Public routes → always allow (even if authenticated)
-//   if (to.meta.roles.includes(-1)) return true //all public pages have meta.roles=[-1] >>> return the page regardless of authentication
-//   // Protected routes → allow only if authenticated with a matching role
-//   if (role !== -1 && to.meta.roles.includes(role)) return true
-//   // Otherwise → send to public home
-//   if (to.name !== 'home') return { name: 'home', query: { redirect: to.fullPath } }
-// })
+router.beforeEach((to) => {
+  const role = getUserRole()
+  // Public routes → always allow (even if authenticated)
+  if (to.meta.roles.includes(-1)) return true //all public pages have meta.roles=[-1] >>> return the page regardless of authentication
+  // Protected routes → allow only if authenticated with a matching role
+  if (role !== -1 && to.meta.roles.includes(role)) return true
+  // Otherwise → send to public home
+  if (to.name !== 'public home') return { name: 'public home', query: { redirect: to.fullPath } }
+})
 export default router

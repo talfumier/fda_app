@@ -6,7 +6,6 @@ import quasarLangFr from 'quasar/lang/fr.js'
 import quasarLangEn from 'quasar/lang/en-GB.js'
 import frFlag from '../../assets/images/fr.png'
 import ukFlag from '../../assets/images/uk.png'
-import arrow from "../../assets/images/down_arrow.png"
 
 const { locale } = useI18n()
 const $q = useQuasar()

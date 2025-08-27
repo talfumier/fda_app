@@ -5,7 +5,7 @@
   import { initToast } from './composable/toast.js';
   import MasterContainer from './components/layout/MasterContainer.vue';
 
-  const userCookie = useCookieRef('user') // OK: inside a component
+  const userCookie = useCookieRef('user') 
   provide('userCookie', userCookie)
 
   initToast(Notify)

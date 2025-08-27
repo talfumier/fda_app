@@ -3,7 +3,6 @@
 
   const props=defineProps({
     id:{type:Number},
-    label:{type:String},
     checked:{type:Boolean}
   })
 
@@ -17,11 +16,7 @@
 
 <template>
   <div>
-    <label 
-      :for="id" 
-      v-html="label"
-    >
-    </label>
+    <slot name="label"></slot>   
     <input
         :id="id"
         type="checkbox"
@@ -46,7 +41,7 @@
   }
   input {
     transform: scale(1.5);
-    margin:0px 10px 0 5px;
+    margin:0px 10px 20px 5px;
     width: fit-content;
     cursor: pointer;
   }

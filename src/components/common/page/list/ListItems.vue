@@ -1,19 +1,24 @@
 <script setup>
   import {ref,defineEmits} from 'vue'
+  import _ from 'lodash'
   import CheckBox from '../../fields/CheckBox.vue';
-  import EditMenu from './EditMenu.vue';
+  import Label3 from './labels/Label3.vue';
+  import ActionMenu from './actions/ActionMenu.vue';
+  import UserActions from './actions/UserActions.vue';
+  import UserInfos from './actions/UserInfos.vue';
 
   const props=defineProps({
-    name:{type:String},
+    model:{type:String},
     master:{type:Array},
     data:{type:Array},
+    infos:{type:Array},
   })
 
   const emit=defineEmits(['openDetails'])
 
   const selected=ref({})
   props.data.map((item) => {
-    selected.value={...selected.value,[item[`id${props.name}`]]:false}
+    selected.value={...selected.value,[item[`id${props.model}`]]:false}
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
@@ -30,18 +35,33 @@
     <div :key="idx" class="list-item">
       <CheckBox
         :id="idx"
-        :label="item[master[0].name]"
-        :checked="selected[item[`id${name}`]]"
+        :checked="selected[item[`id${model}`]]"
         @selection-change="(val) => {
-          handleSelectionChange(val,item[`id${name}`])
+          handleSelectionChange(val,item[`id${model}`])
         }"
-      >
+      >      
+        <template #label>  <!--named scoped slot -->
+          <Label3 :item="item" :master="master" :id="idx" />
+        </template>
       </CheckBox>
-      <EditMenu
-        v-if="selected[item[`id${name}`]]"
-        :data="{id:item[`id${name}`],updatedAt:item.updatedAt}"
-      >
-      </EditMenu>
+      <ActionMenu
+        v-if="selected[item[`id${model}`]]"
+      > 
+        <template #infos> <!--named scoped slot -->
+          <UserInfos
+            v-if="model==='User'"
+            :data="_.filter(infos,(info) => {
+              return info.idUser===item.idUser
+            })"
+          ></UserInfos>
+        </template>
+        <template #actions> <!--named scoped slot -->
+          <UserActions
+            v-if="model==='User'"
+            :data="item"
+          ></UserActions>
+        </template>
+      </ActionMenu>
     </div>
   </div>
 </template>

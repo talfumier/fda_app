@@ -1,12 +1,19 @@
 <script setup>
-  import {useSlots} from 'vue'
-  import { useRoute } from 'vue-router';
+  import {inject,useSlots} from 'vue'
+  import { useRouter,useRoute } from 'vue-router';
+  import { useI18n } from 'vue-i18n';
+  import { setUpTokenExpiry } from '../login/tokenExpiry.js';
   import HeaderMember from './HeaderMember.vue'
   import LangSwitcher from './LangSwitcher.vue';
   import NavBar from './navbar/NavBar.vue';
   
   const route=useRoute()
-  
+  const router=useRouter()
+  const {t}=useI18n()
+  const {decoded} = inject('userCookie')
+  // handling the case where a user has closed the app without actual log-out
+  // and reopen the app with a still valid token  
+  if(decoded.value) setUpTokenExpiry(t, decoded.value?.exp, router)
   const slots = useSlots()
 
   </script>
@@ -20,7 +27,7 @@
           <span class="span-lh"style="color:#fcb414;">Festival des Arts</span>
           <span class="span-rh">Merville</span>
         </h1>
-        <div class="container-lang-icons">
+        <div class="container-public-member">
           <LangSwitcher ></LangSwitcher>
           <HeaderMember></HeaderMember>
         </div>
@@ -97,12 +104,13 @@
     padding:0 0 0 30px;
     color:var(--white);
   }
-  .container-lang-icons {
+  .container-public-member {
     display:flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items:center;  
-    justify-content: center;
-    gap: 20px;
+    justify-content:flex-start;
+    gap: 3px;
   }
   main {
     font-family: "Roboto", sans-serif;
@@ -135,10 +143,15 @@
       left:140px;
       width:calc(100% - 140px);
     }
-  }  
+  } 
+  @media screen and (min-width: 830px) {
+    .container-public-member{
+      flex-wrap: nowrap;      
+    }
+  } 
   @media screen and (min-width: 1300px) {
-    .container-lang-icons {
-      flex-direction: row;
+    .container-public-member{
+      /* flex-direction: row; */
       gap: 20px;
       padding-right: 40px;
     }
