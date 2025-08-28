@@ -1,13 +1,19 @@
 <script setup>
-  defineProps({
+  import { useI18n } from 'vue-i18n'
+  const props = defineProps({
+    role:{type:Object},
     data:{type:Array}
   })
+  const {locale}=useI18n()
   const text={1:'created',2:"validated",3:"deactivated"}
 
 </script>
 
 <template>
   <div>
+    <p :class="['role',role.idRole===1?'green':'red']" >
+      <span>{{ role[`role_${locale}`] }}</span> 
+    </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
       <span >{{ $t(`comps.list_items.actions_menu.user.${text[item.idStatus]}`)}}</span>
       <span>:&nbsp</span>    
@@ -18,12 +24,27 @@
 </template>
 
 <style scoped>
-  p {
+  .green {
+    color:var(--green)
+  }
+  .red {
+    color:var(--orange)
+  }
+  p {    
     font-size:1.3rem;
+    text-wrap: nowrap;
+  }
+  p.role {
+    font-weight:bolder;
+    text-align: center;
+    text-transform: capitalize;
+    font-style: italic;
+    margin:0;
+  }
+  p.date {
     font-weight: lighter;
     text-align: left;
-    text-wrap: nowrap;
-    margin:5px auto 3px 10px;
+    margin:0px auto 3px 10px;
   }
 
 </style>

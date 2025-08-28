@@ -23,8 +23,8 @@
 <template>
   <label  :for="id">
     <div class="row1">
-      <span class="ucase">{{ item[master[0].name] }}</span>
-      <span v-if="master[1]" class="ccase">{{ item[master[1].name] }}</span>
+      <span class="ucase">{{item[master[0].name]?item[master[0].name]:'t.b.d'}}</span>
+      <span v-if="master[1]" class="ccase">{{ item[master[1].name]?item[master[1].name]:'' }}</span>
       <q-icon v-if="status[0]===1 || status[0]===2"name="done_all" :color="status[1]" size="2.5rem"></q-icon>
       <q-icon v-if="status[0]===3" name="no_accounts" :color="status[1]" size="2.5rem"></q-icon>
     </div>
@@ -46,6 +46,7 @@
     flex-wrap: nowrap;
     justify-content: left;
     position:relative;
+    min-width:250px;
   }
   .q-icon {
     position:absolute;
@@ -62,12 +63,12 @@
   }
   .row2 {
     display:flex;
-    justify-content: center;
+    justify-content: left;
   }
   .row2 span {
     font-weight: lighter;
     color:blue;
-    padding:0 10px;
+    padding:0 5px;
   }
 
 </style>

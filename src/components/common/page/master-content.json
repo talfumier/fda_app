@@ -3,7 +3,7 @@
     "entity": {
       "url": "/member/users",
       "name": "member users",
-      "roles": [5, 6],
+      "roles": [5, 6, 7],
       "model": "User",
       "sql": "list_items_user",
       "label_fr": "Compte",

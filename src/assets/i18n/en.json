@@ -17,7 +17,7 @@
       "settings-ico": { "tip": "Account settings" },
       "power-ico": {
         "tip": "Sign-out",
-        "dialog": "Your are about to be logged-out,<br/>please confirm."
+        "dialog": "Your are about to be signed-out,<br/>please confirm."
       }
     },
     "login": {
@@ -69,10 +69,20 @@
           "validation": "User account validation",
           "deactivation": "User account deactivation",
           "delete": "User account deletion",
-          "filter": {
-            "indeterminate": "account status ?",
+          "confirm": {
+            "validation": "Please confirm account validation.",
+            "deactivation": "Please confirm account deactivation.",
+            "delete": "Please confirm account permanent deletion."
+          },
+          "status": {
+            "indeterminate": "status ?",
             "pending": "pending",
             "validated": "validated"
+          },
+          "role": {
+            "indeterminate": "role ?",
+            "artist": "artist",
+            "org": "other"
           }
         }
       }

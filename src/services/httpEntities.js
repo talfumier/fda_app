@@ -10,8 +10,9 @@ export function getEntities(entity, signal) {
     signal,
   })
 }
-export function getEntitiesBySql(stored_proc, signal) {
-  return http.get(`${api}/sql-entities/${stored_proc}`, {
+export function getEntitiesBySql(stored_proc, params, paramsValues, token, signal) {
+  return http.get(`${api}/sql-entities/${stored_proc}/${params}/${paramsValues}`, {
+    headers: { 'x-auth-token': token },
     signal,
   })
 }

@@ -15,7 +15,7 @@ import { setUpTokenExpiry } from './tokenExpiry.js'
 
 defineProps({})
 const{locale,t}=useI18n()
-const {read, set, decoded} = inject('userCookie')
+const {read, set} = inject('userCookie')
 const router=useRouter()
 // state initialization
 let obj={}

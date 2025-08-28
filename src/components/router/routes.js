@@ -40,7 +40,7 @@ const router = createRouter({
       path: '/member/home',
       name: 'member home',
       component: Dashboard,
-      meta: { roles: [1, 5, 6] },
+      meta: { roles: [1, 5, 6, 7] },
     },
     ...routes, //member pages
     {

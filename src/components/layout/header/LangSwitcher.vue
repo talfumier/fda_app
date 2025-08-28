@@ -4,8 +4,8 @@ import { useQuasar} from 'quasar'
 import { useI18n } from 'vue-i18n'
 import quasarLangFr from 'quasar/lang/fr.js'
 import quasarLangEn from 'quasar/lang/en-GB.js'
-import frFlag from '../../assets/images/fr.png'
-import ukFlag from '../../assets/images/uk.png'
+import frFlag from '../../../assets/images/fr.png'
+import ukFlag from '../../../assets/images/uk.png'
 
 const { locale } = useI18n()
 const $q = useQuasar()

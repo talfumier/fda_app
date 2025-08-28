@@ -1,9 +1,22 @@
 <script setup>
+  import { defineEmits } from 'vue';
+  import { useQuasar } from 'quasar';
+  import { useI18n } from 'vue-i18n';
   import Tooltip from '@/components/common/Tooltip.vue';
+  import { confirm } from '@/components/common/dialog/dialog.js';
 
   const props=defineProps({
     data:{type:Object}
-  })
+  })  
+  const $q=useQuasar()
+  const {t}=useI18n()
+  const emit=defineEmits(['userAction'])
+
+  async function handleActions(cs){
+    if (!(await confirm($q,t(`comps.list_items.actions_menu.user.confirm.${cs}`),'cancel'))) return
+    emit('userAction',cs,props.data.idUser)
+
+  }
 
 </script>
 
@@ -11,7 +24,7 @@
   <q-btn class="bg-blue-grey-2" unelevated rounded >
     <div class="menu">
       <div class="validation">
-        <q-btn round flat dense icon="done_all" :disable="data.idStatus===2" @click="" />
+        <q-btn round flat dense icon="done_all" :disable="data.idStatus===2" @click="handleActions('validation')" />
         <Tooltip :tt_text="$t('comps.list_items.actions_menu.user.validation')"></Tooltip>
       </div>
       <div class="deactivation" > 
@@ -28,7 +41,6 @@
 
 <style scoped>
   .q-btn.bg-blue-grey-2 {    
-    margin-top:5px;
     border: solid 1px grey;
   }
   .menu {

@@ -4,20 +4,20 @@
     "icon": "home",
     "text": "dashboard",
     "wrap": false,
-    "roles": [1, 5, 6]
+    "roles": [1, 5, 6, 7]
   },
   {
     "url": "/member/users",
     "icon": "account_circle",
     "text": "users",
     "wrap": false,
-    "roles": [5, 6]
+    "roles": [5, 6, 7]
   },
   {
     "url": "/member/expos",
     "icon": "photo_frame",
     "text": "expos",
     "wrap": false,
-    "roles": [1, 5, 6]
+    "roles": [1, 5, 6, 7]
   }
 ]

@@ -3,8 +3,8 @@
   import { useRouter,useRoute } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import { setUpTokenExpiry } from '../login/tokenExpiry.js';
-  import HeaderMember from './HeaderMember.vue'
-  import LangSwitcher from './LangSwitcher.vue';
+  import HeaderMember from './header/HeaderMember.vue'
+  import LangSwitcher from './header/LangSwitcher.vue';
   import NavBar from './navbar/NavBar.vue';
   
   const route=useRoute()

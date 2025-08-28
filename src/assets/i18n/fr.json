@@ -69,10 +69,20 @@
           "validation": "Validation compte utilisateur",
           "deactivation": "Désactivation compte utilisateur",
           "delete": "Suppresion compte utilisateur",
-          "filter": {
-            "indeterminate": "statut du compte ?",
+          "confirm": {
+            "validation": "Merci de confirmer la validation du compte.",
+            "deactivation": "Merci de confirmer la désactivation du compte.",
+            "delete": "Merci de confirmer la suppression du compte."
+          },
+          "status": {
+            "indeterminate": "statut ?",
             "pending": "en attente",
             "validated": "validé"
+          },
+          "role": {
+            "indeterminate": "role ?",
+            "artist": "artiste",
+            "org": "autres"
           }
         }
       }

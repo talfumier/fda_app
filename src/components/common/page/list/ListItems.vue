@@ -14,7 +14,7 @@
     infos:{type:Array},
   })
 
-  const emit=defineEmits(['openDetails'])
+  const emit=defineEmits(['openDetails','userAction'])
 
   const selected=ref({})
   props.data.map((item) => {
@@ -50,6 +50,7 @@
         <template #infos> <!--named scoped slot -->
           <UserInfos
             v-if="model==='User'"
+            :role="{idRole:item.idRole,role_fr:item.role_fr,role_en:item.role_en}"
             :data="_.filter(infos,(info) => {
               return info.idUser===item.idUser
             })"
@@ -59,6 +60,9 @@
           <UserActions
             v-if="model==='User'"
             :data="item"
+            @user-action="(cs,id) => {
+              emit('userAction',cs,id)
+            }"
           ></UserActions>
         </template>
       </ActionMenu>
