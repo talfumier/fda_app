@@ -8,6 +8,7 @@
     fields:{type:Array},
     data:{type:Object}
   })  
+
   const {locale}=useI18n()
   //filter out _fr or _en fields when they are optional AND do not match the current locale
   const filteredFields=computed(() => {

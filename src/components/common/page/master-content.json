@@ -1,17 +1,19 @@
 [
   {
     "entity": {
+      "idx": 0,
       "url": "/member/users",
       "name": "member users",
       "roles": [5, 6, 7],
       "model": "User",
-      "sql": "list_items_user",
+      "sql": "list_items_user0",
       "label_fr": "Compte",
       "label_en": "Account",
       "labels_fr": "Comptes",
       "labels_en": "Accounts",
       "orderBy": { "field": "lastName", "order": "asc" },
-      "fileYes": "image/png, image/jpeg, image/webp"
+      "fileYes": "image/png, image/jpeg, image/webp",
+      "noList": false
     },
     "fieldsets": [
       {
@@ -79,6 +81,25 @@
             "required": false
           }
         ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 1,
+      "url": "/member/user",
+      "name": "member user",
+      "roles": [1, 5, 6, 7],
+      "model": "User",
+      "sql": "list_items_user1",
+      "label_fr": "Profil",
+      "label_en": "Profile",
+      "fileYes": "image/png, image/jpeg, image/webp",
+      "noList": true
+    },
+    "fieldsets": [
+      {
+        "sameAs_idx": 0
       }
     ]
   }

@@ -20,7 +20,10 @@ const routes = content.map((item) => {
     component: Master,
     props: {
       entity: item.entity,
-      fieldsets: item.fieldsets,
+      fieldsets:
+        item.fieldsets[0].sameAs_idx !== undefined
+          ? content[item.fieldsets[0].sameAs_idx].fieldsets
+          : item.fieldsets,
     },
     meta: { roles: item.entity.roles }, //user must be authenticated and hold the required role to access the page
   }

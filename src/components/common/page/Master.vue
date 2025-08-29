@@ -6,17 +6,18 @@
   import ListItems from './list/ListItems.vue';
   import FormDetails from './details/FormDetails.vue';
 
-  const {entity,fieldsets}=defineProps({
+  const props=defineProps({
     entity:{type:Object},
     fieldsets:{type:Array},
   })
+  
   const {t}=useI18n()  
   const {token,decoded}=inject('userCookie')
   //field_master definition, formValid initialization
   const field_master=ref([])
   let fltr=null
   const obj={}
-  fieldsets.map((fldset) => {
+  props.fieldsets.map((fldset) => {
     fltr=null
     fltr=_.filter(fldset.fields, (fld) => {
       return fld.listMaster !== undefined
@@ -33,18 +34,18 @@
   
   const state=ref(null)
   const selectedId = ref(null)
-  const filtered = computed(() => {
+  const filteredDetails = computed(() => {
     const arr = state.value[0] || []
     const id = selectedId.value
     if (id === null) return null
-    return arr.find(item => item[`id${entity.model}`] === id)
+    return arr.find(item => item[`id${props.entity.model}`] === id)
   })
 
   function handleOpenDetails(id){
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){
-    const idx=state.value[0].findIndex(record => record[`id${entity.model}`] === id)
+    const idx=state.value[0].findIndex(record => record[`id${props.entity.model}`] === id)
     state.value[0][idx][name]=val
     formValid.value[name]=valid
   }
@@ -53,96 +54,111 @@
   let alive = true // guard against updates after unmount
   async function fetch() {
     if (ctrls[0]) ctrls[0].abort()
-    let sqlparams=null,paramsValues=null
-    if (entity.sql && entity.model==="User") //returned users have their idRole < signed-in user but includes the signed-in user record
-      sqlparams=":idRole,:idUser"
-      paramsValues=`${decoded.value.idRole},${decoded.value.idUser}`
     ctrls[0] = new AbortController()
-    let res=null
-    if(entity.sql) res=(await getEntitiesBySql(
-        entity.sql,
-        sqlparams, 
-        paramsValues,
-        token.value,
-        ctrls[0].signal
-      )).data
+    let res=null,sqlparams=null,paramsValues=null
+    if (props.entity.sql) {
+      switch(props.entity.model){
+        case 'User':        //returned users have their idRole < signed-in user
+          sqlparams=!props.entity.noList?":idRole":":idUser"
+          paramsValues=`${!props.entity.noList?decoded.value.idRole:decoded.value.idUser}`
+          break
+      }
+      res=(await getEntitiesBySql(
+          props.entity.sql,
+          sqlparams, 
+          paramsValues,
+          token.value,
+          ctrls[0].signal
+        )).data      
+    }
     if (!alive) return                // component gone? don't touch state 
-    return res.data
+      return res.data    
   }  
   onMounted(async () => {  
     state.value = await fetch() 
-    state.value[0]=_.filter(state.value[0],(item) => {
-      return item.idUser!==decoded.value.idUser  // do not return signed-in user
-    })
+    if(props.entity.noList) {
+      let id=null
+      switch(props.entity.model){
+        case 'User':
+          id=decoded.value.idUser
+          break
+      }
+      handleOpenDetails(id)
+    }
   })
-  onUnmounted(() => { // clean-up code after component has unmounted
+  onUnmounted(() => { // clean-up code after component has unmounted    
     alive = false;
     Object.keys(ctrls).map((key) => {
        ctrls[key]?.abort() 
-    })   
+    }) 
   })    
   //fold button
   const isRotated = ref(false)
   function rotateIcon() {
     isRotated.value=!isRotated.value
   }
-  //DATA FILTERING
-  const stateFilter=ref({search:'',user_status:'',user_role:''})
-  const filteredState=computed(() => {
-    return _.filter(state.value[0],(item) => {
-      let cond=[],result=true
-      cond.push(JSON.stringify(item).includes(stateFilter.value.search))
-      cond.push(stateFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
-        (stateFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
-      cond.push(stateFilter.value.user_role?item.idRole>=5:
-        (stateFilter.value.user_role===false?item.idRole===1:item.idRole>=1))
-      cond.map((cnd) => {
-        result=result && cnd
-      })
-      return result
-    })
-  })
-  const toggleOn = ref({status:false,role:false})
-  function getToggleLabel(toggle){
-    switch(stateFilter.value[`user_${toggle}`]){
-      case true:
-        toggleOn.value[toggle]=true
-        return t(`comps.list_items.actions_menu.user.${toggle}.${toggle==='status'?'validated':'org'}`) 
-      case false:
-        toggleOn.value[toggle]=false
-        return t(`comps.list_items.actions_menu.user.${toggle}.${toggle==='status'?'pending':'artist'}`)
-      default:
-        return t(`comps.list_items.actions_menu.user.${toggle}.indeterminate`)
-    }
-  }
-  //MODEL SPECIFIC
-  async function handleUserAction(cs,id){    
-    if (!alive) return                // component gone? don't touch state 
-    if (ctrls[1]) ctrls[1].abort()
-    ctrls[1] = new AbortController()
-    let status=2
-    switch(cs){      
-      case "deactivation":
-        status=3
-      case "validation":
-        //database update
-        await postEntity('StatusTracking', {idStatus:status,idUser:id}, token.value, ctrls[1].signal)
-        // state update
-        state.value[1].unshift({idUser:id,idStatus:2,createdAt:new Date(Date.now())})
-        const idx=state.value[0].findIndex((item) => {
-          return item.idUser===id
+  //LIST ITEMS DATA FILTERING - MODEL SPECIFIC
+  let stateFilter=ref({}),filteredList=null,toggleOn = ref({})  //filter 3 position switches
+  let getToggleLabel=null, handleAction=null
+  switch(props.entity.model){
+    case 'User':      
+      stateFilter=ref({search:'',user_status:'',user_role:''})  
+      filteredList=computed(() => {
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).includes(stateFilter.value.search))
+          cond.push(stateFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
+            (stateFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
+          cond.push(stateFilter.value.user_role?item.idRole>=5:
+            (stateFilter.value.user_role===false?item.idRole===1:item.idRole>=1))
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
         })
-        state.value[0][idx].idStatus=2
-        break;
-      case "deletion":
-    }
+      })
+      toggleOn = ref({status:false,role:false})
+      getToggleLabel = (toggle)=>{
+        switch(stateFilter.value[`user_${toggle}`]){
+          case true:
+            toggleOn.value[toggle]=true
+            return t(`comps.list_items.actions_menu.user.${toggle}.${toggle==='status'?'validated':'org'}`) 
+          case false:
+            toggleOn.value[toggle]=false
+            return t(`comps.list_items.actions_menu.user.${toggle}.${toggle==='status'?'pending':'artist'}`)
+          default:
+            return t(`comps.list_items.actions_menu.user.${toggle}.indeterminate`)
+        }
+      }
+      handleAction = async(cs,id)=>{    
+        if (!alive) return                // component gone? don't touch state 
+        if (ctrls[1]) ctrls[1].abort()
+        ctrls[1] = new AbortController()
+        let status=2
+        switch(cs){      
+          case "deactivation":
+            status=3
+          case "validation":
+            //database update
+            await postEntity('StatusTracking', {idStatus:status,idUser:id}, token.value, ctrls[1].signal)
+            // state update
+            state.value[1].unshift({idUser:id,idStatus:2,createdAt:new Date(Date.now())})
+            const idx=state.value[0].findIndex((item) => {
+              return item.idUser===id
+            })
+            state.value[0][idx].idStatus=2
+            break;
+          case "deletion":
+        }
+      }
+      break
   }
 
 </script>
 
 <template>
   <section v-if="state" :class="['master-container',isRotated?'folded':'']">
-    <aside class="top-container" >
+    <aside v-if="!entity.noList" class="top-container" >
       <div class="filter">   
         <q-input
           dense
@@ -183,7 +199,7 @@
             size="md"
           />
         </div> 
-        <span v-if="!isRotated">{{ `${filteredState.length}/${state[0].length}` }}</span>
+        <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
       </div>
       <q-icon 
         class="btn-fold"
@@ -193,14 +209,14 @@
       >
       </q-icon>
     </aside>
-    <aside :class="['list-container',isRotated?'folded':'']">
-      <ListItems 
+    <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
+      <ListItems         
         :model="entity.model"
         :master="field_master"
-        :data="filteredState"
+        :data="filteredList"
         :infos="state.length>1?state[1]:null"
         @open-details="handleOpenDetails"
-        @user-action="handleUserAction"
+        @user-action="handleAction"
       >
       </ListItems>
     </aside>
@@ -210,7 +226,7 @@
         :key="selectedId"
         :entity="entity" 
         :fieldsets="fieldsets" 
-        :record="filtered"
+        :record="filteredDetails"
         @change="handleChange"
         >
       </FormDetails>

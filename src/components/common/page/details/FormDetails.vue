@@ -11,7 +11,7 @@
   function handleChange(id,name,valid,val){
     emit('change',id,name,valid,val)
   }
-
+  
 </script>
 
 <template>

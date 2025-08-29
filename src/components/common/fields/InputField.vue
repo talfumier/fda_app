@@ -51,7 +51,7 @@
       props.name,
       valid.valid,
       val,// props.format !== "date" && props.format !== "date-time" ? val : strToDate(val),
-      props.name==='pwd_check'?data:undefined
+      props.name==='pwd_check'?data.value:undefined
     ) 
   }
   function handleVisibility(){

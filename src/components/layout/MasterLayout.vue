@@ -39,7 +39,10 @@
       </Transition>
     </aside>
     <main>
-      <router-view ></router-view>
+      <router-view 
+        :key="$route.fullPath"
+      >
+      </router-view>
     </main>
     <footer v-if="slots.footer">
       <slot name="footer"></slot>
