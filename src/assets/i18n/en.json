@@ -3,7 +3,10 @@
     "welcome": "Welcome",
     "logout": "Log out",
     "select": "Please select an item ...",
-    "search": "Search ..."
+    "search": "Search ...",
+    "save": "Save changes",
+    "clear": "Clear and reset to default values",
+    "undo": "Undo changes"
   },
   "comps": {
     "header": {
@@ -40,6 +43,7 @@
       "dashboard": "Dashboard",
       "users": "User accounts",
       "expos": "Exhibitions",
+      "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
       "map": "Site map",

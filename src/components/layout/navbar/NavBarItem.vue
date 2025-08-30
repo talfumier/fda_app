@@ -58,9 +58,13 @@
     display: block;
     border-radius: 4px;
   }
-  a:hover {
+  a:not(.router-link-active):hover {
     color: var(--red);
     font-weight:bolder;
     background-color: var(--beige-opaque8);
+  }
+  a.router-link-active {
+    color:var(--orange);
+    font-weight: bolder;
   }
 </style>

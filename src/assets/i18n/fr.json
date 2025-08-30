@@ -3,7 +3,10 @@
     "welcome": "Bienvenue",
     "logout": "Déconnexion",
     "select": "Choisir un élément de la liste ...",
-    "search": "Rechercher ..."
+    "search": "Rechercher ...",
+    "save": "Sauvegarder",
+    "clear": "Effacer et réinitialiser",
+    "undo": "Annuler"
   },
   "comps": {
     "header": {
@@ -40,6 +43,7 @@
       "dashboard": "Tableau de bord",
       "users": "Comptes utilisateur",
       "expos": "Expositions",
+      "admin_settings": "Administration",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
       "map": "Plan du site",

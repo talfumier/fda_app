@@ -5,6 +5,7 @@
   import { getEntitiesBySql,postEntity,patchEntity } from '@/services/httpEntities.js';
   import ListItems from './list/ListItems.vue';
   import FormDetails from './details/FormDetails.vue';
+  import Toolbar from '../toolbar/Toolbar.vue';
 
   const props=defineProps({
     entity:{type:Object},
@@ -29,23 +30,26 @@
   })
   const formValid=ref({...obj})
   const disabled=computed(() => {
-    return JSON.stringify(formValid).indexOf(false) !== -1;
+    return JSON.stringify(formValid).includes(false);
   })
   
   const state=ref(null)
   const selectedId = ref(null)
-  const filteredDetails = computed(() => {
-    const arr = state.value[0] || []
-    const id = selectedId.value
-    if (id === null) return null
-    return arr.find(item => item[`id${props.entity.model}`] === id)
-  })
 
+  const initialValues=[]
+  const actualChanges=ref([])
+
+  function getIndex(id){
+    return state.value[0].findIndex((item) => {
+          return item[`id${props.entity.model}`]===selectedId.value
+        }) 
+  }  
   function handleOpenDetails(id){
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){
-    const idx=state.value[0].findIndex(record => record[`id${props.entity.model}`] === id)
+    const idx=getIndex(id)      
+    actualChanges.value[idx][name]=initialValues[idx][name]!==val
     state.value[0][idx][name]=val
     formValid.value[name]=valid
   }
@@ -76,10 +80,18 @@
   }  
   onMounted(async () => {  
     state.value = await fetch() 
+    _.cloneDeep(state.value[0]).map((init) => {  //initialize initialValues, cloneDeep necessary
+      initialValues.push(init)
+    })
+    initialValues.map((init) => {  //initialize actualChanges >>> all fields set to false
+      actualChanges.value.push(
+        Object.keys(init).reduce((acc, key) => (acc[key] = false, acc), {})
+      )
+    })
     if(props.entity.noList) {
       let id=null
       switch(props.entity.model){
-        case 'User':
+        case 'User':                  // WARNING !!!!! >>> MODEL SPECIFIC HERE
           id=decoded.value.idUser
           break
       }
@@ -92,25 +104,25 @@
        ctrls[key]?.abort() 
     }) 
   })    
-  //fold button
+  // FOLDING MENU
   const isRotated = ref(false)
   function rotateIcon() {
     isRotated.value=!isRotated.value
   }
-  //LIST ITEMS DATA FILTERING - MODEL SPECIFIC
-  let stateFilter=ref({}),filteredList=null,toggleOn = ref({})  //filter 3 position switches
+  // LISTITEMS DATA FILTERING AND ACTIONS - MODEL SPECIFIC
+  let listItemsFilter=null,filteredList=null,toggleOn = null  //filter 3 position switches
   let getToggleLabel=null, handleAction=null
   switch(props.entity.model){
     case 'User':      
-      stateFilter=ref({search:'',user_status:'',user_role:''})  
-      filteredList=computed(() => {
+      listItemsFilter=ref({search:'',user_status:'',user_role:''})  
+      filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
-          cond.push(JSON.stringify(item).includes(stateFilter.value.search))
-          cond.push(stateFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
-            (stateFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
-          cond.push(stateFilter.value.user_role?item.idRole>=5:
-            (stateFilter.value.user_role===false?item.idRole===1:item.idRole>=1))
+          cond.push(JSON.stringify(item).includes(listItemsFilter.value.search))
+          cond.push(listItemsFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
+            (listItemsFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
+          cond.push(listItemsFilter.value.user_role?item.idRole>=5:
+            (listItemsFilter.value.user_role===false?item.idRole===1:item.idRole>=1))
           cond.map((cnd) => {
             result=result && cnd
           })
@@ -119,7 +131,7 @@
       })
       toggleOn = ref({status:false,role:false})
       getToggleLabel = (toggle)=>{
-        switch(stateFilter.value[`user_${toggle}`]){
+        switch(listItemsFilter.value[`user_${toggle}`]){
           case true:
             toggleOn.value[toggle]=true
             return t(`comps.list_items.actions_menu.user.${toggle}.${toggle==='status'?'validated':'org'}`) 
@@ -153,6 +165,27 @@
       }
       break
   }
+  const initFlag=ref(0)
+  const filteredDetails = computed(() => {
+    return _.filter(state.value[0],(item) => {
+        return (item[`id${props.entity.model}`]===selectedId.value)
+      })[0]
+  })
+  function filteredDetailsTrigger(){  //trigger filteredDetails computed update, see FormDetails component key in the template
+    return parseInt(selectedId.value)+initFlag.value
+  }
+  // TOOLBAR ACTIONS
+  function handleToolbarActions(cs){
+    switch(cs){
+      case "save":
+      case "clear":
+        break
+      case "undo":
+        const idx=getIndex(selectedId.value)
+        state.value[0][idx]=_.cloneDeep(initialValues[idx])  //cloneDeep necessary
+        initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
+    }
+  }
 
 </script>
 
@@ -164,7 +197,7 @@
           dense
           filled
           debounce="300"
-          v-model="stateFilter.search"
+          v-model="listItemsFilter.search"
           :placeholder="$t('common.search')"
           hide-bottom-space
         >
@@ -172,13 +205,13 @@
             <q-icon name="search" />
           </template>
           <template v-slot:append>
-            <q-icon name="cancel" @click="stateFilter.search=''" class="cursor-pointer" />
+            <q-icon name="cancel" @click="listItemsFilter.search=''" class="cursor-pointer" />
           </template>
         </q-input> 
         <div class="toggle"> 
           <q-toggle
             v-if="entity.model==='User'"
-            v-model="stateFilter.user_status"
+            v-model="listItemsFilter.user_status"
             toggle-indeterminate
             :label="getToggleLabel('status')"            
             :color="toggleOn.status?'positive':'deep-orange-9'"s
@@ -189,7 +222,7 @@
           />   
           <q-toggle
             v-if="entity.model==='User'"
-            v-model="stateFilter.user_role"
+            v-model="listItemsFilter.user_role"
             toggle-indeterminate
             :label="getToggleLabel('role')"
             :color="toggleOn.role?'deep-orange-9':'positive'"
@@ -223,12 +256,19 @@
     <form class="details-container">
       <FormDetails 
         v-if="selectedId" 
-        :key="selectedId"
+        :key="filteredDetailsTrigger()"
         :entity="entity" 
         :fieldsets="fieldsets" 
         :record="filteredDetails"
         @change="handleChange"
         >
+        <template #toolbar> <!--named scoped slot -->
+          <Toolbar class="toolbar"
+            :actualChange="JSON.stringify(actualChanges).includes(true)"
+            @toolbar-actions="handleToolbarActions"
+          >
+        </Toolbar>
+        </template> 
       </FormDetails>
     </form>
   </section>
@@ -242,6 +282,7 @@
     grid-template-rows:80px auto;
     justify-content: left;
     height:100%;   
+    position:relative;
   }  
   .master-container.folded {
     grid-template-columns: 40px auto;
@@ -284,11 +325,6 @@
     justify-content: space-between;
     padding-right: 10px;
   }
-  .toggle-role .q-toggle__track { background: #cbd5e1; }                 /* OFF track */
-  .toggle-role .q-toggle__thumb { background: var(--green); }                 /* OFF thumb */
-  .toggle-role .q-toggle--checked .q-toggle__track { background: #cbd5e1; } /* ON track */
-  .toggle-role .q-toggle--checked .q-toggle__thumb { background: var(--orange); }    /* ON thumb */
-
   .master-container .btn-fold { 
     margin: 0 10px 5px;
     transform: rotate(0deg);
@@ -313,6 +349,11 @@
     grid-row: 1/span 2;
     grid-column: 2;
     border: 1px solid lightgrey;
+  }
+  .toolbar {
+    position:absolute;
+    top:10px;
+    right:20px;
   }
   div.folded .details-container {
     border-width: 0;

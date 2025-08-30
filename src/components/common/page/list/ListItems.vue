@@ -13,7 +13,6 @@
     data:{type:Array},
     infos:{type:Array},
   })
-
   const emit=defineEmits(['openDetails','userAction'])
 
   const selected=ref({})

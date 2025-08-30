@@ -6,8 +6,8 @@
     master:{type:Array},
     id:{type:Number}
   })
-
- const status=computed(() => {
+  
+  const status=computed(() => {
    switch (props.item.idStatus){
       case 1:
         return [1,'warning']
@@ -23,8 +23,8 @@
 <template>
   <label  :for="id">
     <div class="row1">
-      <span class="ucase">{{item[master[0].name]?item[master[0].name]:'t.b.d'}}</span>
-      <span v-if="master[1]" class="ccase">{{ item[master[1].name]?item[master[1].name]:'' }}</span>
+      <span class="ucase">{{item[master[0].name]?item[master[0].name]:master[0].default}}</span>
+      <span v-if="master[1]" class="ccase">{{ item[master[1].name]?item[master[1].name]:master[1].default }}</span>
       <q-icon v-if="status[0]===1 || status[0]===2"name="done_all" :color="status[1]" size="2.5rem"></q-icon>
       <q-icon v-if="status[0]===3" name="no_accounts" :color="status[1]" size="2.5rem"></q-icon>
     </div>

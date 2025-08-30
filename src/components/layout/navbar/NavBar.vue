@@ -82,6 +82,9 @@
   nav.folded .q-icon.btn-fold {
     transform: rotate(-180deg);
   }
+  a.router-link-active img.avatar {
+    border:solid 3px var(--orange);
+  }
   hr {
     width:100%;
   }

@@ -21,18 +21,18 @@
 </script>
 
 <template>
-  <q-btn class="bg-blue-grey-2" unelevated rounded >
+  <q-btn class="bg-blue-grey-2" push  >
     <div class="menu">
       <div class="validation">
-        <q-btn round flat dense icon="done_all" :disable="data.idStatus===2" @click="handleActions('validation')" />
+        <q-btn round flat icon="done_all" size="1.6rem" :disable="data.idStatus===2" @click="handleActions('validation')" />
         <Tooltip :tt_text="$t('comps.list_items.actions_menu.user.validation')"></Tooltip>
       </div>
       <div class="deactivation" > 
-        <q-btn round flat dense icon="no_accounts" :disable="data.idStatus===3" @click="" />
+        <q-btn round flat icon="no_accounts" size="1.6rem" :disable="data.idStatus===3" @click="handleActions('deactivation')" />
         <Tooltip :tt_text="$t('comps.list_items.actions_menu.user.deactivation')"></Tooltip>
       </div>
       <div class="delete">        
-        <q-btn round flat dense icon="delete" @click="" />
+        <q-btn round flat icon="delete" size="1.6rem" @click="handleActions('deletion')" />
         <Tooltip :tt_text="$t('comps.list_items.actions_menu.user.delete')"></Tooltip>
       </div>
     </div>
@@ -42,10 +42,11 @@
 <style scoped>
   .q-btn.bg-blue-grey-2 {    
     border: solid 1px grey;
+    margin-top:5px;
   }
   .menu {
     display: flex;
-    justify-content:center !important;
+    justify-content:center;
   }
   .menu div {    
     cursor: pointer;
@@ -56,12 +57,7 @@
   .deactivation, .delete {    
     color:var(--red-opaque8);
   }
-  .deactivation {
-    border-left: solid 1px;
-    border-right:solid 1px;
-    border-color: grey;
-  }
   .q-btn {
-    padding:0 15px;
+    padding: 0 15px;
   }
 </style>

@@ -93,7 +93,7 @@ async function fetch() {
   const {data}=(await getEntities('Role',ctrl.signal)).data
   if (!alive) return                // component gone? don't touch state  
   return _.filter(data,(item) => {
-    return [1,3,5].includes(item.idRole)    //artist, partner, organisation
+    return [1,5,6].includes(item.idRole)    //artist, organisation, organisation admin
   })
 }
 let roleOptions=[];
