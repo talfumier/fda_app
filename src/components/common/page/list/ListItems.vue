@@ -32,13 +32,17 @@
 <template>
   <div v-for="(item,idx) in data">      
     <div :key="idx" class="list-item">
-      <CheckBox
-        :id="idx"
-        :checked="selected[item[`id${model}`]]"
-        @selection-change="(val) => {
-          handleSelectionChange(val,item[`id${model}`])
-        }"
-      >      
+      <CheckBox>  
+        <template #checkbox>  <!--named scoped slot -->
+          <input
+            :id="idx"
+            type="checkbox"
+            :checked="selected[item[`id${model}`]]"
+            @change="(e) => {
+              handleSelectionChange(e.target.checked,item[`id${model}`])
+            }"
+          />
+        </template>
         <template #label>  <!--named scoped slot -->
           <Label3 :item="item" :master="master" :id="idx" />
         </template>
@@ -76,6 +80,18 @@
     font-size: 1.6rem;
     font-weight: bolder;
     margin: 0 10px;
+  }
+  
+  label {
+    color:var(--black-opaque9);
+    text-wrap: nowrap;
+    cursor: pointer;
+  }
+  input {
+    transform: scale(1.5);
+    margin:0px 10px 20px 5px;
+    width: fit-content;
+    cursor: pointer;
   }
 
 </style>

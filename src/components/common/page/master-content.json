@@ -13,6 +13,7 @@
       "labels_en": "Accounts",
       "orderBy": { "field": "lastName", "order": "asc" },
       "fileYes": "image/png, image/jpeg, image/webp",
+      "newRecord": false,
       "noList": false
     },
     "fieldsets": [

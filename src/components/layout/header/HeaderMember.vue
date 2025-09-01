@@ -108,7 +108,10 @@
               clickable 
               v-close-popup 
               class="hover-bg-grey-3 hover-text-primary "
-              @click="">
+              @click="() => {
+                router.push({ name: 'member user' })
+              }"
+              >
               <div class='text-bolder color-std'>
                 <q-icon name="settings" size="2.5rem" />
                 {{t('comps.header.settings-ico.tip')}}

@@ -6,12 +6,11 @@
   })
   const {locale}=useI18n()
   const text={1:'created',2:"validated",3:"deactivated"}
-
 </script>
 
 <template>
   <div>
-    <p :class="['role',role.idRole===1?'green':'red']" >
+    <p :class="['role',data[0].idStatus===1?'warning':(data[0].idStatus===2?'green':'red')]" >
       <span>{{ role[`role_${locale}`] }}</span> 
     </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
@@ -27,8 +26,11 @@
   .green {
     color:var(--green)
   }
-  .red {
+  .warning {
     color:var(--orange)
+  }
+  .red {
+    color:var(--red)
   }
   p {    
     font-size:1.3rem;

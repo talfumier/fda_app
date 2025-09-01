@@ -1,11 +1,16 @@
 <script setup async>
   import { ref,computed,onMounted,onUnmounted,inject  } from 'vue';
+  import { onBeforeRouteLeave } from 'vue-router'
+  import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n';
   import _ from 'lodash'
-  import { getEntitiesBySql,postEntity,patchEntity } from '@/services/httpEntities.js';
+  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js';
   import ListItems from './list/ListItems.vue';
   import FormDetails from './details/FormDetails.vue';
   import Toolbar from '../toolbar/Toolbar.vue';
+  import Tooltip from '../Tooltip.vue';
+  import clearables from "../page/details/clearables.json";
+  import { confirm } from '../dialog/dialog.js';
 
   const props=defineProps({
     entity:{type:Object},
@@ -14,6 +19,7 @@
   
   const {t}=useI18n()  
   const {token,decoded}=inject('userCookie')
+  const $q=useQuasar()
   //field_master definition, formValid initialization
   const field_master=ref([])
   let fltr=null
@@ -35,6 +41,7 @@
   
   const state=ref(null)
   const selectedId = ref(null)
+  const newRecord=ref(false) //click on + button in ListItems
 
   const initialValues=[]
   const actualChanges=ref([])
@@ -44,14 +51,26 @@
           return item[`id${props.entity.model}`]===selectedId.value
         }) 
   }  
+  function resetActualChanges(){
+    const idModel=`id${props.entity.model}`
+    let obj={}
+    // initialize actualChanges >>> all fields set to false, idModel changed to id, newRec:false added
+    actualChanges.value=[]
+    initialValues.map((init) => {  
+      obj=Object.keys(init).reduce((acc, key) => 
+          (acc[key!==idModel?key:'id'] = key!==idModel?false:init[idModel], acc), {})
+      actualChanges.value.push({newRec:false,...obj})
+    })
+  }
   function handleOpenDetails(id){
     selectedId.value=id
   }
-  function handleChange(id,name,valid,val){
+  function handleChange(id,name,valid,val){    
     const idx=getIndex(id)      
-    actualChanges.value[idx][name]=initialValues[idx][name]!==val
+    actualChanges.value[idx][name]=initialValues[idx][name]!=val
     state.value[0][idx][name]=val
     formValid.value[name]=valid
+    console.log("handlechange",val,initialValues[idx][name]!=val,actualChanges.value)
   }
   // DATA LOADING
   const ctrls={} // AbortController's object' used in http request operation
@@ -83,11 +102,7 @@
     _.cloneDeep(state.value[0]).map((init) => {  //initialize initialValues, cloneDeep necessary
       initialValues.push(init)
     })
-    initialValues.map((init) => {  //initialize actualChanges >>> all fields set to false
-      actualChanges.value.push(
-        Object.keys(init).reduce((acc, key) => (acc[key] = false, acc), {})
-      )
-    })
+    resetActualChanges()
     if(props.entity.noList) {
       let id=null
       switch(props.entity.model){
@@ -97,13 +112,25 @@
       }
       handleOpenDetails(id)
     }
+    window.addEventListener('beforeunload', beforeUnload)
   })
   onUnmounted(() => { // clean-up code after component has unmounted    
     alive = false;
     Object.keys(ctrls).map((key) => {
        ctrls[key]?.abort() 
-    }) 
+    })
+    window.removeEventListener('beforeunload', beforeUnload) 
   })    
+  // DETECTING ROUTE CHANGES INSIDE SPA, PAGE REFRESH/CLOSE  
+  async function beforeUnload(e){  //no custom confirm dialog for browser originated refresh
+    if(!JSON.stringify(actualChanges.value).includes(true)) return
+    e.preventDefault()
+    e.returnValue = '' // required for some browsers
+  }
+  onBeforeRouteLeave(async() => {    
+    if(!JSON.stringify(actualChanges.value).includes(true)) return true
+    if (!(await confirm($q,t('common.unsaved'),'cancel'))) return false    
+  })
   // FOLDING MENU
   const isRotated = ref(false)
   function rotateIcon() {
@@ -146,21 +173,23 @@
         if (!alive) return                // component gone? don't touch state 
         if (ctrls[1]) ctrls[1].abort()
         ctrls[1] = new AbortController()
-        let status=2
+        let res=null,status=2
+        const idx=getIndex(id)
         switch(cs){      
           case "deactivation":
             status=3
           case "validation":
             //database update
-            await postEntity('StatusTracking', {idStatus:status,idUser:id}, token.value, ctrls[1].signal)
+            res=await postEntity('StatusTracking', {idStatus:status,idUser:id}, token.value, ctrls[1].signal)
             // state update
-            state.value[1].unshift({idUser:id,idStatus:2,createdAt:new Date(Date.now())})
-            const idx=state.value[0].findIndex((item) => {
-              return item.idUser===id
-            })
-            state.value[0][idx].idStatus=2
+            if(res.data.statusCode!==200) return
+            state.value[1].unshift({idUser:id,idStatus:status,createdAt:new Date(Date.now())})
+            state.value[0][idx].idStatus=status
             break;
           case "deletion":
+            res=await deleteEntity('User',selectedId.value,token.value, ctrls[1].signal)            
+            if(res.data.statusCode!==200) return
+            state.value[0].splice(idx,1)
         }
       }
       break
@@ -174,18 +203,63 @@
   function filteredDetailsTrigger(){  //trigger filteredDetails computed update, see FormDetails component key in the template
     return parseInt(selectedId.value)+initFlag.value
   }
+  function handleNewRecord(){
+    newRec.value=true
+  }
   // TOOLBAR ACTIONS
-  function handleToolbarActions(cs){
+  async function handleToolbarActions(cs){ 
+    let index=null
     switch(cs){
       case "save":
+        if (!alive) return                // component gone? don't touch state 
+        if (ctrls[2]) ctrls[2].abort()
+        ctrls[2] = new AbortController()
+        let keys=[],obj=null,res=null 
+        actualChanges.value.map(async(item,idx) => {
+          obj={}
+          keys=Object.keys(item)
+          keys.map((key) => {
+            if(key!=='newRec' && key!=='id') {
+              if(item[key]) obj[key]=state.value[0][idx][key]
+            }
+            else obj[key]=item[key]
+          })  
+          const{newRec,id,...body}=obj
+          if(Object.keys(body).length>=1){
+            res=await(newRec?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
+              patchEntity(props.entity.model,id,body,token.value, ctrls[2].signal))
+            if(res.data.statusCode!==200) return
+            keys.map((key) => { 
+              if(key!=='newRec' && key!=='id' && item[key]){
+                initialValues[idx][key]=state.value[0][idx][key] //update initial values with saved data 
+                item[key]=false  //reset actualChanges item to false
+              }
+            })
+          }
+        }) 
+        break
       case "clear":
+        index=getIndex(selectedId.value)
+        clearables[`${props.entity.model}`].map((prop) => {
+          if(state.value[0][index][prop]){
+            state.value[0][index][prop]=''
+            actualChanges.value[index][prop]=true
+          }
+        })
         break
       case "undo":
-        const idx=getIndex(selectedId.value)
-        state.value[0][idx]=_.cloneDeep(initialValues[idx])  //cloneDeep necessary
-        initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
+        index=getIndex(selectedId.value)
+        state.value[0][index]=_.cloneDeep(initialValues[index])  //cloneDeep necessary
     }
+    initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
   }
+  const changeStatus=computed(() => {
+    let n=0
+    actualChanges.value.map((item) => {
+      if(JSON.stringify(item).includes(true)) n+=1
+    })
+    return n
+  })
 
 </script>
 
@@ -208,6 +282,7 @@
             <q-icon name="cancel" @click="listItemsFilter.search=''" class="cursor-pointer" />
           </template>
         </q-input> 
+        <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
         <div class="toggle"> 
           <q-toggle
             v-if="entity.model==='User'"
@@ -232,15 +307,25 @@
             size="md"
           />
         </div> 
-        <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
-      </div>
-      <q-icon 
-        class="btn-fold"
-        name="keyboard_double_arrow_left" 
-        size="md"
-        @click="rotateIcon"
-      >
-      </q-icon>
+      </div>  
+      <div class="btn-add-fold">     
+        <div v-if="entity.newRecord">    
+          <q-btn 
+            class="glossy" 
+            round push color="primary" 
+            icon="add" size="md" 
+            @click="handleNewRecord"
+          />        
+          <Tooltip :tt_text="$t('comps.master.add_btn')"></Tooltip>   
+        </div>     
+        <q-icon 
+          class="btn-fold"
+          name="keyboard_double_arrow_left" 
+          size="md"
+          @click="rotateIcon"
+        >
+        </q-icon>
+      </div>  
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
       <ListItems         
@@ -264,7 +349,7 @@
         >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
-            :actualChange="JSON.stringify(actualChanges).includes(true)"
+            :actualChange="changeStatus"
             @toolbar-actions="handleToolbarActions"
           >
         </Toolbar>
@@ -279,7 +364,7 @@
   .master-container {
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows:80px auto;
+    grid-template-rows:100px auto;
     justify-content: left;
     height:100%;   
     position:relative;
@@ -289,14 +374,25 @@
   }
   .top-container {    
     grid-area: 1/1;
-    align-self: self-end;   
     display:flex;
     justify-content:right;
-    align-items:flex-end;
+    align-items:flex-start;
   }
   .top-container .q-input {
     margin: 0 ;
   }
+  .btn-add-fold {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height:100%;
+  }
+  .btn-add-fold .q-btn {
+    width:40px;
+    height:30px;
+  }
+  
   .q-icon.btn-fold {
     width:40px;
     height:30px;    
@@ -304,26 +400,27 @@
     color:var(--orange);
     background-color: red;
     cursor: pointer;
+    margin:5px 0;
   }
   .filter {
-    position:relative;
     display:flex;
     flex-direction: column;
+    justify-content:space-evenly;
     align-items: left;    
     border-right: 1px solid lightgrey;
+    height:100%;
   }
   .filter span {
-    position:absolute;
-    top: 10px;
-    right:-40px;
     font-size:1.3rem;
     text-wrap: nowrap;
+    text-align: center;
   }
   .toggle {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    padding-right: 10px;
+    padding-right: 10px;      
+    border-top: 1px solid lightgrey;
   }
   .master-container .btn-fold { 
     margin: 0 10px 5px;

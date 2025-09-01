@@ -5,8 +5,9 @@
     "select": "Choisir un élément de la liste ...",
     "search": "Rechercher ...",
     "save": "Sauvegarder",
-    "clear": "Effacer et réinitialiser",
-    "undo": "Annuler"
+    "clear": "Effacer tous les champs",
+    "undo": "Annuler les changements",
+    "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
   },
   "comps": {
     "header": {
@@ -62,6 +63,9 @@
         "date_time": "<span>Format <strong>jj/mm/aaaa hh.mm</strong> non respecté !</span>"
       }
     },
+    "master": {
+      "add_btn": "Ajouter"
+    },
     "list_items": {
       "actions_menu": {
         "last_change": "Mis à jour",
@@ -76,7 +80,7 @@
           "confirm": {
             "validation": "Merci de confirmer la validation du compte.",
             "deactivation": "Merci de confirmer la désactivation du compte.",
-            "delete": "Merci de confirmer la suppression du compte."
+            "deletion": "Merci de confirmer la suppression du compte."
           },
           "status": {
             "indeterminate": "statut ?",

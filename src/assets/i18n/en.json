@@ -5,8 +5,9 @@
     "select": "Please select an item ...",
     "search": "Search ...",
     "save": "Save changes",
-    "clear": "Clear and reset to default values",
-    "undo": "Undo changes"
+    "clear": "Clear all fields",
+    "undo": "Undo all changes",
+    "unsaved": "You have unsaved changes. Proceed anyway ?"
   },
   "comps": {
     "header": {
@@ -62,6 +63,9 @@
         "date_time": "<span>Format <strong>dd/mm/yyyy hh.mm</strong> required !</span>"
       }
     },
+    "master": {
+      "add_btn": "Add"
+    },
     "list_items": {
       "actions_menu": {
         "last_change": "Updated",
@@ -76,7 +80,7 @@
           "confirm": {
             "validation": "Please confirm account validation.",
             "deactivation": "Please confirm account deactivation.",
-            "delete": "Please confirm account permanent deletion."
+            "deletion": "Please confirm account permanent deletion."
           },
           "status": {
             "indeterminate": "status ?",

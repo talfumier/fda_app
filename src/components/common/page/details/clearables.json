@@ -1,0 +1,18 @@
+{
+  "User": [
+    "lastName",
+    "firstName",
+    "pseudo",
+    "phone",
+    "address",
+    "zipCode",
+    "city",
+    "country",
+    "resume_fr",
+    "resume_en",
+    "web1",
+    "web2",
+    "social1",
+    "sovial2"
+  ]
+}
