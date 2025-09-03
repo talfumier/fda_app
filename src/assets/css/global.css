@@ -65,3 +65,16 @@ body {
   height: 100vh;
   position:relative;
 }
+label {
+  font-size:1.7rem;
+  line-height: 2.2rem;
+  color: var(--black-opaque9);
+  text-wrap: nowrap;
+  font-style: italic;
+}
+.toast.no-cap {
+  text-transform: none;
+}
+.q-dialog__inner--minimized>.q-card {
+  max-width: 300px;
+}

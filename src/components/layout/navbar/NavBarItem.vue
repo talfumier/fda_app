@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <RouterLink :to="url">
+  <RouterLink :to="url" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="$t(text)" :wrap="wrap"></Tooltip>
     <div :class="[isRotated?'folded':'']">
       <q-icon v-if="icon" :name="icon" size="3rem"></q-icon>
@@ -58,9 +58,20 @@
     display: block;
     border-radius: 4px;
   }
-  a:hover {
+  a:not(.router-link-active):hover {
     color: var(--red);
     font-weight:bolder;
     background-color: var(--beige-opaque8);
+  }
+  a.router-link-active {
+    color:var(--orange);
+    font-weight: bolder;
+  }
+  footer  a:not(.router-link-active):hover {
+    color: var(--white);
+    background-color: transparent;
+  }
+  footer a.router-link-active {
+    color:var(--white);
   }
 </style>

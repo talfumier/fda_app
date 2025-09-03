@@ -1,7 +1,8 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref,inject,computed } from 'vue';
+  import _ from 'lodash'
   import Tooltip from '../../common/Tooltip.vue';
-  import items from "./items.json"
+  import items from "./nav-items.json"
   import NavBarItem from './NavBarItem.vue';
   
   defineProps({
@@ -14,6 +15,12 @@
   function rotateIcon() {
     isRotated.value=!isRotated.value
   }
+  const {decoded} = inject('userCookie')
+  const roleFilteredItems=computed(() => {
+    return _.filter(items,(item) => {
+      return item.roles.includes(decoded.value.idRole)
+    })
+  })
 </script>
 
 <template>
@@ -26,14 +33,19 @@
           @click="rotateIcon">
         </q-icon>
         <li>
-          <RouterLink to="/">
+          <RouterLink to="/member/user" tabindex="-1">
             <img class="avatar" src="../../../assets/images/Egyptien.jpg" alt="avatar">
             <Tooltip :tt_text="$t('comps.header.settings-ico.tip')"></Tooltip>
           </RouterLink>
         </li>
         <hr></hr>
-        <li v-for="(item, idx) in items" :key="idx">
-          <NavBarItem :url="item.url" :icon="item.icon" :isRotated="isRotated" :text="'comps.navbar.'+item.text" :wrap="item.wrap"/>
+        <li v-for="(item, idx) in roleFilteredItems" :key="idx">
+          <NavBarItem 
+            :url="item.url" 
+            :icon="item.icon" 
+            :isRotated="isRotated" 
+            :text="'comps.navbar.'+item.text" 
+            :wrap="item.wrap"/>
         </li>
       </ul>
     </nav>
@@ -69,6 +81,9 @@
   }
   nav.folded .q-icon.btn-fold {
     transform: rotate(-180deg);
+  }
+  a.router-link-active img.avatar {
+    border:solid 3px var(--orange);
   }
   hr {
     width:100%;

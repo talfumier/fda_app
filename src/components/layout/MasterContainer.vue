@@ -1,12 +1,11 @@
 <script setup>
   import MasterLayout from "./MasterLayout.vue";
   import Footer from './footer/Footer.vue';
-
-  const loggedIn=false
+  
 </script>
 
 <template>
-  <MasterLayout :loggedIn="loggedIn">
+  <MasterLayout>
     <template #footer>
       <Footer></Footer> 
     </template>

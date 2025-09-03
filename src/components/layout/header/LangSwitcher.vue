@@ -4,9 +4,8 @@ import { useQuasar} from 'quasar'
 import { useI18n } from 'vue-i18n'
 import quasarLangFr from 'quasar/lang/fr.js'
 import quasarLangEn from 'quasar/lang/en-GB.js'
-import frFlag from '../../assets/images/fr.png'
-import ukFlag from '../../assets/images/uk.png'
-import arrow from "../../assets/images/down_arrow.png"
+import frFlag from '../../../assets/images/fr.png'
+import ukFlag from '../../../assets/images/uk.png'
 
 const { locale } = useI18n()
 const $q = useQuasar()
@@ -52,6 +51,7 @@ const selectedOption = computed(() => {
     options-dense
     dense
     bg-color="grey-3"
+    tabindex="-1"
   >
     <template v-slot:selected >
       <div class="row items-center no-wrap q-pa-xs q-selected" >

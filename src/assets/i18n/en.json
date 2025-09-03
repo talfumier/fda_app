@@ -1,22 +1,107 @@
 {
-  "common": { "welcome": "Welcome", "logout": "Log out" },
+  "common": {
+    "welcome": "Welcome",
+    "logout": "Log out",
+    "select": "Please select an item ...",
+    "search": "Search ...",
+    "save": "Save changes",
+    "clear": "Clear all fields",
+    "undo": "Undo all changes",
+    "unsaved": "You have unsaved changes. Proceed anyway ?"
+  },
   "comps": {
     "header": {
-      "member-btn": { "text": "Member area", "tip": "Sign-in to your account" },
+      "member-btn": {
+        "text": "Member area",
+        "tip1": "Sign-in to your account",
+        "tip2": "Switch to member area"
+      },
+      "public-btn": { "text": "Public site", "tip": "Switch to public site" },
+      "account-type": "Account type:",
       "settings-ico": { "tip": "Account settings" },
-      "power-ico": { "tip": "Log-out" }
+      "power-ico": {
+        "tip": "Sign-out",
+        "dialog": "Your are about to be signed-out,<br/>please confirm."
+      }
+    },
+    "login": {
+      "email": "User ID",
+      "role": "Role",
+      "pwd": "Password",
+      "pwd_check": "Password check",
+      "sign_in": "Sign in",
+      "register": "Register",
+      "pwd_forgot": "forgot password ?",
+      "no_account": "don't have an account ?",
+      "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>",
+      "execute": "Change password",
+      "token_expiry": {
+        "warning": "Your authentication token is going to expire at",
+        "error": "Your authentication token has expired. Please sign-in again."
+      }
     },
     "navbar": {
       "dashboard": "Dashboard",
+      "users": "User accounts",
       "expos": "Exhibitions",
+      "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
       "map": "Site map",
       "contact": "Contact"
     },
+    "validation": {
+      "fields": {
+        "not_null": "<span><strong>Non-zero</strong> value required !</span>",
+        "pwd": "<span>Invalid password {'>>>'} at least 8 characters,</span><br/><span> 1 special character, 1 uppercase, 1 number !</span>",
+        "pwd_match": "<span>Passwords don't match !</span>",
+        "email": "<span>Invalid email !</span>",
+        "checked": "<span>Checkbox must be checked !</span>",
+        "unchecked": "<span>Checkbox must be un-checked !</span>",
+        "int": "<span>Invalid integer !</span>",
+        "date": "<span>Format <strong>dd/mm/yyyy</strong> required !</span>",
+        "date_time": "<span>Format <strong>dd/mm/yyyy hh.mm</strong> required !</span>"
+      }
+    },
+    "master": {
+      "add_btn": "Add"
+    },
+    "list_items": {
+      "actions_menu": {
+        "last_change": "Updated",
+        "edit": "Edit",
+        "user": {
+          "created": "Created",
+          "validated": "Validated",
+          "deactivated": "Deactivated",
+          "validation": "User account validation",
+          "deactivation": "User account deactivation",
+          "delete": "User account deletion",
+          "confirm": {
+            "validation": "Please confirm account validation.",
+            "deactivation": "Please confirm account deactivation.",
+            "deletion": "Please confirm account permanent deletion."
+          },
+          "status": {
+            "indeterminate": "status ?",
+            "pending": "pending",
+            "validated": "validated"
+          },
+          "role": {
+            "indeterminate": "role ?",
+            "artist": "artist",
+            "org": "other"
+          }
+        }
+      }
+    },
+    "form_details": {
+      "translate": "Translate"
+    },
     "public_site": {
       "home": {}
     },
     "back_office": {}
-  }
+  },
+  "errors": {}
 }

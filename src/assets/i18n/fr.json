@@ -1,22 +1,107 @@
 {
-  "common": { "welcome": "Bienvenue", "logout": "Déconnexion" },
+  "common": {
+    "welcome": "Bienvenue",
+    "logout": "Déconnexion",
+    "select": "Choisir un élément de la liste ...",
+    "search": "Rechercher ...",
+    "save": "Sauvegarder",
+    "clear": "Effacer tous les champs",
+    "undo": "Annuler les changements",
+    "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
+  },
   "comps": {
     "header": {
-      "member-btn": { "text": "Espace membre", "tip": "Connexion à votre compte" },
+      "member-btn": {
+        "text": "Espace membre",
+        "tip1": "Connexion à votre compte",
+        "tip2": "Basculer vers espace membre"
+      },
+      "public-btn": { "text": "Site public", "tip": "Basculer vers le site public" },
+      "account-type": "Type de compte:",
       "settings-ico": { "tip": "Paramêtres du compte" },
-      "power-ico": { "tip": "Déconnexion" }
+      "power-ico": {
+        "tip": "Déconnexion",
+        "dialog": "Vous êtes sur le point d'être déconnecté,<br/>merci de confirmer."
+      }
+    },
+    "login": {
+      "email": "Identifiant",
+      "role": "Rôle",
+      "pwd": "Mot de passe",
+      "pwd_check": "Vérification mot de passe",
+      "sign_in": "Connexion",
+      "register": "Créer le compte",
+      "pwd_forgot": "mot de passe oublié ?",
+      "no_account": "pas encore de compte ?",
+      "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>",
+      "execute": "Changer le mot de passe",
+      "token_expiry": {
+        "warning": "Votre jeton d'authentification va expirer à",
+        "error": "Votre jeton d'authentification a expiré. Merci de vous authentifier à nouveau."
+      }
     },
     "navbar": {
       "dashboard": "Tableau de bord",
+      "users": "Comptes utilisateur",
       "expos": "Expositions",
+      "admin_settings": "Administration",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
       "map": "Plan du site",
       "contact": "Contact"
     },
+    "validation": {
+      "fields": {
+        "not_null": "<span>Valeur <strong>non nulle</strong> obligatoire !</span>",
+        "pwd": "<span>Mot de passe non valide {'>>>'} 8 caractères minimum,</span><br/><span>1 caractère spécial, 1 majuscule, 1 chiffre !</span>",
+        "pwd_match": "<span>Les mots de passe saisis sont différents !</span>",
+        "email": "<span>Email non valide !</span>",
+        "checked": "<span>La case à cocher doit être cochée !</span>",
+        "unchecked": "<span>La case à cocher doit être décochée !</span>",
+        "int": "<span>Nombre entier non valide !</span>",
+        "date": "<span>Format <strong>jj/mm/aaaa</strong> non respecté !</span>",
+        "date_time": "<span>Format <strong>jj/mm/aaaa hh.mm</strong> non respecté !</span>"
+      }
+    },
+    "master": {
+      "add_btn": "Ajouter"
+    },
+    "list_items": {
+      "actions_menu": {
+        "last_change": "Mis à jour",
+        "edit": "Modifier",
+        "user": {
+          "created": "Créé",
+          "validated": "Validé",
+          "deactivated": "Désactivé",
+          "validation": "Validation compte utilisateur",
+          "deactivation": "Désactivation compte utilisateur",
+          "delete": "Suppresion compte utilisateur",
+          "confirm": {
+            "validation": "Merci de confirmer la validation du compte.",
+            "deactivation": "Merci de confirmer la désactivation du compte.",
+            "deletion": "Merci de confirmer la suppression du compte."
+          },
+          "status": {
+            "indeterminate": "statut ?",
+            "pending": "en attente",
+            "validated": "validé"
+          },
+          "role": {
+            "indeterminate": "role ?",
+            "artist": "artiste",
+            "org": "autres"
+          }
+        }
+      }
+    },
+    "form_details": {
+      "translate": "Traduire"
+    },
     "public_site": {
       "home": {}
     },
     "back_office": {}
-  }
+  },
+  "errors": {}
 }
