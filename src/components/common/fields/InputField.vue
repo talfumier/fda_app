@@ -37,8 +37,8 @@
       default:
         data.value=props.value
     }
-    handleChange(data.value)
-  }
+    handleChange(data.value,'init')
+  // }
   
   function handleChange(val){
     dirty.value=true
