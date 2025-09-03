@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "test_build": "npm run test_config && vite build",
+    "test_config": "node src/config/generate-test-env.js",
+    "prod_build": "npm run prod_config && vite build",
+    "prod_config": "node src/config/generate-prod-env.js",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"

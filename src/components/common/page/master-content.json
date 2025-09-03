@@ -155,6 +155,16 @@
             "disabled": true,
             "rows": 1,
             "optional": true
+          },
+          {
+            "name": "lang",
+            "label_fr": "Langue préférée",
+            "label_en": "Preferred language",
+            "type": "select",
+            "options": [
+              ["fr", "Français"],
+              ["en", "Anglais"]
+            ]
           }
         ]
       }

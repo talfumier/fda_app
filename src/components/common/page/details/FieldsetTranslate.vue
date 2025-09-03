@@ -143,7 +143,7 @@
   }
   @media screen and (max-width: 900px) {
     div.translate {
-      grid-template-rows: repeat(2,auto) 80px repeat(2,auto);
+      grid-template-rows: repeat(2,auto) 40px repeat(2,auto);
       grid-template-columns: 1fr ;
     }    
     div.fr {
@@ -173,7 +173,6 @@
     div.controls {
       grid-area: 3/1;
       margin-top: 0; 
-      flex-direction: column;
     }
     .q-btn {
       transform: rotate(90deg);

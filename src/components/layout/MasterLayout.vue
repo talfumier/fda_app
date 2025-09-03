@@ -1,6 +1,6 @@
 <script setup>
   import {inject,useSlots} from 'vue'
-  import { useRouter,useRoute } from 'vue-router';
+  import { useRouter,useRoute,RouterLink } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import { setUpTokenExpiry } from '../login/tokenExpiry.js';
   import HeaderMember from './header/HeaderMember.vue'
@@ -21,7 +21,9 @@
 <template>
   <div class="layout">
     <header>
-      <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo"/>
+      <RouterLink to="/public/home" tabindex="-1">
+        <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo"/>
+      </RouterLink>
       <div class="container">
         <h1 >
           <span class="span-lh"style="color:#fcb414;">Festival des Arts</span>
@@ -82,6 +84,7 @@
   }
  .logo {
     position: absolute;
+    top:17px;
     left: 10px;
     max-height: 75%;
   } 
