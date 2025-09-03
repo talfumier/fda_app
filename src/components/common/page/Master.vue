@@ -11,6 +11,7 @@
   import Tooltip from '../Tooltip.vue';
   import clearables from "../page/details/clearables.json";
   import { confirm } from '../dialog/dialog.js';
+  import { translate } from '@/services/httpGoogleServices.js';
 
   const props=defineProps({
     entity:{type:Object},
@@ -41,7 +42,6 @@
   
   const state=ref(null)
   const selectedId = ref(null)
-  const newRecord=ref(false) //click on + button in ListItems
 
   const initialValues=[]
   const actualChanges=ref([])
@@ -65,12 +65,24 @@
   function handleOpenDetails(id){
     selectedId.value=id
   }
-  function handleChange(id,name,valid,val){    
+  function handleChange(id,name,valid,val){ 
     const idx=getIndex(id)      
-    actualChanges.value[idx][name]=initialValues[idx][name]!=val
+    actualChanges.value[idx][name]=initialValues[idx][name]!=(val===''?null:val)
     state.value[0][idx][name]=val
     formValid.value[name]=valid
-    console.log("handlechange",val,initialValues[idx][name]!=val,actualChanges.value)
+  }
+  async function handleTranslate(id,params){
+    const idx=getIndex(id)  
+    const {from,to,rootName}=params  
+    const translated = (
+      await translate({
+        text:state.value[0][idx][`${rootName}_${from}`],
+        to,
+        from,
+      })
+    ).data
+    handleChange(id,`${rootName}_${to}`,true,translated)
+    initFlag.value+=.01
   }
   // DATA LOADING
   const ctrls={} // AbortController's object' used in http request operation
@@ -99,8 +111,8 @@
   }  
   onMounted(async () => {  
     state.value = await fetch() 
-    _.cloneDeep(state.value[0]).map((init) => {  //initialize initialValues, cloneDeep necessary
-      initialValues.push(init)
+    _.cloneDeep(state.value[0]).map((item) => {  //initialize initialValues, cloneDeep necessary
+      initialValues.push(item)
     })
     resetActualChanges()
     if(props.entity.noList) {
@@ -242,7 +254,7 @@
         index=getIndex(selectedId.value)
         clearables[`${props.entity.model}`].map((prop) => {
           if(state.value[0][index][prop]){
-            state.value[0][index][prop]=''
+            state.value[0][index][prop]=null
             actualChanges.value[index][prop]=true
           }
         })
@@ -250,6 +262,7 @@
       case "undo":
         index=getIndex(selectedId.value)
         state.value[0][index]=_.cloneDeep(initialValues[index])  //cloneDeep necessary
+        resetActualChanges()
     }
     initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
   }
@@ -346,6 +359,7 @@
         :fieldsets="fieldsets" 
         :record="filteredDetails"
         @change="handleChange"
+        @translate="handleTranslate"
         >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
@@ -446,6 +460,9 @@
     grid-row: 1/span 2;
     grid-column: 2;
     border: 1px solid lightgrey;
+    display:flex;
+    flex-direction: column;
+    justify-content: top;
   }
   .toolbar {
     position:absolute;

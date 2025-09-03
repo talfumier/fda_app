@@ -13,7 +13,8 @@
     disabled:{type:Boolean,default:false},
     format:{type:String,default:'text'},
     placeholder:{type:String},
-    value:{type:[String, Number, Boolean,Date],default:""},  
+    value:{type:[String, Number, Boolean,Date]},  
+    maxLength:{type:Number,default:Infinity},
     equal:{type:[String]},
     rows:{type:Number},
     options:{type:Array}
@@ -37,11 +38,11 @@
       default:
         data.value=props.value
     }
-    handleChange(data.value,'init')
-  // }
+    handleChange(data.value)
+  }
   
-  function handleChange(val){
-    dirty.value=true
+  function handleChange(val,cs=null){
+    if(!cs)dirty.value=true
     data.value=val
     let valid = {valid: true, msg: null};
     if (props.required && props.field_type !== 'select') {
@@ -62,9 +63,9 @@
 </script>
 
 <template>
-  <div :className="['input-container']">
+  <div :class="['input-container',`${name}`]">
     <label 
-      :class="type==='checkbox'?'checkbox':''" 
+      :class="[type==='checkbox'?'checkbox':'']" 
       v-html="`${label}${required && type !== 'checkbox' ? ' *' : ''}`"
     >
     </label>
@@ -104,6 +105,7 @@
       :value="data"
       :disabled="disabled" 
       autoComplete="on"
+      :maxlength="maxLength"
       :rows="rows"
       @change="handleChange($event.target.value)"
       @input="(e) => {
@@ -125,7 +127,7 @@
     </select>
     <!-- validatiion message -->
     <div v-if="dirty && !fieldValid.valid && fieldValid.msg" 
-      className="alert" 
+      class="alert" 
       v-html="t(fieldValid.msg)"
     >
     </div>
@@ -156,10 +158,6 @@
   div.input-container:has(.pwd-reset){
     justify-content: center;
   }
-  label {
-    color:var(--black-opaque9);
-    text-wrap: nowrap;
-  }
   label.checkbox {
     font-weight:400;
     color:var(--black);
@@ -177,15 +175,20 @@
     resize: vertical;
     width:100%;
   }
+  div.email textarea {
+    min-width:350px;
+  }
   input.pwd {
     padding-right: 45px;
   }
   div.input-container:has(.not-valid):not(:has(.checkbox)) label{
     color:red;
   }
+  /* .valid.dirty */
   .valid.dirty {
     border-color: green;
   }
+  /* .not-valid.dirty  */
   .not-valid.dirty {
     border-color:red;
   }

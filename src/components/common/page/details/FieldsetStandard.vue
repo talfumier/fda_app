@@ -26,11 +26,12 @@
 
 <template>
   <InputField 
-    v-for="(item,idx) in filteredFields" 
+    v-for="(item) in filteredFields" 
     :key="item.name"
     :name="item.name"
     :field_type="item.type"
     :label="item[`label_${locale}`]"
+    :required="item.required"
     :disabled="item.disabled"
     :format="item.format"
     :value="data[item.name]?data[item.name]:''"

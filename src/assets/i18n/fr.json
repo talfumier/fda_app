@@ -95,6 +95,9 @@
         }
       }
     },
+    "form_details": {
+      "translate": "Traduire"
+    },
     "public_site": {
       "home": {}
     },

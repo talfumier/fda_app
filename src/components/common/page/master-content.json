@@ -26,9 +26,8 @@
             "label_fr": "Nom de famille",
             "label_en": "Last name",
             "type": "textarea",
-            "rows": 2,
+            "rows": 1,
             "default": "t.b.d",
-            "required": true,
             "listMaster": true
           },
           {
@@ -36,19 +35,88 @@
             "label_fr": "Prénom",
             "label_en": "First name",
             "type": "textarea",
-            "rows": 2,
-            "required": true,
+            "rows": 1,
             "listMaster": true
+          },
+          {
+            "name": "pseudo",
+            "label_fr": "Pseudo",
+            "label_en": "Alias",
+            "type": "textarea",
+            "required": false,
+            "rows": 1
           },
           {
             "name": "email",
             "label_fr": "Courriel",
             "label_en": "Email",
             "type": "textarea",
-            "rows": 2,
+            "rows": 1,
             "format": "email",
-            "required": true,
             "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "type": "address",
+        "fields": [
+          {
+            "name": "address",
+            "label_fr": "Adresse",
+            "label_en": "Address",
+            "type": "textarea",
+            "rows": 2
+          },
+          {
+            "name": "zipCode",
+            "label_fr": "Code postal",
+            "label_en": "Zip code",
+            "type": "textarea",
+            "rows": 1
+          },
+          {
+            "name": "city",
+            "label_fr": "Ville",
+            "label_en": "City",
+            "type": "textarea",
+            "rows": 2
+          },
+          {
+            "name": "country",
+            "label_fr": "Pays",
+            "label_en": "Country",
+            "type": "textarea",
+            "rows": 1
+          },
+          {
+            "name": "phone",
+            "label_fr": "Téléphone",
+            "label_en": "Phone",
+            "type": "textarea",
+            "rows": 1
+          }
+        ]
+      },
+      {
+        "name": "resume",
+        "type": "translate",
+        "fields": [
+          {
+            "name": "resume_fr",
+            "label": "Résumé",
+            "type": "textarea",
+            "rows": 4,
+            "required": false,
+            "max_length": 500
+          },
+          {
+            "name": "resume_en",
+            "label": "Resumé",
+            "type": "textarea",
+            "rows": 4,
+            "required": false,
+            "max_length": 500
           }
         ]
       },
@@ -73,14 +141,20 @@
             "optional": true
           },
           {
-            "name": "validated",
-            "label_fr": "Compte Validé",
-            "label_en": "",
+            "name": "title_fr",
+            "label_fr": "Statut",
             "type": "textarea",
-            "format": "date-time",
             "disabled": true,
             "rows": 1,
-            "required": false
+            "optional": true
+          },
+          {
+            "name": "title_en",
+            "label_en": "Status",
+            "type": "textarea",
+            "disabled": true,
+            "rows": 1,
+            "optional": true
           }
         ]
       }

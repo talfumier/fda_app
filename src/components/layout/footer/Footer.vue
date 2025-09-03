@@ -57,11 +57,6 @@
    a {
     color: var(--orange);
   }
-  a:hover {
-    color: var(--white-light);
-    font-weight:normal;
-    background-color:transparent;
-  }
   @media screen and (min-width: 600px) {
     ul {
       gap:60px;

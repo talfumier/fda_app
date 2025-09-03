@@ -67,4 +67,11 @@
     color:var(--orange);
     font-weight: bolder;
   }
+  footer  a:not(.router-link-active):hover {
+    color: var(--white);
+    background-color: transparent;
+  }
+  footer a.router-link-active {
+    color:var(--white);
+  }
 </style>
