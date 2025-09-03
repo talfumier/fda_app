@@ -37,7 +37,7 @@ jobs:
 
             cd /var/www/fda.fr/front/test/temp
             npm install
-            npm run build
+            npm run test_build
             
             rm -rf /var/www/fda.fr/front/test/dist
             mv dist /var/www/fda.fr/front/test
