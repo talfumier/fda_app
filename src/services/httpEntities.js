@@ -1,5 +1,5 @@
 import http from './httpService.js'
-import { environment } from '@/environment/environment.js'
+import { environment } from '@/config/environment.js'
 
 const api = environment.api_url
 export function getEntities(entity, signal) {
