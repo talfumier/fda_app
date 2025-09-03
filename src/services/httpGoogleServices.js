@@ -1,6 +1,7 @@
 import http from './httpService.js'
+import { environment } from '@/config/environment.js'
 
-const api = 'http://localhost:3000/api'
+const api = environment.api_url
 
 export async function translate(data) {
   //data is an object >>> {text, to, from}  >>> from optional

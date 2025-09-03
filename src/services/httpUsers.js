@@ -1,7 +1,8 @@
 import http from './httpService.js'
 import { jwtDecode } from 'jwt-decode'
+import { environment } from '@/config/environment.js'
 
-const api = 'http://localhost:3000/api'
+const api = environment.api_url
 export function login(email, pwd) {
   return http.post(`${api}/login`, { email, pwd })
 }
