@@ -1,5 +1,5 @@
 <script setup>
-  import { inject,ref} from 'vue';
+  import { inject,ref,defineEmits} from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import Tooltip from '@/components/common/Tooltip.vue';
@@ -14,13 +14,16 @@
   const route=useRoute()
   const $q=useQuasar()
 
+  const emit=defineEmits(['lang'])
+
   const openLogin=ref(false)
   const email=ref(decoded.value?decoded.value.email:null)  //initial value when a cookie is already set (reload, connection to the site)
   
   const showPopup = ref(false)
 
-  function handleLogIn(val){
-    email.value=val
+  function handleLogIn(mail,lang){
+    email.value=mail
+    emit('lang',lang)
   }
   async function handleLogOut(){    
     if (!(await confirm($q,t('comps.header.power-ico.dialog'),'ok'))) return

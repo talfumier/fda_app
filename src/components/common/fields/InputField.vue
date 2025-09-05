@@ -1,6 +1,6 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
-  import { ref,reactive } from 'vue';
+  import { ref } from 'vue';
   import { useFormatDate } from '@/composable/useFormatDate.js';
   import {validate} from"./validation.js"
 
@@ -23,7 +23,7 @@
   const { formatDate, formatDateTime } = useFormatDate()
   
   const data=ref(""), dirty=ref(false), type=ref(props.data_type)
-  const fieldValid=reactive({valid: true, msg: null})
+  const fieldValid=ref({valid: true, msg: null})
 
   const emit = defineEmits(['change'])
   //initial value processing >>> when no initial value, props.value="" (set in parent component :value)
@@ -47,7 +47,7 @@
     let valid = {valid: true, msg: null};
     if (props.required && props.field_type !== 'select') {
       valid = validate(val,props.name.includes('pwd')?'pwd':props.format);}
-    Object.assign(fieldValid, valid)
+    Object.assign(fieldValid.value, valid)
     emit('change', //notify the parent component
       props.name,
       valid.valid,
@@ -121,11 +121,14 @@
       @change="handleChange($event.target.value)"     
     >
       <option key="-1" value="-1" disabled hidden>{{ t('common.select') }}</option>
-      <option v-for="(option,idx) in options" :key="idx":value="option[0]">
-        {{option[option.length===3?locale==='fr'?1:2:1]}}
+      <option 
+        v-for="(option,idx) in options" 
+        :key="idx"
+        :value="option.value">
+          {{option.text[locale]}}
       </option>
     </select>
-    <!-- validatiion message -->
+    <!-- failed validation alert message -->
     <div v-if="dirty && !fieldValid.valid && fieldValid.msg" 
       class="alert" 
       v-html="t(fieldValid.msg)"
@@ -175,8 +178,12 @@
     resize: vertical;
     width:100%;
   }
-  div.email textarea {
+  /* Size customization i.a.w name */
+  div.input-container.email textarea {
     min-width:350px;
+  }
+  div.input-container.lang select {
+    width:170px;
   }
   input.pwd {
     padding-right: 45px;

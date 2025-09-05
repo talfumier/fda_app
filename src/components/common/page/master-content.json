@@ -162,8 +162,14 @@
             "label_en": "Preferred language",
             "type": "select",
             "options": [
-              ["fr", "Français"],
-              ["en", "Anglais"]
+              {
+                "value": "fr",
+                "text": { "fr": "🇫🇷 Français", "en": "🇫🇷 Français" }
+              },
+              {
+                "value": "en",
+                "text": { "fr": "🇬🇧 English", "en": "🇬🇧 English" }
+              }
             ]
           }
         ]

@@ -18,7 +18,7 @@
   const {decoded} = inject('userCookie')
   const roleFilteredItems=computed(() => {
     return _.filter(items,(item) => {
-      return item.roles.includes(decoded.value.idRole)
+      return decoded.value.idRole?item.roles.includes(decoded.value.idRole):false
     })
   })
 </script>

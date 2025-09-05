@@ -1,47 +1,52 @@
 <script setup>
-import { ref, watch,computed } from 'vue'
-import { useQuasar} from 'quasar'
-import { useI18n } from 'vue-i18n'
-import quasarLangFr from 'quasar/lang/fr.js'
-import quasarLangEn from 'quasar/lang/en-GB.js'
-import frFlag from '../../../assets/images/fr.png'
-import ukFlag from '../../../assets/images/uk.png'
+  import { ref, watch,computed } from 'vue'
+  import { useQuasar} from 'quasar'
+  import { useI18n } from 'vue-i18n'
+  import quasarLangFr from 'quasar/lang/fr.js'
+  import quasarLangEn from 'quasar/lang/en-GB.js'
+  import frFlag from '../../../assets/images/fr.png'
+  import ukFlag from '../../../assets/images/uk.png'
 
-const { locale } = useI18n()
-const $q = useQuasar()
-const quasarLangs = {
-  fr: quasarLangFr,
-  en: quasarLangEn,
-}
-const langOptions = [
-  {
-    label: 'Français',
-    value: 'fr',
-    img: frFlag,
-    alt:"drapeau FR"
-  },
-  {
-    label: 'English',
-    value: 'en',
-    img: ukFlag,
-    alt:"UK flag"
+  const props=defineProps({
+    preferred:{type:String}
+  })
+  
+  const { locale } = useI18n()
+  const $q = useQuasar()
+  const quasarLangs = {
+    fr: quasarLangFr,
+    en: quasarLangEn,
   }
-]
-const selectedLocale = ref(locale.value)
-// sync with Vue I18n and Quasar on change
-watch(selectedLocale, (val) => {
-  locale.value = val
-  localStorage.setItem('locale', val)
+  const langOptions = [
+    {
+      label: 'Français',
+      value: 'fr',
+      img: frFlag,
+      alt:"drapeau FR"
+    },
+    {
+      label: 'English',
+      value: 'en',
+      img: ukFlag,
+      alt:"UK flag"
+    }
+  ]
+  const selectedLocale = ref(locale.value)
+  // sync with Vue I18n and Quasar on change
+  watch(selectedLocale, (val) => {
+    locale.value = val
+    localStorage.setItem('locale', val)
     $q.lang.set(quasarLangs[val])
-})
-const selectedOption = computed(() => {
-  return langOptions.find(opt => opt.value === selectedLocale.value) || langOptions[0]
-})
+  })
+  if(props.preferred) selectedLocale.value=props.preferred
+  const selectedOption = computed(() => {
+    return langOptions.find(opt => opt.value === selectedLocale.value) || langOptions[0]
+  })
 </script>
 
 <template>
   <q-select
-    v-model="selectedLocale"    
+    v-model="selectedLocale"  
     class="q-select"
     :options="langOptions"
     emit-value

@@ -63,12 +63,12 @@ async function handleSubmit(){
       case false: //login case
         res = await login(state.data.email, state.data.pwd);
         if(res.headers) {
-          const {email,exp} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
+          const {email,exp,lang} = decodeJWT(res.headers['x-auth-token']); //exp is expressed in seconds since EPOCH
           set(res.headers['x-auth-token'], { expires: new Date(exp * 1000) })          
           router.replace({ name: 'member home' })  //send to dashboard page (logic in route.js)
           //set-up warnings for token expiry
           setUpTokenExpiry(t,exp,router)
-          emit('logIn',email)         
+          emit('logIn',email,lang?lang:locale)         
         }
     }
     emit('closeForm')

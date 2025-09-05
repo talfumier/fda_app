@@ -13,12 +13,10 @@ import router from './components/router/routes.js'
 
 const messages = { en, fr }
 
-const browserLang = navigator.language || navigator.userLanguage
-const normalizedLang = browserLang.split('-')[0] // e.g., "fr-FR" → "fr"
+const browserLang = (navigator.language || navigator.userLanguage).split('-')[0] // e.g., "fr-FR" → "fr"
 const supportedLocales = ['en', 'fr']
 const locale = // locale stored in local storage, browser lang or en
-  localStorage.getItem('locale') ||
-  (supportedLocales.includes(normalizedLang) ? normalizedLang : 'en')
+  localStorage.getItem('locale') || (supportedLocales.includes(browserLang) ? browserLang : 'en')
 
 const i18n = createI18n({
   legacy: false, // use Composition API mode

@@ -6,7 +6,6 @@ const api = environment.api_url
 export async function translate(data) {
   //data is an object >>> {text, to, from}  >>> from optional
   try {
-    console.log('trans')
     const res = await http.post(`${api}/translate`, data)
     return res.data
   } catch (error) {

@@ -36,6 +36,7 @@
     :format="item.format"
     :value="data[item.name]?data[item.name]:''"
     :rows="item.rows"
+    :options="item.options"
     @change="handleChange"
   >    
   </InputField>
