@@ -1,18 +1,18 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
   import { ref } from 'vue';
-  import { useFormatDate } from '@/composable/useFormatDate.js';
   import {validate} from"./validation.js"
 
   const props=defineProps({
-    name:String,
+    name:{type:String},
     field_type:{type:String,default:"input"},
     data_type:{type:String,default:"text"},
-    label:String,
+    label:{type:String},
     required:{type:Boolean,default:true},
     disabled:{type:Boolean,default:false},
-    format:{type:String,default:'text'},
-    placeholder:{type:String},
+    format:{type:String,default:'text'},  //used for input validation >>> validation.js
+    highlight:{type:Boolean,default:true},  //label and border color highlight
+    placeholder:{type:String,default:''},
     value:{type:[String, Number, Boolean,Date]},  
     maxLength:{type:Number,default:Infinity},
     equal:{type:[String]},
@@ -20,27 +20,13 @@
     options:{type:Array}
   })    
   const { t,locale } = useI18n()  
-  const { formatDate, formatDateTime } = useFormatDate()
   
-  const data=ref(""), dirty=ref(false), type=ref(props.data_type)
+  const data=ref(props.value), dirty=ref(false), type=ref(props.data_type)
   const fieldValid=ref({valid: true, msg: null})
 
   const emit = defineEmits(['change'])
   //initial value processing >>> when no initial value, props.value="" (set in parent component :value)
-  if(props.value.length>0){
-    switch (props.format) {
-      case "date":
-        data.value=formatDate(props.value)
-        break;
-      case "date-time":
-        data.value=formatDateTime(props.value)
-        break
-      default:
-        data.value=props.value
-    }
-    handleChange(data.value)
-  }
-  
+  handleChange(data.value,'init')
   function handleChange(val,cs=null){
     if(!cs)dirty.value=true
     data.value=val
@@ -63,7 +49,7 @@
 </script>
 
 <template>
-  <div :class="['input-container',`${name}`]">
+  <div :class="['input-container',`${name}`,`${highlight?'highlight':''}`]" >
     <label 
       :class="[type==='checkbox'?'checkbox':'']" 
       v-html="`${label}${required && type !== 'checkbox' ? ' *' : ''}`"
@@ -79,7 +65,7 @@
       :equal="equal"
       :disabled="disabled" 
       :autoComplete="name!=='pwd' && name!=='pwd_check'?'on':'off'"
-      @change="handleChange($event.target[data_type!=='checkbox'?'value':'checked'])"
+      @change="handleChange($event.target.value)"
       @blur="(e) => {
         if(name === 'pwd_check' && fieldValid.valid) {
           const valid = validate(e.target.value, name, equal)          
@@ -87,7 +73,7 @@
         }    
       }"
       @input="(e) => {
-        if(dirty && data_type!=='checkbox') handleChange(e.target.value)
+        if(dirty) handleChange(e.target.value)
       }"
     />
     <q-icon  v-if="data_type==='password'"
@@ -96,6 +82,16 @@
       @click="handleVisibility"
     >
     </q-icon>
+
+    <input v-if="field_type==='checkbox'"
+      :name="name"
+      type="checkbox"
+      v-model="data" :true-value="1" :false-value="0"
+      :value="data"
+      :disabled="disabled" 
+      @change="handleChange($event.target.value)"
+      
+    />
     
     <textarea v-if="field_type==='textarea'"
       :name="name"
@@ -116,7 +112,7 @@
     
     <select v-if="field_type==='select'"
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid']"
-      :value="data.toString().length>0?data:'-1)'"
+      :value="data?.toString().length>0?data:'-1)'"
       :disabled="disabled"
       @change="handleChange($event.target.value)"     
     >
@@ -125,11 +121,11 @@
         v-for="(option,idx) in options" 
         :key="idx"
         :value="option.value">
-          {{option.text[locale]}}
+          {{option.value?option.text[locale]:''}}
       </option>
     </select>
     <!-- failed validation alert message -->
-    <div v-if="dirty && !fieldValid.valid && fieldValid.msg" 
+    <div v-if="dirty && !fieldValid.valid && fieldValid.msg && name!=='cgu_cgv'" 
       class="alert" 
       v-html="t(fieldValid.msg)"
     >
@@ -178,25 +174,16 @@
     resize: vertical;
     width:100%;
   }
-  /* Size customization i.a.w name */
-  div.input-container.email textarea {
-    min-width:350px;
-  }
-  div.input-container.lang select {
-    width:170px;
-  }
   input.pwd {
     padding-right: 45px;
   }
-  div.input-container:has(.not-valid):not(:has(.checkbox)) label{
+  div.input-container.highlight:has(.not-valid):not(:has(.checkbox)) label{
     color:red;
   }
-  /* .valid.dirty */
   .valid.dirty {
     border-color: green;
   }
-  /* .not-valid.dirty  */
-  .not-valid.dirty {
+  div.input-container.highlight .not-valid.dirty {
     border-color:red;
   }
   textarea.disabled, input.disabled {
@@ -225,4 +212,36 @@
     color:red;
     background-color: rgb(243, 227, 227);
   }
+  /* CUSTOMIZATION I.A.W FIELD NAME */
+  div.input-container.cgu_cgv {
+    margin-top: 15px;
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+  div.input-container.email textarea {
+    min-width:350px;
+  }
+  div.input-container.lang select {
+    width:170px;
+  }
+  div.input-container.createdAt input {
+    text-align: center;
+    margin-right:60px;
+  }
+  div.input-container.public {
+    position:relative;
+    width:100%;
+    margin-top:0;
+    margin-left: 40px;
+  }
+  div.input-container.public input {
+    position:absolute;
+    top:10px;
+    left:-40px;
+  }
+  div.input-container.public label{
+    text-wrap:unset;
+    width:400px;
+  }
+ 
 </style>

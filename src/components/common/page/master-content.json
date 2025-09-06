@@ -25,7 +25,7 @@
             "name": "lastName",
             "label_fr": "Nom de famille",
             "label_en": "Last name",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 1,
             "default": "t.b.d",
             "listMaster": true
@@ -34,7 +34,7 @@
             "name": "firstName",
             "label_fr": "Prénom",
             "label_en": "First name",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 1,
             "listMaster": true
           },
@@ -42,7 +42,7 @@
             "name": "pseudo",
             "label_fr": "Pseudo",
             "label_en": "Alias",
-            "type": "textarea",
+            "field_type": "textarea",
             "required": false,
             "rows": 1
           },
@@ -50,7 +50,7 @@
             "name": "email",
             "label_fr": "Courriel",
             "label_en": "Email",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 1,
             "format": "email",
             "listMaster": true
@@ -79,21 +79,21 @@
             "name": "city",
             "label_fr": "Ville",
             "label_en": "City",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 2
           },
           {
             "name": "country",
             "label_fr": "Pays",
             "label_en": "Country",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 1
           },
           {
             "name": "phone",
             "label_fr": "Téléphone",
             "label_en": "Phone",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 1
           }
         ]
@@ -105,7 +105,7 @@
           {
             "name": "resume_fr",
             "label": "Résumé",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 4,
             "required": false,
             "max_length": 500
@@ -113,10 +113,74 @@
           {
             "name": "resume_en",
             "label": "Resumé",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 4,
             "required": false,
             "max_length": 500
+          }
+        ]
+      },
+      {
+        "name": "links",
+        "type": "standard",
+        "fields": [
+          {
+            "name": "web1",
+            "label_fr": "Site web de référence 1",
+            "label_en": "Reference web site 1",
+            "field_type": "input",
+            "data_type": "url",
+            "placeholder": "https://example.com",
+            "required": false
+          },
+          {
+            "name": "web2",
+            "label_fr": "Site web de référence 2",
+            "label_en": "Reference web site 2",
+            "field_type": "input",
+            "data_type": "url",
+            "placeholder": "https://example.com",
+            "required": false
+          },
+          {
+            "name": "social1",
+            "label_fr": "Réseau social 1",
+            "label_en": "Social network 1",
+            "field_type": "input",
+            "data_type": "url",
+            "placeholder": "https://example.com",
+            "required": false
+          },
+          {
+            "name": "social2",
+            "label_fr": "Réseau social 2",
+            "label_en": "Social network 2",
+            "field_type": "input",
+            "data_type": "url",
+            "placeholder": "https://example.com",
+            "required": false
+          }
+        ]
+      },
+
+      {
+        "name": "acceptance",
+        "type": "standard",
+        "fields": [
+          {
+            "name": "cgu_cgv_date",
+            "label_fr": "✔️ CGU-CGV acceptées",
+            "label_en": "✔️ Terms and conditions accepted",
+            "type": "input",
+            "required": false,
+            "disabled": true
+          },
+          {
+            "name": "public",
+            "label_fr": "J'autorise la publication sur le site de mes données personnelles courriel, téléphone et photo",
+            "label_en": "I hereby accept that my personal details email, phone and profile picture are pusblished on the site",
+            "field_type": "checkbox",
+            "required": false
           }
         ]
       },
@@ -127,7 +191,7 @@
           {
             "name": "role_fr",
             "label_fr": "Role",
-            "type": "textarea",
+            "field_type": "textarea",
             "disabled": true,
             "rows": 1,
             "optional": true
@@ -135,7 +199,7 @@
           {
             "name": "role_en",
             "label_en": "Role",
-            "type": "textarea",
+            "field_type": "textarea",
             "disabled": true,
             "rows": 1,
             "optional": true
@@ -143,7 +207,7 @@
           {
             "name": "title_fr",
             "label_fr": "Statut",
-            "type": "textarea",
+            "field_type": "textarea",
             "disabled": true,
             "rows": 1,
             "optional": true
@@ -151,7 +215,7 @@
           {
             "name": "title_en",
             "label_en": "Status",
-            "type": "textarea",
+            "field_type": "textarea",
             "disabled": true,
             "rows": 1,
             "optional": true
@@ -160,7 +224,7 @@
             "name": "lang",
             "label_fr": "Langue préférée",
             "label_en": "Preferred language",
-            "type": "select",
+            "field_type": "select",
             "options": [
               {
                 "value": "fr",
@@ -192,6 +256,17 @@
     "fieldsets": [
       {
         "sameAs_idx": 0
+      },
+      {
+        "name": "password",
+        "type": "button",
+        "buttons": [
+          {
+            "name": "change_password",
+            "label_fr": "Changer le mot de passe",
+            "label_en": "Reset password"
+          }
+        ]
       }
     ]
   }

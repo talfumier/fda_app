@@ -16,7 +16,6 @@
       else return true      
     })
   })
-
   const emit=defineEmits(['change'])
   function handleChange(name,valid,val){
     emit('change',name,valid,val)
@@ -29,10 +28,13 @@
     v-for="(item) in filteredFields" 
     :key="item.name"
     :name="item.name"
-    :field_type="item.type"
+    :field_type="item.field_type"
+    :data_type="item.data_type"
+    :placeholder="item.placeholder"
     :label="item[`label_${locale}`]"
     :required="item.required"
     :disabled="item.disabled"
+    :highlight="item.highlight"
     :format="item.format"
     :value="data[item.name]?data[item.name]:''"
     :rows="item.rows"

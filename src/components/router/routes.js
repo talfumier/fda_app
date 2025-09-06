@@ -13,17 +13,23 @@ function getUserRole() {
   if (idStatus === 2) return parseInt(idRole)
   return -1
 }
+let fldsets = null
 const routes = content.map((item) => {
+  fldsets = []
+  item.fieldsets.map((fieldset) => {
+    if (fieldset.sameAs_idx !== undefined) {
+      content[fieldset.sameAs_idx].fieldsets.map((item) => {
+        fldsets.push(item)
+      })
+    } else fldsets.push(fieldset)
+  })
   return {
     path: `${item.entity.url}`,
     name: item.entity.name,
     component: Master,
     props: {
       entity: item.entity,
-      fieldsets:
-        item.fieldsets[0].sameAs_idx !== undefined
-          ? content[item.fieldsets[0].sameAs_idx].fieldsets
-          : item.fieldsets,
+      fieldsets: fldsets,
     },
     meta: { roles: item.entity.roles }, //user must be authenticated and hold the required role to access the page
   }

@@ -5,6 +5,7 @@
       "field_type": "input",
       "data_type": "email",
       "format": "email",
+      "highlight": false,
       "creation": [false, true]
     },
     {
@@ -20,6 +21,7 @@
       "field_type": "input",
       "data_type": "password",
       "format": "password-not-null",
+      "highlight": false,
       "creation": [false, true]
     },
     {
@@ -27,14 +29,14 @@
       "field_type": "input",
       "data_type": "password",
       "format": "password-not-null",
+      "highlight": false,
       "creation": [true]
     },
     {
       "name": "cgu_cgv",
-      "field_type": "input",
-      "data_type": "checkbox",
-      "value": false,
+      "field_type": "checkbox",
       "format": "checked",
+      "value": 0,
       "creation": [true]
     }
   ],
@@ -43,12 +45,14 @@
       "name": "pwd",
       "field_type": "input",
       "data_type": "password",
+      "highlight": false,
       "format": "password-not-null"
     },
     {
       "name": "pwd_check",
       "field_type": "input",
       "data_type": "password",
+      "highlight": false,
       "format": "password-not-null"
     }
   ]

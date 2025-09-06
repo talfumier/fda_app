@@ -3,6 +3,7 @@
   import FieldsetStandard from './FieldsetStandard.vue';
   import FieldsetAddress from './FieldsetAddress.vue';
   import FieldsetTranslate from './FieldsetTranslate.vue';
+  import FieldsetButton from './FieldsetButton.vue';
 
   const props=defineProps({
     entity:{type:Object},
@@ -10,12 +11,15 @@
     record:{type:Object}
   })
   
-  const emit=defineEmits(['change','translate'])
+  const emit=defineEmits(['change','translate','buttonAction'])
   function handleChange(id,name,valid,val){    
     emit('change',id,name,valid,val)
   }
   function handleTranslate(id,params) {
     emit('translate',id,params)
+  }
+  function handleButtonAction(name){
+    emit('buttonAction',name)
   }
     
 </script>
@@ -56,6 +60,13 @@
         }"
       >
       </FieldsetTranslate>
+      <FieldsetButton
+        v-if="item.type==='button'"
+        :key="idx"
+        :buttons="item.buttons"  
+        @button-action="handleButtonAction"      
+      >
+      </FieldsetButton>
     </fieldset>
 </template>
 
@@ -65,5 +76,8 @@
     flex-wrap: wrap;
     gap:10px;
     padding:0 5px;
+  }
+  fieldset:has(.button) {
+    justify-content:center;
   }
 </style>
