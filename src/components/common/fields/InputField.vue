@@ -51,7 +51,8 @@
 <template>
   <div :class="['input-container',`${name}`,`${highlight?'highlight':''}`]" >
     <label 
-      :class="[type==='checkbox'?'checkbox':'']" 
+      :for="name"
+      :class="[`${type==='checkbox'?'checkbox':''}`]" 
       v-html="`${label}${required && type !== 'checkbox' ? ' *' : ''}`"
     >
     </label>
@@ -84,6 +85,7 @@
     </q-icon>
 
     <input v-if="field_type==='checkbox'"
+      :id="name"
       :name="name"
       type="checkbox"
       v-model="data" :true-value="1" :false-value="0"
@@ -152,7 +154,6 @@
     flex-direction: row-reverse;
     justify-content: left;    
     align-items: center;
-    margin-top: 10px;
   }
   div.input-container:has(.pwd-reset){
     justify-content: center;
@@ -160,6 +161,7 @@
   label.checkbox {
     font-weight:400;
     color:var(--black);
+    cursor: pointer;
   }
   input[type="checkbox"] {
     transform: scale(1.5);
@@ -168,11 +170,17 @@
     cursor: pointer;
   }
   textarea, input, select {
-    padding:5px 10px;
+    padding:3px 10px;
     border: solid 2px grey;
     border-radius: 5px;
     resize: vertical;
     width:100%;
+  }
+  div.modal input, div.modal select {
+    padding:10px;
+  }
+  input, select {
+    height:3.2rem;
   }
   input.pwd {
     padding-right: 45px;
@@ -183,7 +191,7 @@
   .valid.dirty {
     border-color: green;
   }
-  div.input-container.highlight .not-valid.dirty {
+  div.input-container.highlight .not-valid {
     border-color:red;
   }
   textarea.disabled, input.disabled {
@@ -213,8 +221,10 @@
     background-color: rgb(243, 227, 227);
   }
   /* CUSTOMIZATION I.A.W FIELD NAME */
-  div.input-container.cgu_cgv {
+  div.input-container.cgu_cgv {   /*FormLogin*/
     margin-top: 15px;
+  }
+  div.input-container:has(input[type="checkbox"]) {
     flex-direction: row-reverse;
     align-items: center;
   }
@@ -224,24 +234,10 @@
   div.input-container.lang select {
     width:170px;
   }
-  div.input-container.createdAt input {
+  div.input-container.cgu_cgv_date input {    /*user form*/
     text-align: center;
-    margin-right:60px;
+  } 
+  div.input-container.newsletter {
+    padding-top: 20px;;
   }
-  div.input-container.public {
-    position:relative;
-    width:100%;
-    margin-top:0;
-    margin-left: 40px;
-  }
-  div.input-container.public input {
-    position:absolute;
-    top:10px;
-    left:-40px;
-  }
-  div.input-container.public label{
-    text-wrap:unset;
-    width:400px;
-  }
- 
 </style>

@@ -20,6 +20,8 @@
       {
         "name": "personalia",
         "type": "standard",
+        "legend_fr": "Personalia",
+        "legend_en": "Personalia",
         "fields": [
           {
             "name": "lastName",
@@ -60,19 +62,21 @@
       {
         "name": "location",
         "type": "address",
+        "legend_fr": "Adresse - Téléphone",
+        "legend_en": "Address - Phone",
         "fields": [
           {
             "name": "address",
             "label_fr": "Adresse",
             "label_en": "Address",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 2
           },
           {
             "name": "zipCode",
             "label_fr": "Code postal",
             "label_en": "Zip code",
-            "type": "textarea",
+            "field_type": "textarea",
             "rows": 1
           },
           {
@@ -101,10 +105,11 @@
       {
         "name": "resume",
         "type": "translate",
+        "legend_fr": "Résumé",
+        "legend_en": "Resumé",
         "fields": [
           {
             "name": "resume_fr",
-            "label": "Résumé",
             "field_type": "textarea",
             "rows": 4,
             "required": false,
@@ -112,7 +117,6 @@
           },
           {
             "name": "resume_en",
-            "label": "Resumé",
             "field_type": "textarea",
             "rows": 4,
             "required": false,
@@ -123,6 +127,8 @@
       {
         "name": "links",
         "type": "standard",
+        "legend_fr": "Liens hypertexte",
+        "legend_en": "Hyperlinks",
         "fields": [
           {
             "name": "web1",
@@ -162,24 +168,50 @@
           }
         ]
       },
-
       {
-        "name": "acceptance",
+        "name": "public",
         "type": "standard",
+        "legend_fr": "Publication des données personnelles",
+        "legend_en": "Personal data publication",
         "fields": [
           {
-            "name": "cgu_cgv_date",
-            "label_fr": "✔️ CGU-CGV acceptées",
-            "label_en": "✔️ Terms and conditions accepted",
-            "type": "input",
-            "required": false,
-            "disabled": true
+            "name": "public_name",
+            "label_fr": "Nom, prénom",
+            "label_en": "Last name, first name",
+            "field_type": "checkbox",
+            "data_type": "checkbox",
+            "required": false
           },
           {
-            "name": "public",
-            "label_fr": "J'autorise la publication sur le site de mes données personnelles courriel, téléphone et photo",
-            "label_en": "I hereby accept that my personal details email, phone and profile picture are pusblished on the site",
+            "name": "public_pseudo",
+            "label_fr": "Pseudo",
+            "label_en": "Alias",
             "field_type": "checkbox",
+            "data_type": "checkbox",
+            "required": false
+          },
+          {
+            "name": "public_email",
+            "label_fr": "Courriel",
+            "label_en": "Email",
+            "field_type": "checkbox",
+            "data_type": "checkbox",
+            "required": false
+          },
+          {
+            "name": "public_phone",
+            "label_fr": "Téléphone",
+            "label_en": "Phone",
+            "field_type": "checkbox",
+            "data_type": "checkbox",
+            "required": false
+          },
+          {
+            "name": "public_image",
+            "label_fr": "Photo du profil",
+            "label_en": "Profile picture",
+            "field_type": "checkbox",
+            "data_type": "checkbox",
             "required": false
           }
         ]
@@ -187,11 +219,13 @@
       {
         "name": "account",
         "type": "standard",
+        "legend_fr": "Paramètres du compte",
+        "legend_en": "Account settings",
         "fields": [
           {
             "name": "role_fr",
             "label_fr": "Role",
-            "field_type": "textarea",
+            "field_type": "input",
             "disabled": true,
             "rows": 1,
             "optional": true
@@ -199,7 +233,7 @@
           {
             "name": "role_en",
             "label_en": "Role",
-            "field_type": "textarea",
+            "field_type": "input",
             "disabled": true,
             "rows": 1,
             "optional": true
@@ -207,18 +241,24 @@
           {
             "name": "title_fr",
             "label_fr": "Statut",
-            "field_type": "textarea",
+            "field_type": "input",
             "disabled": true,
-            "rows": 1,
             "optional": true
           },
           {
             "name": "title_en",
             "label_en": "Status",
-            "field_type": "textarea",
+            "field_type": "input",
             "disabled": true,
-            "rows": 1,
             "optional": true
+          },
+          {
+            "name": "cgu_cgv_date",
+            "label_fr": "✔️ CGU-CGV acceptées",
+            "label_en": "✔️ Terms and conditions accepted",
+            "field_type": "input",
+            "required": false,
+            "disabled": true
           },
           {
             "name": "lang",
@@ -235,6 +275,14 @@
                 "text": { "fr": "🇬🇧 English", "en": "🇬🇧 English" }
               }
             ]
+          },
+          {
+            "name": "newsletter",
+            "label_fr": "Lettre d'informations",
+            "label_en": "Newsletter",
+            "field_type": "checkbox",
+            "data_type": "checkbox",
+            "required": false
           }
         ]
       }

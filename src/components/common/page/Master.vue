@@ -68,6 +68,7 @@
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){ 
+    // console.log(id,name,valid,val)
     const idx=getIndex(id)      
     actualChanges.value[idx][name]=initialValues[idx][name]!=(val===''?null:val)
     state.value[0][idx][name]=val
@@ -112,8 +113,8 @@
       return res.data    
   }  
   onMounted(async () => {  
-    state.value = await fetch()   
-    _.cloneDeep(state.value[0]).map((item) => {  //initialize initialValues, cloneDeep necessary
+    state.value = await fetch()  
+    _.cloneDeep(state.value[0]).map((item,idx) => {  //initialize initialValues, cloneDeep necessary
       initialValues.push(item)
     })
     resetActualChanges()

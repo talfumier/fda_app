@@ -141,6 +141,7 @@
     width:25px;
     height:15px;
     margin-right: 10px;
+    margin-bottom: 5px;
   }
   @media screen and (max-width: 900px) {
     div.translate {

@@ -1,5 +1,6 @@
 <script setup>
   import {defineEmits} from 'vue';
+  import { useI18n } from 'vue-i18n';
   import FieldsetStandard from './FieldsetStandard.vue';
   import FieldsetAddress from './FieldsetAddress.vue';
   import FieldsetTranslate from './FieldsetTranslate.vue';
@@ -10,7 +11,7 @@
     fieldsets:{type:Array},
     record:{type:Object}
   })
-  
+  const {locale}=useI18n()
   const emit=defineEmits(['change','translate','buttonAction'])
   function handleChange(id,name,valid,val){    
     emit('change',id,name,valid,val)
@@ -26,7 +27,8 @@
 
 <template>
     <slot name="toolbar"></slot>
-    <fieldset :class="item.type" v-for="(item,idx) in fieldsets">
+    <fieldset :class="[item.type,item.name]" v-for="(item,idx) in fieldsets">
+      <legend>{{ item[`legend_${locale}`] }}</legend>
       <FieldsetStandard
         v-if="item.type==='standard'"
         :key="idx"
@@ -60,7 +62,7 @@
         }"
       >
       </FieldsetTranslate>
-      <FieldsetButton
+      <FieldsetButton  
         v-if="item.type==='button'"
         :key="idx"
         :buttons="item.buttons"  
@@ -75,9 +77,31 @@
     display:flex;
     flex-wrap: wrap;
     gap:10px;
-    padding:0 5px;
+    margin-top:5px;
+    padding:0 10px 5px;
+    border-radius: 5px;    
+    border-color:rgb(154, 154, 238);
+    border-width: 1px;
+  }
+  fieldset.public {
+    justify-content: space-around;
+  }
+  fieldset.account {
+    justify-content: space-around;
+    align-items: center;
   }
   fieldset:has(.button) {
     justify-content:center;
+    border-width: 0;
+    padding:10px 0;
+  }
+  legend {
+    font-size:1.7rem;
+    line-height: 2.2rem;
+    text-wrap: nowrap;
+    font-style: italic;
+    font-weight:400;
+    color:var(--blue);
+    padding:0 5px;
   }
 </style>
