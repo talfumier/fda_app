@@ -107,6 +107,8 @@
         "type": "translate",
         "legend_fr": "Résumé",
         "legend_en": "Resumé",
+        "info": true,
+        "info_path": "comps.infos.resume",
         "fields": [
           {
             "name": "resume_fr",
@@ -129,6 +131,8 @@
         "type": "standard",
         "legend_fr": "Liens hypertexte",
         "legend_en": "Hyperlinks",
+        "info": true,
+        "info_path": "comps.infos.hyperlinks",
         "fields": [
           {
             "name": "web1",
@@ -173,6 +177,8 @@
         "type": "standard",
         "legend_fr": "Publication des données personnelles",
         "legend_en": "Personal data publication",
+        "info": true,
+        "info_path": "comps.infos.personal_data",
         "fields": [
           {
             "name": "public_name",

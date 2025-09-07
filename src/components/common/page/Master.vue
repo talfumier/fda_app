@@ -68,7 +68,6 @@
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){ 
-    console.log(id,name,valid,val)
     const idx=getIndex(id)      
     actualChanges.value[idx][name]=initialValues[idx][name]!=(val===''?null:val)
     state.value[0][idx][name]=val

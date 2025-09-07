@@ -5,6 +5,7 @@
   import FieldsetAddress from './FieldsetAddress.vue';
   import FieldsetTranslate from './FieldsetTranslate.vue';
   import FieldsetButton from './FieldsetButton.vue';
+  import DialogInfo from '../../DialogInfo.vue';
 
   const props=defineProps({
     entity:{type:Object},
@@ -28,7 +29,7 @@
 <template>
     <slot name="toolbar"></slot>
     <fieldset :class="[item.type,item.name]" v-for="(item,idx) in fieldsets">
-      <legend>{{ item[`legend_${locale}`] }}</legend>
+      <legend>{{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path"></DialogInfo></legend>
       <FieldsetStandard
         v-if="item.type==='standard'"
         :key="idx"
