@@ -49,7 +49,7 @@
       :disabled="item.disabled"
       :highlight="item.highlight"
       :format="item.format"
-      :value="data[item.name]?data[item.name]:''"
+      :value="data[item.name]!==null?data[item.name]:''"
       :maxLength="item.max_length"
       :rows="item.rows"
       @change="handleChange"

@@ -1,18 +1,22 @@
 {
   "User": [
-    "lastName",
-    "firstName",
-    "pseudo",
-    "phone",
-    "address",
-    "zipCode",
-    "city",
-    "country",
-    "resume_fr",
-    "resume_en",
-    "web1",
-    "web2",
-    "social1",
-    "sovial2"
+    ["lastName"],
+    ["firstName"],
+    ["pseudo"],
+    ["public_pseudo", 0],
+    ["public_email", 0],
+    ["phone"],
+    ["public_phone", 0],
+    ["address"],
+    ["zipCode"],
+    ["city"],
+    ["country"],
+    ["resume_fr"],
+    ["resume_en"],
+    ["public_image", 0],
+    ["web1"],
+    ["web2"],
+    ["social1"],
+    ["social2"]
   ]
 }

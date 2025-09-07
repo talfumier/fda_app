@@ -180,6 +180,8 @@
             "label_en": "Last name, first name",
             "field_type": "checkbox",
             "data_type": "checkbox",
+            "format": "integer",
+            "disabled": true,
             "required": false
           },
           {
@@ -188,6 +190,7 @@
             "label_en": "Alias",
             "field_type": "checkbox",
             "data_type": "checkbox",
+            "format": "integer",
             "required": false
           },
           {
@@ -196,6 +199,7 @@
             "label_en": "Email",
             "field_type": "checkbox",
             "data_type": "checkbox",
+            "format": "integer",
             "required": false
           },
           {
@@ -204,6 +208,7 @@
             "label_en": "Phone",
             "field_type": "checkbox",
             "data_type": "checkbox",
+            "format": "integer",
             "required": false
           },
           {
@@ -212,6 +217,7 @@
             "label_en": "Profile picture",
             "field_type": "checkbox",
             "data_type": "checkbox",
+            "format": "integer",
             "required": false
           }
         ]

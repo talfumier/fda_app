@@ -68,7 +68,7 @@
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){ 
-    // console.log(id,name,valid,val)
+    console.log(id,name,valid,val)
     const idx=getIndex(id)      
     actualChanges.value[idx][name]=initialValues[idx][name]!=(val===''?null:val)
     state.value[0][idx][name]=val
@@ -257,10 +257,8 @@
       case "clear":
         index=getIndex(selectedId.value)
         clearables[`${props.entity.model}`].map((prop) => {
-          if(state.value[0][index][prop]){
-            state.value[0][index][prop]=null
-            actualChanges.value[index][prop]=true
-          }
+          if(state.value[0][index][prop[0]])
+            state.value[0][index][prop[0]]=prop.length===1?null:prop[1]  //actualChanges updated by state reativity mechanism
         })
         break
       case "undo":

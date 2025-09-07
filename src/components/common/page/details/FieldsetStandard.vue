@@ -36,7 +36,7 @@
     :disabled="item.disabled"
     :highlight="item.highlight"
     :format="item.format"
-    :value="data[item.name]?data[item.name]:''"
+    :value="data[item.name]!==null?data[item.name]:''"
     :rows="item.rows"
     :options="item.options"
     @change="handleChange"

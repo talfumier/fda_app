@@ -25,7 +25,7 @@
   const fieldValid=ref({valid: true, msg: null})
 
   const emit = defineEmits(['change'])
-  //initial value processing >>> when no initial value, props.value="" (set in parent component :value)
+  //initial value processing 
   handleChange(data.value,'init')
   function handleChange(val,cs=null){
     if(!cs)dirty.value=true
