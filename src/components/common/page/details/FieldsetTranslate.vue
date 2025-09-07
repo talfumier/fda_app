@@ -43,12 +43,13 @@
       v-for="(item) in fields" 
       :key="item.name"
       :name="item.name"
-      :field_type="item.type"
+      :field_type="item.field_type"
       label=""
       :required="item.required"
       :disabled="item.disabled"
+      :highlight="item.highlight"
       :format="item.format"
-      :value="data[item.name]?data[item.name]:''"
+      :value="data[item.name]!==null?data[item.name]:''"
       :maxLength="item.max_length"
       :rows="item.rows"
       @change="handleChange"
@@ -140,6 +141,7 @@
     width:25px;
     height:15px;
     margin-right: 10px;
+    margin-bottom: 5px;
   }
   @media screen and (max-width: 900px) {
     div.translate {

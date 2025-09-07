@@ -1,5 +1,5 @@
 <script setup>
-  import {inject,useSlots} from 'vue'
+  import {ref,inject,useSlots} from 'vue'
   import { useRouter,useRoute,RouterLink } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import { setUpTokenExpiry } from '../login/tokenExpiry.js';
@@ -14,7 +14,12 @@
   // handling the case where a user has closed the app without actual log-out
   // and reopen the app with a still valid token  
   if(decoded.value) setUpTokenExpiry(t, decoded.value?.exp, router)
+
   const slots = useSlots()
+  const preferred=ref(null)
+  function handlePreferred(lang) {
+    preferred.value=lang
+  }
 
   </script>
 
@@ -30,8 +35,15 @@
           <span class="span-rh">Merville</span>
         </h1>
         <div class="container-public-member">
-          <LangSwitcher ></LangSwitcher>
-          <HeaderMember></HeaderMember>
+          <LangSwitcher 
+            :key="preferred"
+            :preferred="preferred"
+          >
+          </LangSwitcher>
+          <HeaderMember 
+            @lang="handlePreferred"
+          >
+          </HeaderMember>
         </div>
       </div>
     </header>

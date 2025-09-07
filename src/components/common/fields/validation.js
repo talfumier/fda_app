@@ -37,14 +37,14 @@ export function validate(value, format, equal) {
         }
       break
     case 'checked':
-      if (!value)
+      if (!value || value == 0)
         result = {
           valid: false,
           msg: null, //'comps.validation.fields.checked',
         }
       break
     case 'unchecked':
-      if (value)
+      if (value && value === 1)
         result = {
           valid: false,
           msg: 'comps.validation.fields.checked',

@@ -5,6 +5,7 @@
   import { useI18n } from 'vue-i18n';
   import _ from 'lodash'
   import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js';
+  import { forgotPassword } from '@/services/httpUsers.js';
   import ListItems from './list/ListItems.vue';
   import FormDetails from './details/FormDetails.vue';
   import Toolbar from '../toolbar/Toolbar.vue';
@@ -18,7 +19,7 @@
     fieldsets:{type:Array},
   })
   
-  const {t}=useI18n()  
+  const {locale,t}=useI18n()  
   const {token,decoded}=inject('userCookie')
   const $q=useQuasar()
   //field_master definition, formValid initialization
@@ -26,6 +27,7 @@
   let fltr=null
   const obj={}
   props.fieldsets.map((fldset) => {
+    if(!fldset.fields) return
     fltr=null
     fltr=_.filter(fldset.fields, (fld) => {
       return fld.listMaster !== undefined
@@ -40,7 +42,7 @@
     return JSON.stringify(formValid).includes(false);
   })
   
-  const state=ref(null)
+  const state=ref([])
   const selectedId = ref(null)
 
   const initialValues=[]
@@ -110,8 +112,8 @@
       return res.data    
   }  
   onMounted(async () => {  
-    state.value = await fetch() 
-    _.cloneDeep(state.value[0]).map((item) => {  //initialize initialValues, cloneDeep necessary
+    state.value = await fetch()  
+    _.cloneDeep(state.value[0]).map((item,idx) => {  //initialize initialValues, cloneDeep necessary
       initialValues.push(item)
     })
     resetActualChanges()
@@ -208,6 +210,7 @@
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
+    if(state.value.length===0) return
     return _.filter(state.value[0],(item) => {
         return (item[`id${props.entity.model}`]===selectedId.value)
       })[0]
@@ -253,10 +256,8 @@
       case "clear":
         index=getIndex(selectedId.value)
         clearables[`${props.entity.model}`].map((prop) => {
-          if(state.value[0][index][prop]){
-            state.value[0][index][prop]=null
-            actualChanges.value[index][prop]=true
-          }
+          if(state.value[0][index][prop[0]])
+            state.value[0][index][prop[0]]=prop.length===1?null:prop[1]  //actualChanges updated by state reativity mechanism
         })
         break
       case "undo":
@@ -273,11 +274,19 @@
     })
     return n
   })
+  // BUTTON ACTIONS - MODEL SPECIFIC 
+  async function handleButtonActions(name) {
+    switch(props.entity.model){
+      case 'User':
+        await forgotPassword(decoded.value.email, locale.value)
+        break    
+    }
+  }
 
 </script>
 
 <template>
-  <section v-if="state" :class="['master-container',isRotated?'folded':'']">
+  <section v-if="state.length!==0" :class="['master-container',isRotated?'folded':'']">
     <aside v-if="!entity.noList" class="top-container" >
       <div class="filter">   
         <q-input
@@ -360,6 +369,7 @@
         :record="filteredDetails"
         @change="handleChange"
         @translate="handleTranslate"
+        @button-action="handleButtonActions"
         >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
