@@ -6,8 +6,10 @@ const api = environment.api_url
 export function login(email, pwd) {
   return http.post(`${api}/login`, { email, pwd })
 }
-export function register(email, idRole, lang, pwd) {
+export function register(lastName, firstName, email, idRole, lang, pwd) {
   return http.post(`${api}/register`, {
+    lastName,
+    firstName,
     email,
     idRole,
     lang,

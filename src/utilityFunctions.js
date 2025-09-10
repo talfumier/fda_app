@@ -15,6 +15,15 @@ export function range(start, end) {
     .fill()
     .map((_, idx) => start + idx)
 }
+export function getEmptyFile() {
+  return {
+    fileName: '',
+    fileSize: 0,
+    fileLastModified: 0,
+    url: null,
+    data: null,
+  }
+}
 export function fileSize(size) {
   if (size < 1024) {
     return `${size} bytes`

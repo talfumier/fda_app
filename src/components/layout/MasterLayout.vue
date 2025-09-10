@@ -73,9 +73,9 @@
   }
   div.layout {
     display: grid;
+    grid-template-rows: 130px calc(100vh - 180px) 50px;
     grid-template-columns: auto 1fr;
-    grid-template-rows: auto 1fr auto;
-    min-height:100vh;
+    height:100%;
     min-width:525px;
   }
   header { 
@@ -138,6 +138,7 @@
   footer {    
     grid-column: span 2;
     min-width:525px;
+    height:50px;
   }
   @media screen and (min-width: 600px) {
     .logo {

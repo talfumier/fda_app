@@ -1,6 +1,18 @@
 {
   "login": [
     {
+      "name": "lastName",
+      "field_type": "input",
+      "highlight": false,
+      "creation": [true]
+    },
+    {
+      "name": "firstName",
+      "field_type": "input",
+      "highlight": false,
+      "creation": [true]
+    },
+    {
       "name": "email",
       "field_type": "input",
       "data_type": "email",

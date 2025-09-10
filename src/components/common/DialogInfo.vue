@@ -1,9 +1,10 @@
 <script setup>
-  import { ref, reactive } from 'vue';
+  import { ref } from 'vue';
 
   defineProps({
     path:{type:String}
   })
+  const menu=ref(null)
 
 </script>
 
@@ -12,15 +13,13 @@
     push round pulse flat
     icon="info"
     @click="menu = true" />
-  <q-menu v-model="menu">
+  <q-menu >
     <q-card>
-      <q-card-section>
+      <q-card-section :class="menu?'visible':'hidden'">
         {{ $t(path) }}
       </q-card-section>
     </q-card>
   </q-menu>
-
-
 </template>
 
 <style scoped>
@@ -29,5 +28,11 @@
   }
   .q-card__section {
     padding:5px 10px;
+  }
+  .q-card-section.visible {
+    display:block;
+  }
+  .q-card-section.hidden {
+    display:none;
   }
 </style>
