@@ -13,12 +13,12 @@
 </script>
 
 <template>
-<q-tooltip 
-  :class="['tooltip', small ? 'small' : 'large', wrap?'':'nowrap']"
-  anchor="bottom middle"
-  self="center middle"
-  >
-    <slot>{{ tt_text }}</slot>
+  <q-tooltip 
+    :class="['tooltip', small ? 'small' : 'large', wrap?'':'nowrap']"
+    anchor="bottom middle"
+    self="center middle"
+    >
+      <slot>{{ tt_text }}</slot>
   </q-tooltip>
 </template>
 

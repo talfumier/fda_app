@@ -114,7 +114,7 @@
     
     <select v-if="field_type==='select'"
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid']"
-      :value="data?.toString().length>0?data:'-1)'"
+      :value="data?.toString().length>0?data:'-1'"
       :disabled="disabled"
       @change="handleChange($event.target.value)"     
     >
@@ -146,7 +146,7 @@
     align-items: flex-start;
     position:relative;
     font-size: 1.7rem;
-    opacity: 0.8;
+    opacity: 0.9;
     padding:5px 0;
     border:none;
   }
@@ -196,6 +196,7 @@
   }
   textarea.disabled, input.disabled {
     cursor:not-allowed;
+    opacity:1 !important;
   }
   select {
     padding-right: 10px;;
@@ -221,8 +222,11 @@
     background-color: rgb(243, 227, 227);
   }
   /* CUSTOMIZATION I.A.W FIELD NAME */
+  div.modal-content.login input, div.modal-content.login select {
+   height:4.3rem;
+  }
   div.input-container.cgu_cgv {   /*FormLogin*/
-    margin-top: 15px;
+    margin-top: 0px;
   }
   div.input-container:has(input[type="checkbox"]) {
     flex-direction: row-reverse;

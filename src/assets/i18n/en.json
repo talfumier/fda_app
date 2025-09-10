@@ -25,6 +25,8 @@
       }
     },
     "login": {
+      "lastName": "Last name",
+      "firstName": "First name",
       "email": "User ID",
       "role": "Role",
       "pwd": "Password",
@@ -67,6 +69,12 @@
       "resume": "Provide a short description of yourself, your activities ... to be published on our web site.",
       "hyperlinks": "Hyperlinks to your sites or social networks.",
       "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required."
+    },
+    "file_upload": {
+      "delete": "Delete",
+      "upload": "Upload",
+      "max_exceeded": "File size is above the accepted limit (",
+      "file_delete": "Please confirm file deletion."
     },
     "master": {
       "add_btn": "Add"

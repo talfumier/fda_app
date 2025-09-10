@@ -27,9 +27,10 @@ const state=ref({
   creation: false
 })
 
-obj=zipToObject(Object.keys(obj),[false,true,false, state.value.creation ? false : true,state.value.creation ? false : true],false)
+obj=zipToObject(Object.keys(obj),[state.value.creation ? false : true,state.value.creation ? false : true,false,true,false, state.value.creation ? false : true,state.value.creation ? false : true],false)
 const formValid=ref({...obj})
 const disabled=computed(() => {
+  console.log(formValid.value)
   return JSON.stringify(formValid.value).includes(false);
 })
 
@@ -54,6 +55,8 @@ async function handleSubmit(){
     switch (state.value.creation) {
       case true: //register case
         res = await register(  //error handling and success message managed by axios interceptor in httpService.js
+          state.value.data.lastName,
+          state.value.data.firstName,
           state.value.data.email,
           state.value.data.role,
           locale.value,
@@ -185,8 +188,7 @@ onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after co
     z-index: 5000;
   }
   .q-btn {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin: .8rem 0;
   }
   .q-btn:hover {
     opacity: 0.8;

@@ -1,11 +1,13 @@
 <script setup>
-  import {defineEmits} from 'vue';
+  import {computed,defineEmits} from 'vue';
   import { useI18n } from 'vue-i18n';
+  import _ from 'lodash'
   import FieldsetStandard from './FieldsetStandard.vue';
   import FieldsetAddress from './FieldsetAddress.vue';
   import FieldsetTranslate from './FieldsetTranslate.vue';
   import FieldsetButton from './FieldsetButton.vue';
   import DialogInfo from '../../DialogInfo.vue';
+  import FieldsetFile from './FieldsetFile.vue';
 
   const props=defineProps({
     entity:{type:Object},
@@ -13,6 +15,11 @@
     record:{type:Object}
   })
   const {locale}=useI18n()
+  const filteredFieldsets=computed(() => {
+    return _.filter(props.fieldsets,(item) => {
+      return item.type!=='button-bottom'
+    })
+  })
   const emit=defineEmits(['change','translate','buttonAction'])
   function handleChange(id,name,valid,val){    
     emit('change',id,name,valid,val)
@@ -28,7 +35,7 @@
 
 <template>
     <slot name="toolbar"></slot>
-    <fieldset :class="[item.type,item.name]" v-for="(item,idx) in fieldsets">
+    <fieldset :class="[item.type,item.name]" v-for="(item,idx) in filteredFieldsets" >
       <legend>{{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path"></DialogInfo></legend>
       <FieldsetStandard
         v-if="item.type==='standard'"
@@ -63,6 +70,15 @@
         }"
       >
       </FieldsetTranslate>
+      <FieldsetFile
+        v-if="item.type==='file-upload'"          
+        :key="idx"
+        :fileYes="entity.fileYes"
+        :model="entity.model"
+        :fields="item.fields"
+        :data="record"
+      >
+      </FieldsetFile>
       <FieldsetButton  
         v-if="item.type==='button'"
         :key="idx"

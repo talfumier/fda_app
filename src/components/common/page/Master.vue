@@ -90,6 +90,7 @@
   const ctrls={} // AbortController's object' used in http request operation
   let alive = true // guard against updates after unmount
   async function fetch() {
+    if (!alive) return                // component gone? don't touch state 
     if (ctrls[0]) ctrls[0].abort()
     ctrls[0] = new AbortController()
     let res=null,sqlparams=null,paramsValues=null
@@ -108,8 +109,7 @@
           ctrls[0].signal
         )).data      
     }
-    if (!alive) return                // component gone? don't touch state 
-      return res.data    
+    return res.data    
   }  
   onMounted(async () => {  
     state.value = await fetch()  
@@ -286,7 +286,7 @@
 </script>
 
 <template>
-  <section v-if="state.length!==0" :class="['master-container',isRotated?'folded':'']">
+  <section v-if="state.length!==0" :class="['master-container',entity.noList?'no-list':'',isRotated?'folded':'']">
     <aside v-if="!entity.noList" class="top-container" >
       <div class="filter">   
         <q-input
@@ -376,23 +376,33 @@
             :actualChange="changeStatus"
             @toolbar-actions="handleToolbarActions"
           >
-        </Toolbar>
+          </Toolbar>
         </template> 
       </FormDetails>
     </form>
+    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom'" class="bottom-container">
+      <FieldsetButton          
+        key="bottom"
+        :buttons="fieldsets[fieldsets.length-1].buttons"  
+        @button-action="handleButtonActions"      
+      >
+      </FieldsetButton>
+    </div>
   </section>
 </template>
 
 <style scoped>
-
   .master-container {
     display: grid;
-    grid-template-columns: auto auto;
     grid-template-rows:100px auto;
+    grid-template-columns: auto auto;
     justify-content: left;
     height:100%;   
     position:relative;
   }  
+  .master-container.no-list {
+    grid-template-columns: auto;
+  }
   .master-container.folded {
     grid-template-columns: 40px auto;
   }
@@ -458,6 +468,8 @@
   .list-container {
     grid-area: 2/1;      
     border-top: 1px solid lightgrey;
+    height:100%;
+    overflow-y: auto;
     visibility:visible;  
     opacity:1;              
     transition: opacity 0.6s ease, visibility 0.6s ease;
@@ -473,6 +485,21 @@
     display:flex;
     flex-direction: column;
     justify-content: top;
+    width:100%; 
+    padding-right:50px;
+    overflow-y: auto;
+  }
+  .no-list .details-container {    
+    grid-column: 1;
+  }
+  .bottom-container {
+    display:flex;
+    justify-content: center;
+    padding:10px 0;
+  }
+  fieldset.button-bottom {
+    border-width: 0;
+    margin:0;
   }
   .toolbar {
     position:absolute;
