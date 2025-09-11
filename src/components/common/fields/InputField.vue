@@ -7,6 +7,7 @@
     name:{type:String},
     field_type:{type:String,default:"input"},
     data_type:{type:String,default:"text"},
+    icon:{type:String,default:null},
     label:{type:String},
     required:{type:Boolean,default:true},
     disabled:{type:Boolean,default:false},
@@ -24,7 +25,7 @@
   const data=ref(props.value), dirty=ref(false), type=ref(props.data_type)
   const fieldValid=ref({valid: true, msg: null})
 
-  const emit = defineEmits(['change'])
+  const emit = defineEmits(['change','iconClick'])
   //initial value processing 
   handleChange(data.value,'init')
   function handleChange(val,cs=null){
@@ -76,8 +77,17 @@
       @input="(e) => {
         if(dirty) handleChange(e.target.value)
       }"
-    />
+    />    
+    <q-icon  v-if="icon"
+      class="icon"
+      :name="icon"
+      size="3rem"
+      color='primary'
+      @click="emit('iconClick')"
+    >
+    </q-icon>
     <q-icon  v-if="data_type==='password'"
+      class="pwd"
       :name="type==='text'?'visibility_off':'visibility'" size="3rem"
       color='blue-grey-9'
       @click="handleVisibility"
@@ -137,7 +147,7 @@
 
 <style scoped>
   ::placeholder {
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
   }
   div.input-container {
@@ -208,10 +218,15 @@
   }
   .q-icon {
     position:absolute;
+  }
+  .q-icon.pwd {
     top:35px;
-    right:8px;
-    color: red;
-    
+    right:8px;    
+  }
+  .q-icon.icon {
+    top:28px;
+    right:8px;   
+    cursor: pointer; 
   }
   div.alert {
     font-size:1.5rem;
@@ -244,5 +259,8 @@
   } 
   div.input-container.newsletter {
     padding-top: 20px;;
+  }
+  fieldset.links input {
+    width:300px;
   }
 </style>

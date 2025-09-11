@@ -41,7 +41,7 @@
           {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path"></DialogInfo>
       </legend>
       <FieldsetStandard
-        v-if="item.type==='standard'"
+        v-if="item.type.includes('standard')"
         :key="idx"
         :fields="item.fields"
         :data="record"
@@ -109,6 +109,9 @@
   fieldset.account {
     justify-content: space-around;
     align-items: center;
+  }
+  fieldset.links {
+    justify-content: space-around;
   }
   fieldset:has(.button) {
     justify-content:center;

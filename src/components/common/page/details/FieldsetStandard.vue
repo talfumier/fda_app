@@ -20,6 +20,12 @@
   function handleChange(name,valid,val){
     emit('change',name,valid,val)
   }
+  function handleIconClick(cs,url){
+    switch (cs){
+      case "url":
+        window.open(url, '_blank') 
+    }
+  }
 
 </script>
 
@@ -30,6 +36,7 @@
     :name="item.name"
     :field_type="item.field_type"
     :data_type="item.data_type"
+    :icon="item.icon"
     :placeholder="item.placeholder"
     :label="item[`label_${locale}`]"
     :required="item.required"
@@ -40,6 +47,7 @@
     :rows="item.rows"
     :options="item.options"
     @change="handleChange"
+    @icon-click="handleIconClick(item.data_type,data[item.name])"
   >    
   </InputField>
 </template>
