@@ -88,7 +88,8 @@
     </q-icon>
     <q-icon  v-if="data_type==='password'"
       class="pwd"
-      :name="type==='text'?'visibility_off':'visibility'" size="3rem"
+      :name="type==='text'?'visibility_off':'visibility'" 
+      size="3rem"
       color='blue-grey-9'
       @click="handleVisibility"
     >
@@ -186,14 +187,11 @@
     resize: vertical;
     width:100%;
   }
-  div.modal input, div.modal select {
+  div.modal input:not(:has(+ .q-icon)), div.modal select {
     padding:10px;
   }
   input, select {
     height:3.2rem;
-  }
-  input.pwd {
-    padding-right: 45px;
   }
   div.input-container.highlight:has(.not-valid):not(:has(.checkbox)) label{
     color:red;
@@ -220,13 +218,16 @@
     position:absolute;
   }
   .q-icon.pwd {
-    top:35px;
+    top:33px;
     right:8px;    
   }
   .q-icon.icon {
     top:28px;
     right:8px;   
     cursor: pointer; 
+  }
+  input:has(+ .q-icon) {
+    padding-right:40px;
   }
   div.alert {
     font-size:1.5rem;
