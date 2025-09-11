@@ -42,7 +42,7 @@
 
 <template>
   <div :class="['modal']">
-    <div class="modal-content">
+    <div :class="['modal-content','reset']">
       <div class="icon">
         <q-icon name="cancel" size="3.5rem" color='blue-grey-9' @click="handleClose" tabindex="-1">
         </q-icon>

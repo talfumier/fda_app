@@ -32,7 +32,7 @@
       ctrl.signal
     )
     if(res.statusCode===200) {
-      url.value=res.data[0][0].url
+      url.value=res.data[0][0]?.url
     }
   })
   onUnmounted(() => { // clean-up code after component has unmounted

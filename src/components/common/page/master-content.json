@@ -105,6 +105,7 @@
       {
         "name": "resume",
         "type": "translate",
+        "roles": [1, 2, 3, 4],
         "legend_fr": "Résumé",
         "legend_en": "Resumé",
         "info": true,
@@ -129,6 +130,7 @@
       {
         "name": "links",
         "type": "standard",
+        "roles": [1, 2, 3, 4],
         "legend_fr": "Liens hypertexte",
         "legend_en": "Hyperlinks",
         "info": true,
@@ -175,6 +177,7 @@
       {
         "name": "public",
         "type": "standard",
+        "roles": [1, 2, 3, 4],
         "legend_fr": "Publication des données personnelles",
         "legend_en": "Personal data publication",
         "info": true,
@@ -349,7 +352,14 @@
         "type": "button-bottom",
         "buttons": [
           {
+            "name": "delete_account",
+            "icon": "delete",
+            "label_fr": "Supprimer le compte",
+            "label_en": "Delete account"
+          },
+          {
             "name": "change_password",
+            "icon": "password",
             "label_fr": "Changer le mot de passe",
             "label_en": "Reset password"
           }

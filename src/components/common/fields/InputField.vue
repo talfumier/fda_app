@@ -222,7 +222,8 @@
     background-color: rgb(243, 227, 227);
   }
   /* CUSTOMIZATION I.A.W FIELD NAME */
-  div.modal-content.login input, div.modal-content.login select {
+  div.modal-content.login input, div.modal-content.login select, 
+  div.modal-content.reset input, div.modal-content.reset select {
    height:4.3rem;
   }
   div.input-container.cgu_cgv {   /*FormLogin*/

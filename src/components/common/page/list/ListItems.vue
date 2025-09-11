@@ -63,8 +63,8 @@
           <UserActions
             v-if="model==='User'"
             :data="item"
-            @user-action="(cs,id) => {
-              emit('userAction',cs,id)
+            @user-action="(cs) => {
+              emit('userAction',cs)
             }"
           ></UserActions>
         </template>
