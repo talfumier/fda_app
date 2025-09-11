@@ -523,6 +523,7 @@
     position:absolute;
     top:10px;
     right:20px;
+    z-index: 5000;
   }
   div.folded .details-container {
     border-width: 0;

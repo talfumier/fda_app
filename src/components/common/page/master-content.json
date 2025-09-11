@@ -129,7 +129,7 @@
       },
       {
         "name": "links",
-        "type": "standard",
+        "type": "standard hyperlink",
         "roles": [1, 2, 3, 4],
         "legend_fr": "Liens hypertexte",
         "legend_en": "Hyperlinks",
@@ -142,6 +142,7 @@
             "label_en": "Reference web site 1",
             "field_type": "input",
             "data_type": "url",
+            "icon": "east",
             "placeholder": "https://example.com",
             "required": false
           },
@@ -151,6 +152,7 @@
             "label_en": "Reference web site 2",
             "field_type": "input",
             "data_type": "url",
+            "icon": "east",
             "placeholder": "https://example.com",
             "required": false
           },
@@ -160,6 +162,7 @@
             "label_en": "Social network 1",
             "field_type": "input",
             "data_type": "url",
+            "icon": "east",
             "placeholder": "https://example.com",
             "required": false
           },
@@ -169,6 +172,7 @@
             "label_en": "Social network 2",
             "field_type": "input",
             "data_type": "url",
+            "icon": "east",
             "placeholder": "https://example.com",
             "required": false
           }
