@@ -1,10 +1,11 @@
 <script setup async>
   import { ref,computed,onMounted,onUnmounted,inject  } from 'vue';
-  import { onBeforeRouteLeave } from 'vue-router'
+  import { useRouter,onBeforeRouteLeave } from 'vue-router'
   import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n';
   import _ from 'lodash'
   import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js';
+  import { deleteInCloud } from '@/services/httpCloudinary.js';
   import { forgotPassword } from '@/services/httpUsers.js';
   import ListItems from './list/ListItems.vue';
   import FormDetails from './details/FormDetails.vue';
@@ -19,6 +20,7 @@
     fieldsets:{type:Array},
   })
   
+  const router = useRouter()
   const {locale,t}=useI18n()  
   const {token,decoded}=inject('userCookie')
   const $q=useQuasar()
@@ -48,7 +50,7 @@
   const initialValues=[]
   const actualChanges=ref([])
 
-  function getIndex(id){
+  function getIndex(){
     return state.value[0].findIndex((item) => {
           return item[`id${props.entity.model}`]===selectedId.value
         }) 
@@ -68,13 +70,13 @@
     selectedId.value=id
   }
   function handleChange(id,name,valid,val){ 
-    const idx=getIndex(id)      
+    const idx=getIndex()      
     actualChanges.value[idx][name]=initialValues[idx][name]!=(val===''?null:val)
     state.value[0][idx][name]=val
     formValid.value[name]=valid
   }
   async function handleTranslate(id,params){
-    const idx=getIndex(id)  
+    const idx=getIndex()  
     const {from,to,rootName}=params  
     const translated = (
       await translate({
@@ -183,27 +185,34 @@
             return t(`comps.list_items.actions_menu.user.${toggle}.indeterminate`)
         }
       }
-      handleAction = async(cs,id)=>{    
+      handleAction = async(cs)=>{    
         if (!alive) return                // component gone? don't touch state 
         if (ctrls[1]) ctrls[1].abort()
         ctrls[1] = new AbortController()
         let res=null,status=2
-        const idx=getIndex(id)
+        const idx=getIndex()
         switch(cs){      
           case "deactivation":
             status=3
           case "validation":
             //database update
-            res=await postEntity('StatusTracking', {idStatus:status,idUser:id}, token.value, ctrls[1].signal)
+            res=await postEntity('StatusTracking', {idStatus:status,idUser:selectedId.value}, token.value, ctrls[1].signal)
             // state update
             if(res.data.statusCode!==200) return
-            state.value[1].unshift({idUser:id,idStatus:status,createdAt:new Date(Date.now())})
+            state.value[1].unshift({idUser:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
             state.value[0][idx].idStatus=status
             break;
           case "deletion":
-            res=await deleteEntity('User',selectedId.value,token.value, ctrls[1].signal)            
-            if(res.data.statusCode!==200) return
-            state.value[0].splice(idx,1)
+            const idImage=state.value[0][idx].idImage 
+            res=await deleteEntity('User',selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser  
+            if(res.data.statusCode!==200) return       
+            state.value[0].splice(idx,1)  //update state  
+            if(idImage) {
+              const {data:res}=await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com
+               if(res.statusCode===200) 
+                await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
+            } 
+            router.go(0)
         }
       }
       break
@@ -254,14 +263,14 @@
         }) 
         break
       case "clear":
-        index=getIndex(selectedId.value)
+        index=getIndex()
         clearables[`${props.entity.model}`].map((prop) => {
           if(state.value[0][index][prop[0]])
             state.value[0][index][prop[0]]=prop.length===1?null:prop[1]  //actualChanges updated by state reativity mechanism
         })
         break
       case "undo":
-        index=getIndex(selectedId.value)
+        index=getIndex()
         state.value[0][index]=_.cloneDeep(initialValues[index])  //cloneDeep necessary
         resetActualChanges()
     }
@@ -278,7 +287,14 @@
   async function handleButtonActions(name) {
     switch(props.entity.model){
       case 'User':
-        await forgotPassword(decoded.value.email, locale.value)
+        switch(name){
+          case 'change_password':
+            await forgotPassword(decoded.value.email, locale.value)
+            break
+          case 'delete_account':
+            if (!(await confirm($q,t('comps.list_items.actions_menu.user.confirm.deletion'),'cancel'))) return false 
+            handleAction('deletion')
+        }
         break    
     }
   }
@@ -362,7 +378,7 @@
     </aside>
     <form class="details-container">
       <FormDetails 
-        v-if="selectedId" 
+        v-if="selectedId && filteredDetails" 
         :key="filteredDetailsTrigger()"
         :entity="entity" 
         :fieldsets="fieldsets" 
@@ -380,7 +396,7 @@
         </template> 
       </FormDetails>
     </form>
-    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom'" class="bottom-container">
+    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom' && filteredDetails" class="bottom-container">
       <FieldsetButton          
         key="bottom"
         :buttons="fieldsets[fieldsets.length-1].buttons"  
@@ -401,7 +417,7 @@
     position:relative;
   }  
   .master-container.no-list {
-    grid-template-columns: auto;
+    grid-template-columns: 80%;
   }
   .master-container.folded {
     grid-template-columns: 40px auto;
@@ -481,12 +497,13 @@
   .details-container {
     grid-row: 1/span 2;
     grid-column: 2;
-    border: 1px solid lightgrey;
+    border-left: 1px solid lightgrey;
     display:flex;
     flex-direction: column;
     justify-content: top;
     width:100%; 
     padding-right:50px;
+    margin-bottom: 28px;
     overflow-y: auto;
   }
   .no-list .details-container {    
@@ -495,7 +512,8 @@
   .bottom-container {
     display:flex;
     justify-content: center;
-    padding:10px 0;
+    align-items: center;
+    padding-bottom:20px;
   }
   fieldset.button-bottom {
     border-width: 0;

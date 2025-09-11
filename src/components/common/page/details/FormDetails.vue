@@ -17,7 +17,8 @@
   const {locale}=useI18n()
   const filteredFieldsets=computed(() => {
     return _.filter(props.fieldsets,(item) => {
-      return item.type!=='button-bottom'
+      if(item.type==='button-bottom' || !props.record) return false
+      else return item.roles?item.roles.includes(props.record.idRole):true
     })
   })
   const emit=defineEmits(['change','translate','buttonAction'])
@@ -30,13 +31,15 @@
   function handleButtonAction(name){
     emit('buttonAction',name)
   }
-    
+
 </script>
 
 <template>
     <slot name="toolbar"></slot>
     <fieldset :class="[item.type,item.name]" v-for="(item,idx) in filteredFieldsets" >
-      <legend>{{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path"></DialogInfo></legend>
+      <legend>
+          {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path"></DialogInfo>
+      </legend>
       <FieldsetStandard
         v-if="item.type==='standard'"
         :key="idx"
@@ -109,6 +112,7 @@
   }
   fieldset:has(.button) {
     justify-content:center;
+    align-items: top;
     border-width: 0;
     padding:10px 0;
   }

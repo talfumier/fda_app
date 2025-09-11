@@ -17,6 +17,7 @@
       color='primary'
       rounded standout pulse
       no-wrap
+      :icon="button.icon"
       :label="button[`label_${locale}`]"
       :disabled="false"
       @click="emit('buttonAction',button.name)"
@@ -25,5 +26,9 @@
 </template>
 
 <style scoped>
+  .q-btn {
+    max-height: 3.6rem;
+    margin:0 20px;
+  }
 
 </style>

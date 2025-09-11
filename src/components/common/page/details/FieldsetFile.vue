@@ -24,7 +24,7 @@
   const {t,locale}=useI18n()  
   const $q=useQuasar()
   const router = useRouter()
-  const {token}=inject('userCookie')
+  const {token,decoded}=inject('userCookie')
   const {formatDateTime}=useFormatDate()
 
   const file=ref(null)
@@ -61,7 +61,7 @@
             if(res3.statusCode===200) file.value=getEmptyFile()  //update state
           }  
         }
-        router.go(0)  //page refresh without full reload
+        if(props.data[`id${props.model}`]===decoded.value.idUser) router.go(0)  //page refresh without full reload
         loading.value=false
     }
   }
@@ -85,7 +85,7 @@
           }   
         }
     }
-    router.go(0)  //page refresh without full reload
+    if(props.data[`id${props.model}`]===decoded.value.idUser) router.go(0)  //page refresh without full reload
     loading.value=false
   }
   function handleSelectedFile(e){    
@@ -219,6 +219,7 @@
   }
   .q-btn {
     width:100%;
+    max-height: 3.6rem;
   }
   input.upload {
     display:none;
