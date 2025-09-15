@@ -1,11 +1,11 @@
 <script setup>
   import {ref,defineEmits} from 'vue'
   import _ from 'lodash'
-  import CheckBox from '../../fields/CheckBox.vue';
-  import Label3 from './labels/Label3.vue';
-  import ActionMenu from './actions/ActionMenu.vue';
-  import UserActions from './actions/UserActions.vue';
-  import UserInfos from './actions/UserInfos.vue';
+  import CheckBox from '../../fields/CheckBox.vue'
+  import Label3 from './labels/Label3.vue'
+  import ActionMenu from './actions/ActionMenu.vue'
+  import UserActions from './actions/user/UserActions.vue'
+  import UserInfos from './actions/user/UserInfos.vue'
 
   const props=defineProps({
     model:{type:String},
@@ -57,7 +57,16 @@
             :data="_.filter(infos,(info) => {
               return info.idUser===item.idUser
             })"
-          ></UserInfos>
+          >
+          </UserInfos>
+          <ExpoInfos
+            v-if="model==='Expo'"
+            :status="{idExpo:item.idExpo,status_fr:item.status_fr,status_en:item.status_en}"
+            :data="_.filter(infos,(info) => {
+              return info.idExpo===item.idExpo
+            })"
+          >
+          </ExpoInfos>
         </template>
         <template #actions> <!--named scoped slot -->
           <UserActions
@@ -89,7 +98,7 @@
   }
   input {
     transform: scale(1.5);
-    margin:0px 10px 20px 5px;
+    margin:5px 10px 0px 5px;
     width: fit-content;
     cursor: pointer;
   }

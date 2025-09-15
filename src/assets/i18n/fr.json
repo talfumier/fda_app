@@ -68,7 +68,8 @@
     "infos": {
       "resume": "Description de vous-même, de vos activités ... afin de le publier sur notre site.",
       "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
-      "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis."
+      "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis.",
+      "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ..."
     },
     "file_upload": {
       "delete": "Supprimer",
@@ -77,7 +78,7 @@
       "file_delete": "Merci de confirmer la suppression du fichier."
     },
     "master": {
-      "add_btn": "Ajouter"
+      "add_btn": "Ajouter un nouvel enregistrement"
     },
     "list_items": {
       "actions_menu": {
@@ -104,6 +105,16 @@
             "indeterminate": "role ?",
             "artist": "artiste",
             "org": "autres"
+          }
+        },
+        "expo": {
+          "created": "Créé",
+          "on-going": "En cours",
+          "archived": "Archivé",
+          "status": {
+            "indeterminate": "statut ?",
+            "archived": "archivé",
+            "active": "actif"
           }
         }
       }

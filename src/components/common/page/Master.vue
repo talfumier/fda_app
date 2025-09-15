@@ -216,6 +216,35 @@
         }
       }
       break
+    case "Expo":
+      listItemsFilter=ref({search:'',expo_status:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          return true
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).includes(listItemsFilter.value.search))
+          cond.push(listItemsFilter.value.expo_status?item.archived:!item.archived)   
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })
+      toggleOn = ref({status:false})
+      getToggleLabel = (toggle)=>{
+        switch(listItemsFilter.value[`expo_${toggle}`]){
+          case true:
+            toggleOn.value[toggle]=true
+            return t(`comps.list_items.actions_menu.expo.${toggle}.${toggle==='status'?'active':'archived'}`) 
+          case false:
+            toggleOn.value[toggle]=false
+            return t(`comps.list_items.actions_menu.expo.${toggle}.${toggle==='status'?'archived':'active'}`)
+          default:
+            return t(`comps.list_items.actions_menu.expo.${toggle}.indeterminate`)
+        }
+      }
+      break
+
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -227,8 +256,22 @@
   function filteredDetailsTrigger(){  //trigger filteredDetails computed update, see FormDetails component key in the template
     return parseInt(selectedId.value)+initFlag.value
   }
-  function handleNewRecord(){
-    newRec.value=true
+
+function initNewrec(){
+  const obj={}
+  props.fieldsets.map((fieldset) => {
+    fieldset.fields.map((field) => {
+      obj[field.name]='new'
+    })
+  })
+  obj[`id${props.entity.model}`]=-1
+  return obj
+}
+function handleNewRecord(){
+    // newRec.value=true
+    state.value[0]=initNewrec()
+    // initFlag.value+=.01    //forces computed filteredDetails update
+    // handleOpenDetails(-1)
   }
   // TOOLBAR ACTIONS
   async function handleToolbarActions(cs){ 
@@ -323,8 +366,8 @@
         <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
         <div class="toggle"> 
           <q-toggle
-            v-if="entity.model==='User'"
-            v-model="listItemsFilter.user_status"
+            v-if="entity.model==='User' || entity.model==='Expo'"
+            v-model="listItemsFilter[`${entity.model.toLowerCase()}_status`]"
             toggle-indeterminate
             :label="getToggleLabel('status')"            
             :color="toggleOn.status?'positive':'deep-orange-9'"s
@@ -455,7 +498,7 @@
   .filter {
     display:flex;
     flex-direction: column;
-    justify-content:space-evenly;
+    justify-content:top;
     align-items: left;    
     border-right: 1px solid lightgrey;
     height:100%;

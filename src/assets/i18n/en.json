@@ -68,7 +68,8 @@
     "infos": {
       "resume": "Provide a short description of yourself, your activities ... to be published on our web site.",
       "hyperlinks": "Hyperlinks to your sites or social networks.Click on arrow to open the page.",
-      "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required."
+      "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
+      "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ..."
     },
     "file_upload": {
       "delete": "Delete",
@@ -77,7 +78,7 @@
       "file_delete": "Please confirm file deletion."
     },
     "master": {
-      "add_btn": "Add"
+      "add_btn": "Add a new record"
     },
     "list_items": {
       "actions_menu": {
@@ -104,6 +105,16 @@
             "indeterminate": "role ?",
             "artist": "artist",
             "org": "other"
+          }
+        },
+        "expo": {
+          "created": "Created",
+          "on-going": "On going",
+          "archived": "Archived",
+          "status": {
+            "indeterminate": "status ?",
+            "archived": "archived",
+            "active": "active"
           }
         }
       }

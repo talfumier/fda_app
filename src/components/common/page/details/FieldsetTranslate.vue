@@ -112,16 +112,16 @@
   div.input-container {
     padding-top:0;
   }
-  div.input-container.resume_fr {
+  .resume_fr, .title_fr, .desc_fr {
     grid-area: 2/1
   }
-  .reverse div.input-container.resume_fr {
+  .reverse .resume_fr,.title_fr, .desc_fr {
     grid-area: 2/3;
   }
-  div.input-container.resume_en {
+  .resume_en, .title_en, .desc_en {
     grid-area: 2/3;
   }
-  .reverse div.input-container.resume_en {
+  .reverse .resume_en, .reverse .title_en, .reverse .desc_fr {
     grid-area: 2/1
   }
   div.controls {
@@ -160,16 +160,16 @@
     .reverse div.en {
       grid-area: 1/1;
     }
-    div.input-container.resume_fr {
+    .resume_fr, .title_fr, .desc_fr {
       grid-area: 2/1
     }
-    .reverse div.input-container.resume_fr {
+    .reverse .resume_fr, .reverse .title_fr, .reverse .desc_fr {
       grid-area: 5/1;
     }
-    div.input-container.resume_en {
+    .resume_en, .title_en, .desc_en {
       grid-area: 5/1;
     }
-    .reverse div.input-container.resume_en {
+    .reverse .resume_en, .reverse .title_en, .reverse .desc_en {
       grid-area: 2/1
     }
     div.controls {

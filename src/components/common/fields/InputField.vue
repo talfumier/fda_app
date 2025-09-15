@@ -54,7 +54,7 @@
     <label 
       :for="name"
       :class="[`${type==='checkbox'?'checkbox':''}`]" 
-      v-html="`${label}${required && type !== 'checkbox' ? ' *' : ''}`"
+      v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`"
     >
     </label>
     
