@@ -5,7 +5,8 @@
     "select": "Please select an item ...",
     "search": "Search ...",
     "save": "Save changes",
-    "clear": "Clear all fields",
+    "clearAll": "Clear all fields",
+    "clear": "Clear",
     "undo": "Undo all changes",
     "unsaved": "You have unsaved changes. Proceed anyway ?"
   },
@@ -62,7 +63,7 @@
         "unchecked": "<span>Checkbox must be un-checked !</span>",
         "int": "<span>Invalid integer !</span>",
         "date": "<span>Format <strong>dd/mm/yyyy</strong> required !</span>",
-        "date_time": "<span>Format <strong>dd/mm/yyyy hh.mm</strong> required !</span>"
+        "date-time": "<span>Format <strong>dd/mm/yyyy hh:mm</strong> required !</span>"
       }
     },
     "infos": {

@@ -1,6 +1,7 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
-  import { ref } from 'vue';
+  import { ref,computed } from 'vue'
+  import { useFormatDate } from '@/composable/useFormatDate.js'
   import {validate} from"./validation.js"
 
   const props=defineProps({
@@ -20,7 +21,8 @@
     rows:{type:Number},
     options:{type:Array}
   })    
-  const { t,locale } = useI18n()  
+  const { t,locale } = useI18n()    
+  const {formatDate,formatDateTime}=useFormatDate()
   
   const data=ref(props.value), dirty=ref(false), type=ref(props.data_type)
   const fieldValid=ref({valid: true, msg: null})
@@ -38,7 +40,7 @@
     emit('change', //notify the parent component
       props.name,
       valid.valid,
-      val,// props.format !== "date" && props.format !== "date-time" ? val : strToDate(val),
+      val,
       props.name==='pwd_check'?data.value:undefined
     ) 
   }
@@ -46,7 +48,59 @@
      if(type.value==='text') type.value='password'
      else  type.value='text'
   }
-
+  //DATA FORMATTING
+  function formatData(){
+    switch(props.format){
+      case 'date':
+        return formatDate(data.value)
+      case 'date-time':
+        return formatDateTime(data.value)
+      default:
+        return data.value
+    }
+  }
+  //DATE AND TIME POPUP
+  const dt=ref(null)
+  if(props.format==='date-time'){
+    if(data.value && data){
+      dt.value=formatDateTime(data.value).split(' ')
+      dt.value[1]=dt.value[1].substring(0,6)
+    }
+    else {
+      dt.value=['','00:00']
+    }
+  }
+  const openDate = ref(null)
+  const openTime=ref(null)
+  function handleClick(cs){
+    switch(cs){
+      case 'openDate':
+        openTime.value=false
+        openDate.value=true
+        break      
+      case 'openTime':
+        openDate.value=false
+        openTime.value=true
+        break
+      case 'ok':
+        let date=dt.value[0].split('/')
+        date=`${date[2]}-${date[1]}-${date[0]}`
+        handleChange(`${date}T${dt.value[1]?dt.value[1]:'00:00'}:00.000`)
+        openDate.value=false
+        openTime.value=false
+        break
+      case 'clear':
+        if(openDate.value) {
+          dt.value[0]=dt.value[1]=''
+          handleChange(null)
+        }
+        if(openTime.value) {
+          dt.value[1]=''
+          handleClick('ok')
+        }
+    }
+    
+  }
 </script>
 
 <template>
@@ -57,15 +111,44 @@
       v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`"
     >
     </label>
+    <q-icon  v-if="(format==='date' || format==='date-time')"
+      class="date"
+      name="event"
+      size="2.7rem"
+      color='primary'
+      @click="handleClick('openDate')"
+    >
+    </q-icon>
+    <q-icon  v-if="(format==='date-time')"
+      class="time"
+      name="access_time"
+      size="2.7rem"
+      color='primary'
+      @click="handleClick('openTime')"
+    >
+    </q-icon>
+    <q-popup-proxy v-if="openDate || openTime" anchor="bottom left" self="top left">
+        <q-date v-if="openDate" v-model="dt[0]" landscape mask="DD/MM/YYYY"/>
+        <q-time v-if="openTime" v-model="dt[1]" landscape format24h/>
+        <div class="controls">
+          <q-btn flat :label="$t('common.clear')" 
+            @click="handleClick('clear')" 
+          />
+          <q-btn :disabled="!dt[0]" color="primary" label="OK" 
+            @click="handleClick('ok')" 
+          />
+        </div>
+    </q-popup-proxy>
     
     <input v-if="field_type==='input'"
       :name="name"
       :type="type"
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid',name.includes('pwd')?'pwd':'']"
       :placeholder="placeholder"
-      :value="data"
+      :value="formatData()"
       :equal="equal"
       :disabled="disabled" 
+      :readonly="format==='date' || format==='date-time'"
       :autoComplete="name!=='pwd' && name!=='pwd_check'?'on':'off'"
       @change="handleChange($event.target.value)"
       @blur="(e) => {
@@ -76,6 +159,10 @@
       }"
       @input="(e) => {
         if(dirty) handleChange(e.target.value)
+      }"
+      
+      @click="() => {
+        if(format==='date' || format==='date-time') handleClick('openDate')
       }"
     />    
     <q-icon  v-if="icon"
@@ -169,6 +256,10 @@
   div.input-container:has(.pwd-reset){
     justify-content: center;
   }
+  .controls {
+    display:flex;
+    justify-content: right;
+  }
   label.checkbox {
     font-weight:400;
     color:var(--black);
@@ -217,6 +308,16 @@
   .q-icon {
     position:absolute;
   }
+  .q-icon.date {
+    top:30px;
+    left:10px;
+    cursor: pointer;
+  }
+  .q-icon.time {
+    top:30px;
+    right:10px;
+    cursor: pointer;
+  }
   .q-icon.pwd {
     top:33px;
     right:8px;    
@@ -228,6 +329,9 @@
   }
   input:has(+ .q-icon) {
     padding-right:40px;
+  }
+  div.input-container:has(.q-icon.date) input {
+    padding-left:60px;
   }
   div.alert {
     font-size:1.5rem;

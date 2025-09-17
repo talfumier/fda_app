@@ -389,7 +389,8 @@
             "name": "title_fr",
             "field_type": "textarea",
             "rows": 1,
-            "max_length": 100
+            "max_length": 100,
+            "listMaster": true
           },
           {
             "name": "title_en",
@@ -411,42 +412,42 @@
             "label_fr": "Ouverture",
             "label_en": "Opening",
             "field_type": "input",
-            "format": "date_time"
+            "format": "date-time"
           },
           {
             "name": "endDate",
             "label_fr": "Fermeture",
             "label_en": "Closing",
             "field_type": "input",
-            "format": "date_time"
+            "format": "date-time"
           },
           {
-            "name": "depotDateTimeOpen",
+            "name": "depotDateTime_open",
             "label_fr": "Dépôt des oeuvres-ouverture",
             "label_en": "Art works deposit-opening",
             "field_type": "input",
-            "format": "date_time"
+            "format": "date-time"
           },
           {
-            "name": "depotDateTimeClose",
+            "name": "depotDateTime_close",
             "label_fr": "Dépôt des oeuvres-fermeture",
             "label_en": "Art works deposit-closing",
             "field_type": "input",
-            "format": "date_time"
+            "format": "date-time"
           },
           {
             "name": "vernissageDateTime",
             "label_fr": "Vernissage",
             "label_en": "Opening celebration",
             "field_type": "input",
-            "format": "date_time"
+            "format": "date-time"
           },
           {
             "name": "lunchDateTime",
             "label_fr": "Repas",
             "label_en": "Lunch",
             "field_type": "input",
-            "format": "date_time"
+            "format": "date-time"
           }
         ]
       },

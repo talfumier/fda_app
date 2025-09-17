@@ -29,7 +29,7 @@
       </div>
       <div class="clear" > 
         <q-btn round flat icon="clear_all" size="1.6rem" @click="handleActions('clear')" />
-        <Tooltip :tt_text="$t('common.clear')"></Tooltip>
+        <Tooltip :tt_text="$t('common.clearAll')"></Tooltip>
       </div>
       <div class="undo">        
         <q-btn round flat icon="undo" size="1.6rem" @click="handleActions('undo')" />

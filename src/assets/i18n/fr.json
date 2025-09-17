@@ -5,7 +5,8 @@
     "select": "Choisir un élément de la liste ...",
     "search": "Rechercher ...",
     "save": "Sauvegarder",
-    "clear": "Effacer tous les champs",
+    "clearAll": "Effacer tous les champs",
+    "clear": "Effacer",
     "undo": "Annuler les changements",
     "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
   },
@@ -62,7 +63,7 @@
         "unchecked": "<span>La case à cocher doit être décochée !</span>",
         "int": "<span>Nombre entier non valide !</span>",
         "date": "<span>Format <strong>jj/mm/aaaa</strong> non respecté !</span>",
-        "date_time": "<span>Format <strong>jj/mm/aaaa hh.mm</strong> non respecté !</span>"
+        "date_time": "<span>Format <strong>jj/mm/aaaa hh:mm</strong> non respecté !</span>"
       }
     },
     "infos": {
