@@ -402,7 +402,7 @@
         ]
       },
       {
-        "name": "calendar",
+        "name": "calendar_exhibition",
         "type": "standard",
         "legend_fr": "Calendrier",
         "legend_en": "Calendar",
@@ -411,27 +411,6 @@
             "name": "startDate",
             "label_fr": "Ouverture",
             "label_en": "Opening",
-            "field_type": "input",
-            "format": "date-time"
-          },
-          {
-            "name": "endDate",
-            "label_fr": "Fermeture",
-            "label_en": "Closing",
-            "field_type": "input",
-            "format": "date-time"
-          },
-          {
-            "name": "depotDateTime_open",
-            "label_fr": "Dépôt des oeuvres-ouverture",
-            "label_en": "Art works deposit-opening",
-            "field_type": "input",
-            "format": "date-time"
-          },
-          {
-            "name": "depotDateTime_close",
-            "label_fr": "Dépôt des oeuvres-fermeture",
-            "label_en": "Art works deposit-closing",
             "field_type": "input",
             "format": "date-time"
           },
@@ -446,6 +425,57 @@
             "name": "lunchDateTime",
             "label_fr": "Repas",
             "label_en": "Lunch",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "endDate",
+            "label_fr": "Fermeture",
+            "label_en": "Closing",
+            "field_type": "input",
+            "format": "date-time"
+          }
+        ]
+      },
+      {
+        "name": "calendar_deposit",
+        "type": "standard",
+        "legend_fr": "Dépôt des oeuvres",
+        "legend_en": "Art works deposit",
+        "fields": [
+          {
+            "name": "depotDateTime_open",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "depotDateTime_close",
+            "label_fr": "Fermeture",
+            "label_en": "Closing",
+            "field_type": "input",
+            "format": "date-time"
+          }
+        ]
+      },
+      {
+        "name": "calendar_collection",
+        "type": "standard",
+        "legend_fr": "Retrait des oeuvres",
+        "legend_en": "Art works collection",
+        "fields": [
+          {
+            "name": "collectionDateTime_open",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "collectionDateTime_close",
+            "label_fr": "Fermeture",
+            "label_en": "Closing",
             "field_type": "input",
             "format": "date-time"
           }
