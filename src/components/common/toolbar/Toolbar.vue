@@ -1,5 +1,4 @@
 <script setup>
-  import { defineEmits } from 'vue';
   import Tooltip from '../Tooltip.vue';
 
   const props=defineProps({

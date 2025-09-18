@@ -1,5 +1,5 @@
 <script setup>
-  import { inject,ref,defineEmits} from 'vue';
+  import { inject,ref} from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import Tooltip from '@/components/common/Tooltip.vue';

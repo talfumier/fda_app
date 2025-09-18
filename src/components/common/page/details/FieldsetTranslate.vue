@@ -1,5 +1,5 @@
 <script setup>
-  import { ref,defineEmits } from 'vue';
+  import { ref } from 'vue';
   import _ from 'lodash'
   import { useI18n } from 'vue-i18n';
   import InputField from '../../fields/InputField.vue';
@@ -35,7 +35,7 @@
 <template>
   <div :class="['translate',locale==='en'?'reverse':'']">
     <div class="fr">
-      <label>{{locale==='fr'?fields[0].label:''}}</label>
+      <!-- <label>{{locale==='fr'?fields[0].label:''}}</label> -->
       <img src="../../../../assets/images/fr.png" alt="drapeu français">
       <span class="count">{{`${counters.fr}/${fields[0].max_length}`}}</span>
     </div>
@@ -44,7 +44,7 @@
       :key="item.name"
       :name="item.name"
       :field_type="item.field_type"
-      label=""
+      label=''
       :required="item.required"
       :disabled="item.disabled"
       :highlight="item.highlight"
@@ -56,7 +56,7 @@
     >
     </InputField>
     <div class="en">
-      <label>{{locale==='en'?fields[1].label:''}}</label>
+      <!-- <label>{{locale==='en'?fields[1].label:''}}</label> -->
       <img src="../../../../assets/images/uk.png" alt="UK flag">
       <span class="count">{{`${counters.en}/${fields[0].max_length}`}}</span>
     </div>    

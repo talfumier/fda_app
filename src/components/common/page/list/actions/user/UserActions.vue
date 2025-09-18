@@ -1,5 +1,4 @@
 <script setup>
-  import { defineEmits } from 'vue';
   import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n';
   import Tooltip from '@/components/common/Tooltip.vue';

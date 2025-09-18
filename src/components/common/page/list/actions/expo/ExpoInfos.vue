@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <div>
+  <div v-if="data.length>=1">
     <p :class="['expo',data[0].idStatus===10?'warning':(data[0].idStatus===11?'green':'red')]" >
       <span>{{ status[`status_${locale}`] }}</span> 
     </p>

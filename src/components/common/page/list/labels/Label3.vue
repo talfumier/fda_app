@@ -16,18 +16,19 @@
     })
   })
   const status=computed(() => {
-   switch (props.item.idStatus){
-      case 1:
-      case 10:
-        return [1,'warning']
-      case 2:
-      case 11:
-        return [2,'positive']
-      case 3:
-      case 12:
-        return [3,'negative']
-    }
- }) 
+    if(!props.item.idStatus) return [1,'warning'] 
+    switch (props.item.idStatus){
+        case 1:
+        case 10:
+          return [1,'warning']
+        case 2:
+        case 11:
+          return [2,'positive']
+        case 3:
+        case 12:
+          return [3,'negative']
+      }
+  }) 
 
 </script>
 

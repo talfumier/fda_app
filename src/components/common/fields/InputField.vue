@@ -1,6 +1,6 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
-  import { ref,computed } from 'vue'
+  import { ref } from 'vue'
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import {validate} from"./validation.js"
 

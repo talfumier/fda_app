@@ -1,5 +1,5 @@
 <script setup>
-  import {ref,defineEmits} from 'vue'
+  import {ref} from 'vue'
   import _ from 'lodash'
   import CheckBox from '../../fields/CheckBox.vue'
   import Label3 from './labels/Label3.vue'
@@ -11,18 +11,21 @@
     model:{type:String},
     master:{type:Array},
     data:{type:Array},
+    newRecId:{type:Number},
     infos:{type:Array},
   })
   const emit=defineEmits(['openDetails','userAction'])
 
   const selected=ref({})
-  props.data.map((item) => {
-    selected.value={...selected.value,[item[`id${props.model}`]]:false}
+  props.data.map((item) => {  //selected.value initialization
+    selected.value[item[`id${props.model}`]]=false
+    if(props.newRecId<0) selected.value[props.newRecId]=true
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
-    keys.map((key) => {
-      selected.value[key]=(key==id?val:false)
+    keys.map((key) => {      
+      if(key==id) selected.value[key]=val
+      else selected.value[key]=false
     })
     emit('openDetails',val?id:null)  //if id not null populate FormDetails, if id null empty FormDetails
   }

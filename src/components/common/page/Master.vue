@@ -1,5 +1,5 @@
 <script setup async>
-  import { ref,computed,onMounted,onUnmounted,inject  } from 'vue';
+  import { ref,computed,onMounted,onUnmounted,inject} from 'vue';
   import { useRouter,onBeforeRouteLeave } from 'vue-router'
   import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n';
@@ -46,14 +46,15 @@
   
   const state=ref([])
   const selectedId = ref(null)
+  const newRecId=ref(0)
 
   const initialValues=[]
   const actualChanges=ref([])
 
   function getIndex(){
     return state.value[0].findIndex((item) => {
-          return item[`id${props.entity.model}`]===selectedId.value
-        }) 
+      return item[`id${props.entity.model}`]===selectedId.value
+    }) 
   }  
   function resetActualChanges(){
     const idModel=`id${props.entity.model}`
@@ -63,7 +64,7 @@
     initialValues.map((init) => {  
       obj=Object.keys(init).reduce((acc, key) => 
           (acc[key!==idModel?key:'id'] = key!==idModel?false:init[idModel], acc), {})
-      actualChanges.value.push({newRec:false,...obj})
+      actualChanges.value.push({...obj})
     })
   }
   function handleOpenDetails(id){
@@ -113,11 +114,14 @@
     }
     return res.data    
   }  
+  function initInitialValues(id=null){
+    _.cloneDeep(state.value[0]).map((item,idx) => {  //initialize initialValues, cloneDeep necessary
+      if(!id || item[`id${props.entity.model}`]===id) initialValues.push(item)
+    })
+  }
   onMounted(async () => {  
     state.value = await fetch()  
-    _.cloneDeep(state.value[0]).map((item,idx) => {  //initialize initialValues, cloneDeep necessary
-      initialValues.push(item)
-    })
+    initInitialValues()
     resetActualChanges()
     if(props.entity.noList) {
       let id=null
@@ -244,7 +248,6 @@
         }
       }
       break
-
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -261,17 +264,19 @@ function initNewrec(){
   const obj={}
   props.fieldsets.map((fieldset) => {
     fieldset.fields.map((field) => {
-      obj[field.name]='new'
+      obj[field.name]=null
     })
   })
-  obj[`id${props.entity.model}`]=-1
+  newRecId.value=newRecId.value-1
+  obj[`id${props.entity.model}`]=newRecId.value
   return obj
 }
 function handleNewRecord(){
-    // newRec.value=true
-    state.value[0]=initNewrec()
+    state.value[0].push(initNewrec())   
+    initInitialValues(newRecId.value) 
+    resetActualChanges()
     // initFlag.value+=.01    //forces computed filteredDetails update
-    // handleOpenDetails(-1)
+    handleOpenDetails(newRecId.value)
   }
   // TOOLBAR ACTIONS
   async function handleToolbarActions(cs){ 
@@ -409,10 +414,12 @@ function handleNewRecord(){
       </div>  
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
-      <ListItems         
+      <ListItems    
+        :key="filteredList.length"     
         :model="entity.model"
         :master="field_master"
         :data="filteredList"
+        :newRecId="newRecId"
         :infos="state.length>1?state[1]:null"
         @open-details="handleOpenDetails"
         @user-action="handleAction"
