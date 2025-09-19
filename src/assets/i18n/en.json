@@ -112,6 +112,14 @@
           "created": "Created",
           "on-going": "On going",
           "archived": "Archived",
+          "activation": "Exhibition activation.",
+          "archiving": "Exhibition archiving.",
+          "delete": "Exhibition deletion",
+          "confirm": {
+            "activation": "Please confirm exhibition activation.",
+            "archiving": "Please confirm exhibition archiving.",
+            "deletion": "Please confirm exhibition permanent deletion."
+          },
           "status": {
             "indeterminate": "status ?",
             "archived": "archived",

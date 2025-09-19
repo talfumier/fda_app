@@ -18,5 +18,28 @@
     ["web2"],
     ["social1"],
     ["social2"]
+  ],
+  "Expo": [
+    ["title_en"],
+    ["title_fr"],
+    ["desc_en"],
+    ["desc_fr"],
+    ["startDate"],
+    ["endDate"],
+    ["startDate"],
+    ["address"],
+    ["zipCode"],
+    ["city"],
+    ["country"],
+    ["gpsLat"],
+    ["gpsLong"],
+    ["depotDateTime_open"],
+    ["depotDateTime_close"],
+    ["collectionDateTime_open"],
+    ["collectionDateTime_close"],
+    ["vernissageDateTime"],
+    ["lunchDateTime"],
+    ["priceShowRoom"],
+    ["priceScreen"]
   ]
 }

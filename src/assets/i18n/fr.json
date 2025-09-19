@@ -95,7 +95,7 @@
           "confirm": {
             "validation": "Merci de confirmer la validation du compte.",
             "deactivation": "Merci de confirmer la désactivation du compte.",
-            "deletion": "Merci de confirmer la suppression du compte."
+            "deletion": "Merci de confirmer la suppression définitive du compte."
           },
           "status": {
             "indeterminate": "statut ?",
@@ -112,6 +112,14 @@
           "created": "Créé",
           "on-going": "En cours",
           "archived": "Archivé",
+          "activation": "Activation de l'exposition.",
+          "archiving": "Archivage de l'exposition.",
+          "delete": "Suppression de l'exposition",
+          "confirm": {
+            "activation": "Merci de confirmer l'activation de l'exposition.",
+            "archiving": "Merci de confirmer l'archivage de l'exposition.",
+            "deletion": "Merci de confirmer la suppression définitive de l'exposition."
+          },
           "status": {
             "indeterminate": "statut ?",
             "archived": "archivé",

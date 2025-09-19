@@ -92,7 +92,7 @@
   // DATA LOADING
   const ctrls={} // AbortController's object' used in http request operation
   let alive = true // guard against updates after unmount
-  async function fetch() {
+  async function fetch(i=0) {
     if (!alive) return                // component gone? don't touch state 
     if (ctrls[0]) ctrls[0].abort()
     ctrls[0] = new AbortController()
@@ -103,9 +103,15 @@
           sqlparams=!props.entity.noList?":idRole":":idUser"
           paramsValues=`${!props.entity.noList?decoded.value.idRole:decoded.value.idUser}`
           break
+        case 'Expo':
+          if(i===1) { //status type
+            sqlparams=':type'
+            paramsValues='expo'
+          } 
+          break
       }
       res=(await getEntitiesBySql(
-          props.entity.sql,
+          props.entity.sql[i],
           sqlparams, 
           paramsValues,
           token.value,
@@ -120,7 +126,7 @@
     })
   }
   onMounted(async () => {  
-    state.value = await fetch()  
+    state.value = await fetch(0)  
     initInitialValues()
     resetActualChanges()
     if(props.entity.noList) {
@@ -247,6 +253,42 @@
             return t(`comps.list_items.actions_menu.expo.${toggle}.indeterminate`)
         }
       }
+      handleAction = async(cs)=>{    
+        if (!alive) return                // component gone? don't touch state 
+        if (ctrls[1]) ctrls[1].abort()
+        ctrls[1] = new AbortController()
+        let res=null,status=11
+        const idx=getIndex()
+        switch(cs){      
+          case "archiving":
+            status=12
+          case "activation":
+            //database update
+            res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrls[1].signal)
+            // state update
+            if(res.data.statusCode!==200) return
+            state.value[1].unshift({idExpo:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
+            state.value[0][idx].idStatus=status
+            break;
+          case "deletion":
+            const idImages=(await getEntitiesBySql(
+              'list_images_expo',
+              ':idExpo', 
+              selectedId.value,
+              token.value,
+              ctrls[1].signal
+            )).data    
+            idImages.data.map(async(idImage) => {
+              const {data:res}=await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com
+              if(res.statusCode===200) 
+                await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
+            })  
+            res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal)  //delete record in texpo  
+            if(res.data.statusCode!==200) return       
+            state.value[0].splice(idx,1)  //update state
+            router.go(0)
+        }
+      }
       break
   }
   const initFlag=ref(0)
@@ -267,7 +309,7 @@ function initNewrec(){
       obj[field.name]=null
     })
   })
-  newRecId.value=newRecId.value-1
+  newRecId.value+=-1
   obj[`id${props.entity.model}`]=newRecId.value
   return obj
 }
@@ -291,22 +333,32 @@ function handleNewRecord(){
           obj={}
           keys=Object.keys(item)
           keys.map((key) => {
-            if(key!=='newRec' && key!=='id') {
+            if(key!=='id') {
               if(item[key]) obj[key]=state.value[0][idx][key]
             }
             else obj[key]=item[key]
           })  
-          const{newRec,id,...body}=obj
+          const{id,...body}=obj
           if(Object.keys(body).length>=1){
-            res=await(newRec?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
+            res=await(id<0?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
               patchEntity(props.entity.model,id,body,token.value, ctrls[2].signal))
             if(res.data.statusCode!==200) return
             keys.map((key) => { 
-              if(key!=='newRec' && key!=='id' && item[key]){
+              if(key!=='id' && item[key]){
                 initialValues[idx][key]=state.value[0][idx][key] //update initial values with saved data 
                 item[key]=false  //reset actualChanges item to false
               }
             })
+            if(id<0) { //new record creation
+              state.value[0][idx][`id${props.entity.model}`]=res.data.data[`id${props.entity.model}`] //update id[model]     
+              state.value[0][idx].idStatus=props.entity.status_at_creation.idStatus //update current status data
+              state.value[0][idx].status_en=props.entity.status_at_creation.status_en                
+              state.value[0][idx].status_fr=props.entity.status_at_creation.status_fr
+              state.value[0][idx].type=props.entity.status_at_creation.type
+              state.value[1]=(await fetch(1))[0] //retrieve updated status tracking data
+              newRecId.value=res.data.data[`id${props.entity.model}`]
+              handleOpenDetails(newRecId.value)
+            }
           }
         }) 
         break
@@ -415,7 +467,7 @@ function handleNewRecord(){
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
       <ListItems    
-        :key="filteredList.length"     
+        :key="newRecId"     
         :model="entity.model"
         :master="field_master"
         :data="filteredList"
@@ -423,6 +475,7 @@ function handleNewRecord(){
         :infos="state.length>1?state[1]:null"
         @open-details="handleOpenDetails"
         @user-action="handleAction"
+        @expo-action="handleAction"
       >
       </ListItems>
     </aside>

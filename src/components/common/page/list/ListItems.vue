@@ -6,6 +6,7 @@
   import ActionMenu from './actions/ActionMenu.vue'
   import UserActions from './actions/user/UserActions.vue'
   import UserInfos from './actions/user/UserInfos.vue'
+import ExpoActions from './actions/expo/ExpoActions.vue';
 
   const props=defineProps({
     model:{type:String},
@@ -14,12 +15,12 @@
     newRecId:{type:Number},
     infos:{type:Array},
   })
-  const emit=defineEmits(['openDetails','userAction'])
+  const emit=defineEmits(['openDetails','userAction','expoAction'])
 
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.model}`]]=false
-    if(props.newRecId<0) selected.value[props.newRecId]=true
+    if(props.newRecId!==0) selected.value[props.newRecId]=true
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
@@ -79,6 +80,13 @@
               emit('userAction',cs)
             }"
           ></UserActions>
+          <ExpoActions
+            v-if="model==='Expo'"
+            :data="item"
+            @expo-action="(cs) => {
+              emit('expoAction',cs)
+            }"
+          ></ExpoActions>
         </template>
       </ActionMenu>
     </div>
