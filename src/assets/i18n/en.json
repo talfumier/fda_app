@@ -28,7 +28,7 @@
     "login": {
       "lastName": "Last name",
       "firstName": "First name",
-      "email": "User ID",
+      "email": "User ID (email)",
       "role": "Role",
       "pwd": "Password",
       "pwd_check": "Password check",

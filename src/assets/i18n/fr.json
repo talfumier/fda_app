@@ -28,7 +28,7 @@
     "login": {
       "lastName": "Nom",
       "firstName": "Prénom",
-      "email": "Identifiant",
+      "email": "Identifiant (courriel)",
       "role": "Rôle",
       "pwd": "Mot de passe",
       "pwd_check": "Vérification mot de passe",
