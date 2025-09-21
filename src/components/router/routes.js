@@ -6,6 +6,7 @@ import content from '../common/page/master-content.json'
 import Home from '../home/Home.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
+import NotFound from '../notFound/NotFound.vue'
 
 function getUserRole() {
   if (!cookies.get('user')) return -1
@@ -100,6 +101,12 @@ const router = createRouter({
         id: route.query.id ?? null,
         random: route.query.random ?? null,
       }),
+      meta: { roles: [-1] }, //no specific role requirement, nor authentication
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound,
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
   ],

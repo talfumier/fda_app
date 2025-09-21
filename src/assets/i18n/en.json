@@ -43,6 +43,11 @@
         "error": "Your authentication token has expired. Please sign-in again."
       }
     },
+    "notfound": {
+      "error": "Error",
+      "text": "page cannot be found",
+      "home": "Go home"
+    },
     "navbar": {
       "dashboard": "Dashboard",
       "users": "User accounts",

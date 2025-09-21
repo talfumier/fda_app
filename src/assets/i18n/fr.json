@@ -43,6 +43,11 @@
         "error": "Votre jeton d'authentification a expiré. Merci de vous authentifier à nouveau."
       }
     },
+    "notfound": {
+      "error": "Erreur",
+      "text": "la page demandée est introuvable",
+      "home": "Page d'accueil"
+    },
     "navbar": {
       "dashboard": "Tableau de bord",
       "users": "Comptes utilisateur",
