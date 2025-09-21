@@ -110,6 +110,7 @@
         },
         "expo": {
           "created": "Created",
+          "pending": "Pending",
           "on-going": "On going",
           "archived": "Archived",
           "activation": "Exhibition activation.",
@@ -123,13 +124,14 @@
           "status": {
             "indeterminate": "status ?",
             "archived": "archived",
-            "active": "active"
+            "active": "pending or active"
           }
         }
       }
     },
     "form_details": {
-      "translate": "Translate"
+      "translate": "Translate",
+      "newRec": "Please save the record before creating linked data."
     },
     "public_site": {
       "home": {}

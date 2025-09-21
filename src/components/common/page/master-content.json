@@ -233,7 +233,7 @@
       },
       {
         "name": "avatar",
-        "type": "file-upload",
+        "type": "single-upload",
         "legend_fr": "Avatar",
         "legend_en": "Avatar",
         "fields": [
@@ -381,7 +381,8 @@
         "status_en": "pending",
         "status_fr": "en attente"
       },
-      "noList": false
+      "noList": false,
+      "fileYes": "image/png, image/jpeg, image/webp"
     },
     "fieldsets": [
       {
@@ -580,18 +581,31 @@
         ]
       },
       {
-        "name": "status",
-        "type": "standard",
-        "legend_fr": "Statut",
-        "legend_en": "Status",
+        "name": "expo_photos",
+        "type": "multiple-upload",
+        "legend_fr": "Photos",
+        "legend_en": "Pictures",
+        "count": 4,
         "fields": [
           {
-            "name": "archived",
-            "label_fr": "Archivé",
-            "label_en": "Archived",
-            "field_type": "checkbox",
-            "data_type": "checkbox",
-            "required": false,
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
             "disabled": true
           }
         ]

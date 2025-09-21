@@ -171,7 +171,7 @@
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
-          cond.push(JSON.stringify(item).includes(listItemsFilter.value.search))
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
           cond.push(listItemsFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
             (listItemsFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
           cond.push(listItemsFilter.value.user_role?item.idRole>=5:
@@ -218,11 +218,12 @@
             if(res.data.statusCode!==200) return       
             state.value[0].splice(idx,1)  //update state  
             if(idImage) {
-              const {data:res}=await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com
-               if(res.statusCode===200) 
-                await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
+              const {data:res}= await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
+              if(res.statusCode===200) 
+                try {
+                  await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com                  
+                } catch (error) {}  //asset no longer present
             } 
-            router.go(0)
         }
       }
       break
@@ -230,10 +231,10 @@
       listItemsFilter=ref({search:'',expo_status:''})  
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
-          return true
           let cond=[],result=true
-          cond.push(JSON.stringify(item).includes(listItemsFilter.value.search))
-          cond.push(listItemsFilter.value.expo_status?item.archived:!item.archived)   
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+            (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
           cond.map((cnd) => {
             result=result && cnd
           })
@@ -271,22 +272,27 @@
             state.value[0][idx].idStatus=status
             break;
           case "deletion":
-            const idImages=(await getEntitiesBySql(
+            const {data:images}=(await getEntitiesBySql(
               'list_images_expo',
               ':idExpo', 
               selectedId.value,
               token.value,
               ctrls[1].signal
-            )).data    
-            idImages.data.map(async(idImage) => {
-              const {data:res}=await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com
-              if(res.statusCode===200) 
-                await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
-            })  
-            res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal)  //delete record in texpo  
-            if(res.data.statusCode!==200) return       
+            )).data
+            //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
+            res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal) 
+            if(res.data.statusCode!==200) return  
+            //delete images in timage and delete asset on Cloudinary.com
+            images[0].map(async(image) => {
+              //delete record in timage
+              res=await deleteEntity('Image',image.idImage,token.value, ctrls[1].signal)  
+              if(res.data.statusCode===200) { 
+                try {   //delete asset on Cloudinary.com
+                  await deleteInCloud(image.idImage,token.value,ctrls[1].signal)                   
+                } catch (error) {}  //asset no longer present
+              }
+            })      
             state.value[0].splice(idx,1)  //update state
-            router.go(0)
         }
       }
       break
@@ -311,13 +317,17 @@ function initNewrec(){
   })
   newRecId.value+=-1
   obj[`id${props.entity.model}`]=newRecId.value
+  switch(props.entity.model){
+    case 'Expo':
+      obj.idStatus=10  //pending status
+      break
+  }
   return obj
 }
 function handleNewRecord(){
-    state.value[0].push(initNewrec())   
+    state.value[0]=[...state.value[0],initNewrec()]  
     initInitialValues(newRecId.value) 
     resetActualChanges()
-    // initFlag.value+=.01    //forces computed filteredDetails update
     handleOpenDetails(newRecId.value)
   }
   // TOOLBAR ACTIONS

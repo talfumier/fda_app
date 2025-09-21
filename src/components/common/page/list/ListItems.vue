@@ -15,8 +15,8 @@ import ExpoActions from './actions/expo/ExpoActions.vue';
     newRecId:{type:Number},
     infos:{type:Array},
   })
+  
   const emit=defineEmits(['openDetails','userAction','expoAction'])
-
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.model}`]]=false
@@ -65,7 +65,6 @@ import ExpoActions from './actions/expo/ExpoActions.vue';
           </UserInfos>
           <ExpoInfos
             v-if="model==='Expo'"
-            :status="{idExpo:item.idExpo,status_fr:item.status_fr,status_en:item.status_en}"
             :data="_.filter(infos,(info) => {
               return info.idExpo===item.idExpo
             })"

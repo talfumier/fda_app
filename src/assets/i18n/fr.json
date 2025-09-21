@@ -110,6 +110,7 @@
         },
         "expo": {
           "created": "Créé",
+          "pending": "En attente",
           "on-going": "En cours",
           "archived": "Archivé",
           "activation": "Activation de l'exposition.",
@@ -123,13 +124,14 @@
           "status": {
             "indeterminate": "statut ?",
             "archived": "archivé",
-            "active": "actif"
+            "active": "en attente ou actif"
           }
         }
       }
     },
     "form_details": {
-      "translate": "Traduire"
+      "translate": "Traduire",
+      "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées."
     },
     "public_site": {
       "home": {}

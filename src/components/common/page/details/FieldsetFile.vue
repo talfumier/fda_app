@@ -9,7 +9,7 @@
   import { getEmptyFile, getRandomInt } from '@/utilityFunctions.js'
   import { fileSize } from '@/utilityFunctions.js'
   import { environment } from '@/config/environment.js'
-  import { toastError } from '@/composable/toast.js'
+  import { toastError, toastWarning } from '@/composable/toast.js'
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import { postInCloud,deleteInCloud } from '@/services/httpCloudinary.js'
   import { postEntity,patchEntity, deleteEntity } from '@/services/httpEntities.js'
@@ -29,7 +29,7 @@
 
   const file=ref(null)
   const loading=ref(false)
-  if (!props.data.idImage) file.value=getEmptyFile()
+  if (!props.data?.idImage) file.value=getEmptyFile()
   else file.value={
     idImage:props.data.idImage,
     fileName:props.data.fileName,
@@ -53,19 +53,28 @@
         if (!(await confirm($q,t('comps.file_upload.file_delete'),'cancel'))) return false 
         loading.value=true
         const idImage=file.value.idImage
-        const {data:res1}=await deleteInCloud(idImage,token.value,ctrl.signal)  //delete asset on Cloudinary.com
-        if(res1.statusCode===200) {   //update idImage (avatar) in mariaDB tuser
-          const {data:res2}=await patchEntity(props.model,props.data[`id${props.model}`],{idImage:null},token.value,ctrl.signal)
-          if(res2.statusCode===200){  //delete idImage record in timage
-            const {data:res3}=await deleteEntity('Image',idImage,token.value,ctrl.signal)
-            if(res3.statusCode===200) file.value=getEmptyFile()  //update state
-          }  
-        }
-        if(props.data[`id${props.model}`]===decoded.value.idUser) router.go(0)  //page refresh without full reload
+        switch(props.model) {
+          case 'Expo':  //do nothing >>> record in texpo_image deleted by cascade delete from timage  
+            break
+          default: //update idImage in mariaDB tmodel (tuser ...)
+            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage:null},token.value,ctrl.signal)).data
+            if(res1.statusCode!==200) return
+        }            
+        const {data:res2}=await deleteEntity('Image',idImage,token.value,ctrl.signal) //delete idImage record in timage
+        if(res2.statusCode===200) file.value=getEmptyFile()  //update state
+        if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
+          router.go(0)  //page refresh without full reload
+        try {
+          await deleteInCloud(idImage,token.value,ctrl.signal)  //delete asset on Cloudinary.com
+        } catch (error) {}  //asset no longer present
         loading.value=false
     }
   }
   async function processFileData(obj) {
+    if(props.data[`id${props.model}`]<=0){  //new record creation 
+      toastWarning(t('comps.form_details.newRec'))
+      return
+    }
     loading.value=true
     const idImage=getRandomInt(1,214e7)
     const {data:res1}=await postInCloud(idImage,obj.data,token.value,ctrl.signal) //create asset on Cloudinary.com
@@ -76,7 +85,14 @@
       const {data,...body}=_.cloneDeep(obj)
       const {data:res2}=await postEntity('Image',body,token.value,ctrl.signal)  //create image record in mariaDB timage
       if(res2.statusCode===200) {
-        const {data:res3}=await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)  //update idImage (avatar) in mariaDB tuser
+        let res3=null
+        switch(props.model){
+          case 'Expo':
+            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage},token.value,ctrl.signal)).data
+            break
+          default:
+            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)).data  //update idImage (avatar) in mariaDB tuser
+        }
         if(res3.statusCode===200) 
           file.value={    //update state
             ...body,
@@ -85,7 +101,8 @@
           }   
         }
     }
-    if(props.data[`id${props.model}`]===decoded.value.idUser) router.go(0)  //page refresh without full reload
+    if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
+      router.go(0)  //page refresh without full reload
     loading.value=false
   }
   function handleSelectedFile(e){    
@@ -181,8 +198,8 @@
         </q-btn>
       </div>
       <div className="file-details">
-        <InputField v-for="(item) in fields"
-          :key="file[item.name]"
+        <InputField v-for="(item,idx) in fields"
+          :key="idx*.01"
           :name="item.name"
           :label="item[`label_${locale}`]"
           :required="false"

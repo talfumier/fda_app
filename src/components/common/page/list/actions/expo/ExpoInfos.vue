@@ -1,17 +1,15 @@
 <script setup>
-  import { useI18n } from 'vue-i18n'
   const props = defineProps({
-    status:{type:Object},
     data:{type:Array}
   })
-  const {locale}=useI18n()
   const text={10:'created',11:'on-going',12:'archived'}
+  const status={...text,10:'pending'}
 </script>
 
 <template>
   <div v-if="data.length>=1">
     <p :class="['expo',data[0].idStatus===10?'warning':(data[0].idStatus===11?'green':'red')]" >
-      <span>{{ status[`status_${locale}`] }}</span> 
+      <span>{{ $t(`comps.list_items.actions_menu.expo.${status[data[0].idStatus]}`)}}</span> 
     </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
       <span >{{ $t(`comps.list_items.actions_menu.expo.${text[item.idStatus]}`)}}</span>
