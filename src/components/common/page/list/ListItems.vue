@@ -1,28 +1,32 @@
 <script setup>
-  import {ref,defineEmits} from 'vue'
+  import {ref} from 'vue'
   import _ from 'lodash'
-  import CheckBox from '../../fields/CheckBox.vue';
-  import Label3 from './labels/Label3.vue';
-  import ActionMenu from './actions/ActionMenu.vue';
-  import UserActions from './actions/UserActions.vue';
-  import UserInfos from './actions/UserInfos.vue';
+  import CheckBox from '../../fields/CheckBox.vue'
+  import Label3 from './labels/Label3.vue'
+  import ActionMenu from './actions/ActionMenu.vue'
+  import UserActions from './actions/user/UserActions.vue'
+  import UserInfos from './actions/user/UserInfos.vue'
+import ExpoActions from './actions/expo/ExpoActions.vue';
 
   const props=defineProps({
     model:{type:String},
     master:{type:Array},
     data:{type:Array},
+    newRecId:{type:Number},
     infos:{type:Array},
   })
-  const emit=defineEmits(['openDetails','userAction'])
-
+  
+  const emit=defineEmits(['openDetails','userAction','expoAction'])
   const selected=ref({})
-  props.data.map((item) => {
-    selected.value={...selected.value,[item[`id${props.model}`]]:false}
+  props.data.map((item) => {  //selected.value initialization
+    selected.value[item[`id${props.model}`]]=false
+    if(props.newRecId!==0) selected.value[props.newRecId]=true
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
-    keys.map((key) => {
-      selected.value[key]=(key==id?val:false)
+    keys.map((key) => {      
+      if(key==id) selected.value[key]=val
+      else selected.value[key]=false
     })
     emit('openDetails',val?id:null)  //if id not null populate FormDetails, if id null empty FormDetails
   }
@@ -57,7 +61,15 @@
             :data="_.filter(infos,(info) => {
               return info.idUser===item.idUser
             })"
-          ></UserInfos>
+          >
+          </UserInfos>
+          <ExpoInfos
+            v-if="model==='Expo'"
+            :data="_.filter(infos,(info) => {
+              return info.idExpo===item.idExpo
+            })"
+          >
+          </ExpoInfos>
         </template>
         <template #actions> <!--named scoped slot -->
           <UserActions
@@ -67,6 +79,13 @@
               emit('userAction',cs)
             }"
           ></UserActions>
+          <ExpoActions
+            v-if="model==='Expo'"
+            :data="item"
+            @expo-action="(cs) => {
+              emit('expoAction',cs)
+            }"
+          ></ExpoActions>
         </template>
       </ActionMenu>
     </div>
@@ -89,7 +108,7 @@
   }
   input {
     transform: scale(1.5);
-    margin:0px 10px 20px 5px;
+    margin:5px 10px 0px 5px;
     width: fit-content;
     cursor: pointer;
   }

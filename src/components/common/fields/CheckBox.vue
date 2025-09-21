@@ -13,7 +13,7 @@
     display:flex;
     flex-direction: row-reverse;
     justify-content: left;    
-    align-items: center;
+    align-items:start;
     margin-top: 10px;
   }
 </style>

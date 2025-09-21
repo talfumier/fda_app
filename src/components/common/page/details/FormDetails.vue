@@ -1,13 +1,15 @@
 <script setup>
-  import {computed,defineEmits} from 'vue';
-  import { useI18n } from 'vue-i18n';
+  import {computed} from 'vue'
+  import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
-  import FieldsetStandard from './FieldsetStandard.vue';
-  import FieldsetAddress from './FieldsetAddress.vue';
-  import FieldsetTranslate from './FieldsetTranslate.vue';
-  import FieldsetButton from './FieldsetButton.vue';
-  import DialogInfo from '../../DialogInfo.vue';
-  import FieldsetFile from './FieldsetFile.vue';
+  import FieldsetStandard from './FieldsetStandard.vue'
+  import FieldsetAddress from './FieldsetAddress.vue'
+  import FieldsetTranslate from './FieldsetTranslate.vue'
+  import FieldsetButton from './FieldsetButton.vue'
+  import DialogInfo from '../../DialogInfo.vue'
+  import FieldsetFile from './FieldsetFile.vue'
+  import FieldsetFiles from './FieldsetFiles.vue'
+  import { getRandomInt } from '@/utilityFunctions.js'
 
   const props=defineProps({
     entity:{type:Object},
@@ -74,14 +76,24 @@
       >
       </FieldsetTranslate>
       <FieldsetFile
-        v-if="item.type==='file-upload'"          
-        :key="idx"
+        v-if="item.type==='single-upload'"          
+        :key="getRandomInt(100,3e3)"
         :fileYes="entity.fileYes"
         :model="entity.model"
         :fields="item.fields"
         :data="record"
       >
       </FieldsetFile>
+      <FieldsetFiles
+        v-if="item.type==='multiple-upload'"          
+        :key="getRandomInt(1e3,3e5)"
+        :fileYes="entity.fileYes"
+        :model="entity.model"
+        :fields="item.fields"
+        :count="item.count"
+        :data="record"
+      >
+      </FieldsetFiles>
       <FieldsetButton  
         v-if="item.type==='button'"
         :key="idx"

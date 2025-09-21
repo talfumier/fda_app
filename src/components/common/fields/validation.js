@@ -68,7 +68,7 @@ export function validate(value, format, equal) {
       if (!isValidDateTime(value))
         result = {
           valid: false,
-          msg: 'comps.validation.fields.date_time',
+          msg: 'comps.validation.fields.date-time',
         }
       break
   }
@@ -106,22 +106,22 @@ export function strToDate(str) {
   return new Date(result)
 }
 export function isValidDate(str) {
-  const arr = str.split(/[./]/)
+  const arr = str.split('-')
   if (arr.length !== 3) return false
-  if (arr[0].length !== 2 || arr[1].length !== 2 || arr[2].length !== 4) return false
-  return !isNaN(new Date(`${arr[2]}/${arr[1]}/${arr[0]}`))
+  if (arr[0].length !== 4 || arr[1].length !== 2 || arr[2].length !== 2) return false
+  return !isNaN(new Date(`${arr[0]}/${arr[1]}/${arr[2]}`))
 }
 function isValidTime(str) {
-  const arr = str.split(':')
-  if (arr.length !== 2) return false
+  const arr = str.split(/[:.]/)
+  if (arr.length !== 4) return false
   if (arr[0].length !== 2 || arr[1].length !== 2) return false
   return true
 }
 export function isValidDateTime(str) {
-  let arr = str.split(/[./:]/)
+  let arr = str.split(/[T/]/)
   if (arr.length !== 2) return false
   if (!isValidDate(arr[0])) return false
   if (!isValidTime(arr[1])) return false
-  arr = [...arr[0].split('.'), ...arr[1].split(':')]
-  return !isNaN(new Date(`${arr[2]}/${arr[1]}/${arr[0]} ${arr[3]}:${arr[4]}`))
+  arr = [...arr[0].split('-'), ...arr[1].split(':')]
+  return !isNaN(new Date(`${arr[0]}/${arr[1]}/${arr[2]} ${arr[3]}:${arr[4]}`))
 }

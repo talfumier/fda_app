@@ -5,7 +5,8 @@
     "select": "Please select an item ...",
     "search": "Search ...",
     "save": "Save changes",
-    "clear": "Clear all fields",
+    "clearAll": "Clear all fields",
+    "clear": "Clear",
     "undo": "Undo all changes",
     "unsaved": "You have unsaved changes. Proceed anyway ?"
   },
@@ -27,7 +28,7 @@
     "login": {
       "lastName": "Last name",
       "firstName": "First name",
-      "email": "User ID",
+      "email": "User ID (email)",
       "role": "Role",
       "pwd": "Password",
       "pwd_check": "Password check",
@@ -62,13 +63,14 @@
         "unchecked": "<span>Checkbox must be un-checked !</span>",
         "int": "<span>Invalid integer !</span>",
         "date": "<span>Format <strong>dd/mm/yyyy</strong> required !</span>",
-        "date_time": "<span>Format <strong>dd/mm/yyyy hh.mm</strong> required !</span>"
+        "date-time": "<span>Format <strong>dd/mm/yyyy hh:mm</strong> required !</span>"
       }
     },
     "infos": {
       "resume": "Provide a short description of yourself, your activities ... to be published on our web site.",
       "hyperlinks": "Hyperlinks to your sites or social networks.Click on arrow to open the page.",
-      "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required."
+      "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
+      "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ..."
     },
     "file_upload": {
       "delete": "Delete",
@@ -77,7 +79,7 @@
       "file_delete": "Please confirm file deletion."
     },
     "master": {
-      "add_btn": "Add"
+      "add_btn": "Add a new record"
     },
     "list_items": {
       "actions_menu": {
@@ -105,11 +107,31 @@
             "artist": "artist",
             "org": "other"
           }
+        },
+        "expo": {
+          "created": "Created",
+          "pending": "Pending",
+          "on-going": "On going",
+          "archived": "Archived",
+          "activation": "Exhibition activation.",
+          "archiving": "Exhibition archiving.",
+          "delete": "Exhibition deletion",
+          "confirm": {
+            "activation": "Please confirm exhibition activation.",
+            "archiving": "Please confirm exhibition archiving.",
+            "deletion": "Please confirm exhibition permanent deletion."
+          },
+          "status": {
+            "indeterminate": "status ?",
+            "archived": "archived",
+            "active": "pending or active"
+          }
         }
       }
     },
     "form_details": {
-      "translate": "Translate"
+      "translate": "Translate",
+      "newRec": "Please save the record before creating linked data."
     },
     "public_site": {
       "home": {}

@@ -5,7 +5,8 @@
     "select": "Choisir un élément de la liste ...",
     "search": "Rechercher ...",
     "save": "Sauvegarder",
-    "clear": "Effacer tous les champs",
+    "clearAll": "Effacer tous les champs",
+    "clear": "Effacer",
     "undo": "Annuler les changements",
     "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
   },
@@ -27,7 +28,7 @@
     "login": {
       "lastName": "Nom",
       "firstName": "Prénom",
-      "email": "Identifiant",
+      "email": "Identifiant (courriel)",
       "role": "Rôle",
       "pwd": "Mot de passe",
       "pwd_check": "Vérification mot de passe",
@@ -62,13 +63,14 @@
         "unchecked": "<span>La case à cocher doit être décochée !</span>",
         "int": "<span>Nombre entier non valide !</span>",
         "date": "<span>Format <strong>jj/mm/aaaa</strong> non respecté !</span>",
-        "date_time": "<span>Format <strong>jj/mm/aaaa hh.mm</strong> non respecté !</span>"
+        "date_time": "<span>Format <strong>jj/mm/aaaa hh:mm</strong> non respecté !</span>"
       }
     },
     "infos": {
       "resume": "Description de vous-même, de vos activités ... afin de le publier sur notre site.",
       "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
-      "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis."
+      "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis.",
+      "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ..."
     },
     "file_upload": {
       "delete": "Supprimer",
@@ -77,7 +79,7 @@
       "file_delete": "Merci de confirmer la suppression du fichier."
     },
     "master": {
-      "add_btn": "Ajouter"
+      "add_btn": "Ajouter un nouvel enregistrement"
     },
     "list_items": {
       "actions_menu": {
@@ -93,7 +95,7 @@
           "confirm": {
             "validation": "Merci de confirmer la validation du compte.",
             "deactivation": "Merci de confirmer la désactivation du compte.",
-            "deletion": "Merci de confirmer la suppression du compte."
+            "deletion": "Merci de confirmer la suppression définitive du compte."
           },
           "status": {
             "indeterminate": "statut ?",
@@ -105,11 +107,31 @@
             "artist": "artiste",
             "org": "autres"
           }
+        },
+        "expo": {
+          "created": "Créé",
+          "pending": "En attente",
+          "on-going": "En cours",
+          "archived": "Archivé",
+          "activation": "Activation de l'exposition.",
+          "archiving": "Archivage de l'exposition.",
+          "delete": "Suppression de l'exposition",
+          "confirm": {
+            "activation": "Merci de confirmer l'activation de l'exposition.",
+            "archiving": "Merci de confirmer l'archivage de l'exposition.",
+            "deletion": "Merci de confirmer la suppression définitive de l'exposition."
+          },
+          "status": {
+            "indeterminate": "statut ?",
+            "archived": "archivé",
+            "active": "en attente ou actif"
+          }
         }
       }
     },
     "form_details": {
-      "translate": "Traduire"
+      "translate": "Traduire",
+      "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées."
     },
     "public_site": {
       "home": {}
