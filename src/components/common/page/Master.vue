@@ -1,6 +1,6 @@
 <script setup async>
   import { ref,computed,onMounted,onUnmounted,inject} from 'vue';
-  import { useRouter,onBeforeRouteLeave } from 'vue-router'
+  import { onBeforeRouteLeave } from 'vue-router'
   import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n';
   import _ from 'lodash'
@@ -19,8 +19,7 @@
     entity:{type:Object},
     fieldsets:{type:Array},
   })
-  
-  const router = useRouter()
+
   const {locale,t}=useI18n()  
   const {token,decoded}=inject('userCookie')
   const $q=useQuasar()

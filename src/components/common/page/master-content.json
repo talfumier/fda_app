@@ -265,6 +265,8 @@
         "type": "standard",
         "legend_fr": "Paramètres du compte",
         "legend_en": "Account settings",
+        "info": true,
+        "info_path": "comps.infos.account",
         "fields": [
           {
             "name": "role_fr",
