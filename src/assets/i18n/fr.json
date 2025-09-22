@@ -7,6 +7,7 @@
     "save": "Sauvegarder",
     "clearAll": "Effacer tous les champs",
     "clear": "Effacer",
+    "close": "Fermer",
     "undo": "Annuler les changements",
     "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
   },
@@ -73,7 +74,7 @@
     },
     "infos": {
       "resume": "Description de vous-même, de vos activités ... afin de le publier sur notre site.",
-      "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et resté informé de l'activité du festival.",
+      "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et rester informé de l'activité du festival.",
       "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
       "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis.",
       "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ..."

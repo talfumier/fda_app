@@ -1,3 +1,5 @@
+import { i18n } from '@/main.js'
+
 let create = null
 let closeHandle = null
 export function initToast(Notify) {
@@ -48,7 +50,7 @@ function toastPersistent(message, color, icon, spinner) {
     timeout: 0,
     spinner,
     position: 'top-right',
-    actions: [{ label: 'Close', color: 'white' }],
+    actions: [{ label: i18n.global.t('common.close'), color: 'white' }],
   })
   return closeHandle
 }

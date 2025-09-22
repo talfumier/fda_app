@@ -7,7 +7,8 @@
   const props = defineProps({
     fields:{type:Array},
     data:{type:Object}
-  })  
+  }) 
+  console.log(props.fields) 
   const {locale}=useI18n()
   const counters=ref({en:0,fr:0})
 
@@ -35,8 +36,8 @@
 <template>
   <div :class="['translate',locale==='en'?'reverse':'']">
     <div class="fr">
-      <!-- <label>{{locale==='fr'?fields[0].label:''}}</label> -->
-      <img src="../../../../assets/images/fr.png" alt="drapeu français">
+      <label>{{locale==='fr'?fields[0].label:''}}</label>
+      <img src="../../../../assets/images/fr.png" alt="drapeau français">
       <span class="count">{{`${counters.fr}/${fields[0].max_length}`}}</span>
     </div>
     <InputField 
@@ -56,7 +57,7 @@
     >
     </InputField>
     <div class="en">
-      <!-- <label>{{locale==='en'?fields[1].label:''}}</label> -->
+      <label>{{locale==='en'?fields[1].label:''}}</label>
       <img src="../../../../assets/images/uk.png" alt="UK flag">
       <span class="count">{{`${counters.en}/${fields[0].max_length}`}}</span>
     </div>    
@@ -115,13 +116,13 @@
   .resume_fr, .title_fr, .desc_fr {
     grid-area: 2/1
   }
-  .reverse .resume_fr,.title_fr, .desc_fr {
+  .reverse .resume_fr,.reverse .title_fr,.reverse .desc_fr {
     grid-area: 2/3;
   }
   .resume_en, .title_en, .desc_en {
     grid-area: 2/3;
   }
-  .reverse .resume_en, .reverse .title_en, .reverse .desc_fr {
+  .reverse .resume_en, .reverse .title_en, .reverse .desc_en {
     grid-area: 2/1
   }
   div.controls {
