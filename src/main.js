@@ -18,7 +18,7 @@ const supportedLocales = ['en', 'fr']
 const locale = // locale stored in local storage, browser lang or en
   localStorage.getItem('locale') || (supportedLocales.includes(browserLang) ? browserLang : 'en')
 
-const i18n = createI18n({
+export const i18n = createI18n({
   legacy: false, // use Composition API mode
   locale,
   fallbackLocale: 'en', // fallback if translation is missing

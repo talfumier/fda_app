@@ -195,7 +195,7 @@
           },
           {
             "name": "public_pseudo",
-            "label_fr": "Pseudo",
+            "label_fr": "Nom d'artiste",
             "label_en": "Alias",
             "field_type": "checkbox",
             "data_type": "checkbox",
