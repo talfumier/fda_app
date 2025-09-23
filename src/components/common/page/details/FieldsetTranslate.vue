@@ -8,7 +8,7 @@
     fields:{type:Array},
     data:{type:Object}
   }) 
-  console.log(props.fields) 
+  
   const {locale}=useI18n()
   const counters=ref({en:0,fr:0})
 

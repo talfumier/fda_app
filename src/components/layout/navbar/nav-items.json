@@ -21,6 +21,13 @@
     "roles": [5, 6, 7]
   },
   {
+    "url": "/member/oeuvres",
+    "icon": "palette",
+    "text": "oeuvres",
+    "wrap": false,
+    "roles": [1]
+  },
+  {
     "url": "/member/admin",
     "icon": "settings",
     "text": "admin_settings",

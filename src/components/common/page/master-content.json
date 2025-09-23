@@ -613,5 +613,227 @@
         ]
       }
     ]
+  },
+  {
+    "entity": {
+      "idx": 3,
+      "url": "/member/oeuvres",
+      "name": "member oeuvres",
+      "roles": [1],
+      "model": "Oeuvre",
+      "sql": ["list_items_oeuvre"],
+      "orderBy": { "field": "title_fr", "order": "desc" },
+      "newRecord": true,
+      "noList": false,
+      "fileYes": "image/png, image/jpeg, image/webp"
+    },
+    "fieldsets": [
+      {
+        "name": "style",
+        "type": "standard",
+        "legend_fr": "Style *",
+        "legend_en": "Style *",
+        "fields": [
+          {
+            "name": "classic_modern",
+            "label_fr": "",
+            "label_en": "",
+            "field_type": "option-group",
+            "options": [
+              { "label_fr": "Classique", "label_en": "Classic", "value": 0 },
+              { "label_fr": "Contemporain", "label_en": "Modern", "value": 1 }
+            ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "domain_tech_media",
+        "type": "standard",
+        "legend_fr": "Domaine - Technique - Support",
+        "legend_en": "Domain - Technique - Media",
+        "fields": [
+          {
+            "name": "domain",
+            "label_fr": "Domaine",
+            "label_en": "Domain",
+            "field_type": "select",
+            "options": "options_domain"
+          },
+          {
+            "name": "technique",
+            "label_fr": "Technique",
+            "label_en": "Technique",
+            "field_type": "select",
+            "options": "options_technique"
+          },
+          {
+            "name": "media",
+            "label_fr": "Support",
+            "label_en": "Media",
+            "field_type": "select",
+            "options": "options_media"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "translate",
+        "legend_fr": "Nom de l'oeuvre *",
+        "legend_en": "Art work name *",
+        "info": false,
+        "fields": [
+          {
+            "name": "title_fr",
+            "field_type": "textarea",
+            "rows": 1,
+            "max_length": 100,
+            "listMaster": true
+          },
+          {
+            "name": "title_en",
+            "field_type": "textarea",
+            "rows": 1,
+            "max_length": 100,
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "description",
+        "type": "translate",
+        "legend_fr": "Description de l'oeuvre",
+        "legend_en": "Art work description",
+        "info": false,
+        "fields": [
+          {
+            "name": "desc_fr",
+            "field_type": "textarea",
+            "required": false,
+            "rows": 2,
+            "max_length": 300
+          },
+          {
+            "name": "desc_en",
+            "field_type": "textarea",
+            "required": false,
+            "rows": 2,
+            "max_length": 300
+          }
+        ]
+      },
+      {
+        "name": "physical",
+        "type": "standard",
+        "legend_fr": "Dimensions - Poids",
+        "legend_en": "Dimensions - Weight",
+        "info": true,
+        "info_path": "comps.infos.physical",
+        "fields": [
+          {
+            "name": "width",
+            "label_fr": "Largeur (cm)",
+            "label_en": "Width (cm)",
+            "field_type": "input",
+            "format": "integer"
+          },
+          {
+            "name": "height",
+            "label_fr": "Hauteur (cm)",
+            "label_en": "Height (cm)",
+            "field_type": "input",
+            "format": "integer"
+          },
+          {
+            "name": "depth",
+            "label_fr": "Profondeur (cm)",
+            "label_en": "Depth (cm)",
+            "field_type": "input",
+            "format": "integer",
+            "required": false
+          },
+          {
+            "name": "weight",
+            "label_fr": "Poids (Kg)",
+            "label_en": "Weight (Kg)",
+            "field_type": "input",
+            "format": "integer",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "price",
+        "type": "standard",
+        "legend_fr": "Conditions de vente",
+        "legend_en": "Sale conditions",
+        "fields": [
+          {
+            "name": "reserved",
+            "label_fr": "",
+            "label_en": "",
+            "field_type": "option-group",
+            "options": [
+              { "label_fr": "Proposé à la vente", "label_en": "Proposed for sale", "value": 0 },
+              { "label_fr": "Réservé", "label_en": "Reserved", "value": 1 }
+            ],
+            "required": false
+          },
+          {
+            "name": "price",
+            "label_fr": "Prix de vente (EUR)",
+            "label_en": "Selling price (EUR)",
+            "field_type": "input",
+            "format": "integer",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "completion",
+        "type": "standard",
+        "legend_fr": "Date de réalisation",
+        "legend_en": "Completion date",
+        "fields": [
+          {
+            "name": "completionDate",
+            "label_fr": "",
+            "label_en": "",
+            "field_type": "input",
+            "format": "date",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "picture",
+        "type": "single-upload",
+        "legend_fr": "Photo",
+        "legend_en": "Photo",
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
+          }
+        ]
+      }
+    ]
   }
 ]

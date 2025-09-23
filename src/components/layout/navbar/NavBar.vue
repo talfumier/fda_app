@@ -26,10 +26,10 @@
     if(!alive) return
     const {data:res}=await getEntitiesBySql(
       'avatar',
-      ':idUser', 
-      decoded.value.idUser,
       token.value,
-      ctrl.signal
+      ctrl.signal,
+      ':idUser', 
+      decoded.value.idUser
     )
     if(res.statusCode===200) {
       url.value=res.data[0][0]?.url

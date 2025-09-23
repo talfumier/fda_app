@@ -1,8 +1,9 @@
 <script setup>
+  import { onMounted, onUnmounted, ref, computed, inject } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { ref } from 'vue'
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import {validate} from"./validation.js"
+  import { getEntitiesBySql } from '@/services/httpEntities.js'
 
   const props=defineProps({
     name:{type:String},
@@ -19,13 +20,44 @@
     maxLength:{type:Number,default:Infinity},
     equal:{type:[String]},
     rows:{type:Number},
-    options:{type:Array}
+    options:{type:[String,Array]}  //String >>> sql stored procedure
   })    
+  
+  const {token}=inject('userCookie')
   const { t,locale } = useI18n()    
   const {formatDate,formatDateTime}=useFormatDate()
   
-  const data=ref(props.value), dirty=ref(false), type=ref(props.data_type)
+  const data=ref(props.value), dirty=ref(false), type=ref(props.data_type), options=ref([])
   const fieldValid=ref({valid: true, msg: null})
+  //OPTION GROUP OPTIONS PROCESSING 
+  const selected = ref(props.field_type==='option-group'?props.value:null) 
+  const group_options=computed(() => {
+    if(props.field_type!=='option-group') return null
+    return props.options.map((option) => {
+      return {
+        label:locale.value==='fr'?option.label_fr:option.label_en,
+        value:option.value
+      }
+    })
+  })
+
+  //SELECT OPTIONS DATA LOADING FROM A STORED PROCEDURE
+  const ctrl=new AbortController()   // AbortController's object' used in http request operation
+  let alive = true // guard against updates after unmount
+  onMounted(async() => {  //load options data from a stored procedure
+    if(!props.options || Array.isArray(props.options)) return
+    if (!alive) return                // component gone? don't touch state 
+    const {data:res}=await getEntitiesBySql(
+      props.options,
+      token.value,
+      ctrl.signal
+    )
+    const keys=Object.keys(res.data[0][0])
+    res.data[0].map((item) => {
+      options.value.push({value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]}})
+    })
+  })
+  onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 
   const emit = defineEmits(['change','iconClick'])
   //initial value processing 
@@ -34,7 +66,7 @@
     if(!cs)dirty.value=true
     data.value=val
     let valid = {valid: true, msg: null};
-    if (props.required && props.field_type !== 'select') {
+    if (props.required && props.field_type !== 'select' && props.field_type !=='option-group' ) {
       valid = validate(val,props.name.includes('pwd')?'pwd':props.format);}
     Object.assign(fieldValid.value, valid)
     emit('change', //notify the parent component
@@ -60,46 +92,49 @@
     }
   }
   //DATE AND TIME POPUP
-  const dt=ref(null)
-  if(props.format==='date-time'){
-    if(data.value && data){
-      dt.value=formatDateTime(data.value).split(' ')
-      dt.value[1]=dt.value[1].substring(0,6)
-    }
-    else {
-      dt.value=['','00:00']
-    }
+  const dt=ref(['','00:00'])
+  switch(props.format){
+    case 'date':
+      if(data.value && data)
+        dt.value=formatDate(data.value)
+      break
+    case 'date-time':
+      if(data.value && data){
+        dt.value=formatDateTime(data.value).split(' ')
+        dt.value[1]=dt.value[1].substring(0,6)
+      }
   }
   const openDate = ref(null)
   const openTime=ref(null)
   function handleClick(cs){
+    function openClose(date,time){      
+      openDate.value=date
+      openTime.value=time
+    }
     switch(cs){
       case 'openDate':
-        openTime.value=false
-        openDate.value=true
+        openClose(true,false)
         break      
       case 'openTime':
-        openDate.value=false
-        openTime.value=true
+        openClose(false,true)
         break
       case 'ok':
         let date=dt.value[0].split('/')
         date=`${date[2]}-${date[1]}-${date[0]}`
         handleChange(`${date}T${dt.value[1]?dt.value[1]:'00:00'}:00.000`)
-        openDate.value=false
-        openTime.value=false
+        openClose(false,false)
         break
       case 'clear':
         if(openDate.value) {
           dt.value[0]=dt.value[1]=''
           handleChange(null)
+          openClose(false,false)
         }
         if(openTime.value) {
           dt.value[1]=''
           handleClick('ok')
         }
-    }
-    
+    }    
   }
 </script>
 
@@ -159,8 +194,7 @@
       }"
       @input="(e) => {
         if(dirty) handleChange(e.target.value)
-      }"
-      
+      }"      
       @click="() => {
         if(format==='date' || format==='date-time') handleClick('openDate')
       }"
@@ -230,6 +264,13 @@
       v-html="t(fieldValid.msg)"
     >
     </div>
+
+    <q-option-group v-if="field_type==='option-group'"
+      v-model="selected"
+      :options="group_options"
+      type='radio'
+      @update:model-value="handleChange"
+    />
   </div>
 </template>
 
@@ -313,6 +354,9 @@
     left:10px;
     cursor: pointer;
   }
+  div.input-container.completionDate .q-icon.date {
+    top:24px;
+  }
   .q-icon.time {
     top:30px;
     right:10px;
@@ -341,6 +385,11 @@
     color:red;
     background-color: rgb(243, 227, 227);
   }
+  .q-option-group {
+    display:flex;
+    flex-wrap: nowrap;
+    gap:30px;
+  }
   /* CUSTOMIZATION I.A.W FIELD NAME */
   div.modal-content.login input, div.modal-content.login select, 
   div.modal-content.reset input, div.modal-content.reset select {
@@ -362,7 +411,7 @@
   div.input-container.cgu_cgv_date input {    /*user form*/
     text-align: center;
   } 
-  div.input-container.newsletter {
+  div.input-container.newsletter,div.input-container.reserved, div.input-container.completionDate {
     padding-top: 20px;;
   }
   fieldset.links input {

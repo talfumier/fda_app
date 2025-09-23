@@ -30,6 +30,14 @@ import ExpoActions from './actions/expo/ExpoActions.vue';
     })
     emit('openDetails',val?id:null)  //if id not null populate FormDetails, if id null empty FormDetails
   }
+  function setCase(){  //1st label case setting
+    switch(props.model){
+      case "User":
+        return true
+      default:
+        return false
+    }
+  }
   
 </script>
 
@@ -48,7 +56,12 @@ import ExpoActions from './actions/expo/ExpoActions.vue';
           />
         </template>
         <template #label>  <!--named scoped slot -->
-          <Label3 :item="item" :master="master" :id="idx" />
+          <Label3 
+            :id="idx" 
+            :item="item" 
+            :master="master"
+            :ucase="setCase()"
+          />
         </template>
       </CheckBox>
       <ActionMenu

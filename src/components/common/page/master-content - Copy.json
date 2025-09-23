@@ -6,11 +6,7 @@
       "name": "member users",
       "roles": [5, 6, 7],
       "model": "User",
-      "sql": "list_items_user0",
-      "label_fr": "Compte",
-      "label_en": "Account",
-      "labels_fr": "Comptes",
-      "labels_en": "Accounts",
+      "sql": ["list_items_user0"],
       "orderBy": { "field": "lastName", "order": "asc" },
       "fileYes": "image/png, image/jpeg, image/webp",
       "newRecord": false,
@@ -42,7 +38,7 @@
           },
           {
             "name": "pseudo",
-            "label_fr": "Pseudo",
+            "label_fr": "Nom d'artiste",
             "label_en": "Alias",
             "field_type": "textarea",
             "required": false,
@@ -199,7 +195,7 @@
           },
           {
             "name": "public_pseudo",
-            "label_fr": "Pseudo",
+            "label_fr": "Nom d'artiste",
             "label_en": "Alias",
             "field_type": "checkbox",
             "data_type": "checkbox",
@@ -237,7 +233,7 @@
       },
       {
         "name": "avatar",
-        "type": "file-upload",
+        "type": "single-upload",
         "legend_fr": "Avatar",
         "legend_en": "Avatar",
         "fields": [
@@ -269,6 +265,8 @@
         "type": "standard",
         "legend_fr": "Paramètres du compte",
         "legend_en": "Account settings",
+        "info": true,
+        "info_path": "comps.infos.account",
         "fields": [
           {
             "name": "role_fr",
@@ -341,9 +339,7 @@
       "name": "member user",
       "roles": [1, 5, 6, 7],
       "model": "User",
-      "sql": "list_items_user1",
-      "label_fr": "Profil",
-      "label_en": "Profile",
+      "sql": ["list_items_user1"],
       "fileYes": "image/png, image/jpeg, image/webp",
       "noList": true
     },
@@ -366,6 +362,253 @@
             "icon": "password",
             "label_fr": "Changer le mot de passe",
             "label_en": "Reset password"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 2,
+      "url": "/member/expos",
+      "name": "member expos",
+      "roles": [5, 6, 7],
+      "model": "Expo",
+      "sql": ["list_items_expo", "list_status_tracking"],
+      "orderBy": { "field": "startDate", "order": "desc" },
+      "newRecord": true,
+      "status_at_creation": {
+        "idStatus": 10,
+        "type": "expo",
+        "status_en": "pending",
+        "status_fr": "en attente"
+      },
+      "noList": false,
+      "fileYes": "image/png, image/jpeg, image/webp"
+    },
+    "fieldsets": [
+      {
+        "name": "title",
+        "type": "translate",
+        "legend_fr": "Exposition *",
+        "legend_en": "Exhibition *",
+        "info": false,
+        "fields": [
+          {
+            "name": "title_fr",
+            "field_type": "textarea",
+            "rows": 1,
+            "max_length": 100,
+            "listMaster": true
+          },
+          {
+            "name": "title_en",
+            "field_type": "textarea",
+            "rows": 1,
+            "max_length": 100,
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "calendar_exhibition",
+        "type": "standard",
+        "legend_fr": "Calendrier",
+        "legend_en": "Calendar",
+        "fields": [
+          {
+            "name": "startDate",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "vernissageDateTime",
+            "label_fr": "Vernissage",
+            "label_en": "Opening celebration",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "lunchDateTime",
+            "label_fr": "Repas",
+            "label_en": "Lunch",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "endDate",
+            "label_fr": "Fermeture",
+            "label_en": "Closing",
+            "field_type": "input",
+            "format": "date-time"
+          }
+        ]
+      },
+      {
+        "name": "calendar_deposit",
+        "type": "standard",
+        "legend_fr": "Dépôt des oeuvres",
+        "legend_en": "Art works deposit",
+        "fields": [
+          {
+            "name": "depotDateTime_open",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "depotDateTime_close",
+            "label_fr": "Fermeture",
+            "label_en": "Closing",
+            "field_type": "input",
+            "format": "date-time"
+          }
+        ]
+      },
+      {
+        "name": "calendar_collection",
+        "type": "standard",
+        "legend_fr": "Retrait des oeuvres",
+        "legend_en": "Art works collection",
+        "fields": [
+          {
+            "name": "collectionDateTime_open",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
+            "name": "collectionDateTime_close",
+            "label_fr": "Fermeture",
+            "label_en": "Closing",
+            "field_type": "input",
+            "format": "date-time"
+          }
+        ]
+      },
+      {
+        "name": "desc",
+        "type": "translate",
+        "legend_fr": "Présentation *",
+        "legend_en": "Introduction *",
+        "info": true,
+        "info_path": "comps.infos.expo_desc",
+        "fields": [
+          {
+            "name": "desc_fr",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 500
+          },
+          {
+            "name": "desc_en",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 500
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "type": "address",
+        "legend_fr": "Localisation",
+        "legend_en": "Location",
+        "fields": [
+          {
+            "name": "address",
+            "label_fr": "Adresse",
+            "label_en": "Address",
+            "field_type": "textarea",
+            "rows": 2
+          },
+          {
+            "name": "zipCode",
+            "label_fr": "Code postal",
+            "label_en": "Zip code",
+            "field_type": "textarea",
+            "rows": 1
+          },
+          {
+            "name": "city",
+            "label_fr": "Ville",
+            "label_en": "City",
+            "field_type": "textarea",
+            "rows": 2
+          },
+          {
+            "name": "country",
+            "label_fr": "Pays",
+            "label_en": "Country",
+            "field_type": "textarea",
+            "rows": 1
+          },
+          {
+            "name": "gpsLat",
+            "label_fr": "Latitude",
+            "label_en": "Latitude",
+            "field_type": "input"
+          },
+          {
+            "name": "gpsLong",
+            "label_fr": "Longitude",
+            "label_en": "Longitude",
+            "field_type": "input"
+          }
+        ]
+      },
+      {
+        "name": "fee",
+        "type": "standard",
+        "legend_fr": "Tarif de l'exposition",
+        "legend_en": "Exhibition fee",
+        "fields": [
+          {
+            "name": "priceShowRoom",
+            "label_fr": "En salle",
+            "label_en": "Show room",
+            "field_type": "input",
+            "format": "integer"
+          },
+          {
+            "name": "priceScreen",
+            "label_fr": "A l'écran",
+            "label_en": "On screen",
+            "field_type": "input",
+            "format": "integer"
+          }
+        ]
+      },
+      {
+        "name": "expo_photos",
+        "type": "multiple-upload",
+        "legend_fr": "Photos",
+        "legend_en": "Pictures",
+        "count": 4,
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
           }
         ]
       }

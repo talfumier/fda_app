@@ -108,13 +108,17 @@
             paramsValues='expo'
           } 
           break
+        case 'Oeuvre':
+          sqlparams=':idUser'
+          paramsValues=decoded.value.idUser
+          break
       }
       res=(await getEntitiesBySql(
           props.entity.sql[i],
-          sqlparams, 
-          paramsValues,
           token.value,
-          ctrls[0].signal
+          ctrls[0].signal,
+          sqlparams, 
+          paramsValues
         )).data      
     }
     return res.data    
@@ -294,6 +298,22 @@
             state.value[0].splice(idx,1)  //update state
         }
       }
+      break
+    case 'Oeuvre':
+      listItemsFilter=ref({search:'',expo_status:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          return true
+          // let cond=[],result=true
+          // cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          // cond.map((cnd) => {
+          //   result=result && cnd
+          // })
+          // return result
+        })
+      })
       break
   }
   const initFlag=ref(0)

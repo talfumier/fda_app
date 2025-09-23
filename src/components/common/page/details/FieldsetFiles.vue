@@ -19,10 +19,10 @@
     if (!alive) return                // component gone? don't touch state 
     const {data:res}=await getEntitiesBySql(
       'list_images_expo',
-      ':idExpo', 
-      props.data.idExpo,
       token.value,
-      ctrl.signal
+      ctrl.signal,
+      ':idExpo', 
+      props.data.idExpo
     )
     return res.data[0]
   } 

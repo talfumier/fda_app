@@ -4,9 +4,10 @@
   import _ from 'lodash'
 
   const props=defineProps({
+    id:{type:Number},
     item:{type:Object},
     master:{type:Array},
-    id:{type:Number}
+    ucase:{type:Boolean}
   })
   const {locale}=useI18n()
   const filteredMaster=computed(() => {
@@ -35,10 +36,21 @@
 <template>
   <label  :for="id">
     <div class="row1">
-      <span class="ucase">{{item[filteredMaster[0].name]?item[filteredMaster[0].name]:filteredMaster[0].default}}</span>
-      <span v-if="filteredMaster[1]" class="ccase">{{ item[filteredMaster[1].name]?item[filteredMaster[1]?.name]:filteredMaster[1].default }}</span>
-      <q-icon v-if="status[0]===1 || status[0]===2" name="done_all" :color="status[1]" size="2.5rem"></q-icon>
-      <q-icon v-if="status[0]===3" name="no_accounts" :color="status[1]" size="2.5rem"></q-icon>
+      <span :class="ucase?'ucase':''">
+        {{item[filteredMaster[0].name]?item[filteredMaster[0].name]:filteredMaster[0].default}}
+      </span>
+      <span 
+        v-if="filteredMaster[1]" 
+        class="ccase">{{ (item[filteredMaster[1].name]?item[filteredMaster[1]?.name]:filteredMaster[1].default).toLowerCase() }}
+      </span>
+      <q-icon 
+        v-if="status[0]===1 || status[0]===2" 
+        name="done_all" :color="status[1]" size="2.5rem">
+      </q-icon>
+      <q-icon 
+        v-if="status[0]===3" 
+        name="no_accounts" :color="status[1]" size="2.5rem">
+      </q-icon>
     </div>
     <div v-if="filteredMaster[2]" class="row2 lcase">
       <span>{{ item[filteredMaster[2].name] }}</span>
@@ -68,7 +80,7 @@
     text-transform: uppercase;
   }
   .ccase {
-    text-transform: capitalize;
+    text-transform:capitalize;
   }
   .lcase {
     text-transform: lowercase;

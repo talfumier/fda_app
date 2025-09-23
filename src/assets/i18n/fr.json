@@ -53,6 +53,7 @@
       "dashboard": "Tableau de bord",
       "users": "Comptes utilisateur",
       "expos": "Expositions",
+      "oeuvres": "Mes oeuvres",
       "admin_settings": "Administration",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
@@ -77,7 +78,8 @@
       "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et rester informé de l'activité du festival.",
       "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
       "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis.",
-      "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ..."
+      "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ...",
+      "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. "
     },
     "file_upload": {
       "delete": "Supprimer",

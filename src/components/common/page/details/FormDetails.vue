@@ -51,7 +51,7 @@
           handleChange(record[`id${entity.model}`],name,valid,val)
         }"
       >
-      </FieldsetStandard>
+      </FieldsetStandard>    
       <FieldsetAddress
         v-if="item.type==='address'"
         :key="idx"
@@ -124,6 +124,12 @@
   }
   fieldset.links {
     justify-content: space-around;
+  }
+  fieldset.domain_tech_media {
+    gap:30px;
+  }
+  fieldset.price {
+    gap:60px;
   }
   fieldset:has(.button) {
     justify-content:center;
