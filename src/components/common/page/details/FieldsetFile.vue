@@ -199,7 +199,7 @@
       </div>
       <div className="file-details">
         <InputField v-for="(item,idx) in fields"
-          :key="idx*.01"
+          :key="getRandomInt(1,3e6)"
           :name="item.name"
           :label="item[`label_${locale}`]"
           :required="false"

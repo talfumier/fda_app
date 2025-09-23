@@ -654,21 +654,21 @@
         "legend_en": "Domain - Technique - Media",
         "fields": [
           {
-            "name": "domain",
+            "name": "idDomain",
             "label_fr": "Domaine",
             "label_en": "Domain",
             "field_type": "select",
             "options": "options_domain"
           },
           {
-            "name": "technique",
+            "name": "idTech",
             "label_fr": "Technique",
             "label_en": "Technique",
             "field_type": "select",
             "options": "options_technique"
           },
           {
-            "name": "media",
+            "name": "idMedia",
             "label_fr": "Support",
             "label_en": "Media",
             "field_type": "select",

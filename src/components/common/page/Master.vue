@@ -165,6 +165,20 @@
   function rotateIcon() {
     isRotated.value=!isRotated.value
   }
+  // ACTIONS - MODEL INDEPENDANT
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table    
+    const idImage=state.value[0][idx].idImage 
+    const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre ...  
+    if(res.data.statusCode!==200) return       
+    state.value[0].splice(idx,1)  //update state  
+    if(idImage) {
+      const {data:res}= await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
+      if(res.statusCode===200) 
+        try {
+          await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com                  
+        } catch (error) {}  //asset no longer present
+    } 
+  }
   // LISTITEMS DATA FILTERING AND ACTIONS - MODEL SPECIFIC
   let listItemsFilter=null,filteredList=null,toggleOn = null  //filter 3 position switches
   let getToggleLabel=null, handleAction=null
@@ -216,17 +230,7 @@
             state.value[0][idx].idStatus=status
             break;
           case "deletion":
-            const idImage=state.value[0][idx].idImage 
-            res=await deleteEntity('User',selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser  
-            if(res.data.statusCode!==200) return       
-            state.value[0].splice(idx,1)  //update state  
-            if(idImage) {
-              const {data:res}= await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
-              if(res.statusCode===200) 
-                try {
-                  await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com                  
-                } catch (error) {}  //asset no longer present
-            } 
+            handleDelete(idx)
         }
       }
       break
@@ -277,10 +281,10 @@
           case "deletion":
             const {data:images}=(await getEntitiesBySql(
               'list_images_expo',
-              ':idExpo', 
-              selectedId.value,
               token.value,
-              ctrls[1].signal
+              ctrls[1].signal,
+              ':idExpo', 
+              selectedId.value
             )).data
             //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
             res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal) 
@@ -300,20 +304,29 @@
       }
       break
     case 'Oeuvre':
-      listItemsFilter=ref({search:'',expo_status:''})  
+      listItemsFilter=ref({search:'',oeuvre_status:''})  
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
-          return true
-          // let cond=[],result=true
-          // cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
           // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
           //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
-          // cond.map((cnd) => {
-          //   result=result && cnd
-          // })
-          // return result
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
         })
-      })
+      })      
+      handleAction = async(cs)=>{    
+        if (!alive) return                // component gone? don't touch state 
+        if (ctrls[1]) ctrls[1].abort()
+        ctrls[1] = new AbortController()
+        const idx=getIndex()
+        switch(cs){     
+          case "deletion":
+            handleDelete(idx)
+        }
+      }
       break
   }
   const initFlag=ref(0)
@@ -330,6 +343,7 @@
 function initNewrec(){
   const obj={}
   props.fieldsets.map((fieldset) => {
+    if(fieldset.type.includes('-upload')) return
     fieldset.fields.map((field) => {
       obj[field.name]=null
     })
@@ -339,6 +353,11 @@ function initNewrec(){
   switch(props.entity.model){
     case 'Expo':
       obj.idStatus=10  //pending status
+      break
+    case 'Oeuvre':
+      obj.idUser=decoded.value.idUser
+      obj.classic_modern=0
+      obj.reserved=0
       break
   }
   return obj
@@ -367,7 +386,13 @@ function handleNewRecord(){
             }
             else obj[key]=item[key]
           })  
-          const{id,...body}=obj
+          let body=null
+          const{id,...rest}=obj
+          if(id<0) {
+            delete state.value[0][idx][`id${props.entity.model}`]
+            body=state.value[0][idx]
+          }
+          else body=rest
           if(Object.keys(body).length>=1){
             res=await(id<0?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
               patchEntity(props.entity.model,id,body,token.value, ctrls[2].signal))
@@ -380,11 +405,13 @@ function handleNewRecord(){
             })
             if(id<0) { //new record creation
               state.value[0][idx][`id${props.entity.model}`]=res.data.data[`id${props.entity.model}`] //update id[model]     
-              state.value[0][idx].idStatus=props.entity.status_at_creation.idStatus //update current status data
-              state.value[0][idx].status_en=props.entity.status_at_creation.status_en                
-              state.value[0][idx].status_fr=props.entity.status_at_creation.status_fr
-              state.value[0][idx].type=props.entity.status_at_creation.type
-              state.value[1]=(await fetch(1))[0] //retrieve updated status tracking data
+              if(props.entity.status_at_creation){
+                state.value[0][idx].idStatus=props.entity.status_at_creation.idStatus //update current status data
+                state.value[0][idx].status_en=props.entity.status_at_creation.status_en                
+                state.value[0][idx].status_fr=props.entity.status_at_creation.status_fr
+                state.value[0][idx].type=props.entity.status_at_creation.type
+                state.value[1]=(await fetch(1))[0] //retrieve updated status tracking data
+              }
               newRecId.value=res.data.data[`id${props.entity.model}`]
               handleOpenDetails(newRecId.value)
             }
@@ -505,6 +532,7 @@ function handleNewRecord(){
         @open-details="handleOpenDetails"
         @user-action="handleAction"
         @expo-action="handleAction"
+        @oeuvre-action="handleAction"
       >
       </ListItems>
     </aside>

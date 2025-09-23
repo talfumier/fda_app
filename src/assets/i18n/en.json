@@ -135,6 +135,12 @@
             "archived": "archived",
             "active": "pending or active"
           }
+        },
+        "oeuvre": {
+          "delete": "Art work deletion",
+          "confirm": {
+            "deletion": "Please confirm art work permanent deletion."
+          }
         }
       }
     },

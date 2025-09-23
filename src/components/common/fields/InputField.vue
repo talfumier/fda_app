@@ -30,7 +30,6 @@
   const data=ref(props.value), dirty=ref(false), type=ref(props.data_type), options=ref([])
   const fieldValid=ref({valid: true, msg: null})
   //OPTION GROUP OPTIONS PROCESSING 
-  const selected = ref(props.field_type==='option-group'?props.value:null) 
   const group_options=computed(() => {
     if(props.field_type!=='option-group') return null
     return props.options.map((option) => {
@@ -40,7 +39,6 @@
       }
     })
   })
-
   //SELECT OPTIONS DATA LOADING FROM A STORED PROCEDURE
   const ctrl=new AbortController()   // AbortController's object' used in http request operation
   let alive = true // guard against updates after unmount
@@ -266,7 +264,7 @@
     </div>
 
     <q-option-group v-if="field_type==='option-group'"
-      v-model="selected"
+      v-model="data"
       :options="group_options"
       type='radio'
       @update:model-value="handleChange"

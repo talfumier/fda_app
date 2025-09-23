@@ -6,7 +6,8 @@
   import ActionMenu from './actions/ActionMenu.vue'
   import UserActions from './actions/user/UserActions.vue'
   import UserInfos from './actions/user/UserInfos.vue'
-import ExpoActions from './actions/expo/ExpoActions.vue';
+  import ExpoActions from './actions/expo/ExpoActions.vue'
+  import OeuvreActions from './actions/oeuvre/OeuvreActions.vue'
 
   const props=defineProps({
     model:{type:String},
@@ -16,7 +17,7 @@ import ExpoActions from './actions/expo/ExpoActions.vue';
     infos:{type:Array},
   })
   
-  const emit=defineEmits(['openDetails','userAction','expoAction'])
+  const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.model}`]]=false
@@ -99,6 +100,13 @@ import ExpoActions from './actions/expo/ExpoActions.vue';
               emit('expoAction',cs)
             }"
           ></ExpoActions>
+          <OeuvreActions
+            v-if="model==='Oeuvre'"
+            :data="item"
+            @oeuvre-action="(cs) => {
+              emit('oeuvreAction',cs)
+            }">
+          </OeuvreActions>
         </template>
       </ActionMenu>
     </div>
