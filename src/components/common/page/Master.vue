@@ -58,7 +58,7 @@
   function resetActualChanges(){
     const idModel=`id${props.entity.model}`
     let obj={}
-    // initialize actualChanges >>> all fields set to false, idModel changed to id, newRec:false added
+    // initialize actualChanges >>> all fields set to false, idModel changed to id
     actualChanges.value=[]
     initialValues.map((init) => {  
       obj=Object.keys(init).reduce((acc, key) => 
@@ -67,11 +67,16 @@
     })
   }
   function handleOpenDetails(id){
-    selectedId.value=id
+    selectedId.value=id  
+  }
+  function isEqual(val1,val2,name){
+    if(name.includes('file') || name==='url' || name==='idImage') return true
+    if((val1==='' || val1===null) && (val2==='' || val2===null)) return true
+    return val1==val2
   }
   function handleChange(id,name,valid,val){ 
-    const idx=getIndex()      
-    actualChanges.value[idx][name]=initialValues[idx][name]!=(val===''?null:val)
+    const idx=getIndex()
+    actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
     state.value[0][idx][name]=val
     formValid.value[name]=valid
   }
@@ -166,10 +171,12 @@
     isRotated.value=!isRotated.value
   }
   // ACTIONS - MODEL INDEPENDANT
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table    
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table        
     const idImage=state.value[0][idx].idImage 
-    const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre ...  
-    if(res.data.statusCode!==200) return       
+    if(selectedId.value>0) {
+      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre ...  
+      if(res.data.statusCode!==200) return  
+    }     
     state.value[0].splice(idx,1)  //update state  
     if(idImage) {
       const {data:res}= await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
@@ -228,9 +235,6 @@
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idUser:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
             state.value[0][idx].idStatus=status
-            break;
-          case "deletion":
-            handleDelete(idx)
         }
       }
       break
@@ -286,9 +290,10 @@
               ':idExpo', 
               selectedId.value
             )).data
-            //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
-            res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal) 
-            if(res.data.statusCode!==200) return  
+            if(selectedId.value>0) {  //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
+              res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal) 
+              if(res.data.statusCode!==200) return 
+            } 
             //delete images in timage and delete asset on Cloudinary.com
             images[0].map(async(image) => {
               //delete record in timage
@@ -343,7 +348,6 @@
 function initNewrec(){
   const obj={}
   props.fieldsets.map((fieldset) => {
-    if(fieldset.type.includes('-upload')) return
     fieldset.fields.map((field) => {
       obj[field.name]=null
     })
@@ -351,12 +355,13 @@ function initNewrec(){
   newRecId.value+=-1
   obj[`id${props.entity.model}`]=newRecId.value
   switch(props.entity.model){
-    case 'Expo':
-      obj.idStatus=10  //pending status
-      break
     case 'Oeuvre':
       obj.idUser=decoded.value.idUser
       obj.classic_modern=0
+      obj.idDomain=null
+      obj.idTech=null
+      obj.idMedia=null
+      obj.idImage=null
       obj.reserved=0
       break
   }
@@ -391,6 +396,10 @@ function handleNewRecord(){
           if(id<0) {
             delete state.value[0][idx][`id${props.entity.model}`]
             body=state.value[0][idx]
+            delete body.fileName
+            delete body.fileSize
+            delete body.fileLastModified
+            delete body.url
           }
           else body=rest
           if(Object.keys(body).length>=1){
@@ -429,6 +438,10 @@ function handleNewRecord(){
         index=getIndex()
         state.value[0][index]=_.cloneDeep(initialValues[index])  //cloneDeep necessary
         resetActualChanges()
+        break
+      case "deletion":
+        handleAction('deletion')
+
     }
     initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
   }
@@ -550,6 +563,7 @@ function handleNewRecord(){
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
             :actualChange="changeStatus"
+            :model="entity.model"
             @toolbar-actions="handleToolbarActions"
           >
           </Toolbar>

@@ -8,7 +8,6 @@
     fields:{type:Array},
     data:{type:Object}
   }) 
-  
   const {locale}=useI18n()
   const counters=ref({en:0,fr:0})
 
@@ -113,16 +112,16 @@
   div.input-container {
     padding-top:0;
   }
-  .resume_fr, .title_fr, .desc_fr {
+  .resume_fr, .title_fr, .desc_fr, .short_fr {
     grid-area: 2/1
   }
-  .reverse .resume_fr,.reverse .title_fr,.reverse .desc_fr {
+  .reverse .resume_fr,.reverse .title_fr,.reverse .desc_fr,.reverse .short_fr {
     grid-area: 2/3;
   }
-  .resume_en, .title_en, .desc_en {
+  .resume_en, .title_en, .desc_en, .short_en {
     grid-area: 2/3;
   }
-  .reverse .resume_en, .reverse .title_en, .reverse .desc_en {
+  .reverse .resume_en, .reverse .title_en, .reverse .desc_en, .reverse .short_en {
     grid-area: 2/1
   }
   div.controls {

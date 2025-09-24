@@ -25,7 +25,6 @@
             "label_en": "Last name",
             "field_type": "textarea",
             "rows": 1,
-            "default": "t.b.d",
             "listMaster": true
           },
           {
@@ -388,10 +387,29 @@
     },
     "fieldsets": [
       {
+        "name": "short_name",
+        "type": "translate",
+        "legend_fr": "Nom court *",
+        "legend_en": "Short name *",
+        "info": false,
+        "fields": [
+          {
+            "name": "short_fr",
+            "field_type": "input",
+            "max_length": 30
+          },
+          {
+            "name": "short_en",
+            "field_type": "input",
+            "max_length": 30
+          }
+        ]
+      },
+      {
         "name": "title",
         "type": "translate",
-        "legend_fr": "Exposition *",
-        "legend_en": "Exhibition *",
+        "legend_fr": "Nom *",
+        "legend_en": "Name *",
         "info": false,
         "fields": [
           {
@@ -619,7 +637,7 @@
       "idx": 3,
       "url": "/member/oeuvres",
       "name": "member oeuvres",
-      "roles": [1],
+      "roles": [1, 7],
       "model": "Oeuvre",
       "sql": ["list_items_oeuvre"],
       "orderBy": { "field": "title_fr", "order": "desc" },

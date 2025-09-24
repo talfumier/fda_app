@@ -8,6 +8,10 @@
     "clearAll": "Effacer tous les champs",
     "clear": "Effacer",
     "close": "Fermer",
+    "delete": "Suppression de l'enregistrement.",
+    "confirm": {
+      "deletion": "Merci de confirmer la suppression définitive de l'enregistrement."
+    },
     "undo": "Annuler les changements",
     "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
   },
@@ -134,12 +138,6 @@
             "indeterminate": "statut ?",
             "archived": "archivé",
             "active": "en attente ou actif"
-          }
-        },
-        "oeuvre": {
-          "delete": "Suppression de l'oeuvre.",
-          "confirm": {
-            "deletion": "Merci de confirmer la suppression définitive de l'oeuvre."
           }
         }
       }

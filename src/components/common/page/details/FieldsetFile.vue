@@ -21,6 +21,7 @@
     fields:{type:Array},
     data:{type:Object}
   })
+  
   const {t,locale}=useI18n()  
   const $q=useQuasar()
   const router = useRouter()
@@ -37,6 +38,8 @@
     fileLastModified:formatDateTime(props.data.fileLastModified),
     url:props.data.url
   }
+  const emit=defineEmits('fileChange')
+
   const ctrl=new AbortController()  
   let alive = true // guard against updates after unmount
   onUnmounted(() => { // clean-up code after component has unmounted
@@ -47,7 +50,7 @@
     if(!alive) return
     switch(cs){
       case 'upload':
-        document.getElementById('select-file').click()
+        document.getElementById('select-file').click()  
         break
       case 'delete':
         if (!(await confirm($q,t('comps.file_upload.file_delete'),'cancel'))) return false 
@@ -61,14 +64,17 @@
             if(res1.statusCode!==200) return
         }            
         const {data:res2}=await deleteEntity('Image',idImage,token.value,ctrl.signal) //delete idImage record in timage
-        if(res2.statusCode===200) file.value=getEmptyFile()  //update state
+        if(res2.statusCode===200) {     //update state
+          file.value=getEmptyFile()
+          emit('fileChange',file.value)
+        } 
         if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
           router.go(0)  //page refresh without full reload
         try {
           await deleteInCloud(idImage,token.value,ctrl.signal)  //delete asset on Cloudinary.com
         } catch (error) {}  //asset no longer present
-        loading.value=false
-    }
+    }  
+    loading.value=false
   }
   async function processFileData(obj) {
     if(props.data[`id${props.model}`]<=0){  //new record creation 
@@ -87,22 +93,21 @@
       if(res2.statusCode===200) {
         let res3=null
         switch(props.model){
-          case 'Expo':
+          case 'Expo':  //multiple upload
             res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage},token.value,ctrl.signal)).data
             break
-          default:
+          default:  //single upload
             res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)).data  //update idImage (avatar) in mariaDB tuser
         }
         if(res3.statusCode===200) 
           file.value={    //update state
-            ...body,
-            fileSize:formatDateTime(body.fileLastModified),
-            fileLastModified:formatDateTime(body.fileLastModified)
+            ...body
           }   
         }
     }
-    if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
+    if((props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser)) //avatar  update after upload
       router.go(0)  //page refresh without full reload
+    emit('fileChange',file.value)
     loading.value=false
   }
   function handleSelectedFile(e){    

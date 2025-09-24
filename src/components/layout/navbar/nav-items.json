@@ -25,7 +25,7 @@
     "icon": "palette",
     "text": "oeuvres",
     "wrap": false,
-    "roles": [1]
+    "roles": [1, 7]
   },
   {
     "url": "/member/admin",

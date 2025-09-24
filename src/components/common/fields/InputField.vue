@@ -21,7 +21,7 @@
     equal:{type:[String]},
     rows:{type:Number},
     options:{type:[String,Array]}  //String >>> sql stored procedure
-  })    
+  })   
   
   const {token}=inject('userCookie')
   const { t,locale } = useI18n()    

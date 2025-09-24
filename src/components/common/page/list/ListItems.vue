@@ -7,7 +7,6 @@
   import UserActions from './actions/user/UserActions.vue'
   import UserInfos from './actions/user/UserInfos.vue'
   import ExpoActions from './actions/expo/ExpoActions.vue'
-  import OeuvreActions from './actions/oeuvre/OeuvreActions.vue'
 
   const props=defineProps({
     model:{type:String},
@@ -100,13 +99,6 @@
               emit('expoAction',cs)
             }"
           ></ExpoActions>
-          <OeuvreActions
-            v-if="model==='Oeuvre'"
-            :data="item"
-            @oeuvre-action="(cs) => {
-              emit('oeuvreAction',cs)
-            }">
-          </OeuvreActions>
         </template>
       </ActionMenu>
     </div>

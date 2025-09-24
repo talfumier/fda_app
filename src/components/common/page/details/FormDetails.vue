@@ -15,7 +15,8 @@
     entity:{type:Object},
     fieldsets:{type:Array},
     record:{type:Object}
-  })
+  })    
+    
   const {locale}=useI18n()
   const filteredFieldsets=computed(() => {
     return _.filter(props.fieldsets,(item) => {
@@ -29,6 +30,11 @@
   }
   function handleTranslate(id,params) {
     emit('translate',id,params)
+  }
+  function handleFileChange(id,file){
+    Object.keys(file).map((key) => {
+      handleChange(id,key,true,file[key])
+    })
   }
   function handleButtonAction(name){
     emit('buttonAction',name)
@@ -82,6 +88,9 @@
         :model="entity.model"
         :fields="item.fields"
         :data="record"
+        @file-change="(file) => {
+          handleFileChange(record[`id${entity.model}`],file)
+        }"
       >
       </FieldsetFile>
       <FieldsetFiles

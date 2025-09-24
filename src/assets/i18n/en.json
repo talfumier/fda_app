@@ -8,6 +8,10 @@
     "clearAll": "Clear all fields",
     "clear": "Clear",
     "close": "Close",
+    "delete": "Record deletion.",
+    "confirm": {
+      "deletion": "Please confirm record permanent deletion."
+    },
     "undo": "Undo all changes",
     "unsaved": "You have unsaved changes. Proceed anyway ?"
   },
@@ -134,12 +138,6 @@
             "indeterminate": "status ?",
             "archived": "archived",
             "active": "pending or active"
-          }
-        },
-        "oeuvre": {
-          "delete": "Art work deletion",
-          "confirm": {
-            "deletion": "Please confirm art work permanent deletion."
           }
         }
       }
