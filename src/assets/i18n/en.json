@@ -8,6 +8,10 @@
     "clearAll": "Clear all fields",
     "clear": "Clear",
     "close": "Close",
+    "delete": "Record deletion.",
+    "confirm": {
+      "deletion": "Please confirm record permanent deletion."
+    },
     "undo": "Undo all changes",
     "unsaved": "You have unsaved changes. Proceed anyway ?"
   },
@@ -53,6 +57,8 @@
       "dashboard": "Dashboard",
       "users": "User accounts",
       "expos": "Exhibitions",
+      "oeuvres": "My art works",
+      "oeuvres_org": "Art works",
       "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
@@ -77,7 +83,8 @@
       "account": "Choose your preferred language and subscribe to the newsletter to keep in touch with the festival latest news.",
       "hyperlinks": "Hyperlinks to your sites or social networks.Click on arrow to open the page.",
       "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
-      "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ..."
+      "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
+      "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. "
     },
     "file_upload": {
       "delete": "Delete",

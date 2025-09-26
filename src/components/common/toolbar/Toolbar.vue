@@ -1,13 +1,21 @@
 <script setup>
+  import { useQuasar } from 'quasar';
+  import { useI18n } from 'vue-i18n';
   import Tooltip from '../Tooltip.vue';
+  import { confirm } from '../dialog/dialog.js';
 
   const props=defineProps({
-    actualChange:{type:Number}
+    actualChange:{type:Number},
+    model:{type:String}
   })  
+  
+  const $q=useQuasar()
+  const {t}=useI18n()
  
   const emit=defineEmits(['toolbarActions'])
 
-  function handleActions(cs){
+  async function handleActions(cs){    
+    if (cs==='deletion' && !(await confirm($q,t(`common.confirm.${cs}`),'cancel'))) return
     emit('toolbarActions',cs)
   }
 
@@ -34,6 +42,10 @@
         <q-btn round flat icon="undo" size="1.6rem" @click="handleActions('undo')" />
         <Tooltip :tt_text="$t('common.undo')"></Tooltip>
       </div>
+      <div v-if="model==='Oeuvre' "class="delete">        
+        <q-btn round flat icon="delete" size="1.6rem" @click="handleActions('deletion')" />
+        <Tooltip :tt_text="$t('common.delete')"></Tooltip>
+      </div>
     </div>
   </q-btn>
 </template>
@@ -52,6 +64,9 @@
   .save {    
     position:relative;
     color:var(--green);
+  }
+  .delete {    
+    color:var(--red-opaque8);
   }
   .q-badge {
     position:absolute;

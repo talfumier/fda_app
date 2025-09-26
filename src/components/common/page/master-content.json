@@ -10,7 +10,8 @@
       "orderBy": { "field": "lastName", "order": "asc" },
       "fileYes": "image/png, image/jpeg, image/webp",
       "newRecord": false,
-      "noList": false
+      "noList": false,
+      "listType": ["simple"]
     },
     "fieldsets": [
       {
@@ -25,7 +26,6 @@
             "label_en": "Last name",
             "field_type": "textarea",
             "rows": 1,
-            "default": "t.b.d",
             "listMaster": true
           },
           {
@@ -384,14 +384,35 @@
         "status_fr": "en attente"
       },
       "noList": false,
+      "listType": ["simple"],
+      "listItems": true,
       "fileYes": "image/png, image/jpeg, image/webp"
     },
     "fieldsets": [
       {
+        "name": "short_name",
+        "type": "translate",
+        "legend_fr": "Nom court *",
+        "legend_en": "Short name *",
+        "info": false,
+        "fields": [
+          {
+            "name": "short_fr",
+            "field_type": "input",
+            "max_length": 30
+          },
+          {
+            "name": "short_en",
+            "field_type": "input",
+            "max_length": 30
+          }
+        ]
+      },
+      {
         "name": "title",
         "type": "translate",
-        "legend_fr": "Exposition *",
-        "legend_en": "Exhibition *",
+        "legend_fr": "Nom *",
+        "legend_en": "Name *",
         "info": false,
         "fields": [
           {
@@ -611,6 +632,261 @@
             "disabled": true
           }
         ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 3,
+      "url": "/member/oeuvres",
+      "name": "member oeuvres",
+      "roles": [1, 7],
+      "model": "Oeuvre",
+      "sql": ["list_items_oeuvre"],
+      "newRecord": true,
+      "noList": false,
+      "listType": ["simple"],
+      "fileYes": "image/png, image/jpeg, image/webp"
+    },
+    "fieldsets": [
+      {
+        "name": "style",
+        "type": "standard",
+        "legend_fr": "Style *",
+        "legend_en": "Style *",
+        "fields": [
+          {
+            "name": "classic_modern",
+            "label_fr": "",
+            "label_en": "",
+            "field_type": "option-group",
+            "options": [
+              { "label_fr": "Classique", "label_en": "Classic", "value": 0 },
+              { "label_fr": "Contemporain", "label_en": "Modern", "value": 1 }
+            ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "domain_tech_media",
+        "type": "standard",
+        "legend_fr": "Domaine - Technique - Support",
+        "legend_en": "Domain - Technique - Media",
+        "fields": [
+          {
+            "name": "idDomain",
+            "label_fr": "Domaine",
+            "label_en": "Domain",
+            "field_type": "select",
+            "options": "options_domain"
+          },
+          {
+            "name": "idTech",
+            "label_fr": "Technique",
+            "label_en": "Technique",
+            "field_type": "select",
+            "options": "options_technique"
+          },
+          {
+            "name": "idMedia",
+            "label_fr": "Support",
+            "label_en": "Media",
+            "field_type": "select",
+            "options": "options_media"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "type": "translate",
+        "legend_fr": "Nom *",
+        "legend_en": "Name *",
+        "info": false,
+        "fields": [
+          {
+            "name": "title_fr",
+            "field_type": "textarea",
+            "rows": 1,
+            "max_length": 100,
+            "listMaster": true
+          },
+          {
+            "name": "title_en",
+            "field_type": "textarea",
+            "rows": 1,
+            "max_length": 100,
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "description",
+        "type": "translate",
+        "legend_fr": "Description",
+        "legend_en": "Description",
+        "info": false,
+        "fields": [
+          {
+            "name": "desc_fr",
+            "field_type": "textarea",
+            "required": false,
+            "rows": 2,
+            "max_length": 300
+          },
+          {
+            "name": "desc_en",
+            "field_type": "textarea",
+            "required": false,
+            "rows": 2,
+            "max_length": 300
+          }
+        ]
+      },
+      {
+        "name": "physical",
+        "type": "standard",
+        "legend_fr": "Dimensions - Poids",
+        "legend_en": "Dimensions - Weight",
+        "info": true,
+        "info_path": "comps.infos.physical",
+        "fields": [
+          {
+            "name": "width",
+            "label_fr": "Largeur (cm)",
+            "label_en": "Width (cm)",
+            "field_type": "input",
+            "format": "integer"
+          },
+          {
+            "name": "height",
+            "label_fr": "Hauteur (cm)",
+            "label_en": "Height (cm)",
+            "field_type": "input",
+            "format": "integer"
+          },
+          {
+            "name": "depth",
+            "label_fr": "Profondeur (cm)",
+            "label_en": "Depth (cm)",
+            "field_type": "input",
+            "format": "integer",
+            "required": false
+          },
+          {
+            "name": "weight",
+            "label_fr": "Poids (Kg)",
+            "label_en": "Weight (Kg)",
+            "field_type": "input",
+            "format": "integer",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "price",
+        "type": "standard",
+        "legend_fr": "Conditions de vente",
+        "legend_en": "Sale conditions",
+        "fields": [
+          {
+            "name": "reserved",
+            "label_fr": "",
+            "label_en": "",
+            "field_type": "option-group",
+            "options": [
+              { "label_fr": "Proposé à la vente", "label_en": "Proposed for sale", "value": 0 },
+              { "label_fr": "Réservé", "label_en": "Reserved", "value": 1 }
+            ],
+            "required": false
+          },
+          {
+            "name": "price",
+            "label_fr": "Prix de vente (EUR)",
+            "label_en": "Selling price (EUR)",
+            "field_type": "input",
+            "format": "integer",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "completion",
+        "type": "standard",
+        "legend_fr": "Date de réalisation",
+        "legend_en": "Completion date",
+        "fields": [
+          {
+            "name": "completionDate",
+            "label_fr": "",
+            "label_en": "",
+            "field_type": "input",
+            "format": "date",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "picture",
+        "type": "single-upload",
+        "legend_fr": "Photo",
+        "legend_en": "Photo",
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 4,
+      "url": "/member/oeuvres_org",
+      "name": "member oeuvres_org",
+      "roles": [5, 6, 7],
+      "model": "Oeuvre",
+      "sql": ["list_items_oeuvre_org"],
+      "newRecord": true,
+      "noList": false,
+      "listType": ["groupby", "idUser", "lastName", "firstName"],
+      "fileYes": "image/png, image/jpeg, image/webp"
+    },
+    "fieldsets": [
+      {
+        "name": "artist",
+        "type": "unknown",
+        "fields": [
+          {
+            "name": "lastName",
+            "listMaster": true
+          },
+          {
+            "name": "firstName",
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "sameAs_idx": 3
       }
     ]
   }

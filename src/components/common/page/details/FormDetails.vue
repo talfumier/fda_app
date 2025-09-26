@@ -15,7 +15,8 @@
     entity:{type:Object},
     fieldsets:{type:Array},
     record:{type:Object}
-  })
+  })   
+    
   const {locale}=useI18n()
   const filteredFieldsets=computed(() => {
     return _.filter(props.fieldsets,(item) => {
@@ -29,6 +30,11 @@
   }
   function handleTranslate(id,params) {
     emit('translate',id,params)
+  }
+  function handleFileChange(id,file){
+    Object.keys(file).map((key) => {
+      handleChange(id,key,true,file[key])
+    })
   }
   function handleButtonAction(name){
     emit('buttonAction',name)
@@ -51,7 +57,7 @@
           handleChange(record[`id${entity.model}`],name,valid,val)
         }"
       >
-      </FieldsetStandard>
+      </FieldsetStandard>    
       <FieldsetAddress
         v-if="item.type==='address'"
         :key="idx"
@@ -82,6 +88,9 @@
         :model="entity.model"
         :fields="item.fields"
         :data="record"
+        @file-change="(file) => {
+          handleFileChange(record[`id${entity.model}`],file)
+        }"
       >
       </FieldsetFile>
       <FieldsetFiles
@@ -124,6 +133,12 @@
   }
   fieldset.links {
     justify-content: space-around;
+  }
+  fieldset.domain_tech_media {
+    gap:30px;
+  }
+  fieldset.price {
+    gap:60px;
   }
   fieldset:has(.button) {
     justify-content:center;
