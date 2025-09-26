@@ -8,16 +8,15 @@ export function getEntities(entity, signal) {
   })
 }
 export function getEntitiesBySql(stored_proc, token, signal, params, paramsValues) {
-  if (params !== undefined) {
-    return http.get(`${api}/sql-entities/${stored_proc}/${params}/${paramsValues}`, {
-      headers: { 'x-auth-token': token },
-      signal,
-    })
-  } else
+  if (!params)
     return http.get(`${api}/sql-entities/noparams/${stored_proc}`, {
       headers: { 'x-auth-token': token },
       signal,
     })
+  return http.get(`${api}/sql-entities/${stored_proc}/${params}/${paramsValues}`, {
+    headers: { 'x-auth-token': token },
+    signal,
+  })
 }
 export function getEntity(entity, id, signal) {
   return http.get(`${api}/entities/${entity}/${id}`, {

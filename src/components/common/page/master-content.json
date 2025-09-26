@@ -10,7 +10,8 @@
       "orderBy": { "field": "lastName", "order": "asc" },
       "fileYes": "image/png, image/jpeg, image/webp",
       "newRecord": false,
-      "noList": false
+      "noList": false,
+      "listType": ["simple"]
     },
     "fieldsets": [
       {
@@ -383,6 +384,8 @@
         "status_fr": "en attente"
       },
       "noList": false,
+      "listType": ["simple"],
+      "listItems": true,
       "fileYes": "image/png, image/jpeg, image/webp"
     },
     "fieldsets": [
@@ -640,9 +643,9 @@
       "roles": [1, 7],
       "model": "Oeuvre",
       "sql": ["list_items_oeuvre"],
-      "orderBy": { "field": "title_fr", "order": "desc" },
       "newRecord": true,
       "noList": false,
+      "listType": ["simple"],
       "fileYes": "image/png, image/jpeg, image/webp"
     },
     "fieldsets": [
@@ -697,8 +700,8 @@
       {
         "name": "title",
         "type": "translate",
-        "legend_fr": "Nom de l'oeuvre *",
-        "legend_en": "Art work name *",
+        "legend_fr": "Nom *",
+        "legend_en": "Name *",
         "info": false,
         "fields": [
           {
@@ -720,8 +723,8 @@
       {
         "name": "description",
         "type": "translate",
-        "legend_fr": "Description de l'oeuvre",
-        "legend_en": "Art work description",
+        "legend_fr": "Description",
+        "legend_en": "Description",
         "info": false,
         "fields": [
           {
@@ -851,6 +854,39 @@
             "disabled": true
           }
         ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 4,
+      "url": "/member/oeuvres_org",
+      "name": "member oeuvres_org",
+      "roles": [5, 6, 7],
+      "model": "Oeuvre",
+      "sql": ["list_items_oeuvre_org"],
+      "newRecord": true,
+      "noList": false,
+      "listType": ["groupby", "idUser", "lastName", "firstName"],
+      "fileYes": "image/png, image/jpeg, image/webp"
+    },
+    "fieldsets": [
+      {
+        "name": "artist",
+        "type": "unknown",
+        "fields": [
+          {
+            "name": "lastName",
+            "listMaster": true
+          },
+          {
+            "name": "firstName",
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "sameAs_idx": 3
       }
     ]
   }

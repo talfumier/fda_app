@@ -15,7 +15,7 @@
     entity:{type:Object},
     fieldsets:{type:Array},
     record:{type:Object}
-  })    
+  })   
     
   const {locale}=useI18n()
   const filteredFieldsets=computed(() => {

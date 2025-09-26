@@ -228,7 +228,9 @@
     display:flex;
     flex-wrap: wrap;
     justify-content: center;
+    gap:20px;
     margin:5px auto;
+    min-width:200px;
   }
   div.action-infos {
     display:flex;
@@ -261,10 +263,5 @@
     padding:5px;
     border:1px solid lightgrey;
     margin-left: 0;
-  }
-  @media screen and (min-width: 753px) {
-    img {      
-      margin-left: 30px;
-    }
   }
 </style>

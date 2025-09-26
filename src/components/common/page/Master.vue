@@ -1,19 +1,19 @@
 <script setup async>
-  import { ref,computed,onMounted,onUnmounted,inject} from 'vue';
+  import { ref,computed,onMounted,onUnmounted,inject} from 'vue'
   import { onBeforeRouteLeave } from 'vue-router'
-  import { useQuasar } from 'quasar';
-  import { useI18n } from 'vue-i18n';
+  import { useQuasar } from 'quasar'
+  import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
-  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js';
-  import { deleteInCloud } from '@/services/httpCloudinary.js';
-  import { forgotPassword } from '@/services/httpUsers.js';
-  import ListItems from './list/ListItems.vue';
-  import FormDetails from './details/FormDetails.vue';
-  import Toolbar from '../toolbar/Toolbar.vue';
-  import Tooltip from '../Tooltip.vue';
-  import clearables from "../page/details/clearables.json";
-  import { confirm } from '../dialog/dialog.js';
-  import { translate } from '@/services/httpGoogleServices.js';
+  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js'
+  import { deleteInCloud } from '@/services/httpCloudinary.js'
+  import { forgotPassword } from '@/services/httpUsers.js'
+  import ListItems from './list/ListItems.vue'
+  import FormDetails from './details/FormDetails.vue'
+  import Toolbar from '../toolbar/Toolbar.vue'
+  import Tooltip from '../Tooltip.vue'
+  import clearables from "../page/details/clearables.json"
+  import { confirm } from '../dialog/dialog.js'
+  import { translate } from '@/services/httpGoogleServices.js'
 
   const props=defineProps({
     entity:{type:Object},
@@ -114,8 +114,10 @@
           } 
           break
         case 'Oeuvre':
-          sqlparams=':idUser'
-          paramsValues=decoded.value.idUser
+          if(props.entity.idx===3){   //My art works >>> roles [1, 7]
+            sqlparams=':idUser'
+            paramsValues=decoded.value.idUser
+          }
           break
       }
       res=(await getEntitiesBySql(
@@ -134,7 +136,7 @@
     })
   }
   onMounted(async () => {  
-    state.value = await fetch(0)  
+    state.value = await fetch(0) 
     initInitialValues()
     resetActualChanges()
     if(props.entity.noList) {
@@ -535,9 +537,9 @@ function handleNewRecord(){
       </div>  
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
-      <ListItems    
+      <ListItems  
         :key="newRecId"     
-        :model="entity.model"
+        :entity="entity"
         :master="field_master"
         :data="filteredList"
         :newRecId="newRecId"
@@ -688,6 +690,7 @@ function handleNewRecord(){
     justify-content: center;
     align-items: center;
     padding-bottom:20px;
+    padding-right: 50px;
   }
   fieldset.button-bottom {
     border-width: 0;

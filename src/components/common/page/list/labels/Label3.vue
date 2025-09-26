@@ -7,7 +7,7 @@
     id:{type:Number},
     item:{type:Object},
     master:{type:Array},
-    ucase:{type:Boolean}
+    rows:{type:Array,default:[1,2]}
   })
   const {locale}=useI18n()
   const filteredMaster=computed(() => {
@@ -17,6 +17,7 @@
     })
   })
   const status=computed(() => {
+    if(props.item.idBookingOeuvre===undefined) return []  //temporary pending implementation of booking_oeuvre status
     if(!props.item.idStatus) return [1,'warning'] 
     switch (props.item.idStatus){
         case 1:
@@ -31,12 +32,30 @@
       }
   }) 
 
+  function setUCase(name){  //1st label case setting in row1
+    switch(name){
+      case 'lastName':
+        return true
+      default:
+        return false
+    }
+  }
+  function setLCase(name){  //label case setting in row2
+    switch(name){
+      case 'title_fr':
+      case 'title_en':
+        return false
+      default:
+        return true
+    }
+  }
+
 </script>
 
 <template>
   <label  :for="id">
-    <div class="row1">
-      <span :class="ucase?'ucase':''">
+    <div v-if="rows.includes(1) && filteredMaster.length>=1" class="row1">
+      <span :class="setUCase(filteredMaster[0].name)?'ucase':''">
         {{item[filteredMaster[0].name]?item[filteredMaster[0].name]:filteredMaster[0].default}}
       </span>
       <span 
@@ -44,15 +63,15 @@
         class="ccase">{{ (item[filteredMaster[1].name]?item[filteredMaster[1]?.name]:filteredMaster[1].default).toLowerCase() }}
       </span>
       <q-icon 
-        v-if="status[0]===1 || status[0]===2" 
+        v-if="status && (status[0]===1 || status[0]===2)" 
         name="done_all" :color="status[1]" size="2.5rem">
       </q-icon>
       <q-icon 
-        v-if="status[0]===3" 
+        v-if="status && status[0]===3" 
         name="no_accounts" :color="status[1]" size="2.5rem">
       </q-icon>
     </div>
-    <div v-if="filteredMaster[2]" class="row2 lcase">
+    <div v-if="rows.includes(2) && filteredMaster[2]" :class="['row2', setLCase(filteredMaster[2].name)]">
       <span>{{ item[filteredMaster[2].name] }}</span>
     </div>
   </label>

@@ -42,18 +42,21 @@
   //SELECT OPTIONS DATA LOADING FROM A STORED PROCEDURE
   const ctrl=new AbortController()   // AbortController's object' used in http request operation
   let alive = true // guard against updates after unmount
-  onMounted(async() => {  //load options data from a stored procedure
-    if(!props.options || Array.isArray(props.options)) return
-    if (!alive) return                // component gone? don't touch state 
-    const {data:res}=await getEntitiesBySql(
-      props.options,
-      token.value,
-      ctrl.signal
-    )
-    const keys=Object.keys(res.data[0][0])
-    res.data[0].map((item) => {
-      options.value.push({value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]}})
-    })
+  onMounted(async() => {  
+    if(!props.options) return
+    if(Array.isArray(props.options)) options.value=props.options //options array provided directly by props
+    else { //options data loaded from a stored procedure
+      if (!alive) return                // component gone? don't touch state 
+      const {data:res}=await getEntitiesBySql(
+        props.options,
+        token.value,
+        ctrl.signal
+      )
+      const keys=Object.keys(res.data[0][0])
+      res.data[0].map((item) => {
+        options.value.push({value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]}})
+      })
+    }
   })
   onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 
@@ -251,7 +254,7 @@
       <option key="-1" value="-1" disabled hidden>{{ t('common.select') }}</option>
       <option 
         v-for="(option,idx) in options" 
-        :key="idx"
+        :key="option.value"
         :value="option.value">
           {{option.value?option.text[locale]:''}}
       </option>
