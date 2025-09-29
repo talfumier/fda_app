@@ -16,7 +16,7 @@
       else return true      
     })
   })
-  const emit=defineEmits(['change'])
+  const emit=defineEmits(['change','selectObject'])
   function handleChange(name,valid,val){
     emit('change',name,valid,val)
   }
@@ -41,13 +41,18 @@
     :label="item[`label_${locale}`]"
     :required="item.required"
     :disabled="item.disabled"
+    :readOnly="item.readOnly"
     :highlight="item.highlight"
     :format="item.format"
     :value="data[item.name]"
     :rows="item.rows"
     :options="item.options"
+    :listMaster="item.listMaster"
     @change="handleChange"
     @icon-click="handleIconClick(item.data_type,data[item.name])"
+    @select-object="(option) => {
+      emit('selectObject',option)
+    }"
   >    
   </InputField>
 </template>

@@ -59,6 +59,7 @@
       "expos": "Exhibitions",
       "oeuvres": "My art works",
       "oeuvres_org": "Art works",
+      "bookings": "My bookings",
       "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
@@ -83,8 +84,14 @@
       "account": "Choose your preferred language and subscribe to the newsletter to keep in touch with the festival latest news.",
       "hyperlinks": "Hyperlinks to your sites or social networks.Click on arrow to open the page.",
       "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
+      "short": "Short name used in the member area and public site menus.",
+      "title": "Longer and more selling name used in the public site.",
       "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
-      "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. "
+      "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
+      "booking": "Please select the exhition you wish to register to.",
+      "events": "Please indicate the events you plan to attend.",
+      "deposit-collection": "Dates and opening hours for art works deposit and collection.",
+      "pricing": "Price per work in the show room and price per work on screen - EUR."
     },
     "file_upload": {
       "delete": "Delete",
@@ -139,6 +146,16 @@
             "indeterminate": "status ?",
             "archived": "archived",
             "active": "pending or active"
+          }
+        },
+        "booking": {
+          "created": "Created",
+          "draft": "Draft",
+          "candidate": "Candidate",
+          "rejected": "Rejected",
+          "accepted": "Accepted",
+          "confirm": {
+            "deletion": "Please confirm booking permanent deletion."
           }
         }
       }

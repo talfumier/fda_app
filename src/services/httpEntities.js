@@ -41,3 +41,9 @@ export function deleteEntity(entity, id, token, signal) {
     signal,
   })
 }
+export function getEntityFields(entity, token, signal) {
+  return http.get(`${api}/utilities/fields/${entity}`, {
+    headers: { 'x-auth-token': token },
+    signal,
+  })
+}

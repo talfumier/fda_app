@@ -24,7 +24,7 @@
       else return item.roles?item.roles.includes(props.record.idRole):true
     })
   })
-  const emit=defineEmits(['change','translate','buttonAction'])
+  const emit=defineEmits(['change','translate','buttonAction','selectObject'])
   function handleChange(id,name,valid,val){    
     emit('change',id,name,valid,val)
   }
@@ -55,6 +55,9 @@
         :data="record"
         @change="(name,valid,val) => {
           handleChange(record[`id${entity.model}`],name,valid,val)
+        }"
+        @select-object="(option) => {
+          emit('selectObject',option)
         }"
       >
       </FieldsetStandard>    

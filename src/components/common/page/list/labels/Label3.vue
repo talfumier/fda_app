@@ -7,7 +7,7 @@
     id:{type:Number},
     item:{type:Object},
     master:{type:Array},
-    rows:{type:Array,default:[1,2]}
+    rows:{type:Array}
   })
   const {locale}=useI18n()
   const filteredMaster=computed(() => {
@@ -16,22 +16,30 @@
       return true
     })
   })
+  const len=computed(() => {
+    return filteredMaster.value.length
+  })
   const status=computed(() => {
-    if(props.item.idBookingOeuvre===undefined) return []  //temporary pending implementation of booking_oeuvre status
     if(!props.item.idStatus) return [1,'warning'] 
     switch (props.item.idStatus){
         case 1:
-        case 10:
+        case 7:
+        case 8:
+        case 11:
           return [1,'warning']
         case 2:
-        case 11:
+        case 10:
+        case 12:
           return [2,'positive']
         case 3:
-        case 12:
+        case 9:
+        case 13:
           return [3,'negative']
+        default:
+          return []
       }
   }) 
-
+  
   function setUCase(name){  //1st label case setting in row1
     switch(name){
       case 'lastName':
@@ -49,18 +57,33 @@
         return true
     }
   }
+  function setRowText(row){
+    let n=0
+    switch(row){
+      case '1.1':
+        n=0 
+        break
+      case '1.2':
+        n=1
+        break
+      case '2.1':
+        n=len.value-1
+    }
+    if(len.value>=1 && props.item[filteredMaster.value[n].name]) return props.item[filteredMaster.value[n].name]
+    return ''
+  }
 
 </script>
 
 <template>
-  <label  :for="id">
-    <div v-if="rows.includes(1) && filteredMaster.length>=1" class="row1">
+  <label :for="id">
+    <div v-if="rows.includes('1.1')" class="row1">
       <span :class="setUCase(filteredMaster[0].name)?'ucase':''">
-        {{item[filteredMaster[0].name]?item[filteredMaster[0].name]:filteredMaster[0].default}}
+        {{setRowText('1.1')}}
       </span>
       <span 
-        v-if="filteredMaster[1]" 
-        class="ccase">{{ (item[filteredMaster[1].name]?item[filteredMaster[1]?.name]:filteredMaster[1].default).toLowerCase() }}
+        v-if="rows.includes('1.2')" 
+        class="ccase">{{setRowText('1.2')}}
       </span>
       <q-icon 
         v-if="status && (status[0]===1 || status[0]===2)" 
@@ -71,8 +94,8 @@
         name="no_accounts" :color="status[1]" size="2.5rem">
       </q-icon>
     </div>
-    <div v-if="rows.includes(2) && filteredMaster[2]" :class="['row2', setLCase(filteredMaster[2].name)]">
-      <span>{{ item[filteredMaster[2].name] }}</span>
+    <div v-if="rows.includes('2.1')" :class="['row2', setLCase(filteredMaster[len-1]?filteredMaster[len-1].name:'')]">
+      <span>{{ setRowText('2.1') }}</span>
     </div>
   </label>
 </template>

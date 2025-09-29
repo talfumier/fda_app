@@ -4,7 +4,7 @@
   import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
-  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js'
+  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity, getEntityFields } from '@/services/httpEntities.js'
   import { deleteInCloud } from '@/services/httpCloudinary.js'
   import { forgotPassword } from '@/services/httpUsers.js'
   import ListItems from './list/ListItems.vue'
@@ -119,6 +119,12 @@
             paramsValues=decoded.value.idUser
           }
           break
+        case 'Booking':
+          if(props.entity.idx===5){   //My bookings >>> roles [1, 7]
+            sqlparams=':idUser'
+            paramsValues=decoded.value.idUser
+          }
+          break
       }
       res=(await getEntitiesBySql(
           props.entity.sql[i],
@@ -173,11 +179,11 @@
     isRotated.value=!isRotated.value
   }
   // ACTIONS - MODEL INDEPENDANT
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table        
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage        
     const idImage=state.value[0][idx].idImage 
     if(selectedId.value>0) {
-      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre ...  
-      if(res.data.statusCode!==200) return  
+      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre, tbooking ...  
+      if(res.data.statusCode!==200) return                                            //deletion of corresponding records in tstatus_tracking done by cascade delete
     }     
     state.value[0].splice(idx,1)  //update state  
     if(idImage) {
@@ -246,8 +252,8 @@
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
           cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
-          cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
-            (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.push(listItemsFilter.value.expo_status?item.idStatus===11 || item.idStatus===11:
+            (listItemsFilter.value.expo_status===false?item.idStatus===13:item.idStatus>=11)) 
           cond.map((cnd) => {
             result=result && cnd
           })
@@ -275,7 +281,7 @@
         const idx=getIndex()
         switch(cs){      
           case "archiving":
-            status=12
+            status=13
           case "activation":
             //database update
             res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrls[1].signal)
@@ -335,6 +341,33 @@
         }
       }
       break
+      
+    case 'Booking':
+      listItemsFilter=ref({search:'',booking_status:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })      
+      handleAction = async(cs)=>{    
+        if (!alive) return                // component gone? don't touch state 
+        if (ctrls[1]) ctrls[1].abort()
+        ctrls[1] = new AbortController()
+        const idx=getIndex()
+        switch(cs){     
+          case "deletion":
+            handleDelete(idx)
+            initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
+        }
+      }
+      break
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -350,7 +383,7 @@
 function initNewrec(){
   const obj={}
   props.fieldsets.map((fieldset) => {
-    fieldset.fields.map((field) => {
+    fieldset.fields?.map((field) => {
       obj[field.name]=null
     })
   })
@@ -366,7 +399,21 @@ function initNewrec(){
       obj.idImage=null
       obj.reserved=0
       break
+    case 'Booking':
+      obj.idUser=decoded.value.idUser
+      obj.vernissage=0
+      obj.lunch=0
+
   }
+  return obj
+}
+async function bodyCleanUp(body,signal){  //remove fields not belonging to the model and idModel
+  const {data:res}=await getEntityFields(props.entity.model,token.value,signal)
+  if(res.statusCode!==200) return body
+  const obj={}
+  res.data.map((field) => {
+    obj[field]=body[field]
+  })
   return obj
 }
 function handleNewRecord(){
@@ -398,10 +445,11 @@ function handleNewRecord(){
           if(id<0) {
             delete state.value[0][idx][`id${props.entity.model}`]
             body=state.value[0][idx]
-            delete body.fileName
-            delete body.fileSize
-            delete body.fileLastModified
-            delete body.url
+            body=await bodyCleanUp(body,ctrls[2].signal)
+            // delete body.fileName
+            // delete body.fileSize
+            // delete body.fileLastModified
+            // delete body.url
           }
           else body=rest
           if(Object.keys(body).length>=1){
@@ -467,6 +515,19 @@ function handleNewRecord(){
             handleAction('deletion')
         }
         break    
+    }
+  }
+  //SELECT OPTION DATA HANDLING
+  function handleSelectOption(option) {
+    if(!option) return
+    const idx=getIndex(selectedId.value)
+    if(option.data){
+      const obj={}
+      Object.keys(state.value[0][idx]).map((key) => {
+        if(option.data[key]) obj[key]=option.data[key]
+      })
+      state.value[0][idx]={...state.value[0][idx],...obj}
+      initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
     }
   }
 
@@ -561,6 +622,9 @@ function handleNewRecord(){
         @change="handleChange"
         @translate="handleTranslate"
         @button-action="handleButtonActions"
+        @select-object="(option) => {
+          handleSelectOption(option)
+        }"
         >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
@@ -572,7 +636,7 @@ function handleNewRecord(){
         </template> 
       </FormDetails>
     </form>
-    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom' && filteredDetails" class="bottom-container">
+    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom' && filteredDetails" :class="['bottom-container',entity.model]">
       <FieldsetButton          
         key="bottom"
         :buttons="fieldsets[fieldsets.length-1].buttons"  
@@ -586,7 +650,7 @@ function handleNewRecord(){
 <style scoped>
   .master-container {
     display: grid;
-    grid-template-rows:100px auto;
+    grid-template-rows:100px auto auto;
     grid-template-columns: auto auto;
     justify-content: left;
     height:100%;   
@@ -691,6 +755,15 @@ function handleNewRecord(){
     align-items: center;
     padding-bottom:20px;
     padding-right: 50px;
+    
+    grid-row: 3;
+    align-self: center;
+  }
+  .bottom-container.User {
+    grid-column: 1;
+  }
+  .bottom-container.Booking {
+    grid-column: 2;
   }
   fieldset.button-bottom {
     border-width: 0;

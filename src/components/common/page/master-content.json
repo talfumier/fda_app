@@ -378,7 +378,7 @@
       "orderBy": { "field": "startDate", "order": "desc" },
       "newRecord": true,
       "status_at_creation": {
-        "idStatus": 10,
+        "idStatus": 11,
         "type": "expo",
         "status_en": "pending",
         "status_fr": "en attente"
@@ -394,17 +394,20 @@
         "type": "translate",
         "legend_fr": "Nom court *",
         "legend_en": "Short name *",
-        "info": false,
+        "info": true,
+        "info_path": "comps.infos.short",
         "fields": [
           {
             "name": "short_fr",
             "field_type": "input",
-            "max_length": 30
+            "max_length": 30,
+            "listMaster": true
           },
           {
             "name": "short_en",
             "field_type": "input",
-            "max_length": 30
+            "max_length": 30,
+            "listMaster": true
           }
         ]
       },
@@ -413,21 +416,20 @@
         "type": "translate",
         "legend_fr": "Nom *",
         "legend_en": "Name *",
-        "info": false,
+        "info": true,
+        "info_path": "comps.infos.title",
         "fields": [
           {
             "name": "title_fr",
             "field_type": "textarea",
             "rows": 1,
-            "max_length": 100,
-            "listMaster": true
+            "max_length": 100
           },
           {
             "name": "title_en",
             "field_type": "textarea",
             "rows": 1,
-            "max_length": 100,
-            "listMaster": true
+            "max_length": 100
           }
         ]
       },
@@ -657,8 +659,6 @@
         "fields": [
           {
             "name": "classic_modern",
-            "label_fr": "",
-            "label_en": "",
             "field_type": "option-group",
             "options": [
               { "label_fr": "Classique", "label_en": "Classic", "value": 0 },
@@ -791,8 +791,6 @@
         "fields": [
           {
             "name": "reserved",
-            "label_fr": "",
-            "label_en": "",
             "field_type": "option-group",
             "options": [
               { "label_fr": "Proposé à la vente", "label_en": "Proposed for sale", "value": 0 },
@@ -818,8 +816,6 @@
         "fields": [
           {
             "name": "completionDate",
-            "label_fr": "",
-            "label_en": "",
             "field_type": "input",
             "format": "date",
             "required": false
@@ -865,7 +861,6 @@
       "roles": [5, 6, 7],
       "model": "Oeuvre",
       "sql": ["list_items_oeuvre_org"],
-      "newRecord": true,
       "noList": false,
       "listType": ["groupby", "idUser", "lastName", "firstName"],
       "fileYes": "image/png, image/jpeg, image/webp"
@@ -887,6 +882,208 @@
       },
       {
         "sameAs_idx": 3
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 5,
+      "url": "/member/bookings",
+      "name": "member bookings",
+      "roles": [1, 7],
+      "model": "Booking",
+      "sql": ["list_items_booking", "list_status_tracking"],
+      "newRecord": true,
+      "status_at_creation": {
+        "idStatus": 7,
+        "type": "booking",
+        "status_en": "draft",
+        "status_fr": "brouillon"
+      },
+      "noList": false,
+      "listType": ["simple"]
+    },
+    "fieldsets": [
+      {
+        "name": "booking",
+        "type": "standard",
+        "legend_fr": "Inscription",
+        "legend_en": "Booking",
+        "info": true,
+        "info_path": "comps.infos.booking",
+        "fields": [
+          {
+            "name": "idExpo",
+            "field_type": "select",
+            "options": "options_expo",
+            "required": false
+          },
+          {
+            "name": "short_fr",
+            "field_type": "unknown",
+            "listMaster": true,
+            "required": false
+          },
+          {
+            "name": "short_en",
+            "field_type": "unknown",
+            "listMaster": true,
+            "required": false
+          },
+          {
+            "name": "startDate",
+            "field_type": "unknown",
+            "listMaster": true,
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "deposit_collection",
+        "type": "standard",
+        "legend_fr": "Dépôt - retrait des oeuvres",
+        "legend_en": "Art works deposit - collection",
+        "info": true,
+        "info_path": "comps.infos.deposit-collection",
+        "fields": [
+          {
+            "name": "depotDateTime_open",
+            "label_fr": "Dépôt - ouverture",
+            "label_en": "Deposit - opening",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "depotDateTime_close",
+            "label_fr": "Dépôt - fermeture",
+            "label_en": "Deposit - closing",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "collectionDateTime_open",
+            "label_fr": "Retrait - ouverture",
+            "label_en": "Collection - opening",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "collectionDateTime_close",
+            "label_fr": "Retiat - fermeture",
+            "label_en": "Collection - closing",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          }
+        ]
+      },
+
+      {
+        "name": "pricing",
+        "type": "standard",
+        "legend_fr": "Participation financière",
+        "legend_en": "Pricing",
+        "info": true,
+        "info_path": "comps.infos.pricing",
+        "fields": [
+          {
+            "name": "priceShowRoom",
+            "label_fr": "Prix en salle",
+            "label_en": "Show room price",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "priceScreen",
+            "label_fr": "Prix diffusion sur écran",
+            "label_en": "On screen price",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "name": "events",
+        "type": "standard",
+        "legend_fr": "Participation aux évènements",
+        "legend_en": "Events participation",
+        "info": true,
+        "info_path": "comps.infos.events",
+        "fields": [
+          {
+            "name": "vernissageDateTime",
+            "label_fr": "Vernissage",
+            "label_en": "Exhibition opening",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "vernissage",
+            "field_type": "option-group",
+            "options": [
+              {
+                "label_fr": "Je serai présent",
+                "label_en": "I will attend",
+                "value": 1
+              },
+              {
+                "label_fr": "Je ne serai pas présent",
+                "label_en": "I will not attend",
+                "value": 0
+              }
+            ],
+            "required": false
+          },
+          {
+            "name": "lunchDateTime",
+            "label_fr": "Repas",
+            "label_en": "Lunch",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "lunch",
+            "field_type": "option-group",
+            "options": [
+              {
+                "label_fr": "Je serai présent",
+                "label_en": "I will attend",
+                "value": 1
+              },
+              {
+                "label_fr": "Je ne serai pas présent",
+                "label_en": "I will not attend",
+                "value": 0
+              }
+            ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "booking",
+        "type": "button-bottom",
+        "buttons": [
+          {
+            "name": "register",
+            "icon": "app_registration",
+            "label_fr": "M'inscrire",
+            "label_en": "Register"
+          },
+          {
+            "name": "cancel",
+            "icon": "cancel",
+            "label_fr": "Annuler",
+            "label_en": "Cancel"
+          }
+        ]
       }
     ]
   }

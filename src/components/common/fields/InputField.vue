@@ -1,6 +1,7 @@
 <script setup>
   import { onMounted, onUnmounted, ref, computed, inject } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import _ from 'lodash'
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import {validate} from"./validation.js"
   import { getEntitiesBySql } from '@/services/httpEntities.js'
@@ -13,6 +14,7 @@
     label:{type:String},
     required:{type:Boolean,default:true},
     disabled:{type:Boolean,default:false},
+    readOnly:{type:Boolean,default:false},
     format:{type:String,default:'text'},  //used for input validation >>> validation.js
     highlight:{type:Boolean,default:true},  //label and border color highlight
     placeholder:{type:String,default:''},
@@ -20,7 +22,8 @@
     maxLength:{type:Number,default:Infinity},
     equal:{type:[String]},
     rows:{type:Number},
-    options:{type:[String,Array]}  //String >>> sql stored procedure
+    options:{type:[String,Array]},  //String >>> sql stored procedure
+    listMaster:{type:Boolean,default:false}
   })   
   
   const {token}=inject('userCookie')
@@ -53,14 +56,20 @@
         ctrl.signal
       )
       const keys=Object.keys(res.data[0][0])
+      let obj=null
       res.data[0].map((item) => {
-        options.value.push({value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]}})
+        obj={value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]},data:{}}
+        if(item[keys[3]]) obj.infos=item[keys[3]]        
+        keys.map((key,idx) => { //additional data used to update state in Master.vue
+          if(idx>=1) obj.data[key]=item[key]
+        })
+        options.value.push(obj)
       })
     }
   })
   onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 
-  const emit = defineEmits(['change','iconClick'])
+  const emit = defineEmits(['change','iconClick','selectObject'])
   //initial value processing 
   handleChange(data.value,'init')
   function handleChange(val,cs=null){
@@ -76,6 +85,12 @@
       val,
       props.name==='pwd_check'?data.value:undefined
     ) 
+    if(!Array.isArray(props.options) && props.field_type==='select'){    //retrieve option object
+      const obj=_.filter(options.value,(option) => {
+        return option[props.name]=val
+      })[0]
+      emit('selectObject',obj)
+    }
   }
   function handleVisibility(){
      if(type.value==='text') type.value='password'
@@ -141,7 +156,7 @@
 
 <template>
   <div :class="['input-container',`${name}`,`${highlight?'highlight':''}`]" >
-    <label 
+    <label v-if="label"
       :for="name"
       :class="[`${type==='checkbox'?'checkbox':''}`]" 
       v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`"
@@ -184,7 +199,7 @@
       :value="formatData()"
       :equal="equal"
       :disabled="disabled" 
-      :readonly="format==='date' || format==='date-time'"
+      :readonly="readOnly || format==='date' || format==='date-time'"
       :autoComplete="name!=='pwd' && name!=='pwd_check'?'on':'off'"
       @change="handleChange($event.target.value)"
       @blur="(e) => {
@@ -255,8 +270,9 @@
       <option 
         v-for="(option,idx) in options" 
         :key="option.value"
-        :value="option.value">
-          {{option.value?option.text[locale]:''}}
+        :value="option.value"
+        >
+          {{option.value?option.text[locale]:''}}&nbsp;-&nbsp; {{option.value && option.infos?option.infos:''}}
       </option>
     </select>
     <!-- failed validation alert message -->
@@ -356,7 +372,7 @@
     cursor: pointer;
   }
   div.input-container.completionDate .q-icon.date {
-    top:24px;
+    top:23px;
   }
   .q-icon.time {
     top:30px;
@@ -390,6 +406,13 @@
     display:flex;
     flex-wrap: nowrap;
     gap:30px;
+  }
+  div.input-container.vernissage .q-option-group,  
+  div.input-container.lunch .q-option-group {
+    flex-direction: column;
+    justify-content: center;
+    gap:0;
+    margin-right:40px;
   }
   /* CUSTOMIZATION I.A.W FIELD NAME */
   div.modal-content.login input, div.modal-content.login select, 

@@ -2,17 +2,18 @@
   const props = defineProps({
     data:{type:Array}
   })
-  const text={11:'created',12:'on-going',13:'archived'}
-  const status={...text,11:'pending'}
+  
+  const text={7:'created',8:'candidate',9:'rejected',10:'accepted'}
+  const status={...text,7:'draft'}
 </script>
 
 <template>
   <div v-if="data.length>=1">
-    <p :class="['expo',data[0].idStatus===11?'warning':(data[0].idStatus===12?'green':'red')]" >
-      <span>{{ $t(`comps.list_items.actions_menu.expo.${status[data[0].idStatus]}`)}}</span> 
+    <p :class="['booking',data[0].idStatus===7 || data[0].idStatus===8?'warning':(data[0].idStatus===10?'green':'red')]" >
+      <span>{{ $t(`comps.list_items.actions_menu.booking.${status[data[0].idStatus]}`)}}</span> 
     </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
-      <span >{{ $t(`comps.list_items.actions_menu.expo.${text[item.idStatus]}`)}}</span>
+      <span >{{ $t(`comps.list_items.actions_menu.booking.${text[item.idStatus]}`)}}</span>
       <span>:&nbsp</span>    
       <span >{{$formatDateTime(item.createdAt)}}</span>
     </p>
@@ -34,7 +35,7 @@
     font-size:1.3rem;
     text-wrap: nowrap;
   }
-  p.expo {
+  p.booking {
     font-weight:bolder;
     text-align: center;
     text-transform: capitalize;
