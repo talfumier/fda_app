@@ -23,11 +23,11 @@
   <q-btn class="bg-blue-grey-2" push  >
     <div class="menu">
       <div class="activation">
-        <q-btn round flat icon="done_all" size="1.6rem" :disable="data.idStatus===11" @click="handleActions('activation')" />
+        <q-btn round flat icon="done_all" size="1.6rem" :disable="data.idStatus===12" @click="handleActions('activation')" />
         <Tooltip :tt_text="$t('comps.list_items.actions_menu.expo.activation')"></Tooltip>
       </div>
       <div class="archiving" > 
-        <q-btn round flat icon="no_accounts" size="1.6rem" :disable="data.idStatus===12" @click="handleActions('archiving')" />
+        <q-btn round flat icon="no_accounts" size="1.6rem" :disable="data.idStatus===13" @click="handleActions('archiving')" />
         <Tooltip :tt_text="$t('comps.list_items.actions_menu.expo.archiving')"></Tooltip>
       </div>
       <div class="delete">        

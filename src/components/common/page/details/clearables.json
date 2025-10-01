@@ -42,5 +42,5 @@
     ["priceShowRoom"],
     ["priceScreen"]
   ],
-  "Booking": [["idExpo"], ["vernissage"], ["lunch"]]
+  "Booking": [["idExpo"], ["vernissage", 0], ["lunch", 0]]
 }

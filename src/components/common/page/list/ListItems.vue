@@ -15,7 +15,7 @@
     master:{type:Array},
     selectOption:{type:Object},
     data:{type:Array},
-    newRecId:{type:Number},
+    selectedId:{type:Number},
     infos:{type:Array},
   })
   
@@ -23,7 +23,7 @@
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.entity.model}`]]=false
-    if(props.newRecId!==0) selected.value[props.newRecId]=true
+    if(props.selectedId) selected.value[props.selectedId]=true  //initial value coming from Master.vue
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
