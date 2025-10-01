@@ -7,20 +7,23 @@
   import UserActions from './actions/user/UserActions.vue'
   import UserInfos from './actions/user/UserInfos.vue'
   import ExpoActions from './actions/expo/ExpoActions.vue'
+  import ExpoInfos from './actions/expo/ExpoInfos.vue'
+  import BookingInfos from './actions/booking/BookingInfos.vue'
 
   const props=defineProps({
     entity:{type:Object},
     master:{type:Array},
+    selectOption:{type:Object},
     data:{type:Array},
-    newRecId:{type:Number},
+    selectedId:{type:Number},
     infos:{type:Array},
   })
-
+  
   const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.entity.model}`]]=false
-    if(props.newRecId!==0) selected.value[props.newRecId]=true
+    if(props.selectedId) selected.value[props.selectedId]=true  //initial value coming from Master.vue
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
@@ -48,6 +51,16 @@
     })
     return groups
   })
+  function getRows(){
+    switch(props.entity.model){
+      case 'Expo':
+        return ['1.1']
+      case 'Booking':
+        return ['1.1','2.1']
+      default:
+        return ['1.1','1.2','2.1']
+    }
+  }
     
 </script>
 
@@ -70,6 +83,7 @@
             :id="idx" 
             :item="item" 
             :master="master"
+            :rows="getRows()"
           />
         </template>
       </CheckBox>
@@ -91,7 +105,14 @@
               return info.idExpo===item.idExpo
             })"
           >
-          </ExpoInfos>
+          </ExpoInfos>          
+          <BookingInfos
+            v-if="entity.model==='Booking'"
+            :data="_.filter(infos,(info) => {
+              return info.idBooking===item.idBooking
+            })"
+          >
+          </BookingInfos>
         </template>
         <template #actions> <!--named scoped slot -->
           <UserActions
@@ -119,7 +140,7 @@
           :id="idx" 
           :item="group" 
           :master="master"
-          :rows="[1]"
+          :rows="['1.1','1.2']"
         >
         </Label3>        
         <CheckBox v-for="(item,i) in group.items">  
@@ -138,7 +159,7 @@
               :id="i" 
               :item="item" 
               :master="master"
-              :rows="[2]"
+              :rows="['2.1']"
             />
           </template>
         </CheckBox>

@@ -4,7 +4,7 @@
   import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
-  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity } from '@/services/httpEntities.js'
+  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity, getEntityFields } from '@/services/httpEntities.js'
   import { deleteInCloud } from '@/services/httpCloudinary.js'
   import { forgotPassword } from '@/services/httpUsers.js'
   import ListItems from './list/ListItems.vue'
@@ -19,6 +19,8 @@
     entity:{type:Object},
     fieldsets:{type:Array},
   })
+
+  const idModel=`id${props.entity.model}`
 
   const {locale,t}=useI18n()  
   const {token,decoded}=inject('userCookie')
@@ -52,22 +54,23 @@
 
   function getIndex(){
     return state.value[0].findIndex((item) => {
-      return item[`id${props.entity.model}`]===selectedId.value
+      return item[idModel]===selectedId.value
     }) 
   }  
-  function resetActualChanges(){
-    const idModel=`id${props.entity.model}`
+  function resetActualChanges(id){  
     let obj={}
-    // initialize actualChanges >>> all fields set to false, idModel changed to id
-    actualChanges.value=[]
-    initialValues.map((init) => {  
-      obj=Object.keys(init).reduce((acc, key) => 
-          (acc[key!==idModel?key:'id'] = key!==idModel?false:init[idModel], acc), {})
-      actualChanges.value.push({...obj})
+    if(!id) actualChanges.value=[]
+    initialValues.map((item) => {  
+      if(!id || item[idModel]===id){
+        obj=Object.keys(item).reduce((acc, key) => 
+            // (acc[key!==idModel?key:'id'] = key!==idModel?false:item[idModel], acc), {})
+            (acc[key!==idModel?key:idModel] = key!==idModel?false:item[idModel], acc), {})   // initialize actualChanges for a given item >>> all fields set to false
+        actualChanges.value.push(obj)
+      }
     })
   }
   function handleOpenDetails(id){
-    selectedId.value=id  
+    selectedId.value=id
   }
   function isEqual(val1,val2,name){
     if(name.includes('file') || name==='url' || name==='idImage') return true
@@ -76,9 +79,11 @@
   }
   function handleChange(id,name,valid,val){ 
     const idx=getIndex()
-    actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
-    state.value[0][idx][name]=val
-    formValid.value[name]=valid
+    if(name !==idModel){
+      actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
+      state.value[0][idx][name]=val
+      formValid.value[name]=valid
+    }
   }
   async function handleTranslate(id,params){
     const idx=getIndex()  
@@ -119,6 +124,12 @@
             paramsValues=decoded.value.idUser
           }
           break
+        case 'Booking':
+          if(props.entity.idx===5){   //My bookings >>> roles [1, 7]
+            sqlparams=':idUser'
+            paramsValues=decoded.value.idUser
+          }
+          break
       }
       res=(await getEntitiesBySql(
           props.entity.sql[i],
@@ -132,7 +143,7 @@
   }  
   function initInitialValues(id=null){
     _.cloneDeep(state.value[0]).map((item,idx) => {  //initialize initialValues, cloneDeep necessary
-      if(!id || item[`id${props.entity.model}`]===id) initialValues.push(item)
+      if(!id || item[idModel]===id) initialValues.push(item)
     })
   }
   onMounted(async () => {  
@@ -173,11 +184,11 @@
     isRotated.value=!isRotated.value
   }
   // ACTIONS - MODEL INDEPENDANT
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table        
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage        
     const idImage=state.value[0][idx].idImage 
     if(selectedId.value>0) {
-      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre ...  
-      if(res.data.statusCode!==200) return  
+      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre, tbooking ...  
+      if(res.data.statusCode!==200) return                                            //deletion of corresponding records in tstatus_tracking done by cascade delete
     }     
     state.value[0].splice(idx,1)  //update state  
     if(idImage) {
@@ -246,8 +257,8 @@
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
           cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
-          cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
-            (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.push(listItemsFilter.value.expo_status?item.idStatus===11 || item.idStatus===12:
+            (listItemsFilter.value.expo_status===false?item.idStatus===13:item.idStatus>=11)) 
           cond.map((cnd) => {
             result=result && cnd
           })
@@ -271,11 +282,11 @@
         if (!alive) return                // component gone? don't touch state 
         if (ctrls[1]) ctrls[1].abort()
         ctrls[1] = new AbortController()
-        let res=null,status=11
+        let res=null,status=12
         const idx=getIndex()
         switch(cs){      
           case "archiving":
-            status=12
+            status=13
           case "activation":
             //database update
             res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrls[1].signal)
@@ -335,48 +346,95 @@
         }
       }
       break
+      
+    case 'Booking':
+      listItemsFilter=ref({search:'',booking_status:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })      
+      handleAction = async(cs)=>{    
+        if (!alive) return                // component gone? don't touch state 
+        if (ctrls[1]) ctrls[1].abort()
+        ctrls[1] = new AbortController()
+        const idx=getIndex()
+        switch(cs){     
+          case "deletion":
+            handleDelete(idx)
+            initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
+        }
+      }
+      break
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
     if(state.value.length===0) return
     return _.filter(state.value[0],(item) => {
-        return (item[`id${props.entity.model}`]===selectedId.value)
+        return (item[idModel]===selectedId.value)
       })[0]
   })
   function filteredDetailsTrigger(){  //trigger filteredDetails computed update, see FormDetails component key in the template
     return parseInt(selectedId.value)+initFlag.value
   }
 
-function initNewrec(){
-  const obj={}
-  props.fieldsets.map((fieldset) => {
-    fieldset.fields.map((field) => {
-      obj[field.name]=null
+  function initNewrec(){
+    const obj={}
+    props.fieldsets.map((fieldset) => {
+      fieldset.fields?.map((field) => {
+        obj[field.name]=null
+      })
     })
-  })
-  newRecId.value+=-1
-  obj[`id${props.entity.model}`]=newRecId.value
-  switch(props.entity.model){
-    case 'Oeuvre':
-      obj.idUser=decoded.value.idUser
-      obj.classic_modern=0
-      obj.idDomain=null
-      obj.idTech=null
-      obj.idMedia=null
-      obj.idImage=null
-      obj.reserved=0
-      break
+    newRecId.value+=-1
+    obj[idModel]=newRecId.value
+    switch(props.entity.model){
+      case 'Expo':
+        obj.idStatus=11     //pending status
+        break
+      case 'Oeuvre':
+        obj.idUser=decoded.value.idUser
+        obj.classic_modern=0
+        obj.idDomain=null
+        obj.idTech=null
+        obj.idMedia=null
+        obj.idImage=null
+        obj.reserved=0
+        break
+      case 'Booking':
+        obj.idUser=decoded.value.idUser
+        obj.vernissage=0
+        obj.lunch=0
+        // obj.idStatus=7     //draft status
+        break
+    }
+    return obj
   }
-  return obj
-}
-function handleNewRecord(){
-    state.value[0]=[...state.value[0],initNewrec()]  
+  async function bodyCleanUp(body,signal){  //remove fields not belonging to the model and idModel
+    const {data:res}=await getEntityFields(props.entity.model,token.value,signal)
+    if(res.statusCode!==200) return body
+    const obj={}
+    res.data.map((field) => {
+      obj[field]=body[field]
+    })
+    return obj
+  }
+  function handleNewRecord(){
+    state.value[0]=[...state.value[0],_.cloneDeep(initNewrec())]  
     initInitialValues(newRecId.value) 
-    resetActualChanges()
+    resetActualChanges(newRecId.value)  //initialize actualChanges for the newly created record
+    console.log('init',initialValues,'changes',actualChanges.value)
     handleOpenDetails(newRecId.value)
+    
   }
-  // TOOLBAR ACTIONS
-  async function handleToolbarActions(cs){ 
+  // FORM DETAILS TOOLBAR ACTIONS
+  async function handleToolbarActions(cs){  
     let index=null
     switch(cs){
       case "save":
@@ -385,49 +443,59 @@ function handleNewRecord(){
         ctrls[2] = new AbortController()
         let keys=[],obj=null,res=null 
         actualChanges.value.map(async(item,idx) => {
-          obj={}
-          keys=Object.keys(item)
-          keys.map((key) => {
-            if(key!=='id') {
-              if(item[key]) obj[key]=state.value[0][idx][key]
-            }
-            else obj[key]=item[key]
-          })  
-          let body=null
-          const{id,...rest}=obj
-          if(id<0) {
-            delete state.value[0][idx][`id${props.entity.model}`]
-            body=state.value[0][idx]
-            delete body.fileName
-            delete body.fileSize
-            delete body.fileLastModified
-            delete body.url
-          }
-          else body=rest
-          if(Object.keys(body).length>=1){
-            res=await(id<0?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
-              patchEntity(props.entity.model,id,body,token.value, ctrls[2].signal))
-            if(res.data.statusCode!==200) return
-            keys.map((key) => { 
-              if(key!=='id' && item[key]){
-                initialValues[idx][key]=state.value[0][idx][key] //update initial values with saved data 
-                item[key]=false  //reset actualChanges item to false
+          if(JSON.stringify(item).includes(true)){
+            obj={}
+            keys=Object.keys(item)
+            keys.map((key) => {
+              if(key!==idModel) {
+                if(item[key]) obj[key]=state.value[0][idx][key]
               }
-            })
-            if(id<0) { //new record creation
-              state.value[0][idx][`id${props.entity.model}`]=res.data.data[`id${props.entity.model}`] //update id[model]     
-              if(props.entity.status_at_creation){
-                state.value[0][idx].idStatus=props.entity.status_at_creation.idStatus //update current status data
-                state.value[0][idx].status_en=props.entity.status_at_creation.status_en                
-                state.value[0][idx].status_fr=props.entity.status_at_creation.status_fr
-                state.value[0][idx].type=props.entity.status_at_creation.type
-                state.value[1]=(await fetch(1))[0] //retrieve updated status tracking data
+              else obj[key]=item[key]
+            })  
+            let body=null
+            if(obj[idModel]<0) {
+              // delete state.value[0][idx][`id${props.entity.model}`]
+              body=state.value[0][idx]
+              body=await bodyCleanUp(body,ctrls[2].signal)
+              // delete body.fileName
+              // delete body.fileSize
+              // delete body.fileLastModified
+              // delete body.url
+            }
+            else {
+              body=_.cloneDeep(obj)  //cloneDeep necessary
+              delete body[idModel]
+              console.log(body,obj[idModel],props.entity.model)
+            }
+            if(Object.keys(body).length>=1){
+              res=await(obj[idModel]<0?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
+                patchEntity(props.entity.model,obj[idModel],body,token.value, ctrls[2].signal))
+              if(res.data.statusCode!==200) return
+              keys.map((key) => { 
+                if(key!==idModel && item[key]){
+                  initialValues[idx][key]=state.value[0][idx][key] //update initial values with saved data 
+                  item[key]=false  //reset actualChanges item to false
+                }
+                if(key===idModel && obj[idModel]<0) {
+                  initialValues[idx][key]=res.data.data[idModel]  //update initialValues idModel value to newly created record id
+                  item[key]=res.data.data[idModel]  //update actualChanges idModel value to newly created record id
+                }
+              })
+              if(obj[idModel]<0) { //new record creation
+                state.value[0][idx][idModel]=res.data.data[idModel] //update idModel value to newly created record id   
+                if(props.entity.status_at_creation){
+                  state.value[0][idx].idStatus=props.entity.status_at_creation.idStatus //update current status data
+                  state.value[0][idx].status_en=props.entity.status_at_creation.status_en                
+                  state.value[0][idx].status_fr=props.entity.status_at_creation.status_fr
+                  state.value[0][idx].type=props.entity.status_at_creation.type
+                  state.value[1]=(await fetch(1))[0] //retrieve updated status tracking data
+                }
+                handleOpenDetails(res.data.data[idModel])
+                newRecId.value=0
               }
-              newRecId.value=res.data.data[`id${props.entity.model}`]
-              handleOpenDetails(newRecId.value)
             }
           }
-        }) 
+        })    
         break
       case "clear":
         index=getIndex()
@@ -467,6 +535,19 @@ function handleNewRecord(){
             handleAction('deletion')
         }
         break    
+    }
+  }
+  //SELECT OPTION DATA HANDLING
+  function handleSelectOption(option) {
+    if(!option) return
+    const idx=getIndex(selectedId.value)
+    if(option.data){
+      const obj={}
+      Object.keys(state.value[0][idx]).map((key) => {
+        if(option.data[key]) obj[key]=option.data[key]
+      })
+      state.value[0][idx]={...state.value[0][idx],...obj}
+      initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
     }
   }
 
@@ -537,12 +618,11 @@ function handleNewRecord(){
       </div>  
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
-      <ListItems  
-        :key="newRecId"     
+      <ListItems    
         :entity="entity"
         :master="field_master"
         :data="filteredList"
-        :newRecId="newRecId"
+        :selectedId="selectedId"
         :infos="state.length>1?state[1]:null"
         @open-details="handleOpenDetails"
         @user-action="handleAction"
@@ -561,6 +641,9 @@ function handleNewRecord(){
         @change="handleChange"
         @translate="handleTranslate"
         @button-action="handleButtonActions"
+        @select-object="(option) => {
+          handleSelectOption(option)
+        }"
         >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
@@ -572,7 +655,7 @@ function handleNewRecord(){
         </template> 
       </FormDetails>
     </form>
-    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom' && filteredDetails" class="bottom-container">
+    <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom' && filteredDetails" :class="['bottom-container',entity.model]">
       <FieldsetButton          
         key="bottom"
         :buttons="fieldsets[fieldsets.length-1].buttons"  
@@ -586,7 +669,7 @@ function handleNewRecord(){
 <style scoped>
   .master-container {
     display: grid;
-    grid-template-rows:100px auto;
+    grid-template-rows:100px auto auto;
     grid-template-columns: auto auto;
     justify-content: left;
     height:100%;   
@@ -691,6 +774,15 @@ function handleNewRecord(){
     align-items: center;
     padding-bottom:20px;
     padding-right: 50px;
+    
+    grid-row: 3;
+    align-self: center;
+  }
+  .bottom-container.User {
+    grid-column: 1;
+  }
+  .bottom-container.Booking {
+    grid-column: 2;
   }
   fieldset.button-bottom {
     border-width: 0;

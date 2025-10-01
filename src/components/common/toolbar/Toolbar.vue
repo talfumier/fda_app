@@ -42,7 +42,7 @@
         <q-btn round flat icon="undo" size="1.6rem" @click="handleActions('undo')" />
         <Tooltip :tt_text="$t('common.undo')"></Tooltip>
       </div>
-      <div v-if="model==='Oeuvre' "class="delete">        
+      <div v-if="model==='Oeuvre' || model==='Booking' "class="delete">        
         <q-btn round flat icon="delete" size="1.6rem" @click="handleActions('deletion')" />
         <Tooltip :tt_text="$t('common.delete')"></Tooltip>
       </div>

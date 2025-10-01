@@ -59,6 +59,7 @@
       "expos": "Expositions",
       "oeuvres": "Mes oeuvres",
       "oeuvres_org": "Oeuvres",
+      "bookings": "Mes inscriptions",
       "admin_settings": "Administration",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
@@ -83,8 +84,14 @@
       "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et rester informé de l'activité du festival.",
       "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
       "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis.",
+      "short": "Nom court principalement utilisé dans l'espace membre et les menus du site public.",
+      "title": "Nom long et commercial utilisé sur le site public.",
       "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ...",
-      "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. "
+      "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. ",
+      "booking": "Veuillez sélectionner l'exposition pour laquelle vous souhaitez vous inscrire.",
+      "events": "Veuillez indiquer les évènements auxquels vous pensez participer.",
+      "deposit-collection": "Dates et horaires durant lesquels les oeuvres devront être déposées et retirées.",
+      "pricing": "Prix par oeuvre exposée en salle et prix par oeuvre diffusée sur écran - EUR."
     },
     "file_upload": {
       "delete": "Supprimer",
@@ -139,6 +146,16 @@
             "indeterminate": "statut ?",
             "archived": "archivé",
             "active": "en attente ou actif"
+          }
+        },
+        "booking": {
+          "created": "Créé",
+          "draft": "Brouillon",
+          "candidate": "Candidat",
+          "rejected": "Rejeté",
+          "accepted": "Accepté",
+          "confirm": {
+            "deletion": "Merci de confirmer la suppression définitive de l'inscription."
           }
         }
       }

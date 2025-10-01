@@ -226,8 +226,8 @@
 <style scoped>
   div.file-container {
     display:flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: left;
     gap:20px;
     margin:5px auto;
     min-width:200px;

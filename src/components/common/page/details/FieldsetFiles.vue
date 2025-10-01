@@ -51,7 +51,7 @@
 <style scoped>
   div.files-container {
     display: flex;
-    justify-content:left;
+    justify-content:space-between;
     align-items: top;
     gap:20px;
   }
