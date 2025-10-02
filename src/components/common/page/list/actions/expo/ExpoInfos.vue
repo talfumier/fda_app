@@ -2,6 +2,7 @@
   const props = defineProps({
     data:{type:Array}
   })
+  
   const text={11:'created',12:'on-going',13:'archived'}
   const status={...text,11:'pending'}
 </script>

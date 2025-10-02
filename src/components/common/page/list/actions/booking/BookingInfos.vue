@@ -2,7 +2,6 @@
   const props = defineProps({
     data:{type:Array}
   })
-  
   const text={7:'created',8:'candidate',9:'rejected',10:'accepted'}
   const status={...text,7:'draft'}
 </script>

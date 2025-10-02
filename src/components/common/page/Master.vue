@@ -47,7 +47,7 @@
   
   const state=ref([])
   const selectedId = ref(null)
-  const newRecId=ref(0)
+  let newRecId=0
 
   const initialValues=[]
   const actualChanges=ref([])
@@ -101,7 +101,7 @@
   // DATA LOADING
   const ctrls={} // AbortController's object' used in http request operation
   let alive = true // guard against updates after unmount
-  async function fetch(i=0) {
+  async function fetch() {
     if (!alive) return                // component gone? don't touch state 
     if (ctrls[0]) ctrls[0].abort()
     ctrls[0] = new AbortController()
@@ -111,12 +111,6 @@
         case 'User':        //returned users have their idRole < signed-in user
           sqlparams=!props.entity.noList?":idRole":":idUser"
           paramsValues=`${!props.entity.noList?decoded.value.idRole:decoded.value.idUser}`
-          break
-        case 'Expo':
-          if(i===1) { //status type
-            sqlparams=':type'
-            paramsValues='expo'
-          } 
           break
         case 'Oeuvre':
           if(props.entity.idx===3){   //My art works >>> roles [1, 7]
@@ -132,12 +126,12 @@
           break
       }
       res=(await getEntitiesBySql(
-          props.entity.sql[i],
+          props.entity.sql,
           token.value,
           ctrls[0].signal,
           sqlparams, 
           paramsValues
-        )).data      
+        )).data    
     }
     return res.data    
   }  
@@ -184,13 +178,18 @@
     isRotated.value=!isRotated.value
   }
   // ACTIONS - MODEL INDEPENDANT
+  function afterDelete(idx){  //update state, initialValues, actualChanges
+    state.value[0].splice(idx,1)  
+    initialValues.splice(idx,1)
+    actualChanges.value.splice(idx,1)
+  }
   async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage        
     const idImage=state.value[0][idx].idImage 
     if(selectedId.value>0) {
       const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre, tbooking ...  
       if(res.data.statusCode!==200) return                                            //deletion of corresponding records in tstatus_tracking done by cascade delete
-    }     
-    state.value[0].splice(idx,1)  //update state  
+    }      
+    afterDelete(idx)  //update state, initialValues, actualChanges    
     if(idImage) {
       const {data:res}= await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
       if(res.statusCode===200) 
@@ -316,8 +315,8 @@
                   await deleteInCloud(image.idImage,token.value,ctrls[1].signal)                   
                 } catch (error) {}  //asset no longer present
               }
-            })      
-            state.value[0].splice(idx,1)  //update state
+            })     
+            afterDelete(idx)  //update state, initialValues, actualChanges  
         }
       }
       break
@@ -392,8 +391,8 @@
         obj[field.name]=null
       })
     })
-    newRecId.value+=-1
-    obj[idModel]=newRecId.value
+    newRecId+=-1
+    obj[idModel]=newRecId
     switch(props.entity.model){
       case 'Expo':
         obj.idStatus=11     //pending status
@@ -411,7 +410,6 @@
         obj.idUser=decoded.value.idUser
         obj.vernissage=0
         obj.lunch=0
-        // obj.idStatus=7     //draft status
         break
     }
     return obj
@@ -427,10 +425,9 @@
   }
   function handleNewRecord(){
     state.value[0]=[...state.value[0],_.cloneDeep(initNewrec())]  
-    initInitialValues(newRecId.value) 
-    resetActualChanges(newRecId.value)  //initialize actualChanges for the newly created record
-    console.log('init',initialValues,'changes',actualChanges.value)
-    handleOpenDetails(newRecId.value)
+    initInitialValues(newRecId) 
+    resetActualChanges(newRecId)  //initialize actualChanges for the newly created record
+    handleOpenDetails(newRecId)
     
   }
   // FORM DETAILS TOOLBAR ACTIONS
@@ -454,19 +451,13 @@
             })  
             let body=null
             if(obj[idModel]<0) {
-              // delete state.value[0][idx][`id${props.entity.model}`]
               body=state.value[0][idx]
               body=await bodyCleanUp(body,ctrls[2].signal)
-              // delete body.fileName
-              // delete body.fileSize
-              // delete body.fileLastModified
-              // delete body.url
             }
             else {
               body=_.cloneDeep(obj)  //cloneDeep necessary
               delete body[idModel]
-              console.log(body,obj[idModel],props.entity.model)
-            }
+            }  
             if(Object.keys(body).length>=1){
               res=await(obj[idModel]<0?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
                 patchEntity(props.entity.model,obj[idModel],body,token.value, ctrls[2].signal))
@@ -480,18 +471,13 @@
                   initialValues[idx][key]=res.data.data[idModel]  //update initialValues idModel value to newly created record id
                   item[key]=res.data.data[idModel]  //update actualChanges idModel value to newly created record id
                 }
-              })
+              })  
               if(obj[idModel]<0) { //new record creation
                 state.value[0][idx][idModel]=res.data.data[idModel] //update idModel value to newly created record id   
-                if(props.entity.status_at_creation){
-                  state.value[0][idx].idStatus=props.entity.status_at_creation.idStatus //update current status data
-                  state.value[0][idx].status_en=props.entity.status_at_creation.status_en                
-                  state.value[0][idx].status_fr=props.entity.status_at_creation.status_fr
-                  state.value[0][idx].type=props.entity.status_at_creation.type
-                  state.value[1]=(await fetch(1))[0] //retrieve updated status tracking data
-                }
+                if(props.entity.status_at_creation)
+                  state.value[1].unshift({[idModel]:res.data.data[idModel],idStatus:props.entity.status_at_creation,createdAt:new Date(Date.now())})
                 handleOpenDetails(res.data.data[idModel])
-                newRecId.value=0
+                newRecId=0
               }
             }
           }
@@ -619,6 +605,7 @@
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
       <ListItems    
+        :key="selectedId"
         :entity="entity"
         :master="field_master"
         :data="filteredList"
