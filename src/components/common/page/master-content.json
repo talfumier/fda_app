@@ -906,6 +906,7 @@
             "name": "idExpo",
             "field_type": "select",
             "options": "options_expo",
+            "showInfos": true,
             "required": false
           },
           {

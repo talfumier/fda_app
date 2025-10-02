@@ -7,8 +7,9 @@
     id:{type:Number},
     item:{type:Object},
     master:{type:Array},
-    rows:{type:Array}
+    rowSchema:{type:Array}
   })
+
   const {locale}=useI18n()
   const filteredMaster=computed(() => {
     return _.filter(props.master,(mstr) => {
@@ -77,12 +78,12 @@
 
 <template>
   <label :for="id">
-    <div v-if="rows.includes('1.1')" class="row1">
+    <div v-if="rowSchema.includes('1.1')" class="row1">
       <span :class="setUCase(filteredMaster[0].name)?'ucase':''">
         {{setRowText('1.1')}}
       </span>
       <span 
-        v-if="rows.includes('1.2')" 
+        v-if="rowSchema.includes('1.2')" 
         class="ccase">{{setRowText('1.2')}}
       </span>
       <q-icon 
@@ -94,7 +95,7 @@
         name="no_accounts" :color="status[1]" size="2.5rem">
       </q-icon>
     </div>
-    <div v-if="rows.includes('2.1')" :class="['row2', setLCase(filteredMaster[len-1]?filteredMaster[len-1].name:'')]">
+    <div v-if="rowSchema.includes('2.1')" :class="['row2', setLCase(filteredMaster[len-1]?filteredMaster[len-1].name:'')]">
       <span>{{ setRowText('2.1') }}</span>
     </div>
   </label>
