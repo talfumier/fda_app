@@ -18,12 +18,12 @@
     selectedId:{type:Number},
     infos:{type:Array},
   })
-  
+
   const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.entity.model}`]]=false
-    if(props.selectedId) selected.value[props.selectedId]=true  //initial value coming from Master.vue
+    if(props.selectedId) selected.value[props.selectedId]=true  //initial value coming from Master.vue (new record)
   })
   function handleSelectionChange(val,id){
     const keys=Object.keys(selected.value)
@@ -109,7 +109,7 @@
           <BookingInfos
             v-if="entity.model==='Booking'"
             :data="_.filter(infos,(info) => {
-              return info.idBooking===item.idBooking
+              return info.idBooking==item.idBooking
             })"
           >
           </BookingInfos>

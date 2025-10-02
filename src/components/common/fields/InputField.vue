@@ -87,7 +87,7 @@
     ) 
     if(!Array.isArray(props.options) && props.field_type==='select'){    //retrieve option object
       const obj=_.filter(options.value,(option) => {
-        return option[props.name]=val
+        return option.value==val
       })[0]
       emit('selectObject',obj)
     }
@@ -264,7 +264,7 @@
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid']"
       :value="data?.toString().length>0?data:'-1'"
       :disabled="disabled"
-      @change="handleChange($event.target.value)"     
+      @change="handleChange(parseInt($event.target.value))"     
     >
       <option key="-1" value="-1" disabled hidden>{{ t('common.select') }}</option>
       <option 
