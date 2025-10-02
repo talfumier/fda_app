@@ -23,6 +23,7 @@
     equal:{type:[String]},
     rows:{type:Number},
     options:{type:[String,Array]},  //String >>> sql stored procedure
+    showInfos:{type:Boolean,default:false},  //display select value and infos in dropdown
     listMaster:{type:Boolean,default:false}
   })   
   
@@ -272,7 +273,7 @@
         :key="option.value"
         :value="option.value"
         >
-          {{option.value?option.text[locale]:''}}&nbsp;-&nbsp; {{option.value && option.infos?option.infos:''}}
+          {{option.value?option.text[locale]:''}}&nbsp;{{ showInfos?'-':'' }}&nbsp; {{showInfos && option.value && option.infos?option.infos:''}}
       </option>
     </select>
     <!-- failed validation alert message -->

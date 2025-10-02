@@ -438,7 +438,7 @@
         if (!alive) return                // component gone? don't touch state 
         if (ctrls[2]) ctrls[2].abort()
         ctrls[2] = new AbortController()
-        let keys=[],obj=null,res=null 
+        let keys=[],obj=null,res=null,newId=null
         actualChanges.value.map(async(item,idx) => {
           if(JSON.stringify(item).includes(true)){
             obj={}
@@ -468,15 +468,16 @@
                   item[key]=false  //reset actualChanges item to false
                 }
                 if(key===idModel && obj[idModel]<0) {
-                  initialValues[idx][key]=res.data.data[idModel]  //update initialValues idModel value to newly created record id
-                  item[key]=res.data.data[idModel]  //update actualChanges idModel value to newly created record id
+                  newId=res.data.data[idModel]
+                  initialValues[idx][key]=newId  //update initialValues idModel value to newly created record id
+                  item[key]=newId  //update actualChanges idModel value to newly created record id
                 }
               })  
               if(obj[idModel]<0) { //new record creation
-                state.value[0][idx][idModel]=res.data.data[idModel] //update idModel value to newly created record id   
+                state.value[0][idx][idModel]=newId //update idModel value to newly created record id   
                 if(props.entity.status_at_creation)
-                  state.value[1].unshift({[idModel]:res.data.data[idModel],idStatus:props.entity.status_at_creation,createdAt:new Date(Date.now())})
-                handleOpenDetails(res.data.data[idModel])
+                  state.value[1].unshift({[idModel]:newId,idStatus:props.entity.status_at_creation,createdAt:new Date(Date.now())})
+                handleOpenDetails(newId)
                 newRecId=0
               }
             }

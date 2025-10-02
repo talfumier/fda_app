@@ -51,8 +51,9 @@
     })
     return groups
   })
-  function getRows(){
+  function getRowSchema(){
     switch(props.entity.model){
+      case 'Oeuvre':
       case 'Expo':
         return ['1.1']
       case 'Booking':
@@ -83,7 +84,7 @@
             :id="idx" 
             :item="item" 
             :master="master"
-            :rows="getRows()"
+            :rowSchema="getRowSchema()"
           />
         </template>
       </CheckBox>
@@ -140,7 +141,7 @@
           :id="idx" 
           :item="group" 
           :master="master"
-          :rows="['1.1','1.2']"
+          :rowSchema="['1.1','1.2']"
         >
         </Label3>        
         <CheckBox v-for="(item,i) in group.items">  
@@ -159,7 +160,7 @@
               :id="i" 
               :item="item" 
               :master="master"
-              :rows="['2.1']"
+              :rowSchema="['2.1']"
             />
           </template>
         </CheckBox>
