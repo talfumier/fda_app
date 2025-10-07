@@ -1,5 +1,7 @@
 {
   "common": {
+    "yes": "Yes",
+    "no": "No",
     "welcome": "Welcome",
     "logout": "Log out",
     "select": "Please select an item ...",
@@ -91,7 +93,8 @@
       "booking": "Please select the exhition you wish to register to.",
       "events": "Please indicate the events you plan to attend.",
       "deposit-collection": "Dates and opening hours for art works deposit and collection.",
-      "pricing": "Price per work in the show room and price per work on screen - EUR."
+      "pricing": "Price per work in the show room and price per work on screen - EUR.",
+      "selection": "Please make the selection of your works that you wish to exhibit."
     },
     "file_upload": {
       "delete": "Delete",
@@ -162,7 +165,13 @@
     },
     "form_details": {
       "translate": "Translate",
-      "newRec": "Please save the record before creating linked data."
+      "newRec": "Please save the record before creating linked data.",
+      "booking": {},
+      "booking_oeuvre": {
+        "showRoom": "Show room",
+        "screen": "On screen",
+        "status": "Status"
+      }
     },
     "public_site": {
       "home": {}

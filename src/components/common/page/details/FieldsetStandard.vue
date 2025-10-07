@@ -26,7 +26,6 @@
         window.open(url, '_blank') 
     }
   }
-// :value="data[item.name]!==null?data[item.name]:''"
 </script>
 
 <template>
@@ -47,6 +46,8 @@
     :value="data[item.name]"
     :rows="item.rows"
     :options="item.options"
+    :lock="item.lock"
+    :showInfos="item.showInfos"
     :listMaster="item.listMaster"
     @change="handleChange"
     @icon-click="handleIconClick(item.data_type,data[item.name])"

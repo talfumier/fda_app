@@ -10,6 +10,7 @@
   import FieldsetFile from './FieldsetFile.vue'
   import FieldsetFiles from './FieldsetFiles.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
+import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
 
   const props=defineProps({
     entity:{type:Object},
@@ -25,15 +26,15 @@
     })
   })
   const emit=defineEmits(['change','translate','buttonAction','selectObject'])
-  function handleChange(id,name,valid,val){    
-    emit('change',id,name,valid,val)
+  function handleChange(name,valid,val){   
+    emit('change',name,valid,val)
   }
-  function handleTranslate(id,params) {
-    emit('translate',id,params)
+  function handleTranslate(params) {
+    emit('translate',params)
   }
-  function handleFileChange(id,file){
+  function handleFileChange(file){
     Object.keys(file).map((key) => {
-      handleChange(id,key,true,file[key])
+      handleChange(key,true,file[key])
     })
   }
   function handleButtonAction(name){
@@ -54,7 +55,7 @@
         :fields="item.fields"
         :data="record"
         @change="(name,valid,val) => {
-          handleChange(record[`id${entity.model}`],name,valid,val)
+          handleChange(name,valid,val)
         }"
         @select-object="(option) => {
           emit('selectObject',option)
@@ -67,7 +68,7 @@
         :fields="item.fields"
         :data="record"
         @change="(name,valid,val) => {
-          handleChange(record[`id${entity.model}`],name,valid,val)
+          handleChange(name,valid,val)
         }"
       >
       </FieldsetAddress>      
@@ -77,10 +78,10 @@
         :fields="item.fields"
         :data="record"
         @change="(name,valid,val) => {
-          handleChange(record[`id${entity.model}`],name,valid,val)
+          handleChange(name,valid,val)
         }"
         @translate="(params) => {
-          handleTranslate(record[`id${entity.model}`],params)
+          handleTranslate(params)
         }"
       >
       </FieldsetTranslate>
@@ -92,7 +93,7 @@
         :fields="item.fields"
         :data="record"
         @file-change="(file) => {
-          handleFileChange(record[`id${entity.model}`],file)
+          handleFileChange(file)
         }"
       >
       </FieldsetFile>
@@ -106,6 +107,14 @@
         :data="record"
       >
       </FieldsetFiles>
+      <FieldsetBookingOeuvre
+        v-if="item.type==='booking-oeuvre'"
+        :data="record"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val)
+        }"
+      >
+      </FieldsetBookingOeuvre>
       <FieldsetButton  
         v-if="item.type==='button'"
         :key="idx"

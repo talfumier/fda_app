@@ -23,9 +23,10 @@
     equal:{type:[String]},
     rows:{type:Number},
     options:{type:[String,Array]},  //String >>> sql stored procedure
+    lock:{type:Boolean,default:false},
     showInfos:{type:Boolean,default:false},  //display select value and infos in dropdown
     listMaster:{type:Boolean,default:false}
-  })   
+  })  
   
   const {token}=inject('userCookie')
   const { t,locale } = useI18n()    
@@ -51,11 +52,20 @@
     if(Array.isArray(props.options)) options.value=props.options //options array provided directly by props
     else { //options data loaded from a stored procedure
       if (!alive) return                // component gone? don't touch state 
+      let sqlparams=null,paramsValues=null
+      switch(props.options){
+        case 'options_expo':
+          sqlparams=':idExpo'
+          paramsValues=props.value?props.value:-10
+      }
       const {data:res}=await getEntitiesBySql(
         props.options,
         token.value,
-        ctrl.signal
+        ctrl.signal,
+        sqlparams,
+        paramsValues
       )
+      if(res.data[0].length===0) return
       const keys=Object.keys(res.data[0][0])
       let obj=null
       res.data[0].map((item) => {
@@ -264,7 +274,7 @@
     <select v-if="field_type==='select'"
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid']"
       :value="data?.toString().length>0?data:'-1'"
-      :disabled="disabled"
+      :disabled="lock?value>0:disabled"
       @change="handleChange(parseInt($event.target.value))"     
     >
       <option key="-1" value="-1" disabled hidden>{{ t('common.select') }}</option>

@@ -906,6 +906,7 @@
             "name": "idExpo",
             "field_type": "select",
             "options": "options_expo",
+            "lock": true,
             "showInfos": true,
             "required": false
           },
@@ -971,7 +972,6 @@
           }
         ]
       },
-
       {
         "name": "pricing",
         "type": "standard",
@@ -1054,6 +1054,20 @@
                 "value": 0
               }
             ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "selection",
+        "type": "booking-oeuvre",
+        "legend_fr": "Ma sélection d'oeuvres",
+        "legend_en": "My works selection",
+        "info": true,
+        "info_path": "comps.infos.selection",
+        "fields": [
+          {
+            "name": "bookingOeuvre",
             "required": false
           }
         ]

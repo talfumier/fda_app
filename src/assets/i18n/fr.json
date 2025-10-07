@@ -1,5 +1,7 @@
 {
   "common": {
+    "yes": "Oui",
+    "no": "Non",
     "welcome": "Bienvenue",
     "logout": "Déconnexion",
     "select": "Choisir un élément de la liste ...",
@@ -91,7 +93,8 @@
       "booking": "Veuillez sélectionner l'exposition pour laquelle vous souhaitez vous inscrire.",
       "events": "Veuillez indiquer les évènements auxquels vous pensez participer.",
       "deposit-collection": "Dates et horaires durant lesquels les oeuvres devront être déposées et retirées.",
-      "pricing": "Prix par oeuvre exposée en salle et prix par oeuvre diffusée sur écran - EUR."
+      "pricing": "Prix par oeuvre exposée en salle et prix par oeuvre diffusée sur écran - EUR.",
+      "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer."
     },
     "file_upload": {
       "delete": "Supprimer",
@@ -162,7 +165,13 @@
     },
     "form_details": {
       "translate": "Traduire",
-      "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées."
+      "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées.",
+      "booking": {},
+      "booking_oeuvre": {
+        "showRoom": "En salle",
+        "screen": "A l'écran",
+        "status": "Statut"
+      }
     },
     "public_site": {
       "home": {}
