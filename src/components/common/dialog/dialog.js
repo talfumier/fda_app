@@ -1,9 +1,9 @@
-export function confirm($q, message, focus = 'cancel', title = '') {
+export function confirm($q, message, cancel = true, focus = 'cancel', title = '') {
   return new Promise((resolve) => {
     $q.dialog({
       title,
       message,
-      cancel: true,
+      cancel,
       persistent: true,
       // dark: true,
       focus, //[ok, cancel]

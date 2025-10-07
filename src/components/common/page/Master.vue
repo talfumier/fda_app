@@ -14,6 +14,7 @@
   import clearables from "../page/details/clearables.json"
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
+import { getRandomInt } from '@/utilityFunctions.js';
 
   const props=defineProps({
     entity:{type:Object},
@@ -75,9 +76,9 @@
   function isEqual(val1,val2,name){
     if(name.includes('file') || name==='url' || name==='idImage') return true
     if((val1==='' || val1===null) && (val2==='' || val2===null)) return true
-    return val1==val2
+    return _.isEqual(val1,val2)  //deep comparison
   }
-  function handleChange(id,name,valid,val){ 
+  function handleChange(name,valid,val){ 
     const idx=getIndex()
     if(name !==idModel){
       actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
@@ -85,7 +86,7 @@
       formValid.value[name]=valid
     }
   }
-  async function handleTranslate(id,params){
+  async function handleTranslate(params){
     const idx=getIndex()  
     const {from,to,rootName}=params  
     const translated = (
@@ -95,16 +96,16 @@
         from,
       })
     ).data
-    handleChange(id,`${rootName}_${to}`,true,translated)
+    handleChange(`${rootName}_${to}`,true,translated)
     initFlag.value+=.01
   }
   // DATA LOADING
-  const ctrls={} // AbortController's object' used in http request operation
+  const ctrls={} // AbortController's object' used in http request operation  
+  if (ctrls[0]) ctrls[0].abort()
+  ctrls[0] = new AbortController()
   let alive = true // guard against updates after unmount
-  async function fetch() {
+  async function fetch(signal) {
     if (!alive) return                // component gone? don't touch state 
-    if (ctrls[0]) ctrls[0].abort()
-    ctrls[0] = new AbortController()
     let res=null,sqlparams=null,paramsValues=null
     if (props.entity.sql) {
       switch(props.entity.model){
@@ -128,22 +129,54 @@
       res=(await getEntitiesBySql(
           props.entity.sql,
           token.value,
-          ctrls[0].signal,
+          signal,
           sqlparams, 
           paramsValues
         )).data    
     }
     return res.data    
   }  
+  async function fetchBookingOeuvre(user,booking,signal){
+    if (!alive) return                // component gone? don't touch state      
+    const {data:res}=await getEntitiesBySql(
+      'booking_oeuvre_selection',
+      token.value,
+      signal,
+      ':idUser,:idBooking',
+      `${user},${booking}`
+    )
+    return res   
+  }
   function initInitialValues(id=null){
     _.cloneDeep(state.value[0]).map((item,idx) => {  //initialize initialValues, cloneDeep necessary
       if(!id || item[idModel]===id) initialValues.push(item)
     })
   }
   onMounted(async () => {  
-    state.value = await fetch(0) 
+    state.value = await fetch(ctrls[0].signal)
+    if(props.entity.model==='Booking'){  //load BookingOeuvre data for each idBooking of a given user (connected user) 
+      let res=null,bookingOeuvre=null,obj=null
+      await Promise.all(
+        state.value[0].map(async(item,idx) => {  
+          res=await fetchBookingOeuvre(item.idUser,item.idBooking,ctrls[0].signal)  
+          if(res.statusCode!==200) return
+          bookingOeuvre=[]
+          res.data[0].map((bo,i) => {
+            obj={}
+            if(!bo.idStatus)  obj={idStatus:14,status_fr:'brouillon',status_en:'draft'}
+            bookingOeuvre.push({
+              ...bo,
+              idBookingOeuvre:bo.idBookingOeuvre?bo.idBookingOeuvre:-(i+=1),
+              idBooking:item.idBooking,
+              ...obj
+            })
+          })  
+          state.value[0][idx]={...state.value[0][idx],bookingOeuvre}
+        })
+      )
+    } 
     initInitialValues()
-    resetActualChanges()
+    resetActualChanges()    
     if(props.entity.noList) {
       let id=null
       switch(props.entity.model){
@@ -179,26 +212,28 @@
   }
   // ACTIONS - MODEL INDEPENDANT
   function afterDelete(idx){  //update state, initialValues, actualChanges
-    state.value[0].splice(idx,1)  
+      state.value[0].splice(idx,1)  
     initialValues.splice(idx,1)
-    actualChanges.value.splice(idx,1)
+    actualChanges.value.splice(idx,1)    
   }
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage        
+  async function handleDelete(idx,signal){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage  
     const idImage=state.value[0][idx].idImage 
     if(selectedId.value>0) {
-      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, ctrls[1].signal)  //delete record in tuser, toeuvre, tbooking ...  
+      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, signal)  //delete record in tuser, toeuvre, tbooking ...  
       if(res.data.statusCode!==200) return                                            //deletion of corresponding records in tstatus_tracking done by cascade delete
     }      
     afterDelete(idx)  //update state, initialValues, actualChanges    
     if(idImage) {
-      const {data:res}= await deleteEntity('Image',idImage,token.value, ctrls[1].signal)  //delete record in timage
+      const {data:res}= await deleteEntity('Image',idImage,token.value, signal)  //delete record in timage
       if(res.statusCode===200) 
         try {
-          await deleteInCloud(idImage,token.value,ctrls[1].signal) //delete asset on Cloudinary.com                  
+          await deleteInCloud(idImage,token.value,signal) //delete asset on Cloudinary.com                  
         } catch (error) {}  //asset no longer present
     } 
   }
   // LISTITEMS DATA FILTERING AND ACTIONS - MODEL SPECIFIC
+  if (ctrls[2]) ctrls[2].abort()
+  ctrls[2] = new AbortController() 
   let listItemsFilter=null,filteredList=null,toggleOn = null  //filter 3 position switches
   let getToggleLabel=null, handleAction=null
   switch(props.entity.model){
@@ -231,10 +266,7 @@
             return t(`comps.list_items.actions_menu.user.${toggle}.indeterminate`)
         }
       }
-      handleAction = async(cs)=>{    
-        if (!alive) return                // component gone? don't touch state 
-        if (ctrls[1]) ctrls[1].abort()
-        ctrls[1] = new AbortController()
+      handleAction = async(cs)=>{   
         let res=null,status=2
         const idx=getIndex()
         switch(cs){      
@@ -242,7 +274,7 @@
             status=3
           case "validation":
             //database update
-            res=await postEntity('StatusTracking', {idStatus:status,idUser:selectedId.value}, token.value, ctrls[1].signal)
+            res=await postEntity('StatusTracking', {idStatus:status,idUser:selectedId.value}, token.value, ctrls[2].signal)
             // state update
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idUser:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
@@ -278,9 +310,6 @@
         }
       }
       handleAction = async(cs)=>{    
-        if (!alive) return                // component gone? don't touch state 
-        if (ctrls[1]) ctrls[1].abort()
-        ctrls[1] = new AbortController()
         let res=null,status=12
         const idx=getIndex()
         switch(cs){      
@@ -288,7 +317,7 @@
             status=13
           case "activation":
             //database update
-            res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrls[1].signal)
+            res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrls[2].signal)
             // state update
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idExpo:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
@@ -298,21 +327,21 @@
             const {data:images}=(await getEntitiesBySql(
               'list_images_expo',
               token.value,
-              ctrls[1].signal,
+              ctrls[2].signal,
               ':idExpo', 
               selectedId.value
             )).data
             if(selectedId.value>0) {  //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
-              res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[1].signal) 
+              res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[2].signal) 
               if(res.data.statusCode!==200) return 
             } 
             //delete images in timage and delete asset on Cloudinary.com
             images[0].map(async(image) => {
               //delete record in timage
-              res=await deleteEntity('Image',image.idImage,token.value, ctrls[1].signal)  
+              res=await deleteEntity('Image',image.idImage,token.value, ctrls[2].signal)  
               if(res.data.statusCode===200) { 
                 try {   //delete asset on Cloudinary.com
-                  await deleteInCloud(image.idImage,token.value,ctrls[1].signal)                   
+                  await deleteInCloud(image.idImage,token.value,ctrls[2].signal)                   
                 } catch (error) {}  //asset no longer present
               }
             })     
@@ -335,17 +364,13 @@
         })
       })      
       handleAction = async(cs)=>{    
-        if (!alive) return                // component gone? don't touch state 
-        if (ctrls[1]) ctrls[1].abort()
-        ctrls[1] = new AbortController()
         const idx=getIndex()
         switch(cs){     
           case "deletion":
-            handleDelete(idx)
+            handleDelete(idx,ctrls[2].signal)
         }
       }
-      break
-      
+      break      
     case 'Booking':
       listItemsFilter=ref({search:'',booking_status:''})  
       filteredList=computed(() => {  
@@ -361,13 +386,10 @@
         })
       })      
       handleAction = async(cs)=>{    
-        if (!alive) return                // component gone? don't touch state 
-        if (ctrls[1]) ctrls[1].abort()
-        ctrls[1] = new AbortController()
         const idx=getIndex()
         switch(cs){     
           case "deletion":
-            handleDelete(idx)
+            handleDelete(idx,ctrls[2].signal)
             initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
         }
       }
@@ -410,34 +432,79 @@
         obj.idUser=decoded.value.idUser
         obj.vernissage=0
         obj.lunch=0
+        obj.bookingOeuvre=[]
+        state.value[2].map((item,i) => {
+          obj.bookingOeuvre.push({
+            idBookingOeuvre:-(i+=1),
+            idBooking:newRecId,
+            idOeuvre:item.idOeuvre,
+            title_fr:item.title_fr,
+            title_en:item.title_en,
+            url:item.url,
+            selected:0,
+            showRoom:0,
+            screen:0,
+            idStatus:14,
+            status_fr:'brouillon',
+            status_en:'draft'
+          })
+        })
         break
     }
     return obj
   }
-  async function bodyCleanUp(body,signal){  //remove fields not belonging to the model and idModel
-    const {data:res}=await getEntityFields(props.entity.model,token.value,signal)
+  async function bodyCleanUp(model,body,signal){  //remove fields not belonging to the model and idModel
+    const {data:res}=await getEntityFields(model,token.value,signal)
     if(res.statusCode!==200) return body
     const obj={}
     res.data.map((field) => {
-      obj[field]=body[field]
+      if(body[field]!==undefined) obj[field]=body[field]
     })
     return obj
   }
   function handleNewRecord(){
-    state.value[0]=[...state.value[0],_.cloneDeep(initNewrec())]  
+    state.value[0]=[...state.value[0],_.cloneDeep(initNewrec())] 
     initInitialValues(newRecId) 
     resetActualChanges(newRecId)  //initialize actualChanges for the newly created record
     handleOpenDetails(newRecId)
     
   }
   // FORM DETAILS TOOLBAR ACTIONS
+  async function processBookingOeuvre(body,bookingID,idx,signal) {  //body=bookingOeuvre array
+    let res=null,obj=null
+    await Promise.all(
+      body.map(async(bo,i) => {
+        if(bo.selected && bo.idBookingOeuvre<0){  //new record case
+          obj=await bodyCleanUp('BookingOeuvre',bo,signal)
+          res=await postEntity('BookingOeuvre',obj,token.value, signal)
+          if(res.data.statusCode!==200) return
+          state.value[0][idx].bookingOeuvre[i].idBookingOeuvre=res.data.data.idBookingOeuvre //update idModel value to newly created record id
+        }
+        else if(bo.idBookingOeuvre>0) {   
+          if(!bo.selected) {
+            res=await deleteEntity('BookingOeuvre',bo.idBookingOeuvre,token.value, signal)  
+            if(res.data.statusCode!==200) return
+            const id=getRandomInt(-1e5,-1e2)
+            state.value[0][idx].bookingOeuvre[i].idBookingOeuvre=id
+          } 
+          else  { 
+            obj=await bodyCleanUp('BookingOeuvre',bo,signal)
+            res=await patchEntity('BookingOeuvre',bo.idBookingOeuvre,obj,token.value, signal)
+            if(res.data.statusCode!==200) return        
+          }          
+        }  
+        initialValues[idx].bookingOeuvre[i]= _.cloneDeep(state.value[0][idx].bookingOeuvre[i]) //update initial values with saved data 
+      })
+    )
+    actualChanges.value[idx].bookingOeuvre=false
+  }
   async function handleToolbarActions(cs){  
+    if (!alive) return                // component gone? don't touch state  
+    if (ctrls[3]) ctrls[3].abort()
+    ctrls[3] = new AbortController() 
     let index=null
     switch(cs){
       case "save":
-        if (!alive) return                // component gone? don't touch state 
-        if (ctrls[2]) ctrls[2].abort()
-        ctrls[2] = new AbortController()
         let keys=[],obj=null,res=null,newId=null
         actualChanges.value.map(async(item,idx) => {
           if(JSON.stringify(item).includes(true)){
@@ -449,18 +516,14 @@
               }
               else obj[key]=item[key]
             })  
-            let body=null
-            if(obj[idModel]<0) {
-              body=state.value[0][idx]
-              body=await bodyCleanUp(body,ctrls[2].signal)
-            }
-            else {
-              body=_.cloneDeep(obj)  //cloneDeep necessary
-              delete body[idModel]
-            }  
+            let body=null,bodyBookingOeuvre=null
+            if(obj[idModel]<0) body=state.value[0][idx]
+            else body=_.cloneDeep(obj)  //cloneDeep necessary
+            if(body.bookingOeuvre) bodyBookingOeuvre=body.bookingOeuvre
+            body=await bodyCleanUp(props.entity.model,body,ctrls[3].signal)
             if(Object.keys(body).length>=1){
-              res=await(obj[idModel]<0?postEntity(props.entity.model,body,token.value, ctrls[2].signal):
-                patchEntity(props.entity.model,obj[idModel],body,token.value, ctrls[2].signal))
+              res=await(obj[idModel]<0?postEntity(props.entity.model,body,token.value, ctrls[3].signal):
+                patchEntity(props.entity.model,obj[idModel],body,token.value, ctrls[3].signal))
               if(res.data.statusCode!==200) return
               keys.map((key) => { 
                 if(key!==idModel && item[key]){
@@ -481,14 +544,36 @@
                 newRecId=0
               }
             }
+            if(bodyBookingOeuvre) {
+              processBookingOeuvre(bodyBookingOeuvre,newId?newId:obj[idModel],idx,ctrls[3].signal)  //newId is idBooking in case of new Booking creation, otherwise idModel being updated
+              if(newId) {  //renumber idBooking in bodyBookingOeuvre to newly created Booking object
+                bodyBookingOeuvre.map((bo) => {
+                  bo.idBooking=newId
+                })
+              }
+            }
+            else handleToolbarActions('undo')
           }
         })    
         break
       case "clear":
         index=getIndex()
         clearables[`${props.entity.model}`].map((prop) => {
-          if(state.value[0][index][prop[0]])
-            state.value[0][index][prop[0]]=prop.length===1?null:prop[1]  //actualChanges updated by state reativity mechanism
+          if(state.value[0][index][prop[0]]){
+            switch(prop[0]){
+              case 'bookingOeuvre':
+                const keys=Object.keys(prop[1])
+                state.value[0][index][prop[0]].map((bo) => {
+                  keys.map((key) => {
+                    bo[key]=prop[1][key]
+                  })
+                })
+                break
+              default:
+                state.value[0][index][prop[0]]=prop.length===1?null:prop[1] 
+            }
+            actualChanges.value[index][prop[0]]=!isEqual(initialValues[index][prop[0]],state.value[0][index][prop[0]],prop[0])
+          } 
         })
         break
       case "undo":
@@ -498,7 +583,6 @@
         break
       case "deletion":
         handleAction('deletion')
-
     }
     initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
   }
@@ -566,7 +650,7 @@
             v-model="listItemsFilter[`${entity.model.toLowerCase()}_status`]"
             toggle-indeterminate
             :label="getToggleLabel('status')"            
-            :color="toggleOn.status?'positive':'deep-orange-9'"s
+            :color="toggleOn.status?'positive':'deep-orange-9'"
             keep-color
             checked-icon="check"
             unchecked-icon="clear"
