@@ -11,7 +11,7 @@
     "icon": "photo_frame",
     "text": "expos",
     "wrap": false,
-    "roles": [1, 5, 6, 7]
+    "roles": [5, 6, 7]
   },
   {
     "url": "/member/users",

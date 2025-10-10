@@ -2,6 +2,7 @@
   import {ref,computed} from 'vue'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
+  import Tooltip from '../../Tooltip.vue'
 
   const props = defineProps({
     data:{type:Object}
@@ -45,6 +46,9 @@
     }
     emit('change','bookingOeuvre',true,bookingOeuvre.value)    
   }
+  function truncate(text, max = 24) {
+    return text?.length > max ? text.slice(0, max).trimEnd() + ' ...' : text
+  }
 
 </script>
 
@@ -67,15 +71,22 @@
           <q-card-section class='title'>
             <q-checkbox 
               v-model="slotProps.row.selected" 
-              :label="slotProps.row[`title_${locale}`]" 
               dense 
               :true-value="1" :false-value="0"
+              :disable="!slotProps.row.selected && !slotProps.row.showRoom && !slotProps.row.screen"
               @update:model-value="() => {
                 handleChange(!slotProps.row.selected?slotProps.row.idBookingOeuvre:null)
               }"
-            />
+            >
+              <span>{{ truncate(slotProps.row[`title_${locale}`]) }}</span>              
+            </q-checkbox>
+            <Tooltip 
+              v-if="!slotProps.row.showRoom && !slotProps.row.screen" 
+              :wrap="true"
+              :tt_text="$t('comps.form_details.booking_oeuvre.tooltip')">
+            </Tooltip>   
           </q-card-section>          
-          <div class="status-container">
+          <div v-if="slotProps.row.selected" class="status-container">
             <label>
               <span>
                 {{t('comps.form_details.booking_oeuvre.status')}}&nbsp;:&nbsp;
@@ -94,7 +105,7 @@
           <q-separator />
           <q-card-section class="toggle">
             <div class="toggle-container">
-              <label>{{ t('comps.form_details.booking_oeuvre.showRoom') }}</label>
+              <label>{{t('comps.form_details.booking_oeuvre.showRoom')}}</label>
               <q-toggle
                 v-model="slotProps.row.showRoom" 
                 :true-value="1" :false-value="0"
@@ -103,12 +114,11 @@
                 checked-icon="check"
                 unchecked-icon="clear"
                 size="md"
-                :disable="!slotProps.row.selected"
                 @update:model-value="handleChange"
               />  
             </div>
             <div class="toggle-container">
-              <label>{{ t('comps.form_details.booking_oeuvre.screen') }}</label>
+              <label>{{t('comps.form_details.booking_oeuvre.screen')}}</label>
               <q-toggle
                 v-model="slotProps.row.screen"
                 :true-value="1" :false-value="0"
@@ -117,7 +127,6 @@
                 checked-icon="check"
                 unchecked-icon="clear"
                 size="md"
-                :disable="!slotProps.row.selected"
                 @update:model-value="handleChange"
               />  
             </div>

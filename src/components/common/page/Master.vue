@@ -14,7 +14,7 @@
   import clearables from "../page/details/clearables.json"
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
-import { getRandomInt } from '@/utilityFunctions.js';
+  import { getRandomInt } from '@/utilityFunctions.js'
 
   const props=defineProps({
     entity:{type:Object},
@@ -42,9 +42,9 @@ import { getRandomInt } from '@/utilityFunctions.js';
     })
   })
   const formValid=ref({...obj})
-  const disabled=computed(() => {
-    return JSON.stringify(formValid).includes(false);
-  })
+  // const disabled=computed(() => {
+  //   return JSON.stringify(formValid).includes(false);
+  // })
   
   const state=ref([])
   const selectedId = ref(null)
@@ -64,7 +64,6 @@ import { getRandomInt } from '@/utilityFunctions.js';
     initialValues.map((item) => {  
       if(!id || item[idModel]===id){
         obj=Object.keys(item).reduce((acc, key) => 
-            // (acc[key!==idModel?key:'id'] = key!==idModel?false:item[idModel], acc), {})
             (acc[key!==idModel?key:idModel] = key!==idModel?false:item[idModel], acc), {})   // initialize actualChanges for a given item >>> all fields set to false
         actualChanges.value.push(obj)
       }
@@ -279,6 +278,10 @@ import { getRandomInt } from '@/utilityFunctions.js';
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idUser:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
             state.value[0][idx].idStatus=status
+            break
+          case "deletion":
+            handleDelete(idx,ctrls[2].signal)
+          
         }
       }
       break
@@ -387,8 +390,11 @@ import { getRandomInt } from '@/utilityFunctions.js';
       })      
       handleAction = async(cs)=>{    
         const idx=getIndex()
-        switch(cs){     
+        switch(cs){   
           case "deletion":
+            if(state.value[0][idx].idStatus>7){
+              
+            }
             handleDelete(idx,ctrls[2].signal)
             initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
         }
@@ -471,14 +477,24 @@ import { getRandomInt } from '@/utilityFunctions.js';
   }
   // FORM DETAILS TOOLBAR ACTIONS
   async function processBookingOeuvre(body,bookingID,idx,signal) {  //body=bookingOeuvre array
-    let res=null,obj=null
+    const bookingStatus=state.value[0][idx].idStatus
+    let res=null,obj=null,newId
     await Promise.all(
       body.map(async(bo,i) => {
         if(bo.selected && bo.idBookingOeuvre<0){  //new record case
           obj=await bodyCleanUp('BookingOeuvre',bo,signal)
-          res=await postEntity('BookingOeuvre',obj,token.value, signal)
+          res=await postEntity('BookingOeuvre',obj,token.value, signal)  //creation of corresponding record in tstatus_tracking at the same time (idStatus:14 >>> draft)
           if(res.data.statusCode!==200) return
-          state.value[0][idx].bookingOeuvre[i].idBookingOeuvre=res.data.data.idBookingOeuvre //update idModel value to newly created record id
+          newId=res.data.data.idBookingOeuvre
+          state.value[0][idx].bookingOeuvre[i].idBookingOeuvre=newId //update idBookingOeuvre value to newly created record id
+          //if booking is at candidate status (8), related BookingOeuvre should have a corresponding record at status 15 (candidate) in tstatus_tracking (in addition to those at 14)
+          if(bookingStatus===8){  
+            res=await postEntity('StatusTracking',{idStatus:15,idBookingOeuvre:newId},token.value, signal)
+            if(res.data.statusCode!==200) return
+            state.value[0][idx].bookingOeuvre[i].idStatus=15
+            state.value[0][idx].bookingOeuvre[i].status_fr='candidat'
+            state.value[0][idx].bookingOeuvre[i].status_en='candidate'
+          }
         }
         else if(bo.idBookingOeuvre>0) {   
           if(!bo.selected) {
@@ -486,6 +502,11 @@ import { getRandomInt } from '@/utilityFunctions.js';
             if(res.data.statusCode!==200) return
             const id=getRandomInt(-1e5,-1e2)
             state.value[0][idx].bookingOeuvre[i].idBookingOeuvre=id
+            if(state.value[0][idx].bookingOeuvre[i].idStatus!==14){
+              state.value[0][idx].bookingOeuvre[i].idStatus=14
+              state.value[0][idx].bookingOeuvre[i].status_fr='brouillon'
+              state.value[0][idx].bookingOeuvre[i].status_en='draft'
+            }
           } 
           else  { 
             obj=await bodyCleanUp('BookingOeuvre',bo,signal)
@@ -593,8 +614,9 @@ import { getRandomInt } from '@/utilityFunctions.js';
     })
     return n
   })
-  // BUTTON ACTIONS - MODEL SPECIFIC 
+  // BOTTOM BUTTONS ACTIONS - MODEL SPECIFIC
   async function handleButtonActions(name) {
+    if (!alive) return                // component gone? don't touch state  
     switch(props.entity.model){
       case 'User':
         switch(name){
@@ -605,10 +627,64 @@ import { getRandomInt } from '@/utilityFunctions.js';
             if (!(await confirm($q,t('comps.list_items.actions_menu.user.confirm.deletion'),'cancel'))) return false 
             handleAction('deletion')
         }
-        break    
+        break   
+      case 'Booking':
+        if (!(await confirm($q,t(`comps.form_details.booking.${name}`),'cancel'))) return
+        const idx=getIndex()
+        switch(name){
+          case 'register':
+            //process candidate status for booking
+            const{data:res}=await postEntity('StatusTracking',{idStatus:8,idBooking:state.value[0][idx].idBooking},token.value,ctrls[2].signal)  
+            if(res.statusCode!==200) return
+            state.value[1].unshift(res.data) //update status tracking state
+            //process candidate status for each booking-oeuvre
+            await Promise.all(
+              selection.value.map(async(bo,i) => {
+                const{data:res}=await postEntity('StatusTracking',{idStatus:15,idBookingOeuvre:bo[0].idBookingOeuvre},token.value,ctrls[2].signal)  
+                if(res.statusCode===200) {
+                  state.value[0][idx].bookingOeuvre[bo[1]].idStatus=15
+                  state.value[0][idx].bookingOeuvre[bo[1]].status_fr='candidat'
+                  state.value[0][idx].bookingOeuvre[bo[1]].status_en='candidate'
+                }                
+              })
+
+            )
+            break
+          case 'cancel':
+
+        }
+
     }
   }
+  //BOTTOM BUTTONS ENABLE-DISABLE CONDITIONS
+  function initButtonDisabled(vals){
+    const obj={}
+    props.fieldsets[props.fieldsets.length-1].buttons.map((button,i) => {
+      obj[button.name]=vals[i]          
+    })
+    return obj
+  }
+  const selection=computed(() => {
+    const idx=getIndex(),arr=[]
+    state.value[0][idx].bookingOeuvre.map((bo,i) => {
+      if((bo.selected && bo.showRoom) || (bo.selected && bo.screen))
+        arr.push([bo,i])
+    })
+    return arr
+  })
+  const buttonDisabledConditions=computed(() => {
+    switch(props.entity.model){
+      case 'Booking':  //buttons >>> [register,cancel]
+        return initButtonDisabled([true,true])
+        const idx=getIndex()
+        if(JSON.stringify(actualChanges.value[idx]).includes(true) || selection.value.length===0 || state.value[0][idx].idStatus>7)
+          return initButtonDisabled([true,false])
+      default:
+        return initButtonDisabled([false,false])
+    }
+  })
   //SELECT OPTION DATA HANDLING
+  let flg=[]
   function handleSelectOption(option) {
     if(!option) return
     const idx=getIndex(selectedId.value)
@@ -618,7 +694,9 @@ import { getRandomInt } from '@/utilityFunctions.js';
         if(option.data[key]) obj[key]=option.data[key]
       })
       state.value[0][idx]={...state.value[0][idx],...obj}
+      if(flg.includes(option.value)) return
       initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
+      flg.push(option.value)
     }
   }
 
@@ -731,6 +809,7 @@ import { getRandomInt } from '@/utilityFunctions.js';
       <FieldsetButton          
         key="bottom"
         :buttons="fieldsets[fieldsets.length-1].buttons"  
+        :disabled="buttonDisabledConditions"
         @button-action="handleButtonActions"      
       >
       </FieldsetButton>

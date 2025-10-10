@@ -91,10 +91,11 @@
       "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
       "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
       "booking": "Please select the exhition you wish to register to.",
+      "closure": "Be aware that after the closure date, your will not be able to register nor modify/delete any on-going registration.",
       "events": "Please indicate the events you plan to attend.",
       "deposit-collection": "Dates and opening hours for art works deposit and collection.",
       "pricing": "Price per work in the show room and price per work on screen - EUR.",
-      "selection": "Please make the selection of your works that you wish to exhibit."
+      "selection": "Please make the selection of your works that you wish to exhibit. Then click on REGISTER when you are ready."
     },
     "file_upload": {
       "delete": "Delete",
@@ -166,11 +167,14 @@
     "form_details": {
       "translate": "Translate",
       "newRec": "Please save the record before creating linked data.",
-      "booking": {},
+      "booking": {
+        "register": "Please confirm submission of your registration."
+      },
       "booking_oeuvre": {
         "showRoom": "Show room",
         "screen": "On screen",
-        "status": "Status"
+        "status": "Status",
+        "tooltip": "To enable selection, you must choose one display mode at least (show room and/or screen)."
       }
     },
     "public_site": {

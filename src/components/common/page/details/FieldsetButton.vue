@@ -2,26 +2,28 @@
   import { useI18n } from 'vue-i18n'
 
   const props=defineProps({
-    buttons:{type:Array}
+    buttons:{type:Array},
+    disabled:{type:Object}
   })
+  
   const {locale}=useI18n()
   const emit=defineEmits(['buttonAction'])
   
 </script>
 
 <template>
-    <q-btn 
-      v-for="(button,idx) in buttons"
-      class="button"
-      color='primary'
-      rounded standout pulse
-      no-wrap
-      :icon="button.icon"
-      :label="button[`label_${locale}`]"
-      :disabled="false"
-      @click="emit('buttonAction',button.name)"
-    >
-    </q-btn>
+  <q-btn 
+    v-for="(button,idx) in buttons"
+    class="button"
+    color='primary'
+    rounded standout pulse
+    no-wrap
+    :icon="button.icon"
+    :label="button[`label_${locale}`]"
+    :disabled="disabled[button.name]"
+    @click="emit('buttonAction',button.name)"
+  >
+  </q-btn>
 </template>
 
 <style scoped>
