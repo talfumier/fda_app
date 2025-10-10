@@ -14,7 +14,7 @@
 
 <template>
   <q-tooltip 
-    :class="['tooltip', small ? 'small' : 'large', wrap?'':'nowrap']"
+    :class="['tooltip', small ? 'small' : 'large', wrap?'wrap':'nowrap']"
     anchor="bottom middle"
     self="center middle"
     >
@@ -28,6 +28,9 @@
     color: var(--white);
     padding: 5px 12px;
     border-radius: 6px;
+  }
+  .wrap {
+    max-width:250px;
   }
   .nowrap {
     white-space: nowrap;

@@ -429,6 +429,19 @@
         ]
       },
       {
+        "name": "deadline",
+        "type": "standard",
+        "legend_fr": "Date limite de dépôt des inscriptions *",
+        "legend_en": "Deadline for submitting registration *",
+        "fields": [
+          {
+            "name": "closureDateTime",
+            "field_type": "input",
+            "format": "date-time"
+          }
+        ]
+      },
+      {
         "name": "calendar_exhibition",
         "type": "standard",
         "legend_fr": "Calendrier",
@@ -927,6 +940,22 @@
             "field_type": "unknown",
             "listMaster": true,
             "required": false
+          }
+        ]
+      },
+      {
+        "name": "closure",
+        "type": "standard",
+        "legend_fr": "Date limite d'inscription",
+        "legend_en": "Dealine for registration",
+        "info": true,
+        "info_path": "comps.infos.closure",
+        "fields": [
+          {
+            "name": "closureDateTime",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
           }
         ]
       },

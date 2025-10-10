@@ -28,7 +28,7 @@
     listMaster:{type:Boolean,default:false}
   })  
   
-  const {token}=inject('userCookie')
+  const {token,decoded}=inject('userCookie')
   const { t,locale } = useI18n()    
   const {formatDate,formatDateTime}=useFormatDate()
   
@@ -55,8 +55,8 @@
       let sqlparams=null,paramsValues=null
       switch(props.options){
         case 'options_expo':
-          sqlparams=':idExpo'
-          paramsValues=props.value?props.value:-10
+          sqlparams=':idUser,:idExpo'
+          paramsValues=`${decoded.value.idUser},${props.value?props.value:-10}`
       }
       const {data:res}=await getEntitiesBySql(
         props.options,
@@ -76,13 +76,14 @@
         })
         options.value.push(obj)
       })
+      handleChange(data.value,'init')
     }
   })
   onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
 
   const emit = defineEmits(['change','iconClick','selectObject'])
-  //initial value processing 
-  handleChange(data.value,'init')
+    
+  handleChange(data.value,'init') //initial value processing 
   function handleChange(val,cs=null){
     if(!cs)dirty.value=true
     data.value=val
@@ -96,7 +97,7 @@
       val,
       props.name==='pwd_check'?data.value:undefined
     ) 
-    if(!Array.isArray(props.options) && props.field_type==='select'){    //retrieve option object
+    if(props.options && !Array.isArray(props.options) && props.field_type==='select'){    //retrieve option object
       const obj=_.filter(options.value,(option) => {
         return option.value==val
       })[0]
@@ -384,6 +385,10 @@
   }
   div.input-container.completionDate .q-icon.date {
     top:23px;
+  }
+  div.input-container.closureDateTime .q-icon.date,
+  div.input-container.closureDateTime .q-icon.time {
+    top:8px;
   }
   .q-icon.time {
     top:30px;

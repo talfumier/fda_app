@@ -108,7 +108,7 @@ import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
       >
       </FieldsetFiles>
       <FieldsetBookingOeuvre
-        v-if="item.type==='booking-oeuvre'"
+        v-if="item.type==='booking-oeuvre'"  
         :data="record"
         @change="(name,valid,val) => {
           handleChange(name,valid,val)
