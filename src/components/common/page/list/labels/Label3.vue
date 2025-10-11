@@ -115,6 +115,9 @@
     position:relative;
     min-width:250px;
   }
+  .group .row1 {
+    margin-top: 5px;
+  }
   .q-icon {
     position:absolute;
     right:0;

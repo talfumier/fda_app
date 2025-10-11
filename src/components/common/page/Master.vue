@@ -4,6 +4,7 @@
   import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
+  import { parse } from 'date-fns'
   import { getEntitiesBySql,postEntity,patchEntity,deleteEntity, getEntityFields } from '@/services/httpEntities.js'
   import { deleteInCloud } from '@/services/httpCloudinary.js'
   import { forgotPassword } from '@/services/httpUsers.js'
@@ -15,6 +16,7 @@
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
   import { getRandomInt } from '@/utilityFunctions.js'
+  import { statusText } from '@/globals/globals.js'
 
   const props=defineProps({
     entity:{type:Object},
@@ -162,7 +164,7 @@
           bookingOeuvre=[]
           res.data[0].map((bo,i) => {
             obj={}
-            if(!bo.idStatus)  obj={idStatus:14,status_fr:'brouillon',status_en:'draft'}
+            if(!bo.idStatus)  obj=statusText[14]
             bookingOeuvre.push({
               ...bo,
               idBookingOeuvre:bo.idBookingOeuvre?bo.idBookingOeuvre:-(i+=1),
@@ -392,9 +394,6 @@
         const idx=getIndex()
         switch(cs){   
           case "deletion":
-            if(state.value[0][idx].idStatus>7){
-              
-            }
             handleDelete(idx,ctrls[2].signal)
             initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
         }
@@ -450,9 +449,7 @@
             selected:0,
             showRoom:0,
             screen:0,
-            idStatus:14,
-            status_fr:'brouillon',
-            status_en:'draft'
+            ...statusText[14]
           })
         })
         break
@@ -491,9 +488,7 @@
           if(bookingStatus===8){  
             res=await postEntity('StatusTracking',{idStatus:15,idBookingOeuvre:newId},token.value, signal)
             if(res.data.statusCode!==200) return
-            state.value[0][idx].bookingOeuvre[i].idStatus=15
-            state.value[0][idx].bookingOeuvre[i].status_fr='candidat'
-            state.value[0][idx].bookingOeuvre[i].status_en='candidate'
+            state.value[0][idx].bookingOeuvre[i]={...state.value[0][idx].bookingOeuvre[i],...statusText[15]}
           }
         }
         else if(bo.idBookingOeuvre>0) {   
@@ -502,11 +497,8 @@
             if(res.data.statusCode!==200) return
             const id=getRandomInt(-1e5,-1e2)
             state.value[0][idx].bookingOeuvre[i].idBookingOeuvre=id
-            if(state.value[0][idx].bookingOeuvre[i].idStatus!==14){
-              state.value[0][idx].bookingOeuvre[i].idStatus=14
-              state.value[0][idx].bookingOeuvre[i].status_fr='brouillon'
-              state.value[0][idx].bookingOeuvre[i].status_en='draft'
-            }
+            if(state.value[0][idx].bookingOeuvre[i].idStatus!==14)
+              state.value[0][idx].bookingOeuvre[i]={...state.value[0][idx].bookingOeuvre[i],...statusText[14]}
           } 
           else  { 
             obj=await bodyCleanUp('BookingOeuvre',bo,signal)
@@ -629,41 +621,67 @@
         }
         break   
       case 'Booking':
+        async function processBookingStatus(newStatus){
+          //process new status for booking
+          const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.booking,idBooking:state.value[0][idx].idBooking},token.value,ctrls[2].signal)  
+          if(res.statusCode!==200) return
+          state.value[0][idx].idStatus=newStatus.booking
+          state.value[1].unshift(res.data) //update status tracking state
+          //process new status for each booking-oeuvre
+          await Promise.all(
+            selection.value.map(async(bo,i) => {
+              const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.bookingOeuvre,idBookingOeuvre:bo[0].idBookingOeuvre},token.value,ctrls[2].signal)  
+              if(res.statusCode===200) {
+                state.value[0][idx].bookingOeuvre[bo[i]]={...state.value[0][idx].bookingOeuvre[bo[i]],...statusText[newStatus.bookingOeuvre]}
+              }                
+            })
+
+          )
+        }
         if (!(await confirm($q,t(`comps.form_details.booking.${name}`),'cancel'))) return
         const idx=getIndex()
         switch(name){
           case 'register':
-            //process candidate status for booking
-            const{data:res}=await postEntity('StatusTracking',{idStatus:8,idBooking:state.value[0][idx].idBooking},token.value,ctrls[2].signal)  
-            if(res.statusCode!==200) return
-            state.value[1].unshift(res.data) //update status tracking state
-            //process candidate status for each booking-oeuvre
-            await Promise.all(
-              selection.value.map(async(bo,i) => {
-                const{data:res}=await postEntity('StatusTracking',{idStatus:15,idBookingOeuvre:bo[0].idBookingOeuvre},token.value,ctrls[2].signal)  
-                if(res.statusCode===200) {
-                  state.value[0][idx].bookingOeuvre[bo[1]].idStatus=15
-                  state.value[0][idx].bookingOeuvre[bo[1]].status_fr='candidat'
-                  state.value[0][idx].bookingOeuvre[bo[1]].status_en='candidate'
-                }                
-              })
-
-            )
+            processBookingStatus({booking:8,bookingOeuvre:15})
             break
           case 'cancel':
-
+            processBookingStatus({booking:7,bookingOeuvre:14})
         }
-
+        initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
     }
   }
   //BOTTOM BUTTONS ENABLE-DISABLE CONDITIONS
-  function initButtonDisabled(vals){
-    const obj={}
-    props.fieldsets[props.fieldsets.length-1].buttons.map((button,i) => {
-      obj[button.name]=vals[i]          
-    })
-    return obj
-  }
+  const bottomButtonDisabled = computed(() => {
+    const idx=getIndex()
+    const out = { register: false, cancel: false }
+    if (props.entity.model !== 'Booking') return out
+    if (!selection.value || JSON.stringify(actualChanges.value[idx]).includes(true)) {
+      out.register = true
+      out.cancel = true
+      return out
+    }
+    const closureDate = state.value[0][idx].closureDateTime
+      ? parse(state.value[0][idx].closureDateTime, 'dd/MM/yyyy HH:mm', new Date())
+      : null
+    const closureExceeded = closureDate && closureDate < new Date()
+    if (state.value[0][idx].idStatus > 8 || (state.value[0][idx].idStatus === 8 && closureExceeded)) {
+      out.register = true
+      out.cancel = true
+      return out
+    }
+    if(state.value[0][idx].idStatus === 8 && !closureExceeded){
+      out.register = true
+      out.cancel = false
+      return out
+    }
+    if (state.value[0][idx].idStatus === 7) {      
+      out.cancel=true
+      if(!closureExceeded) out.register=false
+      else out.register=true
+      return out
+    }
+    return out
+  })
   const selection=computed(() => {
     const idx=getIndex(),arr=[]
     state.value[0][idx].bookingOeuvre.map((bo,i) => {
@@ -671,17 +689,6 @@
         arr.push([bo,i])
     })
     return arr
-  })
-  const buttonDisabledConditions=computed(() => {
-    switch(props.entity.model){
-      case 'Booking':  //buttons >>> [register,cancel]
-        return initButtonDisabled([true,true])
-        const idx=getIndex()
-        if(JSON.stringify(actualChanges.value[idx]).includes(true) || selection.value.length===0 || state.value[0][idx].idStatus>7)
-          return initButtonDisabled([true,false])
-      default:
-        return initButtonDisabled([false,false])
-    }
   })
   //SELECT OPTION DATA HANDLING
   let flg=[]
@@ -691,7 +698,7 @@
     if(option.data){
       const obj={}
       Object.keys(state.value[0][idx]).map((key) => {
-        if(option.data[key]) obj[key]=option.data[key]
+        if(option.data[key] && key!=='idStatus' && !key.includes('status_')) obj[key]=option.data[key]  //do not change booking idStatus data to expo idStatus data
       })
       state.value[0][idx]={...state.value[0][idx],...obj}
       if(flg.includes(option.value)) return
@@ -699,6 +706,16 @@
       flg.push(option.value)
     }
   }
+  const toolbarDisableItem=computed(() => {    
+    const idx=getIndex()
+    let obj={save:false,delete:false}
+    switch(props.entity.model){
+      case 'Booking':
+        if(state.value[0][idx].idStatus>8 || (state.value[0][idx].idStatus===8 && parse(state.value[0][idx].closureDateTime, 'dd/MM/yyyy HH:mm', new Date()) < new Date()))          
+          obj= {save:true,delete:true}
+    }
+    return obj
+  })
 
 </script>
 
@@ -794,22 +811,50 @@
         @select-object="(option) => {
           handleSelectOption(option)
         }"
-        >
+      >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"
-            :actualChange="changeStatus"
-            :model="entity.model"
             @toolbar-actions="handleToolbarActions"
           >
+            <template #save>    <!--named scoped slot -->          
+              <div class="save">
+                <q-btn round flat icon="save" 
+                  :size="`${changeStatus===0?'1.6rem':'1.8rem'}`" 
+                  :class="`${changeStatus==0?'':'pulse'}`" 
+                  :disable="changeStatus===0 || toolbarDisableItem.save" 
+                  @click="handleToolbarActions('save')">
+                </q-btn>
+                <q-badge v-if="changeStatus>=1" color="orange" text-color="black" :label="changeStatus" />
+                <Tooltip 
+                  :tt_text="$t(`${toolbarDisableItem.save?'comps.toolbar.booking_save':'common.save'}`)"
+                  :wrap="toolbarDisableItem.save?true:false"
+                >
+              </Tooltip>
+              </div>
+            </template>
+            <template #delete> <!--named scoped slot -->              
+              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' "class="delete">        
+                <q-btn round flat icon="delete" size="1.6rem" 
+                  :disable="toolbarDisableItem.delete"
+                  @click="async() => {
+                    if(!(await confirm($q,t(`common.confirm.${cs}`),'cancel'))) return   
+                    handleToolbarActions('deletion') 
+                  }" 
+                />
+                <Tooltip 
+                  :tt_text="$t(`${toolbarDisableItem.delete?'comps.toolbar.booking_delete':'common.delete'}`)"
+                  :wrap="toolbarDisableItem.delete?true:false"
+                  ></Tooltip>
+              </div>
+            </template>
           </Toolbar>
         </template> 
       </FormDetails>
     </form>
     <div v-if="fieldsets[fieldsets.length-1].type==='button-bottom' && filteredDetails" :class="['bottom-container',entity.model]">
-      <FieldsetButton          
-        key="bottom"
+      <FieldsetButton  
         :buttons="fieldsets[fieldsets.length-1].buttons"  
-        :disabled="buttonDisabledConditions"
+        :disabled="bottomButtonDisabled"
         @button-action="handleButtonActions"      
       >
       </FieldsetButton>
@@ -944,6 +989,26 @@
     top:10px;
     right:20px;
     z-index: 5000;
+  }  
+  .toolbar .save {    
+    position:relative;
+    color:var(--green);
+  }
+  .toolbar .q-badge {
+    position:absolute;
+    top:5px;
+    right:0;
+  }
+  @keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,0,0,.0) }
+  40%  { box-shadow: 0 0 0 8px rgba(25,118,210,.25) } /* adjust color */
+  100% { box-shadow: 0 0 0 0 rgba(0,0,0,.0) }
+  }
+  .pulse { 
+    animation: pulse 1.2s ease-out infinite 
+  }
+  .toolbar .delete {    
+    color:var(--red-opaque8);
   }
   div.folded .details-container {
     border-width: 0;

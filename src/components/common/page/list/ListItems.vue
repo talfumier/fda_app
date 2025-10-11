@@ -172,6 +172,7 @@
   .list-item {
     display:flex;
     flex-direction: column;
+    justify-content: center;
     font-size: 1.6rem;
     font-weight: bolder;
     margin: 0 10px;

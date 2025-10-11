@@ -947,7 +947,7 @@
         "name": "closure",
         "type": "standard",
         "legend_fr": "Date limite d'inscription",
-        "legend_en": "Dealine for registration",
+        "legend_en": "Deadline for registration",
         "info": true,
         "info_path": "comps.infos.closure",
         "fields": [

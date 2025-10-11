@@ -3,8 +3,17 @@
     data:{type:Array}
   })
   
-  const text={7:'created',8:'candidate',9:'rejected',10:'accepted'}
+  const text={70:'created',71:'draft',8:'candidate',9:'rejected',10:'accepted'}
   const status={...text,7:'draft'}
+  function getTextIndex(statusID,idx){
+    switch(statusID){
+      case 7:
+        if(idx===props.data.length-1) return 70
+        else return 71
+      default:
+        return statusID
+    }
+  }
 </script>
 
 <template>
@@ -13,7 +22,7 @@
       <span>{{ $t(`comps.list_items.actions_menu.booking.${status[data[0].idStatus]}`)}}</span> 
     </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
-      <span >{{ $t(`comps.list_items.actions_menu.booking.${text[item.idStatus]}`)}}</span>
+      <span >{{ $t(`comps.list_items.actions_menu.booking.${text[getTextIndex(item.idStatus,idx)]}`)}}</span>
       <span>:&nbsp</span>    
       <span >{{$formatDateTime(item.createdAt)}}</span>
     </p>

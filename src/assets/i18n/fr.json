@@ -68,6 +68,10 @@
       "map": "Plan du site",
       "contact": "Contact"
     },
+    "toolbar": {
+      "booking_delete": "L'inscription ne peut pas être supprimée. Merci de contacter les organisateurs si besoin ...",
+      "booking_save": "L'inscription ne peut pas être modifiée. Merci de contacter les organisateurs si besoin ..."
+    },
     "validation": {
       "fields": {
         "not_null": "<span>Champs obligatoire !</span>",
@@ -168,7 +172,8 @@
       "translate": "Traduire",
       "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées.",
       "booking": {
-        "register": "Merci de confirmer votre demande d'inscription."
+        "register": "Merci de confirmer votre demande d'inscription.",
+        "cancel": "Merci de confirmer l'annulation de votre inscription."
       },
       "booking_oeuvre": {
         "showRoom": "En salle",

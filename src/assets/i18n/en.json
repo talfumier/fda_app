@@ -68,6 +68,10 @@
       "map": "Site map",
       "contact": "Contact"
     },
+    "toolbar": {
+      "booking_delete": "Registration cannot be deleted. Please contact the organsisation if needed ...",
+      "booking_save": "Registration cannot be modified. Please contact the organsisation if needed ..."
+    },
     "validation": {
       "fields": {
         "not_null": "<span>Mandatory input !</span>",
@@ -168,7 +172,8 @@
       "translate": "Translate",
       "newRec": "Please save the record before creating linked data.",
       "booking": {
-        "register": "Please confirm submission of your registration."
+        "register": "Please confirm submission of your registration.",
+        "cancel": "Please confirm cancellation of your registration."
       },
       "booking_oeuvre": {
         "showRoom": "Show room",

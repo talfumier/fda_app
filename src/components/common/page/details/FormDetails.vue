@@ -117,7 +117,6 @@ import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
       </FieldsetBookingOeuvre>
       <FieldsetButton  
         v-if="item.type==='button'"
-        :key="idx"
         :buttons="item.buttons"  
         @button-action="handleButtonAction"      
       >

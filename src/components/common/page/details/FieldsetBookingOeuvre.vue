@@ -3,6 +3,7 @@
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
   import Tooltip from '../../Tooltip.vue'
+  import { truncate } from '@/utilityFunctions.js'
 
   const props = defineProps({
     data:{type:Object}
@@ -46,9 +47,6 @@
     }
     emit('change','bookingOeuvre',true,bookingOeuvre.value)    
   }
-  function truncate(text, max = 24) {
-    return text?.length > max ? text.slice(0, max).trimEnd() + ' ...' : text
-  }
 
 </script>
 
@@ -78,7 +76,7 @@
                 handleChange(!slotProps.row.selected?slotProps.row.idBookingOeuvre:null)
               }"
             >
-              <span>{{ truncate(slotProps.row[`title_${locale}`]) }}</span>              
+              <span>{{ truncate(slotProps.row[`title_${locale}`],24) }}</span>              
             </q-checkbox>
             <Tooltip 
               v-if="!slotProps.row.showRoom && !slotProps.row.screen" 

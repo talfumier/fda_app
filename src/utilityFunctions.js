@@ -33,3 +33,6 @@ export function fileSize(size) {
     return `${(size / 1048576).toFixed(1)} MB`
   }
 }
+export function truncate(text, max) {
+  return text?.length > max ? text.slice(0, max).trimEnd() + ' ...' : text
+}
