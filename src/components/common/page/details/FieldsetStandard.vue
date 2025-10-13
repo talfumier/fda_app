@@ -8,6 +8,7 @@
     fields:{type:Array},
     data:{type:Object}
   })  
+  
   const {locale}=useI18n()
   //filter out _fr or _en fields when they are optional AND do not match the current locale
   const filteredFields=computed(() => {
@@ -16,9 +17,10 @@
       else return true      
     })
   })
-  const emit=defineEmits(['change','selectObject'])
-  function handleChange(name,valid,val){
-    emit('change',name,valid,val)
+  
+  const emit=defineEmits(['change'])
+  function handleChange(name,valid,val,option){
+    emit('change',name,valid,val,option)
   }
   function handleIconClick(cs,url){
     switch (cs){
@@ -51,10 +53,7 @@
     :listMaster="item.listMaster"
     @change="handleChange"
     @icon-click="handleIconClick(item.data_type,data[item.name])"
-    @select-object="(option) => {
-      emit('selectObject',option)
-    }"
-  >    
+  >  
   </InputField>
 </template>
 

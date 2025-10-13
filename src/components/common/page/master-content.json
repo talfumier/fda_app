@@ -925,7 +925,7 @@
             "options": "options_expo",
             "lock": true,
             "showInfos": true,
-            "required": false
+            "required": true
           },
           {
             "name": "short_fr",

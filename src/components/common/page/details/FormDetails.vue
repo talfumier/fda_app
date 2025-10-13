@@ -9,14 +9,14 @@
   import DialogInfo from '../../DialogInfo.vue'
   import FieldsetFile from './FieldsetFile.vue'
   import FieldsetFiles from './FieldsetFiles.vue'
+  import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
-import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
 
   const props=defineProps({
     entity:{type:Object},
     fieldsets:{type:Array},
     record:{type:Object}
-  })   
+  }) 
     
   const {locale}=useI18n()
   const filteredFieldsets=computed(() => {
@@ -25,9 +25,9 @@ import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
       else return item.roles?item.roles.includes(props.record.idRole):true
     })
   })
-  const emit=defineEmits(['change','translate','buttonAction','selectObject'])
-  function handleChange(name,valid,val){   
-    emit('change',name,valid,val)
+  const emit=defineEmits(['change','translate','buttonAction'])
+  function handleChange(name,valid,val,option){ 
+    emit('change',name,valid,val,option)
   }
   function handleTranslate(params) {
     emit('translate',params)
@@ -41,6 +41,13 @@ import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
     emit('buttonAction',name)
   }
 
+ function getUniqueKey(){
+  let x=null
+  Object.keys(props.record).map((key) => {
+    if(key.includes('id')) x+=props.record[key]
+  })
+  return x
+ }
 </script>
 
 <template>
@@ -51,15 +58,10 @@ import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue';
       </legend>
       <FieldsetStandard
         v-if="item.type.includes('standard')"
-        :key="idx"
+        :key="getUniqueKey()"
         :fields="item.fields"
         :data="record"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val)
-        }"
-        @select-object="(option) => {
-          emit('selectObject',option)
-        }"
+        @change="handleChange"
       >
       </FieldsetStandard>    
       <FieldsetAddress
