@@ -80,11 +80,26 @@
     if((val1==='' || val1===null) && (val2==='' || val2===null)) return true
     return _.isEqual(val1,val2)  //deep comparison
   }
-  function handleChange(name,valid,val){ 
+  function handleSelectOption(name,val,idx,option){
+    switch(props.entity.model){
+      case 'Booking':
+        if(name==='idExpo') {
+          const obj={}
+          Object.keys(state.value[0][idx]).map((key) => {
+            if(option.data[key] && key!=='idStatus' && !key.includes('status_'))  //do not change booking idStatus data to expo idStatus data
+              obj[key]=option.data[key]
+          })
+          state.value[0][idx]={...state.value[0][idx],...obj,idExpo:val} 
+        }
+
+    }
+  }
+  function handleChange(name,valid,val,option){ 
     const idx=getIndex()
     if(name !==idModel){
       actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
-      state.value[0][idx][name]=val
+      if(!option) state.value[0][idx][name]=val
+      if(option && option.data) handleSelectOption(name,val,idx,option)
       formValid.value[name]=valid
     }
   }
@@ -454,7 +469,7 @@
   }
 
   function initNewrec(){
-    const obj={}
+    let obj={}
     props.fieldsets.map((fieldset) => {
       fieldset.fields?.map((field) => {
         obj[field.name]=null
@@ -480,7 +495,7 @@
         obj.vernissage=0
         obj.lunch=0
         obj.price=0
-        obj.bookingOeuvre=[]
+        obj.bookingOeuvre=[]        
         state.value[2].map((item,i) => {
           obj.bookingOeuvre.push({
             idBookingOeuvre:-(i+=1),
@@ -495,6 +510,7 @@
             ...statusText[14]
           })
         })
+        obj={...obj,...statusText[7]}
         break
     }
     return obj
@@ -781,22 +797,7 @@
     if(price) handleChange('price',true,price)
     // state.value[0][idx].price=price
   }, { deep: true, immediate: true })
-  //SELECT OPTION DATA HANDLING
-  let flg=[]
-  function handleSelectOption(option) {
-    if(!option) return
-    const idx=getIndex(selectedId.value)
-    if(option.data){
-      const obj={}
-      Object.keys(state.value[0][idx]).map((key) => {
-        if(option.data[key] && key!=='idStatus' && !key.includes('status_')) obj[key]=option.data[key]  //do not change booking idStatus data to expo idStatus data
-      })
-      state.value[0][idx]={...state.value[0][idx],...obj}
-      if(flg.includes(option.value)) return
-      initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
-      flg.push(option.value)
-    }
-  }
+  
   const toolbarDisableItem=computed(() => {    
     const idx=getIndex()
     let obj={save:false,delete:false}
@@ -899,9 +900,6 @@
         @change="handleChange"
         @translate="handleTranslate"
         @button-action="handleButtonActions"
-        @select-object="(option) => {
-          handleSelectOption(option)
-        }"
       >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar class="toolbar"

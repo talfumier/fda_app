@@ -72,7 +72,7 @@
       })
       options.value.push(obj)
     })
-    handleChange(data.value,'init')   
+    handleChange(data.value,'init')   //necessary because async operation completes after standard handleChange init
   }
   onMounted(() => {  
     if(!props.options) return
@@ -93,7 +93,7 @@
   })
   onUnmounted(() => { cancelAllInFlight(inFlight) })    // clean-up code after component has unmounted
 
-  const emit = defineEmits(['change','iconClick','selectObject'])
+  const emit = defineEmits(['change','iconClick'])
     
   handleChange(data.value,'init') //initial value processing 
   function handleChange(val,cs=null){
@@ -103,18 +103,21 @@
     if (props.required && props.field_type !== 'select' && props.field_type !=='option-group' ) {
       valid = validate(val,props.name.includes('pwd')?'pwd':props.format);}
     Object.assign(fieldValid.value, valid)
+
+    let obj=null
+    if(props.options && !Array.isArray(props.options) && props.field_type==='select'){    //retrieve option object
+      obj=_.filter(options.value,(option) => {
+        return option.value==val
+      })[0]
+    }
+    
     emit('change', //notify the parent component
       props.name,
       valid.valid,
       val,
-      props.name==='pwd_check'?data.value:undefined
+      props.name==='pwd_check'?data.value:(obj?obj:undefined)  //obj = selected option whose value = val
     ) 
-    if(props.options && !Array.isArray(props.options) && props.field_type==='select'){    //retrieve option object
-      const obj=_.filter(options.value,(option) => {
-        return option.value==val
-      })[0]
-      if(obj) emit('selectObject',obj)
-    }
+    
   }
   function handleVisibility(){
      if(type.value==='text') type.value='password'
