@@ -14,6 +14,6 @@
     flex-direction: row-reverse;
     justify-content: left;    
     align-items:start;
-    margin-top: 10px;
+    margin: 5px 0;
   }
 </style>

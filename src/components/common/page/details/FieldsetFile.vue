@@ -14,6 +14,7 @@
   import { postInCloud,deleteInCloud } from '@/services/httpCloudinary.js'
   import { postEntity,patchEntity, deleteEntity } from '@/services/httpEntities.js'
   import { confirm } from '../../dialog/dialog.js'
+  import Tooltip from '../../Tooltip.vue'
 
   const props = defineProps({
     fileYes:{type:String},
@@ -41,13 +42,10 @@
   const emit=defineEmits('fileChange')
 
   const ctrl=new AbortController()  
-  let alive = true // guard against updates after unmount
   onUnmounted(() => { // clean-up code after component has unmounted
-    alive=false
     ctrl.abort()
   })   
   async function handleClick(cs){
-    if(!alive) return
     switch(cs){
       case 'upload':
         document.getElementById('select-file').click()  
@@ -190,7 +188,7 @@
           no-wrap
           icon="upload"
           :label="$t('comps.file_upload.upload')"
-          :disabled="false"
+          :disabled="data.idOeuvre<0 || data.idExpo<0?true:false"
           @click="handleClick('upload')"
         >
           <input
@@ -201,6 +199,7 @@
             @change="handleSelectedFile"
           />
         </q-btn>
+        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip>  
       </div>
       <div className="file-details">
         <InputField v-for="(item,idx) in fields"

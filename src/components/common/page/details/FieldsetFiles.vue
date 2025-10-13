@@ -14,9 +14,7 @@
   const images=ref(null)
   // IMAGE DATA LOADING
   const ctrl=new AbortController()   // AbortController's object' used in http request operation
-  let alive = true // guard against updates after unmount
   async function fetch() {
-    if (!alive) return                // component gone? don't touch state 
     const {data:res}=await getEntitiesBySql(
       'list_images_expo',
       token.value,
@@ -30,7 +28,6 @@
     images.value=await fetch()
   })
   onUnmounted(() => {  // clean-up code after component has unmounted    
-    alive = false;
     ctrl.abort    
   })
 </script>

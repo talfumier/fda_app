@@ -68,6 +68,10 @@
       "map": "Site map",
       "contact": "Contact"
     },
+    "toolbar": {
+      "booking_delete": "Registration cannot be deleted. Please contact the organsisation if needed ...",
+      "booking_save": "Registration cannot be modified. Please contact the organsisation if needed ..."
+    },
     "validation": {
       "fields": {
         "not_null": "<span>Mandatory input !</span>",
@@ -90,16 +94,18 @@
       "title": "Longer and more selling name used in the public site.",
       "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
       "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
+      "picture": "Please make sure the record is actually saved before uploading any picture.",
       "booking": "Please select the exhition you wish to register to.",
       "closure": "Be aware that after the closure date, your will not be able to register nor modify/delete any on-going registration.",
       "events": "Please indicate the events you plan to attend.",
       "deposit-collection": "Dates and opening hours for art works deposit and collection.",
-      "pricing": "Price per work in the show room and price per work on screen - EUR.",
+      "pricing": "Price per work displayed in the show room and price per work on screen. Your financial contribution is based on your selection.",
       "selection": "Please make the selection of your works that you wish to exhibit. Then click on REGISTER when you are ready."
     },
     "file_upload": {
       "delete": "Delete",
       "upload": "Upload",
+      "tooltip": "Save record before file upload.",
       "max_exceeded": "File size is above the accepted limit (",
       "file_delete": "Please confirm file deletion."
     },
@@ -168,7 +174,8 @@
       "translate": "Translate",
       "newRec": "Please save the record before creating linked data.",
       "booking": {
-        "register": "Please confirm submission of your registration."
+        "register": "Please confirm submission of your registration.",
+        "cancel": "Please confirm cancellation of your registration."
       },
       "booking_oeuvre": {
         "showRoom": "Show room",
