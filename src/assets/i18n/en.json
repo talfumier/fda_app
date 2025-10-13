@@ -105,6 +105,7 @@
     "file_upload": {
       "delete": "Delete",
       "upload": "Upload",
+      "tooltip": "Save record before file upload.",
       "max_exceeded": "File size is above the accepted limit (",
       "file_delete": "Please confirm file deletion."
     },

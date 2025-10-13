@@ -88,8 +88,7 @@
         finally {
           doneController(ctrl, inFlight)
         }
-      })() //Immediately Invoked Function Expression >>> runs async operation inside a non async onMounted (preferable)
-      
+      })() //Immediately Invoked Function Expression >>> runs async operation inside a non async onMounted (preferable)      
     }
   })
   onUnmounted(() => { cancelAllInFlight(inFlight) })    // clean-up code after component has unmounted

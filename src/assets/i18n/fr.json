@@ -105,6 +105,7 @@
     "file_upload": {
       "delete": "Supprimer",
       "upload": "Télécharger",
+      "tooltip": "Sauvegarder l'enregistrement avant le téléchargement du fichier.",
       "max_exceeded": "La taille du fichier est supérieure à la valeur max autorisée (",
       "file_delete": "Merci de confirmer la suppression du fichier."
     },

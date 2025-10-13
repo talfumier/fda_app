@@ -14,6 +14,7 @@
   import { postInCloud,deleteInCloud } from '@/services/httpCloudinary.js'
   import { postEntity,patchEntity, deleteEntity } from '@/services/httpEntities.js'
   import { confirm } from '../../dialog/dialog.js'
+  import Tooltip from '../../Tooltip.vue'
 
   const props = defineProps({
     fileYes:{type:String},
@@ -198,6 +199,7 @@
             @change="handleSelectedFile"
           />
         </q-btn>
+        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip>  
       </div>
       <div className="file-details">
         <InputField v-for="(item,idx) in fields"

@@ -719,9 +719,11 @@
         const idx=getIndex()
         switch(name){
           case 'register':
+            if(state.value[0][idx].idStatus>7) return
             processBookingStatus({booking:8,bookingOeuvre:15})
             break
           case 'cancel':
+            if(state.value[0][idx].idStatus<8) return
             processBookingStatus({booking:7,bookingOeuvre:14})
         }
         initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
