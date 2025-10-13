@@ -1,5 +1,5 @@
-<script setup async>
-  import { ref,computed,onMounted,onUnmounted,inject} from 'vue'
+<script setup>
+  import { ref,computed,watch,onMounted,onUnmounted,inject} from 'vue'
   import { onBeforeRouteLeave } from 'vue-router'
   import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
@@ -15,7 +15,7 @@
   import clearables from "../page/details/clearables.json"
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
-  import { getRandomInt } from '@/utilityFunctions.js'
+  import { newController,doneController,cancelAllInFlight,getRandomInt } from '@/utilityFunctions.js'
   import { statusText } from '@/globals/globals.js'
 
   const props=defineProps({
@@ -24,6 +24,7 @@
   })
 
   const idModel=`id${props.entity.model}`
+  const inFlight=new Set()
 
   const {locale,t}=useI18n()  
   const {token,decoded}=inject('userCookie')
@@ -101,12 +102,7 @@
     initFlag.value+=.01
   }
   // DATA LOADING
-  const ctrls={} // AbortController's object' used in http request operation  
-  if (ctrls[0]) ctrls[0].abort()
-  ctrls[0] = new AbortController()
-  let alive = true // guard against updates after unmount
   async function fetch(signal) {
-    if (!alive) return                // component gone? don't touch state 
     let res=null,sqlparams=null,paramsValues=null
     if (props.entity.sql) {
       switch(props.entity.model){
@@ -138,7 +134,6 @@
     return res.data    
   }  
   async function fetchBookingOeuvre(user,booking,signal){
-    if (!alive) return                // component gone? don't touch state      
     const {data:res}=await getEntitiesBySql(
       'booking_oeuvre_selection',
       token.value,
@@ -154,28 +149,42 @@
     })
   }
   onMounted(async () => {  
-    state.value = await fetch(ctrls[0].signal)
-    if(props.entity.model==='Booking'){  //load BookingOeuvre data for each idBooking of a given user (connected user) 
-      let res=null,bookingOeuvre=null,obj=null
-      await Promise.all(
-        state.value[0].map(async(item,idx) => {  
-          res=await fetchBookingOeuvre(item.idUser,item.idBooking,ctrls[0].signal)  
-          if(res.statusCode!==200) return
-          bookingOeuvre=[]
-          res.data[0].map((bo,i) => {
-            obj={}
-            if(!bo.idStatus)  obj=statusText[14]
-            bookingOeuvre.push({
-              ...bo,
-              idBookingOeuvre:bo.idBookingOeuvre?bo.idBookingOeuvre:-(i+=1),
-              idBooking:item.idBooking,
-              ...obj
-            })
-          })  
-          state.value[0][idx]={...state.value[0][idx],bookingOeuvre}
-        })
-      )
-    } 
+    const ctrl=newController(inFlight)
+    try {
+      state.value = await fetch(ctrl.signal)    
+      if(props.entity.model==='Booking'){  //load BookingOeuvre data for each idBooking of a given user (connected user) 
+        let res=null,bookingOeuvre=null,obj=null
+        await Promise.all(
+          state.value[0].map(async(item,idx) => {  
+            try {
+              res=await fetchBookingOeuvre(item.idUser,item.idBooking,ctrl.signal)             
+            } catch (error) {
+              console.error('onmounted failed in Master.vue >>> Booking load', error)
+              return
+            }
+            if(res.statusCode!==200) return
+            bookingOeuvre=[]
+            res.data[0].map((bo,i) => {
+              obj={}
+              if(!bo.idStatus)  obj=statusText[14]
+              bookingOeuvre.push({
+                ...bo,
+                idBookingOeuvre:bo.idBookingOeuvre?bo.idBookingOeuvre:-(i+=1),
+                idBooking:item.idBooking,
+                ...obj
+              })
+            })  
+            state.value[0][idx]={...state.value[0][idx],bookingOeuvre}
+          })
+        )
+      }   
+    } catch (error) {
+      console.error('onmounted failed in Master.vue', error)
+      return
+    }
+    finally {
+      doneController(ctrl,inFlight)
+    }
     initInitialValues()
     resetActualChanges()    
     if(props.entity.noList) {
@@ -189,11 +198,8 @@
     }
     window.addEventListener('beforeunload', beforeUnload)
   })
-  onUnmounted(() => { // clean-up code after component has unmounted    
-    alive = false;
-    Object.keys(ctrls).map((key) => {
-       ctrls[key]?.abort() 
-    })
+  onUnmounted(() => { // clean-up code after component has unmounted  
+    cancelAllInFlight(inFlight)
     window.removeEventListener('beforeunload', beforeUnload) 
   })    
   // DETECTING ROUTE CHANGES INSIDE SPA, PAGE REFRESH/CLOSE  
@@ -213,28 +219,42 @@
   }
   // ACTIONS - MODEL INDEPENDANT
   function afterDelete(idx){  //update state, initialValues, actualChanges
-      state.value[0].splice(idx,1)  
+    state.value[0].splice(idx,1)  
     initialValues.splice(idx,1)
     actualChanges.value.splice(idx,1)    
   }
-  async function handleDelete(idx,signal){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage  
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage
+    const ctrl = newController(inFlight)
     const idImage=state.value[0][idx].idImage 
     if(selectedId.value>0) {
-      const res=await deleteEntity(props.entity.model,selectedId.value,token.value, signal)  //delete record in tuser, toeuvre, tbooking ...  
-      if(res.data.statusCode!==200) return                                            //deletion of corresponding records in tstatus_tracking done by cascade delete
+      try {
+        const res=await deleteEntity(props.entity.model,selectedId.value,token.value,ctrl.signal)  //delete record in tuser, toeuvre, tbooking ...  
+        if(res.data.statusCode!==200) return    
+      } catch (error) {
+        console.error(error)
+      }
+      finally {
+        doneController(ctrl,inFlight)
+      }      
     }      
     afterDelete(idx)  //update state, initialValues, actualChanges    
     if(idImage) {
-      const {data:res}= await deleteEntity('Image',idImage,token.value, signal)  //delete record in timage
-      if(res.statusCode===200) 
-        try {
-          await deleteInCloud(idImage,token.value,signal) //delete asset on Cloudinary.com                  
-        } catch (error) {}  //asset no longer present
+      const ctrl = newController(inFlight)
+      try {
+        const {data:res}= await deleteEntity('Image',idImage,token.value,ctrl.signal)  //delete record in timage
+        if(res.statusCode===200) 
+          try {
+            await deleteInCloud(idImage,token.value,ctrl.signal) //delete asset on Cloudinary.com                  
+          } catch (error) {}  //asset no longer present        
+      } catch (error) {
+        console.error(error)
+      }
+      finally {
+        doneController(ctrl,inFlight)
+      }  
     } 
   }
   // LISTITEMS DATA FILTERING AND ACTIONS - MODEL SPECIFIC
-  if (ctrls[2]) ctrls[2].abort()
-  ctrls[2] = new AbortController() 
   let listItemsFilter=null,filteredList=null,toggleOn = null  //filter 3 position switches
   let getToggleLabel=null, handleAction=null
   switch(props.entity.model){
@@ -268,6 +288,7 @@
         }
       }
       handleAction = async(cs)=>{   
+        const ctrl=newController(inFlight)
         let res=null,status=2
         const idx=getIndex()
         switch(cs){      
@@ -275,15 +296,21 @@
             status=3
           case "validation":
             //database update
-            res=await postEntity('StatusTracking', {idStatus:status,idUser:selectedId.value}, token.value, ctrls[2].signal)
+            try {
+              res=await postEntity('StatusTracking', {idStatus:status,idUser:selectedId.value}, token.value, ctrl.signal)              
+            } catch (error) {
+                console.error(error)
+            }
+            finally {
+              doneController(ctrl,inFlight)
+            }  
             // state update
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idUser:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
             state.value[0][idx].idStatus=status
             break
           case "deletion":
-            handleDelete(idx,ctrls[2].signal)
-          
+            handleDelete(idx)          
         }
       }
       break
@@ -314,7 +341,8 @@
             return t(`comps.list_items.actions_menu.expo.${toggle}.indeterminate`)
         }
       }
-      handleAction = async(cs)=>{    
+      handleAction = async(cs)=>{         
+        const ctrl=newController(inFlight)   
         let res=null,status=12
         const idx=getIndex()
         switch(cs){      
@@ -322,35 +350,49 @@
             status=13
           case "activation":
             //database update
-            res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrls[2].signal)
+            try {
+              res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrl.signal)              
+            } catch (error) {
+                console.error(error)
+            }
+            finally {
+              doneController(ctrl,inFlight)
+            }  
             // state update
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idExpo:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})
             state.value[0][idx].idStatus=status
             break;
           case "deletion":
-            const {data:images}=(await getEntitiesBySql(
-              'list_images_expo',
-              token.value,
-              ctrls[2].signal,
-              ':idExpo', 
-              selectedId.value
-            )).data
-            if(selectedId.value>0) {  //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
-              res=await deleteEntity('Expo',selectedId.value,token.value, ctrls[2].signal) 
-              if(res.data.statusCode!==200) return 
+            try {
+              const {data:images}=(await getEntitiesBySql(
+                'list_images_expo',
+                token.value,
+                ctrl.signal,
+                ':idExpo', 
+                selectedId.value
+              )).data
+              if(selectedId.value>0) {  //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
+                res=await deleteEntity('Expo',selectedId.value,token.value, ctrl.signal) 
+                if(res.data.statusCode!==200) return 
+              } 
+              //delete images in timage and delete asset on Cloudinary.com
+              await Promise.all(images[0].map(async(image) => {
+                //delete record in timage
+                res=await deleteEntity('Image',image.idImage,token.value, ctrl.signal)  
+                if(res.data.statusCode===200) { 
+                  try {   //delete asset on Cloudinary.com
+                    await deleteInCloud(image.idImage,token.value,ctrl.signal)                   
+                  } catch (error) {}  //asset no longer present
+                }
+              })   )  
+              afterDelete(idx)  //update state, initialValues, actualChanges               
+            } catch (error) {
+                console.error(error)      
             } 
-            //delete images in timage and delete asset on Cloudinary.com
-            images[0].map(async(image) => {
-              //delete record in timage
-              res=await deleteEntity('Image',image.idImage,token.value, ctrls[2].signal)  
-              if(res.data.statusCode===200) { 
-                try {   //delete asset on Cloudinary.com
-                  await deleteInCloud(image.idImage,token.value,ctrls[2].signal)                   
-                } catch (error) {}  //asset no longer present
-              }
-            })     
-            afterDelete(idx)  //update state, initialValues, actualChanges  
+            finally {
+              doneController(ctrl,inFlight)
+            }  
         }
       }
       break
@@ -372,7 +414,7 @@
         const idx=getIndex()
         switch(cs){     
           case "deletion":
-            handleDelete(idx,ctrls[2].signal)
+            handleDelete(idx)
         }
       }
       break      
@@ -390,12 +432,12 @@
           return result
         })
       })      
-      handleAction = async(cs)=>{    
+      handleAction = (cs)=>{    
         const idx=getIndex()
         switch(cs){   
           case "deletion":
-            handleDelete(idx,ctrls[2].signal)
-            initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
+            handleDelete(idx)
+            // initFlag.value+=.01    //forces computed filteredDetails update >>> key property in FormDetails component in below template
         }
       }
       break
@@ -437,6 +479,7 @@
         obj.idUser=decoded.value.idUser
         obj.vernissage=0
         obj.lunch=0
+        obj.price=0
         obj.bookingOeuvre=[]
         state.value[2].map((item,i) => {
           obj.bookingOeuvre.push({
@@ -469,8 +512,7 @@
     state.value[0]=[...state.value[0],_.cloneDeep(initNewrec())] 
     initInitialValues(newRecId) 
     resetActualChanges(newRecId)  //initialize actualChanges for the newly created record
-    handleOpenDetails(newRecId)
-    
+    handleOpenDetails(newRecId)    
   }
   // FORM DETAILS TOOLBAR ACTIONS
   async function processBookingOeuvre(body,bookingID,idx,signal) {  //body=bookingOeuvre array
@@ -512,9 +554,6 @@
     actualChanges.value[idx].bookingOeuvre=false
   }
   async function handleToolbarActions(cs){  
-    if (!alive) return                // component gone? don't touch state  
-    if (ctrls[3]) ctrls[3].abort()
-    ctrls[3] = new AbortController() 
     let index=null
     switch(cs){
       case "save":
@@ -533,10 +572,26 @@
             if(obj[idModel]<0) body=state.value[0][idx]
             else body=_.cloneDeep(obj)  //cloneDeep necessary
             if(body.bookingOeuvre) bodyBookingOeuvre=body.bookingOeuvre
-            body=await bodyCleanUp(props.entity.model,body,ctrls[3].signal)
+            const ctrl=newController(inFlight)
+            try {
+              body=await bodyCleanUp(props.entity.model,body,ctrl.signal)
+            } catch (error) {
+                console.error(error)
+            }
+            finally {
+              doneController(ctrl,inFlight)
+            }
             if(Object.keys(body).length>=1){
-              res=await(obj[idModel]<0?postEntity(props.entity.model,body,token.value, ctrls[3].signal):
-                patchEntity(props.entity.model,obj[idModel],body,token.value, ctrls[3].signal))
+              const ctrl1=newController(inFlight)
+              try {
+                res=await(obj[idModel]<0?postEntity(props.entity.model,body,token.value, ctrl1.signal):
+                patchEntity(props.entity.model,obj[idModel],body,token.value, ctrl1.signal))
+              } catch (error) {
+                  console.error(error)     
+              } 
+              finally {
+                doneController(ctrl1,inFlight)
+              }             
               if(res.data.statusCode!==200) return
               keys.map((key) => { 
                 if(key!==idModel && item[key]){
@@ -557,17 +612,25 @@
                 newRecId=0
               }
             }
-            if(bodyBookingOeuvre) {
-              processBookingOeuvre(bodyBookingOeuvre,newId?newId:obj[idModel],idx,ctrls[3].signal)  //newId is idBooking in case of new Booking creation, otherwise idModel being updated
-              if(newId) {  //renumber idBooking in bodyBookingOeuvre to newly created Booking object
-                bodyBookingOeuvre.map((bo) => {
-                  bo.idBooking=newId
-                })
+            if(bodyBookingOeuvre) {              
+              const ctrl2=newController(inFlight)
+              try {
+                processBookingOeuvre(bodyBookingOeuvre,newId?newId:obj[idModel],idx,ctrl2.signal)  //newId is idBooking in case of new Booking creation, otherwise idModel being updated
+                if(newId) {  //renumber idBooking in bodyBookingOeuvre to newly created Booking object
+                  bodyBookingOeuvre.map((bo) => {
+                    bo.idBooking=newId
+                  })
+                }                
+              } catch (error) {
+                  console.error(error)               
               }
+              finally {
+                doneController(ctrl2,inFlight)
+              }  
             }
             else handleToolbarActions('undo')
           }
-        })    
+        }) 
         break
       case "clear":
         index=getIndex()
@@ -608,7 +671,6 @@
   })
   // BOTTOM BUTTONS ACTIONS - MODEL SPECIFIC
   async function handleButtonActions(name) {
-    if (!alive) return                // component gone? don't touch state  
     switch(props.entity.model){
       case 'User':
         switch(name){
@@ -622,20 +684,35 @@
         break   
       case 'Booking':
         async function processBookingStatus(newStatus){
-          //process new status for booking
-          const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.booking,idBooking:state.value[0][idx].idBooking},token.value,ctrls[2].signal)  
-          if(res.statusCode!==200) return
-          state.value[0][idx].idStatus=newStatus.booking
-          state.value[1].unshift(res.data) //update status tracking state
+          const ctrl=newController(inFlight)
+          try {
+            //process new status for booking
+            const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.booking,idBooking:state.value[0][idx].idBooking},token.value,ctrl.signal)  
+            if(res.statusCode!==200) return
+            state.value[0][idx].idStatus=newStatus.booking
+            state.value[1].unshift(res.data) //update status tracking state
+          } catch (error) {
+            console.error(error)
+          }
+          finally {
+            doneController(ctrl,inFlight)
+          }
           //process new status for each booking-oeuvre
           await Promise.all(
             selection.value.map(async(bo,i) => {
-              const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.bookingOeuvre,idBookingOeuvre:bo[0].idBookingOeuvre},token.value,ctrls[2].signal)  
-              if(res.statusCode===200) {
-                state.value[0][idx].bookingOeuvre[bo[i]]={...state.value[0][idx].bookingOeuvre[bo[i]],...statusText[newStatus.bookingOeuvre]}
-              }                
+              const ctrl=newController(inFlight)
+              try {
+                const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.bookingOeuvre,idBookingOeuvre:bo[0].idBookingOeuvre},token.value,ctrl.signal)  
+                if(res.statusCode===200) {
+                  state.value[0][idx].bookingOeuvre[bo[i]]={...state.value[0][idx].bookingOeuvre[bo[i]],...statusText[newStatus.bookingOeuvre]}
+                }                     
+              } catch (error) {
+                  console.error(error)     
+              }  
+              finally {
+                doneController(ctrl,inFlight)
+              }         
             })
-
           )
         }
         if (!(await confirm($q,t(`comps.form_details.booking.${name}`),'cancel'))) return
@@ -654,8 +731,8 @@
   const bottomButtonDisabled = computed(() => {
     const idx=getIndex()
     const out = { register: false, cancel: false }
-    if (props.entity.model !== 'Booking') return out
-    if (!selection.value || JSON.stringify(actualChanges.value[idx]).includes(true)) {
+    if(props.entity.model !== 'Booking') return out
+    if(!selection.value || JSON.stringify(actualChanges.value[idx]).includes(true)) {
       out.register = true
       out.cancel = true
       return out
@@ -664,7 +741,7 @@
       ? parse(state.value[0][idx].closureDateTime, 'dd/MM/yyyy HH:mm', new Date())
       : null
     const closureExceeded = closureDate && closureDate < new Date()
-    if (state.value[0][idx].idStatus > 8 || (state.value[0][idx].idStatus === 8 && closureExceeded)) {
+    if(state.value[0][idx].idStatus > 8 || (state.value[0][idx].idStatus === 8 && closureExceeded)) {
       out.register = true
       out.cancel = true
       return out
@@ -674,7 +751,7 @@
       out.cancel = false
       return out
     }
-    if (state.value[0][idx].idStatus === 7) {      
+    if(state.value[0][idx].idStatus === 7) {      
       out.cancel=true
       if(!closureExceeded) out.register=false
       else out.register=true
@@ -683,13 +760,25 @@
     return out
   })
   const selection=computed(() => {
+    if(props.entity.model!=='Booking' || !selectedId.value) return null
     const idx=getIndex(),arr=[]
+    if(!state.value[0][idx] || !state.value[0][idx].bookingOeuvre) return arr
     state.value[0][idx].bookingOeuvre.map((bo,i) => {
       if((bo.selected && bo.showRoom) || (bo.selected && bo.screen))
         arr.push([bo,i])
     })
     return arr
   })
+  watch(selection, (newValue, oldValue) => {
+    if(props.entity.model!=='Booking' || !selectedId.value) return null
+    const idx=getIndex()
+    const price = newValue.reduce(
+      (total, item) => total + item[0].showRoom*state.value[0][idx].priceShowRoom+item[0].screen*state.value[0][idx].priceScreen,
+      0,
+    );    
+    if(price) handleChange('price',true,price)
+    // state.value[0][idx].price=price
+  }, { deep: true, immediate: true })
   //SELECT OPTION DATA HANDLING
   let flg=[]
   function handleSelectOption(option) {
@@ -837,7 +926,7 @@
                 <q-btn round flat icon="delete" size="1.6rem" 
                   :disable="toolbarDisableItem.delete"
                   @click="async() => {
-                    if(!(await confirm($q,t(`common.confirm.${cs}`),'cancel'))) return   
+                    if(!(await confirm($q,t(`common.confirm.deletion`),'cancel'))) return   
                     handleToolbarActions('deletion') 
                   }" 
                 />

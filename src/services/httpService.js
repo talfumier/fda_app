@@ -39,7 +39,15 @@ axios.interceptors.response.use(
     }
   },
   async (error) => {
-    //catching unexpected errors globally
+    //CATCHING UNEXPECTED ERRORS GLOBALLY
+    //abort controllers cancellation errors >>> resolve in order to keep running code
+    if (
+      error?.code === 'ERR_CANCELED' ||
+      error?.name === 'CanceledError' ||
+      error?.message === 'canceled' ||
+      (typeof axios.isCancel === 'function' && axios.isCancel(error))
+    )
+      return Promise.resolve({ data: null, __canceled: true }) // resolve instead of reject so nothing up the stack sees a rejection
     let text = 'Oups ... an unexpected error has occured :<br> '
     if (!error.response)
       //no response means network error

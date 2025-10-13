@@ -21,9 +21,7 @@
     })
   })
   const ctrl=new AbortController()  
-  let alive = true // guard against updates after unmount
   onMounted(async() => {
-    if(!alive) return
     const {data:res}=await getEntitiesBySql(
       'avatar',
       token.value,
@@ -36,7 +34,6 @@
     }
   })
   onUnmounted(() => { // clean-up code after component has unmounted
-    alive=false
     ctrl.abort()
   }) 
 </script>

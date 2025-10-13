@@ -1,5 +1,5 @@
 <script setup>
-  import {ref, computed, onMounted} from 'vue'
+  import {ref, computed} from 'vue'
   import _ from 'lodash'
   import CheckBox from '../../fields/CheckBox.vue'
   import Label3 from './labels/Label3.vue'

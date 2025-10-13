@@ -38,13 +38,18 @@
   const emit = defineEmits(['change'])
 
   function handleChange(id=null){   
-    if(id) {
+    if(id) {  //not selected >>> unset showRoom and screen toggles
       bookingOeuvre.value.map((bo) => {
         if(bo.idBookingOeuvre===id) {
           bo.showRoom=bo.screen=0
         }
       })
     }
+    bookingOeuvre.value.map((bo) => { //both toggles unset >>> set selected to 0
+        if(bo.showRoom===0 && bo.screen===0) {
+          bo.selected=0
+        }
+      })
     emit('change','bookingOeuvre',true,bookingOeuvre.value)    
   }
 

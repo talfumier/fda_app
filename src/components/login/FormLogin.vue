@@ -89,12 +89,10 @@
   }
   // role data loading
   let ctrl // current AbortController
-  let alive = true // guard against updates after unmount
   async function fetch() {
     if (ctrl) ctrl.abort()
     ctrl = new AbortController()
     const {data}=(await getEntities('Role',ctrl.signal)).data
-    if (!alive) return                // component gone? don't touch state  
     return _.filter(data,(item) => {
       return [1,5,6].includes(item.idRole)    //artist, organisation, organisation admin
     })
@@ -106,7 +104,7 @@
       roleOptions.push({value:item.idRole,text:{fr:item.role_fr,en:item.role_en}})
     })
   })
-  onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
+  onUnmounted(() => { ctrl?.abort() })    // clean-up code after component has unmounted
 </script>
 
 <template>

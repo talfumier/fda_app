@@ -5,6 +5,7 @@
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import {validate} from"./validation.js"
   import { getEntitiesBySql } from '@/services/httpEntities.js'
+  import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
 
   const props=defineProps({
     name:{type:String},
@@ -30,7 +31,8 @@
   
   const {token,decoded}=inject('userCookie')
   const { t,locale } = useI18n()    
-  const {formatDate,formatDateTime}=useFormatDate()
+  const {formatDate,formatDateTime}=useFormatDate()  
+  const inFlight=new Set()
   
   const data=ref(props.value), dirty=ref(false), type=ref(props.data_type), options=ref([])
   const fieldValid=ref({valid: true, msg: null})
@@ -45,41 +47,52 @@
     })
   })
   //SELECT OPTIONS DATA LOADING FROM A STORED PROCEDURE
-  const ctrl=new AbortController()   // AbortController's object' used in http request operation
-  let alive = true // guard against updates after unmount
-  onMounted(async() => {  
+  async function fetchOptions(signal){
+    let sqlparams=null,paramsValues=null
+    switch(props.options){
+      case 'options_expo':
+        sqlparams=':idUser,:idExpo'
+        paramsValues=`${decoded.value.idUser},${props.value?props.value:-10}`
+    }
+    const {data:res}=await getEntitiesBySql(
+      props.options,
+      token.value,
+      signal,
+      sqlparams,
+      paramsValues
+    )
+    if(!res || res.data[0].length===0) return
+    const keys=Object.keys(res.data[0][0])
+    let obj=null
+    res.data[0].map((item) => {
+      obj={value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]},data:{}}
+      if(item[keys[3]]) obj.infos=item[keys[3]]        
+      keys.map((key,idx) => { //additional data used to update state in Master.vue
+        if(idx>=1) obj.data[key]=item[key]
+      })
+      options.value.push(obj)
+    })
+    handleChange(data.value,'init')   
+  }
+  onMounted(() => {  
     if(!props.options) return
     if(Array.isArray(props.options)) options.value=props.options //options array provided directly by props
     else { //options data loaded from a stored procedure
-      if (!alive) return                // component gone? don't touch state 
-      let sqlparams=null,paramsValues=null
-      switch(props.options){
-        case 'options_expo':
-          sqlparams=':idUser,:idExpo'
-          paramsValues=`${decoded.value.idUser},${props.value?props.value:-10}`
-      }
-      const {data:res}=await getEntitiesBySql(
-        props.options,
-        token.value,
-        ctrl.signal,
-        sqlparams,
-        paramsValues
-      )
-      if(res.data[0].length===0) return
-      const keys=Object.keys(res.data[0][0])
-      let obj=null
-      res.data[0].map((item) => {
-        obj={value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]},data:{}}
-        if(item[keys[3]]) obj.infos=item[keys[3]]        
-        keys.map((key,idx) => { //additional data used to update state in Master.vue
-          if(idx>=1) obj.data[key]=item[key]
-        })
-        options.value.push(obj)
-      })
-      handleChange(data.value,'init')
+      ;(async() => {  
+        const ctrl = newController(inFlight)
+        try {
+          await fetchOptions(ctrl.signal)
+        } catch (err) {
+          console.error('InputField mounted fetch failed:', err)
+        } 
+        finally {
+          doneController(ctrl, inFlight)
+        }
+      })() //Immediately Invoked Function Expression >>> runs async operation inside a non async onMounted (preferable)
+      
     }
   })
-  onUnmounted(() => { alive = false; ctrl?.abort() })    // clean-up code after component has unmounted
+  onUnmounted(() => { cancelAllInFlight(inFlight) })    // clean-up code after component has unmounted
 
   const emit = defineEmits(['change','iconClick','selectObject'])
     
@@ -101,7 +114,7 @@
       const obj=_.filter(options.value,(option) => {
         return option.value==val
       })[0]
-      emit('selectObject',obj)
+      if(obj) emit('selectObject',obj)
     }
   }
   function handleVisibility(){
@@ -202,7 +215,8 @@
           />
         </div>
     </q-popup-proxy>
-    
+
+    <span v-if="name.includes('price')" class='currency'>€</span> 
     <input v-if="field_type==='input'"
       :name="name"
       :type="type"
@@ -226,7 +240,7 @@
       @click="() => {
         if(format==='date' || format==='date-time') handleClick('openDate')
       }"
-    />    
+    /> 
     <q-icon  v-if="icon"
       class="icon"
       :name="icon"
@@ -454,7 +468,30 @@
   div.input-container.newsletter,div.input-container.reserved, div.input-container.completionDate {
     padding-top: 20px;;
   }
+  div.input-container:has(.currency) input{
+    padding-left:20px;
+  }
+  div.input-container span.currency {
+    position:absolute;
+    top:31px;
+    left:10px;
+  }
+  div.input-container.price {
+    margin-left:0;
+  }
+  fieldset.standard.pricing div.input-container.price input, fieldset.standard.pricing div.input-container.price label {
+    color:red;
+  }
+  fieldset.standard.pricing div.input-container.price span.currency {    
+    color:red;
+  }
   fieldset.links input {
     width:300px;
   }
+
+  @media screen and (min-width: 1272px) {
+    div.input-container.price {
+      margin-left:80px;
+    }
+  } 
 </style>

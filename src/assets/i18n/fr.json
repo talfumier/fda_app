@@ -94,11 +94,12 @@
       "title": "Nom long et commercial utilisé sur le site public.",
       "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ...",
       "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. ",
+      "picture": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger une image.",
       "booking": "Veuillez sélectionner l'exposition pour laquelle vous souhaitez vous inscrire.",
       "closure": "Après la date de clôture, il ne sera pas possible de s'enregistrer ou de mofifier votre inscription",
       "events": "Veuillez indiquer les évènements auxquels vous pensez participer.",
       "deposit-collection": "Dates et horaires durant lesquels les oeuvres devront être déposées et retirées.",
-      "pricing": "Prix par oeuvre exposée en salle et prix par oeuvre diffusée sur écran - EUR.",
+      "pricing": "Prix par oeuvre exposée en salle et prix par oeuvre diffusée sur écran. Votre participation financière est calculée sur la base de votre sélection.",
       "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer. Puis cliquer sur M'ENREGISTRER lorsque vous êtes prêt."
     },
     "file_upload": {

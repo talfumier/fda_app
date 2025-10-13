@@ -619,6 +619,8 @@
         "legend_fr": "Photos",
         "legend_en": "Pictures",
         "count": 4,
+        "info": true,
+        "info_path": "comps.infos.picture",
         "fields": [
           {
             "name": "fileName",
@@ -808,8 +810,8 @@
           },
           {
             "name": "price",
-            "label_fr": "Prix de vente (EUR)",
-            "label_en": "Selling price (EUR)",
+            "label_fr": "Prix de vente",
+            "label_en": "Selling price",
             "field_type": "input",
             "format": "integer",
             "required": false
@@ -835,6 +837,8 @@
         "type": "single-upload",
         "legend_fr": "Photo",
         "legend_en": "Photo",
+        "info": true,
+        "info_path": "comps.infos.picture",
         "fields": [
           {
             "name": "fileName",
@@ -927,19 +931,22 @@
             "name": "short_fr",
             "field_type": "unknown",
             "listMaster": true,
-            "required": false
+            "required": false,
+            "readOnly": true
           },
           {
             "name": "short_en",
             "field_type": "unknown",
             "listMaster": true,
-            "required": false
+            "required": false,
+            "readOnly": true
           },
           {
             "name": "startDate",
             "field_type": "unknown",
             "listMaster": true,
-            "required": false
+            "required": false,
+            "readOnly": true
           }
         ]
       },
@@ -1002,32 +1009,6 @@
         ]
       },
       {
-        "name": "pricing",
-        "type": "standard",
-        "legend_fr": "Participation financière",
-        "legend_en": "Pricing",
-        "info": true,
-        "info_path": "comps.infos.pricing",
-        "fields": [
-          {
-            "name": "priceShowRoom",
-            "label_fr": "Prix en salle",
-            "label_en": "Show room price",
-            "field_type": "input",
-            "required": false,
-            "readOnly": true
-          },
-          {
-            "name": "priceScreen",
-            "label_fr": "Prix diffusion sur écran",
-            "label_en": "On screen price",
-            "field_type": "input",
-            "required": false,
-            "readOnly": true
-          }
-        ]
-      },
-      {
         "name": "events",
         "type": "standard",
         "legend_fr": "Participation aux évènements",
@@ -1083,6 +1064,39 @@
                 "value": 0
               }
             ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "pricing",
+        "type": "standard",
+        "legend_fr": "Participation financière",
+        "legend_en": "Pricing",
+        "info": true,
+        "info_path": "comps.infos.pricing",
+        "fields": [
+          {
+            "name": "priceShowRoom",
+            "label_fr": "Prix en salle",
+            "label_en": "Show room price",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "priceScreen",
+            "label_fr": "Prix diffusion sur écran",
+            "label_en": "On screen price",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "price",
+            "label_fr": "Ma participation financière",
+            "label_en": "My financial contribution",
+            "field_type": "input",
             "required": false
           }
         ]
