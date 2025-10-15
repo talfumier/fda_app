@@ -1000,7 +1000,7 @@
           },
           {
             "name": "collectionDateTime_close",
-            "label_fr": "Retiat - fermeture",
+            "label_fr": "Retrait - fermeture",
             "label_en": "Collection - closing",
             "field_type": "input",
             "required": false,
@@ -1011,15 +1011,15 @@
       {
         "name": "events",
         "type": "standard",
-        "legend_fr": "Participation aux évènements",
-        "legend_en": "Events participation",
+        "legend_fr": "Participation au vernissage",
+        "legend_en": "Exhibition opening participation",
         "info": true,
         "info_path": "comps.infos.events",
         "fields": [
           {
             "name": "vernissageDateTime",
-            "label_fr": "Vernissage",
-            "label_en": "Exhibition opening",
+            "label_fr": "Vernissage/remise des prix",
+            "label_en": "Exhibition opening/awards",
             "field_type": "input",
             "required": false,
             "readOnly": true
@@ -1069,6 +1069,20 @@
         ]
       },
       {
+        "name": "selection",
+        "type": "booking-oeuvre",
+        "legend_fr": "Ma sélection d'oeuvres",
+        "legend_en": "My works selection",
+        "info": true,
+        "info_path": "comps.infos.selection",
+        "fields": [
+          {
+            "name": "bookingOeuvre",
+            "required": false
+          }
+        ]
+      },
+      {
         "name": "pricing",
         "type": "standard",
         "legend_fr": "Participation financière",
@@ -1097,21 +1111,28 @@
             "label_fr": "Ma participation financière",
             "label_en": "My financial contribution",
             "field_type": "input",
-            "required": false
+            "required": false,
+            "readOnly": true
           }
         ]
       },
+
       {
-        "name": "selection",
-        "type": "booking-oeuvre",
-        "legend_fr": "Ma sélection d'oeuvres",
-        "legend_en": "My works selection",
+        "name": "terms&conditions",
+        "type": "standard",
+        "legend_fr": "Règlement",
+        "legend_en": "Terms & conditions",
         "info": true,
-        "info_path": "comps.infos.selection",
+        "info_path": "comps.infos.terms",
         "fields": [
           {
-            "name": "bookingOeuvre",
-            "required": false
+            "name": "terms",
+            "label_fr": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>le règlement général de l'exposition</a>",
+            "label_en": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>exhibition terms & conditions</a>",
+            "field_type": "checkbox",
+            "data_type": "checkbox",
+            "format": "integer",
+            "required": true
           }
         ]
       },
@@ -1130,6 +1151,78 @@
             "icon": "cancel",
             "label_fr": "Annuler",
             "label_en": "Cancel"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 6,
+      "url": "/member/admin",
+      "name": "member admin",
+      "roles": [6, 7],
+      "model": "Admin",
+      "sql": "admin_settings",
+      "noList": true,
+      "newRecord": true
+    },
+    "fieldsets": [
+      {
+        "name": "artist-partner-only",
+        "type": "standard",
+        "legend_fr": "Création de compte",
+        "legend_en": "Account creation",
+        "info": true,
+        "info_path": "comps.infos.admin.artistPartnerOnly",
+        "fields": [
+          {
+            "name": "artistPartnerOnly",
+            "field_type": "option-group",
+            "options": [
+              {
+                "label_fr": "Tous les rôles",
+                "label_en": "All roles",
+                "value": 0
+              },
+              {
+                "label_fr": "Rôles artiste et partenaire uniquement",
+                "label_en": "Artist and partner roles only",
+                "value": 1
+              }
+            ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "domain_tech_media",
+        "type": "domain-tech-media",
+        "legend_fr": "Domaine - Technique - Support",
+        "legend_en": "Domain - Technique - Media",
+        "info": true,
+        "info_path": "comps.infos.admin.domain_tech_media",
+        "fields": [
+          {
+            "name": "domain",
+            "label_fr": "Domaine",
+            "label_en": "Domain",
+            "field_type": "table",
+            "required": false
+          },
+          {
+            "name": "tech",
+            "label_fr": "Technique",
+            "label_en": "Technique",
+            "field_type": "table",
+            "required": false
+          },
+          {
+            "name": "media",
+            "label_fr": "Media",
+            "label_en": "Media",
+            "field_type": "table",
+            "required": false
           }
         ]
       }

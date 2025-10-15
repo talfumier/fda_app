@@ -99,8 +99,13 @@
       "closure": "Be aware that after the closure date, your will not be able to register nor modify/delete any on-going registration.",
       "events": "Please indicate the events you plan to attend.",
       "deposit-collection": "Dates and opening hours for art works deposit and collection.",
-      "pricing": "Price per work displayed in the show room and price per work on screen. Your financial contribution is based on your selection.",
-      "selection": "Please make the selection of your works that you wish to exhibit. Then click on REGISTER when you are ready."
+      "pricing": "Fixed price for works displayed in the show room and price per work on screen. Your financial contribution is based on your selection.",
+      "selection": "Please make the selection of your works that you wish to exhibit.",
+      "terms": "Please accept the exhibition terms & conditions. Then click on REGISTER when you are ready.",
+      "admin": {
+        "artistPartnerOnly": "Admin setting defining the list of roles available at account creation.",
+        "domain_tech_media": "Admin settings for definition of domain, technique and media."
+      }
     },
     "file_upload": {
       "delete": "Delete",

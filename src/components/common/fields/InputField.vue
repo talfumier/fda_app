@@ -364,6 +364,9 @@
     resize: vertical;
     width:100%;
   }
+  fieldset.events input {
+    width:210px
+  }
   div.modal input:not(:has(+ .q-icon)), div.modal select {
     padding:10px;
   }

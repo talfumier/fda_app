@@ -99,8 +99,13 @@
       "closure": "Après la date de clôture, il ne sera pas possible de s'enregistrer ou de mofifier votre inscription",
       "events": "Veuillez indiquer les évènements auxquels vous pensez participer.",
       "deposit-collection": "Dates et horaires durant lesquels les oeuvres devront être déposées et retirées.",
-      "pricing": "Prix par oeuvre exposée en salle et prix par oeuvre diffusée sur écran. Votre participation financière est calculée sur la base de votre sélection.",
-      "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer. Puis cliquer sur M'ENREGISTRER lorsque vous êtes prêt."
+      "pricing": "Prix forfaitaire pour les oeuvres exposées en salle et prix par oeuvre diffusée sur écran. Votre participation financière est calculée sur la base de votre sélection.",
+      "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
+      "terms": "Veuillez accepter le règlement général de l'exposition. Puis cliquez sur M'INSCRIRE lorsque vous êtes prêt.",
+      "admin": {
+        "artistPartnerOnly": "Paramêtre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
+        "domain_tech_media": "Paramêtres admininistrateur pour la définition des domaines, techniques et supports."
+      }
     },
     "file_upload": {
       "delete": "Supprimer",

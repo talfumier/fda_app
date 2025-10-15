@@ -10,6 +10,7 @@
   import FieldsetFile from './FieldsetFile.vue'
   import FieldsetFiles from './FieldsetFiles.vue'
   import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue'
+  import FieldsetDomainTechMedia from './FieldsetDomainTechMedia.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
 
   const props=defineProps({
@@ -109,6 +110,11 @@
         :data="record"
       >
       </FieldsetFiles>
+      <FieldsetDomainTechMedia
+        v-if="item.type==='domain-tech-media'"
+        :data="[record.domain,record.tech,record.media]"
+      >
+      </FieldsetDomainTechMedia>
       <FieldsetBookingOeuvre
         v-if="item.type==='booking-oeuvre'"  
         :data="record"
@@ -153,6 +159,13 @@
   fieldset.price {
     gap:60px;
   }
+  fieldset.events {
+    flex-direction: column;
+    gap:0px;
+  }
+  fieldset.events input{
+    /* width:250px; */
+  }
   fieldset:has(.button) {
     justify-content:center;
     align-items: top;
@@ -168,4 +181,9 @@
     color:var(--blue);
     padding:0 5px;
   }
+  @media screen and (min-width: 1546px) {
+    fieldset.events {
+      flex-direction: row;      
+    }
+  } 
 </style>
