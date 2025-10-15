@@ -12,6 +12,7 @@
   import { toastInfo } from '@/composable/toast.js'
   import { translate } from '@/services/httpGoogleServices.js'
   import { setUpTokenExpiry } from './tokenExpiry.js'
+  import { artistPartnerOnly, statusText } from '@/globals/globals.js'
 
   defineProps({})
   const{locale,t}=useI18n()
@@ -94,7 +95,7 @@
     ctrl = new AbortController()
     const {data}=(await getEntities('Role',ctrl.signal)).data
     return _.filter(data,(item) => {
-      return [1,5,6].includes(item.idRole)    //artist, organisation, organisation admin
+      return (artistPartnerOnly===1?[1,3]:[1,3,5,6]).includes(item.idRole)    //artist, partner, organisation, organisation admin
     })
   }
   let roleOptions=[];

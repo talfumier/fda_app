@@ -96,9 +96,9 @@
   }
  .logo {
     position: absolute;
-    top:17px;
-    left: 10px;
-    max-height: 75%;
+    top:0px;
+    margin-left:-29px;
+    height: 132px;
   } 
   .container {
     display:flex;

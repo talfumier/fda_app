@@ -16,7 +16,7 @@
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
   import { newController,doneController,cancelAllInFlight,getRandomInt } from '@/utilityFunctions.js'
-  import { statusText } from '@/globals/globals.js'
+  import { artistPartnerOnly, setGlobals, statusText } from '@/globals/globals.js'
 
   const props=defineProps({
     entity:{type:Object},
@@ -91,7 +91,6 @@
           })
           state.value[0][idx]={...state.value[0][idx],...obj,idExpo:val} 
         }
-
     }
   }
   function handleChange(name,valid,val,option){ 
@@ -102,6 +101,7 @@
       if(option && option.data) handleSelectOption(name,val,idx,option)
       formValid.value[name]=valid
     }
+    if(name==='artistPartnerOnly' && artistPartnerOnly!==val) setGlobals('Admin',val)
   }
   async function handleTranslate(params){
     const idx=getIndex()  
@@ -166,32 +166,38 @@
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
-      state.value = await fetch(ctrl.signal)    
-      if(props.entity.model==='Booking'){  //load BookingOeuvre data for each idBooking of a given user (connected user) 
-        let res=null,bookingOeuvre=null,obj=null
-        await Promise.all(
-          state.value[0].map(async(item,idx) => {  
-            try {
-              res=await fetchBookingOeuvre(item.idUser,item.idBooking,ctrl.signal)             
-            } catch (error) {
-              console.error('onmounted failed in Master.vue >>> Booking load', error)
-              return
-            }
-            if(res.statusCode!==200) return
-            bookingOeuvre=[]
-            res.data[0].map((bo,i) => {
-              obj={}
-              if(!bo.idStatus)  obj=statusText[14]
-              bookingOeuvre.push({
-                ...bo,
-                idBookingOeuvre:bo.idBookingOeuvre?bo.idBookingOeuvre:-(i+=1),
-                idBooking:item.idBooking,
-                ...obj
-              })
-            })  
-            state.value[0][idx]={...state.value[0][idx],bookingOeuvre}
-          })
-        )
+      state.value = await fetch(ctrl.signal) 
+      let res=null,obj=null  
+      switch(props.entity.model) {
+        case'Booking':  //load BookingOeuvre data for each idBooking of a given user (connected user) 
+          let bookingOeuvre=null
+          await Promise.all(
+            state.value[0].map(async(item,idx) => {  
+              try {
+                res=await fetchBookingOeuvre(item.idUser,item.idBooking,ctrl.signal)             
+              } catch (error) {
+                console.error('onmounted failed in Master.vue >>> Booking load', error)
+                return
+              }
+              if(res.statusCode!==200) return
+              bookingOeuvre=[]
+              res.data[0].map((bo,i) => {
+                obj={}
+                if(!bo.idStatus)  obj=statusText[14]
+                bookingOeuvre.push({
+                  ...bo,
+                  idBookingOeuvre:bo.idBookingOeuvre?bo.idBookingOeuvre:-(i+=1),
+                  idBooking:item.idBooking,
+                  ...obj
+                })
+              })  
+              state.value[0][idx]={...state.value[0][idx],bookingOeuvre}
+            })
+          )
+          break
+        case 'Admin':
+          const domain=state.value[1],tech=state.value[2],media=state.value[3]
+          state.value[0]=[{...state.value[0][0],domain,tech,media}]
       }   
     } catch (error) {
       console.error('onmounted failed in Master.vue', error)
@@ -201,12 +207,15 @@
       doneController(ctrl,inFlight)
     }
     initInitialValues()
-    resetActualChanges()    
+    resetActualChanges()
     if(props.entity.noList) {
       let id=null
       switch(props.entity.model){
         case 'User':                  // WARNING !!!!! >>> MODEL SPECIFIC HERE
           id=decoded.value.idUser
+          break
+        case 'Admin': 
+          id=1
           break
       }
       handleOpenDetails(id)
@@ -495,6 +504,7 @@
         obj.vernissage=0
         obj.lunch=0
         obj.price=0
+        obj.terms=0
         obj.bookingOeuvre=[]        
         state.value[2].map((item,i) => {
           obj.bookingOeuvre.push({
@@ -750,7 +760,7 @@
     const idx=getIndex()
     const out = { register: false, cancel: false }
     if(props.entity.model !== 'Booking') return out
-    if(!selection.value || JSON.stringify(actualChanges.value[idx]).includes(true)) {
+    if(state.value[0][idx].terms==0 || !selection.value || JSON.stringify(actualChanges.value[idx]).includes(true)) {
       out.register = true
       out.cancel = true
       return out
@@ -771,7 +781,8 @@
     }
     if(state.value[0][idx].idStatus === 7) {      
       out.cancel=true
-      if(!closureExceeded) out.register=false
+      if(!closureExceeded && state.value[0][idx].terms!=0) 
+        out.register=false
       else out.register=true
       return out
     }
@@ -790,12 +801,15 @@
   watch(selection, (newValue, oldValue) => {
     if(props.entity.model!=='Booking' || !selectedId.value) return null
     const idx=getIndex()
-    const price = newValue.reduce(
-      (total, item) => total + item[0].showRoom*state.value[0][idx].priceShowRoom+item[0].screen*state.value[0][idx].priceScreen,
-      0,
-    );    
+    let price=0,flg=false //showRoom flag
+    newValue.map((item) => {
+      if(!flg && item[0].showRoom) {
+        price+=state.value[0][idx].priceShowRoom
+        flg=true
+      }
+      price+= item[0].screen*state.value[0][idx].priceScreen
+    })  
     if(price) handleChange('price',true,price)
-    // state.value[0][idx].price=price
   }, { deep: true, immediate: true })
   
   const toolbarDisableItem=computed(() => {    
@@ -902,7 +916,7 @@
         @button-action="handleButtonActions"
       >
         <template #toolbar> <!--named scoped slot -->
-          <Toolbar class="toolbar"
+          <Toolbar v-if="props.entity.newRecord || decoded.idRole===7" class="toolbar"
             @toolbar-actions="handleToolbarActions"
           >
             <template #save>    <!--named scoped slot -->          

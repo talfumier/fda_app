@@ -10,7 +10,7 @@ import en from './assets/i18n/en.json'
 import fr from './assets/i18n/fr.json'
 import App from './App.vue'
 import router from './components/router/routes.js'
-import { loadStatus } from './globals/globals.js'
+import { loadGlobals } from './globals/globals.js'
 
 const messages = { en, fr }
 
@@ -63,7 +63,7 @@ app.config.globalProperties.$formatDate = (d, mask = 'DD/MM/YYYY') => {
 app.config.globalProperties.$formatDateTime = (d, mask = 'DD/MM/YYYY HH:mm') => {
   return qdate.formatDate(d, mask)
 }
-// --- laod global variables ---
-await loadStatus()
+// --- load global variables ---
+await loadGlobals()
 
 app.mount('#app')
