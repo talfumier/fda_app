@@ -11,8 +11,11 @@
     "clear": "Effacer",
     "close": "Fermer",
     "delete": "Suppression de l'enregistrement.",
+    "delete-row": "Supprimer la ligne.",
+    "insert-row": "Insérer une ligne au-dessus.",
     "confirm": {
-      "deletion": "Merci de confirmer la suppression définitive de l'enregistrement."
+      "deletion": "Merci de confirmer la suppression définitive de l'enregistrement.",
+      "delete-row": "Merci de confirmer la suppression définitive de la ligne."
     },
     "undo": "Annuler les changements",
     "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"

@@ -11,8 +11,11 @@
     "clear": "Clear",
     "close": "Close",
     "delete": "Record deletion.",
+    "delete-row": "Delete selected row.",
+    "insert-row": "Insert one row above.",
     "confirm": {
-      "deletion": "Please confirm record permanent deletion."
+      "deletion": "Please confirm record permanent deletion.",
+      "delete-row": "Please confirm row permament deletion."
     },
     "undo": "Undo all changes",
     "unsaved": "You have unsaved changes. Proceed anyway ?"
