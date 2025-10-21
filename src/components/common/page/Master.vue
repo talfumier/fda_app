@@ -93,17 +93,16 @@
         }
     }
   }
-  function handleChange(name,valid,val,option){ 
+  function handleChange(name,valid,val,option){
     const idx=getIndex()
     if(name !==idModel){
       actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
-      if(!option) state.value[0][idx][name]=val
+      // if(!option) state.value[0][idx][name]=val
+      state.value[0][idx][name]=val
       if(option && option.data) handleSelectOption(name,val,idx,option)
       formValid.value[name]=valid
     }
     if(name==='artistPartnerOnly' && artistPartnerOnly!==val) setGlobals('Admin',val)
-    
-    
   }
   async function handleTranslate(params){
     const idx=getIndex()  
@@ -668,6 +667,8 @@
               bodyDTM={...bodyDTM,media:body.media}}
             const ctrl=newController(inFlight)
             try {
+              
+              console.log('body',_.cloneDeep(body))
               body=await bodyCleanUp(props.entity.model,body,ctrl.signal)
             } catch (error) {
                 console.error(error)

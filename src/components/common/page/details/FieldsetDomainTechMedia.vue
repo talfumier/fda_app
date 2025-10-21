@@ -42,8 +42,7 @@
     props.data.map((item) => {
       arr=[]
       Object.keys(item[0]).map((key,idx) => {
-        // if(!key.includes('id')) arr.push(key)
-        arr.push(key)
+        if(!key.includes('id')) arr.push(key)
       })
       cols.push(arr)
     })
