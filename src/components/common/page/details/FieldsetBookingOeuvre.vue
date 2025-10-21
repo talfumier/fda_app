@@ -37,19 +37,22 @@
   const visible=ref([`title_${locale.value}`,'showRoom','screen'])
   const emit = defineEmits(['change'])
 
-  function handleChange(id=null){   
-    if(id) {  //not selected >>> unset showRoom and screen toggles
-      bookingOeuvre.value.map((bo) => {
-        if(bo.idBookingOeuvre===id) {
-          bo.showRoom=bo.screen=0
+  function handleChange(cs,val,id){  
+    bookingOeuvre.value.map((bo) => {
+      if(bo.idBookingOeuvre===id) {
+        switch(cs){
+          case 'checkbox':
+            if(val===1 && bo.showRoom===0 && bo.screen===0) bo.showRoom=1
+            if(val===0) bo.showRoom=bo.screen=0
+            break
+          case 'showRoom':
+            if(val===0 && bo.screen===0 && bo.selected===1) bo.selected=0
+            break
+          case 'screen':
+            if(val===0 && bo.showRoom===0 && bo.selected===1) bo.selected=0
         }
-      })
-    }
-    bookingOeuvre.value.map((bo) => { //both toggles unset >>> set selected to 0
-        if(bo.showRoom===0 && bo.screen===0) {
-          bo.selected=0
-        }
-      })
+      }
+    })
     emit('change','bookingOeuvre',true,bookingOeuvre.value)    
   }
 
@@ -76,18 +79,17 @@
               v-model="slotProps.row.selected" 
               dense 
               :true-value="1" :false-value="0"
-              :disable="!slotProps.row.selected && !slotProps.row.showRoom && !slotProps.row.screen"
-              @update:model-value="() => {
-                handleChange(!slotProps.row.selected?slotProps.row.idBookingOeuvre:null)
+              @update:model-value="(val) => {
+                handleChange('checkbox',val,slotProps.row.idBookingOeuvre)
               }"
             >
               <span>{{ truncate(slotProps.row[`title_${locale}`],24) }}</span>              
             </q-checkbox>
-            <Tooltip 
+            <!-- <Tooltip 
               v-if="!slotProps.row.showRoom && !slotProps.row.screen" 
               :wrap="true"
               :tt_text="$t('comps.form_details.booking_oeuvre.tooltip')">
-            </Tooltip>   
+            </Tooltip>    -->
           </q-card-section>          
           <div v-if="slotProps.row.selected" class="status-container">
             <label>
@@ -117,7 +119,9 @@
                 checked-icon="check"
                 unchecked-icon="clear"
                 size="md"
-                @update:model-value="handleChange"
+                @update:model-value="(val) => {
+                  handleChange('showRoom',val,slotProps.row.idBookingOeuvre)
+                }"
               />  
             </div>
             <div class="toggle-container">
@@ -130,7 +134,9 @@
                 checked-icon="check"
                 unchecked-icon="clear"
                 size="md"
-                @update:model-value="handleChange"
+                @update:model-value="(val) => {
+                  handleChange('screen',val,slotProps.row.idBookingOeuvre)
+                }"
               />  
             </div>
           </q-card-section>

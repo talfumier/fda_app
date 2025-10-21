@@ -310,7 +310,7 @@
           cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
           cond.push(listItemsFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
             (listItemsFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
-          cond.push(listItemsFilter.value.user_role?item.idRole>=5:
+          cond.push(listItemsFilter.value.user_role?item.idRole>=3:
             (listItemsFilter.value.user_role===false?item.idRole===1:item.idRole>=1))
           cond.map((cnd) => {
             result=result && cnd
@@ -667,8 +667,6 @@
               bodyDTM={...bodyDTM,media:body.media}}
             const ctrl=newController(inFlight)
             try {
-              
-              console.log('body',_.cloneDeep(body))
               body=await bodyCleanUp(props.entity.model,body,ctrl.signal)
             } catch (error) {
                 console.error(error)
@@ -885,8 +883,8 @@
         flg=true
       }
       price+= item[0].screen*state.value[0][idx].priceScreen
-    })  
-    if(price) handleChange('price',true,price)
+    }) 
+    handleChange('price',true,price)
   }, { deep: true, immediate: true })
   
   const toolbarDisableItem=computed(() => {    
