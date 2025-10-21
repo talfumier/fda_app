@@ -1,5 +1,5 @@
 <script setup>
-  import { onMounted, onUnmounted, ref, computed, inject } from 'vue'
+  import { onMounted, onUnmounted, ref, watch, computed, inject } from 'vue'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
   import { useFormatDate } from '@/composable/useFormatDate.js'
@@ -33,8 +33,15 @@
   const { t,locale } = useI18n()    
   const {formatDate,formatDateTime}=useFormatDate()  
   const inFlight=new Set()
+
+  const data=ref(props.value)  
+  watch(    //ensure props.value is kept in sync when changes occur
+    () => props.value,              // <-- getter function required for primitive value
+    (v) => { data.value = v },
+    { immediate: false }
+  )
   
-  const data=ref(props.value), dirty=ref(false), type=ref(props.data_type), options=ref([])
+  const dirty=ref(false), type=ref(props.data_type), options=ref([])
   const fieldValid=ref({valid: true, msg: null})
   //OPTION GROUP OPTIONS PROCESSING 
   const group_options=computed(() => {
