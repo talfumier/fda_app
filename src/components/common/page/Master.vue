@@ -76,7 +76,7 @@
     selectedId.value=id
   }
   function isEqual(val1,val2,name){
-    if(name.includes('file') || name==='url' || name==='idImage') return true
+    if(name && name.includes('file') || name && name==='url' || name && name==='idImage') return true
     if((val1==='' || val1===null) && (val2==='' || val2===null)) return true
     return _.isEqual(val1,val2)  //deep comparison
   }
@@ -93,11 +93,12 @@
         }
     }
   }
-  function handleChange(name,valid,val,option){ 
+  function handleChange(name,valid,val,option){
     const idx=getIndex()
     if(name !==idModel){
       actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
-      if(!option) state.value[0][idx][name]=val
+      // if(!option) state.value[0][idx][name]=val
+      state.value[0][idx][name]=val
       if(option && option.data) handleSelectOption(name,val,idx,option)
       formValid.value[name]=valid
     }
@@ -115,6 +116,25 @@
     ).data
     handleChange(`${rootName}_${to}`,true,translated)
     initFlag.value+=.01
+  }
+  async function handleDeleteRow(model,id){
+    const ctrl = newController(inFlight)
+      try {
+        const {data:res}=await deleteEntity(model,id,token.value,ctrl.signal)  //delete record in tdomain, ttechnique, tmedia  
+        if(res.statusCode!==200) return 
+        state.value[0][0][model.toLowerCase()]=_.filter(state.value[0][0][model.toLowerCase()],(row) => {
+          return row[`id${model}`]!==id
+        })
+        initialValues[0][model.toLowerCase()]=_.filter(initialValues[0][model.toLowerCase()],(row) => {
+          return row[`id${model}`]!==id
+        })
+        initFlag.value+=.01
+      } catch (error) {
+        console.error(error)
+      }
+      finally {
+        doneController(ctrl,inFlight)
+      } 
   }
   // DATA LOADING
   async function fetch(signal) {
@@ -579,11 +599,47 @@
     )
     actualChanges.value[idx].bookingOeuvre=false
   }
+  async function processDTM(body,signal) {  //body=bodyDTM object >>> {domain:[{idDomain: ...},...{}]},tech:[{idTech:...},..{}],media:[{idMedia:...},..{}]}
+    function findIndex(arr,key,id){
+      return arr.findIndex((item) => {
+        return item[`id${_.capitalize(key)}`]===id
+      }) 
+    }  
+    const ids={domain:[],tech:[],media:[]}  //id of records that have actually changed
+    Object.keys(body).forEach((key) => { //key >>> domain, tech, media
+      const model=_.capitalize(key)
+      body[key].forEach((item) => {
+        const idx=findIndex(initialValues[0][key],key,item[`id${model}`])
+        if(!isEqual(item,initialValues[0][key][idx]))
+          ids[key].push(item[`id${model}`])        
+      })
+    })
+    for (const key of Object.keys(ids)) {
+      const model=_.capitalize(key)
+      for (const id of ids[key]) {
+        const idx1 = findIndex(body[key], key, id)
+        const cleaned = await bodyCleanUp(model, body[key][idx1], signal)
+        const {data:res}=await(id<0?postEntity(model,cleaned, token.value, signal):patchEntity(model, id, cleaned, token.value, signal))
+        if(res.statusCode===200){
+          if(id>0){
+            const idx2=findIndex(initialValues[0][key],key,id)
+            initialValues[0][key][idx2]=body[key][idx1]} 
+          else { //new record case
+            const newId=res.data[`id${model}`]
+            const idx3=findIndex(state.value[0][0][key],key,id)
+            state.value[0][0][key][idx3]={...state.value[0][0][key][idx3],[`id${model}`]:newId} //updtate state row with newly created record idModel
+            initialValues[0][key].push(_.cloneDeep(state.value[0][0][key][idx3]))
+          }
+        }
+      }
+      actualChanges.value[0][key]=false  //reset actualChanges
+    }
+  }
   async function handleToolbarActions(cs){  
     let index=null
     switch(cs){
       case "save":
-        let keys=[],obj=null,res=null,newId=null
+        let keys=[],obj=null,res=null,newId=null,cs=-1
         actualChanges.value.map(async(item,idx) => {
           if(JSON.stringify(item).includes(true)){
             obj={}
@@ -594,12 +650,25 @@
               }
               else obj[key]=item[key]
             })  
-            let body=null,bodyBookingOeuvre=null
+            let body=null,bodyBookingOeuvre=null,bodyDTM=null
             if(obj[idModel]<0) body=state.value[0][idx]
             else body=_.cloneDeep(obj)  //cloneDeep necessary
-            if(body.bookingOeuvre) bodyBookingOeuvre=body.bookingOeuvre
+            if(body.bookingOeuvre) {
+              cs=1
+              bodyBookingOeuvre=body.bookingOeuvre}
+            if(body.domain) {
+              cs=2
+              bodyDTM={domain:body.domain}}
+            if(body.tech) {
+              cs=2
+              bodyDTM={...bodyDTM,tech:body.tech}}
+            if(body.media) {
+              cs=2
+              bodyDTM={...bodyDTM,media:body.media}}
             const ctrl=newController(inFlight)
             try {
+              
+              console.log('body',_.cloneDeep(body))
               body=await bodyCleanUp(props.entity.model,body,ctrl.signal)
             } catch (error) {
                 console.error(error)
@@ -638,15 +707,23 @@
                 newRecId=0
               }
             }
-            if(bodyBookingOeuvre) {              
+            if(cs>0) {  //bodyBookingOeuvre || bodyDTM             
               const ctrl2=newController(inFlight)
               try {
-                processBookingOeuvre(bodyBookingOeuvre,newId?newId:obj[idModel],idx,ctrl2.signal)  //newId is idBooking in case of new Booking creation, otherwise idModel being updated
-                if(newId) {  //renumber idBooking in bodyBookingOeuvre to newly created Booking object
-                  bodyBookingOeuvre.map((bo) => {
-                    bo.idBooking=newId
-                  })
-                }                
+                switch(cs){
+                  case 1:
+                    processBookingOeuvre(bodyBookingOeuvre,newId?newId:obj[idModel],idx,ctrl2.signal)  //newId is idBooking in case of new Booking creation, otherwise idModel being updated
+                    if(newId) {  //renumber idBooking in bodyBookingOeuvre to newly created Booking object
+                      bodyBookingOeuvre.map((bo) => {
+                        bo.idBooking=newId
+                      })
+                    }   
+                    break
+                  case 2:
+                    const {idAdmin,artistPartnerOnly,...rest}=bodyDTM
+                    processDTM(rest,ctrl2.signal)
+
+                }             
               } catch (error) {
                   console.error(error)               
               }
@@ -654,7 +731,7 @@
                 doneController(ctrl2,inFlight)
               }  
             }
-            else handleToolbarActions('undo')
+            // else handleToolbarActions('undo')
           }
         }) 
         break
@@ -914,6 +991,7 @@
         @change="handleChange"
         @translate="handleTranslate"
         @button-action="handleButtonActions"
+        @delete-row="handleDeleteRow"
       >
         <template #toolbar> <!--named scoped slot -->
           <Toolbar v-if="props.entity.newRecord || decoded.idRole===7" class="toolbar"

@@ -26,7 +26,7 @@
       else return item.roles?item.roles.includes(props.record.idRole):true
     })
   })
-  const emit=defineEmits(['change','translate','buttonAction'])
+  const emit=defineEmits(['change','translate','buttonAction','deleteRow'])
   function handleChange(name,valid,val,option){ 
     emit('change',name,valid,val,option)
   }
@@ -113,6 +113,10 @@
       <FieldsetDomainTechMedia
         v-if="item.type==='domain-tech-media'"
         :data="[record.domain,record.tech,record.media]"
+        @change="handleChange"
+        @delete-row="(model,id) => {
+          emit('deleteRow',model,id)
+        }"
       >
       </FieldsetDomainTechMedia>
       <FieldsetBookingOeuvre
@@ -162,9 +166,6 @@
   fieldset.events {
     flex-direction: column;
     gap:0px;
-  }
-  fieldset.events input{
-    /* width:250px; */
   }
   fieldset:has(.button) {
     justify-content:center;

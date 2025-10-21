@@ -11,8 +11,11 @@
     "clear": "Clear",
     "close": "Close",
     "delete": "Record deletion.",
+    "delete-row": "Delete selected row.",
+    "insert-row": "Insert one row above.",
     "confirm": {
-      "deletion": "Please confirm record permanent deletion."
+      "deletion": "Please confirm record permanent deletion.",
+      "delete-row": "Please confirm row permament deletion."
     },
     "undo": "Undo all changes",
     "unsaved": "You have unsaved changes. Proceed anyway ?"
@@ -101,7 +104,7 @@
       "deposit-collection": "Dates and opening hours for art works deposit and collection.",
       "pricing": "Fixed price for works displayed in the show room and price per work on screen. Your financial contribution is based on your selection.",
       "selection": "Please make the selection of your works that you wish to exhibit.",
-      "terms": "Please accept the exhibition terms & conditions. Then click on REGISTER when you are ready.",
+      "terms": "Please accept the exhibition terms & conditions, save the changes and then click on REGISTER when you are ready.",
       "admin": {
         "artistPartnerOnly": "Admin setting defining the list of roles available at account creation.",
         "domain_tech_media": "Admin settings for definition of domain, technique and media."
