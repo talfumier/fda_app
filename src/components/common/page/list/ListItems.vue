@@ -55,6 +55,7 @@
     switch(props.entity.model){
       case 'Oeuvre':
       case 'Expo':
+      case 'Partner':
         return ['1.1']
       case 'Booking':
         return ['1.1','2.1']

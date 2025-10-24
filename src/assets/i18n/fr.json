@@ -65,6 +65,7 @@
       "oeuvres": "Mes oeuvres",
       "oeuvres_org": "Oeuvres",
       "bookings": "Mes inscriptions",
+      "partners": "Fiches partenaires",
       "admin_settings": "Administration",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
@@ -90,9 +91,11 @@
     },
     "infos": {
       "resume": "Description de vous-même, de vos activités ... afin de le publier sur notre site.",
+      "resume-partner": "Description des activités de l'entreprise ... afin de les publier sur le site.",
       "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et rester informé de l'activité du festival.",
       "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
-      "personal_data": "Faites vos choix pour la publication de vos données personnelles sur notre site, sachant que nom et prénom sont requis.",
+      "hyperlinks-partner": "Liens hypertexte vers les sites web de l'entreprise ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
+      "personal_data": "Faites vos choix pour la publication des données de l'entreprise sur notre site, sachant que le nom de l'entrepr.",
       "short": "Nom court principalement utilisé dans l'espace membre et les menus du site public.",
       "title": "Nom long et commercial utilisé sur le site public.",
       "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ...",
@@ -106,7 +109,7 @@
       "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
       "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changement, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
       "admin": {
-        "artistPartnerOnly": "Paramêtre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
+        "orgExcluded": "Paramêtre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
         "domain_tech_media": "Paramêtres admininistrateur pour la définition des domaines, techniques et supports."
       }
     },
@@ -190,6 +193,34 @@
         "screen": "A l'écran",
         "status": "Statut",
         "tooltip": "Pour permettre la sélection, vous devez choisir au moins un moyen d'exposition (salle et/ou écran)."
+      },
+      "expos": {
+        "tabs": {
+          "master-file": "Fiche expo",
+          "guest": "Invité d'honneur",
+          "jury": "Jury",
+          "partner": "Partenariat"
+        },
+        "tables": {
+          "partner-left": {
+            "title": "Partenaires référencés"
+          },
+          "partner-right": {
+            "title": "Partenaires engagés"
+          },
+          "guest-left": {
+            "title": "Artistes référencés"
+          },
+          "guest-right": {
+            "title": "Invités d'honneur"
+          },
+          "jury-left": {
+            "title": "Personnes référencées"
+          },
+          "jury-right": {
+            "title": "Membres du jury"
+          }
+        }
       }
     },
     "public_site": {

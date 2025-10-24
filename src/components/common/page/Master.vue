@@ -16,7 +16,7 @@
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
   import { newController,doneController,cancelAllInFlight,getRandomInt } from '@/utilityFunctions.js'
-  import { artistPartnerOnly, setGlobals, statusText } from '@/globals/globals.js'
+  import { orgExcluded, setGlobals, statusText } from '@/globals/globals.js'
 
   const props=defineProps({
     entity:{type:Object},
@@ -51,6 +51,7 @@
   
   const state=ref([])
   const selectedId = ref(null)
+  const tabUnsaved=ref(false)
   let newRecId=0
 
   const initialValues=[]
@@ -102,7 +103,7 @@
       if(option && option.data) handleSelectOption(name,val,idx,option)
       formValid.value[name]=valid
     }
-    if(name==='artistPartnerOnly' && artistPartnerOnly!==val) setGlobals('Admin',val)
+    if(name==='orgExcluded' && orgExcluded!==val) setGlobals('Admin',val)
   }
   async function handleTranslate(params){
     const idx=getIndex()  
@@ -253,7 +254,7 @@
     e.returnValue = '' // required for some browsers
   }
   onBeforeRouteLeave(async() => {    
-    if(!JSON.stringify(actualChanges.value).includes(true)) return true
+    if(!JSON.stringify(actualChanges.value).includes(true) && !tabUnsaved.value) return true
     if (!(await confirm($q,t('common.unsaved'),'cancel'))) return false    
   })
   // FOLDING MENU
@@ -485,6 +486,28 @@
         }
       }
       break
+    case 'Partner':
+      listItemsFilter=ref({search:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })      
+      handleAction = async(cs)=>{    
+        const idx=getIndex()
+        switch(cs){     
+          case "deletion":
+            handleDelete(idx)
+        }
+      }
+      break      
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -718,7 +741,7 @@
                     }   
                     break
                   case 2:
-                    const {idAdmin,artistPartnerOnly,...rest}=bodyDTM
+                    const {idAdmin,orgExcluded,...rest}=bodyDTM
                     processDTM(rest,ctrl2.signal)
 
                 }             
@@ -897,6 +920,7 @@
     }
     return obj
   })
+  const hideToolbar=ref(false)
 
 </script>
 
@@ -990,9 +1014,15 @@
         @translate="handleTranslate"
         @button-action="handleButtonActions"
         @delete-row="handleDeleteRow"
+        @hide-toolbar="(val) => {
+          hideToolbar=val
+        }"
+        @tab-unsaved="(val) => {
+          tabUnsaved=val
+        }"
       >
         <template #toolbar> <!--named scoped slot -->
-          <Toolbar v-if="props.entity.newRecord || decoded.idRole===7" class="toolbar"
+          <Toolbar v-if="props.entity.newRecord && !hideToolbar" class="toolbar"
             @toolbar-actions="handleToolbarActions"
           >
             <template #save>    <!--named scoped slot -->          
@@ -1012,7 +1042,7 @@
               </div>
             </template>
             <template #delete> <!--named scoped slot -->              
-              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' "class="delete">        
+              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' || entity.model==='Partner'" class="delete">        
                 <q-btn round flat icon="delete" size="1.6rem" 
                   :disable="toolbarDisableItem.delete"
                   @click="async() => {
@@ -1138,7 +1168,8 @@
     width:100%; 
     padding-right:50px;
     margin-bottom: 28px;
-    overflow-y: auto;
+    /* height:fit-content; */
+    overflow-y: hidden;
   }
   .no-list .details-container {    
     grid-column: 1;

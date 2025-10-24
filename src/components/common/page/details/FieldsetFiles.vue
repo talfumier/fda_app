@@ -48,6 +48,7 @@
 <style scoped>
   div.files-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content:space-between;
     align-items: top;
     gap:20px;
