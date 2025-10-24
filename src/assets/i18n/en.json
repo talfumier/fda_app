@@ -207,6 +207,18 @@
           },
           "partner-right": {
             "title": "Engaged partners"
+          },
+          "guest-left": {
+            "title": "Referenced artists"
+          },
+          "guest-right": {
+            "title": "Special guests"
+          },
+          "jury-left": {
+            "title": "Referenced people"
+          },
+          "jury-right": {
+            "title": "Panel members"
           }
         }
       }

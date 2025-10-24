@@ -4,10 +4,17 @@
   import { getEntitiesBySql,postEntity,deleteEntity } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight, getRandomInt } from '@/utilityFunctions.js'
   import GenericTable from './GenericTable.vue'
-  import FieldsetButton from '../common/page/details/FieldsetButton.vue'
+  import FieldsetButton from '../../FieldsetButton.vue'
 
   const props=defineProps({
-    idExpo:{type:Number}
+    entity:{type:String},
+    idExpo:{type:Number},
+    relatedIdModel:{type:Array},
+    idRole:{type:Number},
+    sql:{type:String},
+    columns:{type:Array},
+    visible:{type:Array},
+    titles:{type:Array} //table titles
   })
 
   const {token}=inject('userCookie')
@@ -17,16 +24,9 @@
 
   const emit=defineEmits(['tabUnsaved'])
 
-  const columns=[
-    {name:'selected',field:'selected',align:'left'},
-    {name:'idPartner',field:'idPartner',align:'left'},
-    {name:'name',field:'name',headerClasses: 'col-name'},
-    {name:'url',field:'url'}]
-  const visible=['selected','name','url']
-
   async function fetch(signal){
     const {data:res}=await getEntitiesBySql(
-      'list_expo_partner',
+      props.sql,
       token.value,
       signal,
       ':idExpo',
@@ -48,7 +48,7 @@
       initialValues=_.cloneDeep(state.value[1])  //selected property not in initialValues
       initSelected()
     } catch (error) {
-      console.error('onmounted failed in ExpoPartner.vue', error)
+      console.error('onmounted failed in ExpoMaster.vue', error)
       return
     }
     finally {
@@ -59,6 +59,7 @@
     cancelAllInFlight(inFlight)
   })  
   const disabled=ref([true,true,true])
+
   function isEqual(arr1,arr2){
     const arr=arr1.map((row) => {
       const {selected,...obj}=row
@@ -99,31 +100,50 @@
   function handleSave(){
     const post=[],del=[]
     state.value[1].forEach((row) => {
+      let cond=true
       const idx=initialValues.findIndex((item) => {
-        return item.idPartner===row.idPartner
+        props.relatedIdModel.forEach((idModel) => {
+          cond=cond && item[idModel]===row[idModel]
+        })
+        return cond
       })
-      if(idx===-1) post.push({idExpo:props.idExpo,idPartner:row.idPartner})
+      if(idx===-1) {
+        const obj={idExpo:props.idExpo}
+        props.relatedIdModel.forEach((idModel) => {
+          obj[idModel]=row[idModel]
+          if(props.idRole && idModel==='idRole') obj.idRole=props.idRole
+        })
+        post.push(obj)
+      }
     }) 
     initialValues.forEach((row) => {
       const idx=state.value[1].findIndex((item) => {
-        return item.idPartner===row.idPartner
+        let cond=true
+        props.relatedIdModel.forEach((idModel) => {
+          cond=cond && item[idModel]===row[idModel]
+        })
+        return cond
       })
       if(idx===-1) del.push(row.ID)
     })  
     const ctrl=newController(inFlight),bls=[]
     try { 
       del.forEach(async(id) => {
-        const {data:res}=await deleteEntity('ExpoPartner',id,token.value, ctrl.signal)
+        const {data:res}=await deleteEntity(props.entity,parseInt(id),token.value, ctrl.signal)
         bls.push(res.statusCode===200?true:false)
       })
       if(JSON.stringify(bls).includes(false)) return
       post.forEach(async(body) => {
-        const {data:res}=await postEntity('ExpoPartner',body,token.value, ctrl.signal)
+        const {data:res}=await postEntity(props.entity,body,token.value, ctrl.signal)
         bls.push(res.statusCode===200?true:false)
       })
       if(!JSON.stringify(bls).includes(false)){
         initialValues=_.cloneDeep(state.value[1]) 
+        initialValues.map((row) => {  //remove selected property coming from state.value[1]
+          delete row.selected
+        })
         disabled.value[2]=true
+        emit('tabUnsaved',false)
       }     
     } catch (error) {}
     finally {
@@ -146,21 +166,24 @@
         </q-btn>
         <GenericTable v-if="state.length>0"
           :key="getRandomInt(1e2,1e5)"
-          :title="$t('comps.form_details.expos.tables.partner-left.title')"
+          :title="titles[0]"
           :data="state[0]"
           :columns="columns"
           :visible="visible"
-          rowKey='idPartner'
+          :rowKey="relatedIdModel[0]"
           @selected="(val) => {
             handleSelected('left',val)
           }"
         >
           <template #body="slotProps">
             <q-td>
-              {{ slotProps.row.name }}
+              {{ slotProps.row[visible[1]] }}
+            </q-td>
+            <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
+              {{ slotProps.row[visible[2]] }}
             </q-td>
             <q-td>
-              <img v-if="slotProps.row.url" :src="slotProps.row.url" :alt="slotProps.row.name">
+              <img v-if="slotProps.row.url" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
             </q-td>
           </template>
         </GenericTable>      
@@ -175,21 +198,24 @@
         </q-btn>
         <GenericTable v-if="state.length>0"
           :key="getRandomInt(1e2,1e5)"
-          :title="$t('comps.form_details.expos.tables.partner-right.title')"
+          :title="titles[1]"
           :data="state[1]"
           :columns="columns"
           :visible="visible"
-          rowKey='idPartner'
+          :rowKey="relatedIdModel[0]"
           @selected="(val) => {
             handleSelected('right',val)
           }"
         >
           <template #body="slotProps">
             <q-td>
-              {{ slotProps.row.name }}
+              {{ slotProps.row[visible[1]] }}
+            </q-td>
+            <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
+              {{ slotProps.row[visible[2]] }}
             </q-td>
             <q-td>
-              <img v-if="slotProps.row.url" :src="slotProps.row.url" :alt="slotProps.row.name">
+              <img v-if="slotProps.row.url" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
             </q-td>
           </template>
         </GenericTable> 

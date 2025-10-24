@@ -207,6 +207,18 @@
           },
           "partner-right": {
             "title": "Partenaires engagés"
+          },
+          "guest-left": {
+            "title": "Artistes référencés"
+          },
+          "guest-right": {
+            "title": "Invités d'honneur"
+          },
+          "jury-left": {
+            "title": "Personnes référencées"
+          },
+          "jury-right": {
+            "title": "Membres du jury"
           }
         }
       }

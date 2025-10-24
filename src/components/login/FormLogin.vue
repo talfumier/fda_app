@@ -95,7 +95,7 @@
     ctrl = new AbortController()
     const {data}=(await getEntities('Role',ctrl.signal)).data
     return _.filter(data,(item) => {
-      return (orgExcluded===1?[1,2,4]:[1,2,4,5,6]).includes(item.idRole)  
+      return (orgExcluded===1?[1,3]:[1,3,5,6]).includes(item.idRole)  
     })
   }
   let roleOptions=[];
