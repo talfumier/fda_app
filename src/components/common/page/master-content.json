@@ -101,7 +101,7 @@
       {
         "name": "resume",
         "type": "translate",
-        "roles": [1, 2, 3, 4],
+        "roles": [1, 2, 4],
         "legend_fr": "Résumé",
         "legend_en": "Resumé",
         "info": true,
@@ -125,8 +125,8 @@
       },
       {
         "name": "links",
-        "type": "standard hyperlink",
-        "roles": [1, 2, 3, 4],
+        "type": "standard",
+        "roles": [1, 2, 4],
         "legend_fr": "Liens hypertexte",
         "legend_en": "Hyperlinks",
         "info": true,
@@ -177,7 +177,7 @@
       {
         "name": "public",
         "type": "standard",
-        "roles": [1, 2, 3, 4],
+        "roles": [1, 2, 4],
         "legend_fr": "Publication des données personnelles",
         "legend_en": "Personal data publication",
         "info": true,
@@ -381,6 +381,12 @@
       "noList": false,
       "listType": ["simple"],
       "listItems": true,
+      "detailsTabs": [
+        { "name": "default", "label": "comps.form_details.expos.tabs.master-file" },
+        { "name": "guest", "label": "comps.form_details.expos.tabs.guest" },
+        { "name": "jury", "label": "comps.form_details.expos.tabs.jury" },
+        { "name": "partner", "label": "comps.form_details.expos.tabs.partner" }
+      ],
       "fileYes": "image/png, image/jpeg, image/webp"
     },
     "fieldsets": [
@@ -1169,15 +1175,15 @@
     },
     "fieldsets": [
       {
-        "name": "artist-partner-only",
+        "name": "artist-only",
         "type": "standard",
         "legend_fr": "Création de compte",
         "legend_en": "Account creation",
         "info": true,
-        "info_path": "comps.infos.admin.artistPartnerOnly",
+        "info_path": "comps.infos.admin.orgExcluded",
         "fields": [
           {
-            "name": "artistPartnerOnly",
+            "name": "orgExcluded",
             "field_type": "option-group",
             "options": [
               {
@@ -1186,8 +1192,8 @@
                 "value": 0
               },
               {
-                "label_fr": "Rôles artiste et partenaire uniquement",
-                "label_en": "Artist and partner roles only",
+                "label_fr": "Rôles organisation exclus",
+                "label_en": "Organisation roles excluded",
                 "value": 1
               }
             ],
@@ -1223,6 +1229,232 @@
             "label_en": "Media",
             "field_type": "table",
             "required": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 7,
+      "url": "/member/partners",
+      "name": "member partners",
+      "roles": [5, 6, 7],
+      "model": "Partner",
+      "sql": ["list_items_partners"],
+      "fileYes": "image/png, image/jpeg, image/webp",
+      "newRecord": true,
+      "noList": false,
+      "listType": ["simple"]
+    },
+    "fieldsets": [
+      {
+        "name": "company-name",
+        "type": "standard",
+        "legend_fr": "Raison sociale *",
+        "legend_en": "Company name *",
+        "fields": [
+          {
+            "name": "short",
+            "label_fr": "Nom cours",
+            "label_en": "Short name",
+            "field_type": "input",
+            "required": true,
+            "listMaster": true
+          },
+          {
+            "name": "name",
+            "label_fr": "Raison sociale",
+            "label_en": "Company name",
+            "field_type": "input",
+            "required": true
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "type": "address",
+        "legend_fr": "Adresse - Téléphone",
+        "legend_en": "Address - Phone",
+        "fields": [
+          {
+            "name": "address",
+            "label_fr": "Adresse",
+            "label_en": "Address",
+            "field_type": "textarea",
+            "rows": 2
+          },
+          {
+            "name": "zipCode",
+            "label_fr": "Code postal",
+            "label_en": "Zip code",
+            "field_type": "textarea",
+            "rows": 1
+          },
+          {
+            "name": "city",
+            "label_fr": "Ville",
+            "label_en": "City",
+            "field_type": "textarea",
+            "rows": 2
+          },
+          {
+            "name": "country",
+            "label_fr": "Pays",
+            "label_en": "Country",
+            "field_type": "textarea",
+            "rows": 1
+          },
+          {
+            "name": "phone",
+            "label_fr": "Téléphone",
+            "label_en": "Phone",
+            "field_type": "textarea",
+            "rows": 1
+          }
+        ]
+      },
+      {
+        "name": "resume",
+        "type": "translate",
+        "legend_fr": "Domaine d'activité",
+        "legend_en": "Field of activity",
+        "info": true,
+        "info_path": "comps.infos.resume-partner",
+        "fields": [
+          {
+            "name": "resume_fr",
+            "field_type": "textarea",
+            "rows": 4,
+            "required": false,
+            "max_length": 500
+          },
+          {
+            "name": "resume_en",
+            "field_type": "textarea",
+            "rows": 4,
+            "required": false,
+            "max_length": 500
+          }
+        ]
+      },
+      {
+        "name": "links",
+        "type": "standard",
+        "legend_fr": "Liens hypertexte",
+        "legend_en": "Hyperlinks",
+        "info": true,
+        "info_path": "comps.infos.hyperlinks-partner",
+        "fields": [
+          {
+            "name": "web1",
+            "label_fr": "Site web de référence 1",
+            "label_en": "Reference web site 1",
+            "field_type": "input",
+            "data_type": "url",
+            "icon": "east",
+            "placeholder": "https://example.com",
+            "required": false
+          },
+          {
+            "name": "web2",
+            "label_fr": "Site web de référence 2",
+            "label_en": "Reference web site 2",
+            "field_type": "input",
+            "data_type": "url",
+            "icon": "east",
+            "placeholder": "https://example.com",
+            "required": false
+          },
+          {
+            "name": "social1",
+            "label_fr": "Réseau social 1",
+            "label_en": "Social network 1",
+            "field_type": "input",
+            "data_type": "url",
+            "icon": "east",
+            "placeholder": "https://example.com",
+            "required": false
+          },
+          {
+            "name": "social2",
+            "label_fr": "Réseau social 2",
+            "label_en": "Social network 2",
+            "field_type": "input",
+            "data_type": "url",
+            "icon": "east",
+            "placeholder": "https://example.com",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "contact",
+        "type": "standard",
+        "legend_fr": "Interlocuteur",
+        "legend_en": "Representative",
+        "fields": [
+          {
+            "name": "lastNameRep",
+            "label_fr": "Nom de famille",
+            "label_en": "Last name",
+            "field_type": "textarea",
+            "rows": 1,
+            "required": false
+          },
+          {
+            "name": "firstNameRep",
+            "label_fr": "Prénom",
+            "label_en": "First name",
+            "field_type": "textarea",
+            "rows": 1,
+            "required": false
+          },
+          {
+            "name": "emailRep",
+            "label_fr": "Courriel",
+            "label_en": "Email",
+            "field_type": "textarea",
+            "rows": 1,
+            "format": "email",
+            "required": false
+          },
+          {
+            "name": "phoneRep",
+            "label_fr": "Téléphone",
+            "label_en": "Phone",
+            "field_type": "textarea",
+            "rows": 1,
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "photo",
+        "type": "single-upload",
+        "legend_fr": "Photo",
+        "legend_en": "Photo",
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
           }
         ]
       }

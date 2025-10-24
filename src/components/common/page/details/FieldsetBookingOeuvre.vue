@@ -2,7 +2,6 @@
   import {ref,computed} from 'vue'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
-  import Tooltip from '../../Tooltip.vue'
   import { truncate } from '@/utilityFunctions.js'
 
   const props = defineProps({

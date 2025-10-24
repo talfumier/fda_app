@@ -65,6 +65,7 @@
       "oeuvres": "My art works",
       "oeuvres_org": "Art works",
       "bookings": "My bookings",
+      "partners": "Partner forms",
       "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
@@ -90,8 +91,10 @@
     },
     "infos": {
       "resume": "Provide a short description of yourself, your activities ... to be published on our web site.",
+      "resume-partner": "Provide a short description of company's activities ... to be published on our web site.",
       "account": "Choose your preferred language and subscribe to the newsletter to keep in touch with the festival latest news.",
       "hyperlinks": "Hyperlinks to your sites or social networks.Click on arrow to open the page.",
+      "hyperlinks-partner": "Hyperlinks to corporate sites or social networks.Click on arrow to open the page.",
       "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
       "short": "Short name used in the member area and public site menus.",
       "title": "Longer and more selling name used in the public site.",
@@ -106,7 +109,7 @@
       "selection": "Please make the selection of your works that you wish to exhibit.",
       "terms": "Please accept the exhibition terms & conditions, save the changes and then click on REGISTER when you are ready.",
       "admin": {
-        "artistPartnerOnly": "Admin setting defining the list of roles available at account creation.",
+        "orgExcluded": "Admin setting defining the list of roles available at account creation.",
         "domain_tech_media": "Admin settings for definition of domain, technique and media."
       }
     },
@@ -190,6 +193,22 @@
         "screen": "On screen",
         "status": "Status",
         "tooltip": "To enable selection, you must choose one display mode at least (show room and/or screen)."
+      },
+      "expos": {
+        "tabs": {
+          "master-file": "Master file",
+          "guest": "Guest",
+          "jury": "Jury",
+          "partner": "Partnership"
+        },
+        "tables": {
+          "partner-left": {
+            "title": "Referenced partners"
+          },
+          "partner-right": {
+            "title": "Engaged partners"
+          }
+        }
       }
     },
     "public_site": {

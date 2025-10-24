@@ -47,5 +47,23 @@
     ["lunch", 0],
     ["bookingOeuvre", { "selected": 0, "showRoom": 0, "screen": 0 }]
   ],
-  "Admin": [["artistPartnerOnly", 1]]
+  "Admin": [["orgExcluded", 1]],
+  "Partner": [
+    ["short"],
+    ["name"],
+    ["address"],
+    ["zipCode"],
+    ["city"],
+    ["country"],
+    ["resume_fr"],
+    ["resume_en"],
+    ["web1"],
+    ["web2"],
+    ["social1"],
+    ["social2"],
+    ["lastNameRep"],
+    ["firstNameRep"],
+    ["emailRep"],
+    ["phoneRep"]
+  ]
 }

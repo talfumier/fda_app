@@ -1,6 +1,6 @@
 <script setup>
   import {ref,inject,onUnmounted} from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRouter,useRoute } from 'vue-router'
   import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n'
   import {arrayBufferToWebP} from "webp-converter-browser"
@@ -26,9 +26,10 @@
   const {t,locale}=useI18n()  
   const $q=useQuasar()
   const router = useRouter()
+  const route = useRoute()
   const {token,decoded}=inject('userCookie')
   const {formatDateTime}=useFormatDate()
-
+  
   const file=ref(null)
   const loading=ref(false)
   if (!props.data?.idImage) file.value=getEmptyFile()
@@ -95,7 +96,7 @@
             res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage},token.value,ctrl.signal)).data
             break
           default:  //single upload
-            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)).data  //update idImage (avatar) in mariaDB tuser
+            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)).data  //update idImage (avatar) in mariaDB tModel
         }
         if(res3.statusCode===200) 
           file.value={    //update state
@@ -166,13 +167,28 @@
       }
     } else processFileData(val);
   }
+  function roleRouteCondition(){
+    const orgRole=decoded.value.idRole>=5
+    if(!orgRole) return true
+    switch(route.name){
+      case 'member user':
+      case 'member expos':
+      case 'member partners':
+        return true
+      case 'member users':
+      case 'member oeuvres_org':
+        return false
+      default:
+        return true
+    }
+  }
 </script>
 
 <template>
   <div className="file-container">
     <div class="action-infos">
       <div className="buttons-container">
-        <q-btn v-if="file.url"
+        <q-btn v-if="file.url && roleRouteCondition()"
           color='primary'
           rounded standout pulse
           no-wrap
@@ -182,7 +198,7 @@
           @click="handleClick('delete')"
         >
         </q-btn >    
-        <q-btn v-if="!file.url"
+        <q-btn v-if="!file.url && roleRouteCondition()"
           color='primary'
           rounded standout pulse
           no-wrap

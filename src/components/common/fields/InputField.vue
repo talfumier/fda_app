@@ -497,6 +497,9 @@
   fieldset.standard.pricing div.input-container.price span.currency {    
     color:red;
   }
+  fieldset.standard.company-name div.input-container.name {
+    width:400px;
+  }
   fieldset.links input {
     width:300px;
   }

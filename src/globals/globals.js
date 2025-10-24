@@ -1,6 +1,6 @@
 import { getEntities } from '@/services/httpEntities.js'
 export let statusText = null
-export let artistPartnerOnly = null
+export let orgExcluded = null
 export async function loadGlobals() {
   const ctrl = new AbortController() // AbortController's object' used in http request operation
   try {
@@ -20,7 +20,7 @@ export async function loadGlobals() {
       }, {})
     }
     const { data: res2 } = await getEntities('Admin', ctrl.signal)
-    if (res2.statusCode === 200) artistPartnerOnly = res2.data[0].artistPartnerOnly
+    if (res2.statusCode === 200) orgExcluded = res2.data[0].orgExcluded
   } catch (error) {
   } finally {
     ctrl.abort()
@@ -29,6 +29,6 @@ export async function loadGlobals() {
 export function setGlobals(cs, val) {
   switch (cs) {
     case 'Admin':
-      artistPartnerOnly = val
+      orgExcluded = val
   }
 }
