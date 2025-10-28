@@ -170,13 +170,12 @@
     justify-content: space-evenly;
     align-items: center;
     width:100%;
-    padding-bottom: 15px;
   }
   .table {
-    max-height: 250px;
+    max-height: 200px;
     overflow:auto;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
   }
   .sticky-header thead th {
     position: sticky;
