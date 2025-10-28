@@ -110,7 +110,8 @@
       "terms": "Please accept the exhibition terms & conditions, save the changes and then click on REGISTER when you are ready.",
       "admin": {
         "orgExcluded": "Admin setting defining the list of roles available at account creation.",
-        "domain_tech_media": "Admin settings for definition of domain, technique and media."
+        "domain_tech_media": "Admin settings for definition of domain, technique and media. To be carefully managed, since any change will immediately affect ALL existing records ('art works'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables.",
+        "prize": "Admin settings for definition of awards. To be carefully managed, since any change will immediately affect ALL existing records ('exhibition awards'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables."
       }
     },
     "file_upload": {

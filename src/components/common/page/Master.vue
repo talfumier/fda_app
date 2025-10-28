@@ -217,8 +217,8 @@
           )
           break
         case 'Admin':
-          const domain=state.value[1],tech=state.value[2],media=state.value[3]
-          state.value[0]=[{...state.value[0][0],domain,tech,media}]
+          const domain=state.value[1],tech=state.value[2],media=state.value[3],prize=state.value[4]
+          state.value[0]=[{...state.value[0][0],domain,tech,media,prize}]
       }   
     } catch (error) {
       console.error('onmounted failed in Master.vue', error)
@@ -622,14 +622,14 @@
     )
     actualChanges.value[idx].bookingOeuvre=false
   }
-  async function processDTM(body,signal) {  //body=bodyDTM object >>> {domain:[{idDomain: ...},...{}]},tech:[{idTech:...},..{}],media:[{idMedia:...},..{}]}
+  async function processDTMP(body,signal) {  //body=bodyDTMP object >>> {domain:[{idDomain: ...},...{}]},tech:[{idTech:...},..{}],media:[{idMedia:...},prize:[{idPrize:...},..{}]}
     function findIndex(arr,key,id){
       return arr.findIndex((item) => {
         return item[`id${_.capitalize(key)}`]===id
       }) 
     }  
-    const ids={domain:[],tech:[],media:[]}  //id of records that have actually changed
-    Object.keys(body).forEach((key) => { //key >>> domain, tech, media
+    const ids={domain:[],tech:[],media:[],prize:[]}  //id of records that have actually changed
+    Object.keys(body).forEach((key) => { //key >>> domain, tech, media, prize
       const model=_.capitalize(key)
       body[key].forEach((item) => {
         const idx=findIndex(initialValues[0][key],key,item[`id${model}`])
@@ -673,7 +673,7 @@
               }
               else obj[key]=item[key]
             })  
-            let body=null,bodyBookingOeuvre=null,bodyDTM=null
+            let body=null,bodyBookingOeuvre=null,bodyDTMP=null  //Domain, Technique, Media, Prize
             if(obj[idModel]<0) body=state.value[0][idx]
             else body=_.cloneDeep(obj)  //cloneDeep necessary
             if(body.bookingOeuvre) {
@@ -681,13 +681,16 @@
               bodyBookingOeuvre=body.bookingOeuvre}
             if(body.domain) {
               cs=2
-              bodyDTM={domain:body.domain}}
+              bodyDTMP={domain:body.domain}}
             if(body.tech) {
               cs=2
-              bodyDTM={...bodyDTM,tech:body.tech}}
+              bodyDTMP={...bodyDTMP,tech:body.tech}}
             if(body.media) {
               cs=2
-              bodyDTM={...bodyDTM,media:body.media}}
+              bodyDTMP={...bodyDTMP,media:body.media}}
+            if(body.prize) {
+              cs=2
+              bodyDTMP={...bodyDTMP,prize:body.prize}}
             const ctrl=newController(inFlight)
             try {
               body=await bodyCleanUp(props.entity.model,body,ctrl.signal)
@@ -728,7 +731,7 @@
                 newRecId=0
               }
             }
-            if(cs>0) {  //bodyBookingOeuvre || bodyDTM             
+            if(cs>0) {  //bodyBookingOeuvre || bodyDTMP             
               const ctrl2=newController(inFlight)
               try {
                 switch(cs){
@@ -741,8 +744,8 @@
                     }   
                     break
                   case 2:
-                    const {idAdmin,orgExcluded,...rest}=bodyDTM
-                    processDTM(rest,ctrl2.signal)
+                    const {idAdmin,orgExcluded,...rest}=bodyDTMP
+                    processDTMP(rest,ctrl2.signal)
 
                 }             
               } catch (error) {
@@ -1083,6 +1086,9 @@
   }  
   .master-container.no-list {
     grid-template-columns: 80%;
+  }
+  .master-container.no-list:has(.admin) {
+    grid-template-columns: 100%;
   }
   .master-container.folded {
     grid-template-columns: 40px auto;

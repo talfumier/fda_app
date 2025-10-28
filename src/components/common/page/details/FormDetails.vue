@@ -12,6 +12,7 @@
   import FieldsetFiles from './FieldsetFiles.vue'
   import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue'
   import FieldsetDomainTechMedia from './FieldsetDomainTechMedia.vue'
+  import FieldsetPrize from './FieldsetPrize.vue'
   import ExpoMaster from './tabs/expo/ExpoMaster.vue'
   import ExpoAward from './tabs/expo/ExpoAward.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
@@ -91,7 +92,7 @@
       <q-tab-panel name='default' >
         <fieldset :class="[item.type,item.name]" v-for="(item,idx) in filteredFieldsets" >
           <legend > 
-              {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path"></DialogInfo>
+              {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path" :color="item.info_color"></DialogInfo>
           </legend>
           <FieldsetStandard
             v-if="item.type==='standard'"
@@ -155,6 +156,14 @@
             }"
           >
           </FieldsetDomainTechMedia>
+          <FieldsetPrize
+            v-if="item.type==='prize'"
+            :data="record.prize"
+            @change="handleChange"
+            @delete-row="(model,id) => {
+              emit('deleteRow',model,id)
+            }"          
+          ></FieldsetPrize>
           <FieldsetBookingOeuvre
             v-if="item.type==='booking-oeuvre'"  
             :data="record"
@@ -287,6 +296,7 @@
     padding:0px 5px;
     height:100%;
     overflow-y: auto;
+    width:100%;
   }
   .q-tab-panels.offset .q-tab-panel {
     padding-top:40px;

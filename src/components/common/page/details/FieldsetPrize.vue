@@ -12,119 +12,94 @@
   const {t}=useI18n()   
   const $q=useQuasar()
 
-  const tblIndex={0:'domain',1:'tech',2:'media'}
-
   const rows=ref(null) 
   watch(props.data, (newValue, oldValue) => {
-    rows.value=_.cloneDeep(newValue.map((tbl) => {
-      return _.orderBy(tbl,['order'])
-    }))
-    rows.value.map((tbl) => {  //set selected to false on each tbl and each row
-      tbl.map((row) => {
-        row.selected=false
-      })
+    rows.value=_.cloneDeep(_.orderBy(newValue,['order']))
+    rows.value.map((row) => {  //set selected to false
+      row.selected=false
     })
   }, { deep: true, immediate: true })
-  
-  const columns=computed(() => {
-    const cols=[]
-    let arr=null
-    rows.value.map((item) => {
-      arr=[]
-      Object.keys(item[0]).map((key,i) => {
-        arr.push({name:key,label:key,field:key,align:'left'})
-      })
-      cols.push(arr)
-    })
-    return cols
-  })
-  const visible=computed(() => {
-    const cols=[]
-    let arr=null
-    props.data.map((item) => {
-      arr=[]
-      Object.keys(item[0]).map((key,idx) => {
-        arr.push(key)
-      })
-      cols.push(arr)
-    })
-    return cols
-  })  
+
+  const columns=[
+    {name:'selected',field:'selected',align:'left'},
+    {name:'idPrize',field:'idPrize',align:'left'},
+    {name:'prize_fr',field:'prize_fr',headerClasses: 'col-name'},
+    {name:'prize_en',field:'prize_en',headerClasses: 'col-name'},
+    {name:'order',field:'order',align:'left'}
+  ]
+  const visible=['idPrize','prize_fr','prize_en','order']
 
   let newRowId=0
  
-  const pagination = ref(rows.value.map(() => ({ rowsPerPage: 0 })))  // Per-table pagination
+  const pagination = { rowsPerPage: 0 }
 
   const emit=defineEmits(['change','deleteRow'])
 
-  function handleSelection(selected,rowKey,idx){
+  function handleSelection(selected,rowKey){
     if(selected){
-      const idKey=`id${_.capitalize(tblIndex[idx])}` //idDomain, idTech, idMedia
-      rows.value[idx].map((item) => {
-        if(item[idKey]!==rowKey) item.selected=false
+      rows.value.map((item) => {
+        if(item.idPrize!==rowKey) item.selected=false
       })
     }
   }
-  function handleChange(idx){
-    const val=_.cloneDeep(rows.value[idx]).map((item) => {
+  function handleChange(){
+    const val=_.cloneDeep(rows.value).map((item) => {
         delete item.selected
         return item
       })
     emit(
       'change',
-      tblIndex[idx],
+      'prize',
       true,
       val
     )
   }
-  function findIndex(arr,key,id){
+  function findIndex(arr,id){
     return arr.findIndex((item) => {
-      return item[`id${_.capitalize(key)}`]===id
+      return item.idPrize===id
     }) 
   }  
-  function initNewRow(idx){
+  function initNewRow(){
     const row={}
     newRowId+=-1
-    row[`id${_.capitalize(tblIndex[idx])}`]=newRowId
-    row[`${tblIndex[idx]}_fr`]=''
-    row[`${tblIndex[idx]}_en`]=''
+    row.idPrize=newRowId
+    row.prize_fr=''
+    row.prize_en=''
     row.order=''
     row.selected=true
     return row
   }
-  async function handleAction(cs,idx,rowKey){
+  async function handleAction(cs,rowKey){
     switch(cs){
       case 'insert':
-        rows.value[idx].splice(findIndex(rows.value[idx],tblIndex[idx],rowKey),0,initNewRow(idx))
-        handleChange(idx)
-        handleSelection(true,newRowId,idx)
+        rows.value.splice(findIndex(rows.value,rowKey),0,initNewRow())
+        handleChange()
+        handleSelection(true,newRowId)
         break
       case 'delete':
         if(rowKey<0) //row not yet saved to database
-          rows.value[idx]=_.filter(rows.value[idx],(row) => {
-            return row[`id${_.capitalize(tblIndex[idx])}`]!==rowKey
+          rows.value=_.filter(rows.value,(row) => {
+            return row.idPrize!==rowKey
           })
         else {
           if (!(await confirm($q,t('common.confirm.delete-row'),'cancel'))) return 
-          emit('deleteRow',_.capitalize(tblIndex[idx]),rowKey)
+          emit('deleteRow','Prize',rowKey)
         }
-
     }
   }
 
 </script>
 
 <template>
-  <div class="tables-container admin">    
-    <q-table v-for="(item,idx) in rows"
-      :key="idx"
+  <div class="table-container admin">    
+    <q-table
       class="table sticky-header"
-      :rows="item"
-      :columns="columns[idx]"
-      :visible-columns="visible[idx]"
-      :row-key="columns[idx][0].name"
+      :rows="rows"
+      :columns="columns"
+      :visible-columns="visible"
+      :row-key="columns[0].name"
       virtual-scroll
-      v-model:pagination="pagination[idx]"
+      v-model:pagination="pagination"
       :rows-per-page-options="[0]"
       hide-pagination
       dense
@@ -133,7 +108,7 @@
         <q-tr :props="slotProps">
           <q-th auto-width />  <!-- checkbox column -->
           <q-th v-for="col in slotProps.cols" :key="col.name" :props="slotProps">
-            {{ col.label }}
+            {{ col.name }}
           </q-th>
           <q-th auto-width/>  <!-- actions column -->
         </q-tr>
@@ -147,11 +122,12 @@
               dense 
               @update:model-value="() => {
                 slotProps.row.selected=true
-                handleSelection(slotProps.row.selected,slotProps.key,idx)
+                handleSelection(slotProps.row.selected,slotProps.row.idPrize)
               }"
             >       
             </q-checkbox> 
           </q-td>  
+          <!-- <div>{{slotProps.cols}}</div> -->
           <q-td v-for="(field,i) in slotProps.cols" :key="field">
             <q-input 
               v-model="slotProps.row[field.name]"
@@ -159,21 +135,21 @@
               :borderless="!slotProps.row.selected"
               dense
               :readonly="!slotProps.row.selected || i===0"
-              :style="`width: ${i===0 || i===3?30:100}px`"
+              :style="`width: ${i===0 || i===3?30:150}px`"
               @change="(val) => {
-                handleChange(idx)
+                handleChange()
               }"
             />
           </q-td>
           <q-td>
             <div v-if="slotProps.row.selected" class="buttons">
               <q-btn round flat icon="add_circle" size="1.2rem" color="primary"
-                @click="handleAction('insert',idx,slotProps.key)"
+                @click="handleAction('insert',slotProps.key)"
               >
                 <Tooltip :tt_text="$t('common.insert-row')"></Tooltip>
               </q-btn>
               <q-btn round flat icon="delete" size="1.2rem" color="negative"
-                @click="handleAction('delete',idx,slotProps.key)"
+                @click="handleAction('delete',slotProps.key)"
               >
                 <Tooltip :tt_text="$t('common.delete-row')"></Tooltip>
               </q-btn>
@@ -188,7 +164,7 @@
 </template>
 
 <style scoped>
-  div.tables-container {
+  div.table-container {
     display:flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -209,6 +185,10 @@
     z-index: 1000;
     font-size: 1.5rem;
     background: var(--grey-light);  
+  }
+  ::v-deep(.q-table th.col-name) {
+    width: 200px;
+    text-align: left;
   }
   div.buttons {
     display:flex;
