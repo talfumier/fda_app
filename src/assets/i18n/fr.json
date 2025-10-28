@@ -107,7 +107,7 @@
       "deposit-collection": "Dates et horaires durant lesquels les oeuvres devront être déposées et retirées.",
       "pricing": "Prix forfaitaire pour les oeuvres exposées en salle et prix par oeuvre diffusée sur écran. Votre participation financière est calculée sur la base de votre sélection.",
       "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
-      "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changement, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
+      "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changements, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
       "admin": {
         "orgExcluded": "Paramêtre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
         "domain_tech_media": "Paramêtres admininistrateur pour la définition des domaines, techniques et supports."
@@ -199,7 +199,8 @@
           "master-file": "Fiche expo",
           "guest": "Invité d'honneur",
           "jury": "Jury",
-          "partner": "Partenariat"
+          "partner": "Partenariat",
+          "award": "Remise des prix"
         },
         "tables": {
           "partner-left": {
@@ -219,6 +220,15 @@
           },
           "jury-right": {
             "title": "Membres du jury"
+          },
+          "award": {
+            "toggle": {
+              "yes": "applicable",
+              "no": "non applicable"
+            },
+            "select": {
+              "winner": "Sélectionner l'artiste primé(e)"
+            }
           }
         }
       }

@@ -60,6 +60,7 @@
       case 'options_expo':
         sqlparams=':idUser,:idExpo'
         paramsValues=`${decoded.value.idUser},${props.value?props.value:-10}`
+        break
     }
     const {data:res}=await getEntitiesBySql(
       props.options,

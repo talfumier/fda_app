@@ -1,15 +1,16 @@
 <script setup>
   import {ref,watch,inject,onMounted,onUnmounted} from 'vue'
   import _ from 'lodash'
-  import { getEntitiesBySql,postEntity,deleteEntity } from '@/services/httpEntities.js'
+  import { getEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight, getRandomInt } from '@/utilityFunctions.js'
   import GenericTable from './GenericTable.vue'
   import FieldsetButton from '../../FieldsetButton.vue'
+  import { isEqual,handleSaveMaster } from './expoFunctions.js'
 
   const props=defineProps({
     entity:{type:String},
     idExpo:{type:Number},
-    relatedIdModel:{type:Array},
+    relatedFields:{type:Array},
     idRole:{type:Number},
     sql:{type:String},
     columns:{type:Array},
@@ -60,19 +61,13 @@
   })  
   const disabled=ref([true,true,true])
 
-  function isEqual(arr1,arr2){
-    const arr=arr1.map((row) => {
-      const {selected,...obj}=row
-      return obj
-    })
-    return _.isEqual(arr,arr2)
-  }
   watch(() => {
     if(state.value.length>0) return state.value[1]
   }, (newValue, oldValue) => {
     const cond=isEqual(_.cloneDeep(state.value[1]),initialValues)  
     disabled.value[2]=cond //bottom action button disabled condition
-    if(!cond) emit('tabUnsaved',true)  //track actual changes
+    // if(!cond) emit('tabUnsaved',true)  //track actual changes    
+    emit('tabUnsaved',!cond?true:false)  //track actual changes
   }, { deep: true, immediate: false })
 
   function handleSelected(cs,val){
@@ -90,65 +85,14 @@
     const idx=state.value[from].findIndex((row) => {
       return row.selected
     })
-    state.value[to].push(state.value[from][idx])
+    const obj={}
+    if(props.idRole) obj.idRole=props.idRole
+    state.value[to].push({...state.value[from][idx],ID:null,idExpo:props.idExpo,...obj})
     state.value[from]=_.filter(state.value[from],(row,i) => {
       return !row.selected
     })
     initSelected()
     disabled.value=[true,true,disabled.value[2]]
-  }
-  function handleSave(){
-    const post=[],del=[]
-    state.value[1].forEach((row) => {
-      let cond=true
-      const idx=initialValues.findIndex((item) => {
-        props.relatedIdModel.forEach((idModel) => {
-          cond=cond && item[idModel]===row[idModel]
-        })
-        return cond
-      })
-      if(idx===-1) {
-        const obj={idExpo:props.idExpo}
-        props.relatedIdModel.forEach((idModel) => {
-          obj[idModel]=row[idModel]
-          if(props.idRole && idModel==='idRole') obj.idRole=props.idRole
-        })
-        post.push(obj)
-      }
-    }) 
-    initialValues.forEach((row) => {
-      const idx=state.value[1].findIndex((item) => {
-        let cond=true
-        props.relatedIdModel.forEach((idModel) => {
-          cond=cond && item[idModel]===row[idModel]
-        })
-        return cond
-      })
-      if(idx===-1) del.push(row.ID)
-    })  
-    const ctrl=newController(inFlight),bls=[]
-    try { 
-      del.forEach(async(id) => {
-        const {data:res}=await deleteEntity(props.entity,parseInt(id),token.value, ctrl.signal)
-        bls.push(res.statusCode===200?true:false)
-      })
-      if(JSON.stringify(bls).includes(false)) return
-      post.forEach(async(body) => {
-        const {data:res}=await postEntity(props.entity,body,token.value, ctrl.signal)
-        bls.push(res.statusCode===200?true:false)
-      })
-      if(!JSON.stringify(bls).includes(false)){
-        initialValues=_.cloneDeep(state.value[1]) 
-        initialValues.map((row) => {  //remove selected property coming from state.value[1]
-          delete row.selected
-        })
-        disabled.value[2]=true
-        emit('tabUnsaved',false)
-      }     
-    } catch (error) {}
-    finally {
-      doneController(ctrl,inFlight)
-    }  
   }
 
 </script>
@@ -170,7 +114,7 @@
           :data="state[0]"
           :columns="columns"
           :visible="visible"
-          :rowKey="relatedIdModel[0]"
+          :rowKey="relatedFields[0]"
           @selected="(val) => {
             handleSelected('left',val)
           }"
@@ -202,7 +146,7 @@
           :data="state[1]"
           :columns="columns"
           :visible="visible"
-          :rowKey="relatedIdModel[0]"
+          :rowKey="relatedFields[0]"
           @selected="(val) => {
             handleSelected('right',val)
           }"
@@ -230,7 +174,12 @@
             label_en: 'Save'
           }]"  
         :disabled="{save:disabled[2]}"
-        @button-action="handleSave"      
+        @button-action="
+          async () => {
+            initialValues=await handleSaveMaster(state[1], initialValues,entity,token,inFlight)
+            disabled[2] = true
+            emit('tabUnsaved', false)
+          }"     
       >
       </FieldsetButton>
     </div>
@@ -281,7 +230,6 @@
   div.bottom-container {
     display: flex;
     justify-content: center;
-    width:100%;
     padding-top:20px;
   }
 

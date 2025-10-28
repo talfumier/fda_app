@@ -199,7 +199,8 @@
           "master-file": "Master file",
           "guest": "Guest",
           "jury": "Jury",
-          "partner": "Partnership"
+          "partner": "Partnership",
+          "award": "Awards"
         },
         "tables": {
           "partner-left": {
@@ -219,6 +220,15 @@
           },
           "jury-right": {
             "title": "Panel members"
+          },
+          "award": {
+            "toggle": {
+              "yes": "applicable",
+              "no": "not applicable"
+            },
+            "select": {
+              "winner": "Select award-winning artist"
+            }
           }
         }
       }
