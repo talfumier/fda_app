@@ -1209,6 +1209,7 @@
         "legend_en": "Domain - Technique - Media",
         "info": true,
         "info_path": "comps.infos.admin.domain_tech_media",
+        "info_color": "negative",
         "fields": [
           {
             "name": "domain",
@@ -1228,6 +1229,24 @@
             "name": "media",
             "label_fr": "Media",
             "label_en": "Media",
+            "field_type": "table",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "prize",
+        "type": "prize",
+        "legend_fr": "Prix décernés aux artistes",
+        "legend_en": "Prizes awarded to artists",
+        "info": true,
+        "info_path": "comps.infos.admin.prize",
+        "info_color": "negative",
+        "fields": [
+          {
+            "name": "prize",
+            "label_fr": "Liste des prix",
+            "label_en": "Awards list",
             "field_type": "table",
             "required": false
           }

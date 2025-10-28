@@ -29,7 +29,7 @@
       },
       "public-btn": { "text": "Site public", "tip": "Basculer vers le site public" },
       "account-type": "Type de compte:",
-      "settings-ico": { "tip": "Paramêtres du compte" },
+      "settings-ico": { "tip": "Paramètres du compte" },
       "power-ico": {
         "tip": "Déconnexion",
         "dialog": "Vous êtes sur le point d'être déconnecté,<br/>merci de confirmer."
@@ -109,8 +109,9 @@
       "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
       "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changements, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
       "admin": {
-        "orgExcluded": "Paramêtre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
-        "domain_tech_media": "Paramêtres admininistrateur pour la définition des domaines, techniques et supports."
+        "orgExcluded": "Paramètre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
+        "domain_tech_media": "Paramètres admininistrateur pour la définition des domaines, techniques et supports.A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('oeuvres'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
+        "prize": "Paramètres admininistrateur pour la définition des prix. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('remise des 'prix'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables."
       }
     },
     "file_upload": {
