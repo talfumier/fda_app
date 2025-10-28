@@ -385,7 +385,8 @@
         { "name": "default", "label": "comps.form_details.expos.tabs.master-file" },
         { "name": "guest", "label": "comps.form_details.expos.tabs.guest" },
         { "name": "jury", "label": "comps.form_details.expos.tabs.jury" },
-        { "name": "partner", "label": "comps.form_details.expos.tabs.partner" }
+        { "name": "partner", "label": "comps.form_details.expos.tabs.partner" },
+        { "name": "award", "label": "comps.form_details.expos.tabs.award" }
       ],
       "fileYes": "image/png, image/jpeg, image/webp"
     },

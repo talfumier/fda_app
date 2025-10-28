@@ -13,6 +13,7 @@
   import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue'
   import FieldsetDomainTechMedia from './FieldsetDomainTechMedia.vue'
   import ExpoMaster from './tabs/expo/ExpoMaster.vue'
+  import ExpoAward from './tabs/expo/ExpoAward.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
   import { confirm } from '../../dialog/dialog.js'
 
@@ -171,76 +172,97 @@
         </fieldset>
       </q-tab-panel>
       <q-tab-panel v-if="entity.model==='Expo'" name='guest' >
-          <ExpoMaster
-            entity='UserExpoRole'
-            :idExpo="record.idExpo"
-            :relatedIdModel="['idUser','idRole']"
-            :idRole="2"
-            sql='list_expo_guest'
-            :columns="[
-              {name:'selected',field:'selected',align:'left'},
-              {name:'idUser',field:'idUser',align:'left'},
-              {name:'idRole',field:'idRole',align:'left'},
-              {name:'lastName',field:'lastName',headerClasses: 'col-name'},
-              {name:'firstName',field:'firstName',headerClasses: 'col-name'},
-              {name:'url',field:'url'}]"
-            :visible="['selected','lastName','firstName','url']"
-            :titles="[
-              $t('comps.form_details.expos.tables.guest-left.title'),
-              $t('comps.form_details.expos.tables.guest-right.title')]"
-            @tab-unsaved="(val) => {
-              tabUnsaved=val
-              emit('tabUnsaved',val)
-            }"
-          >
+        <ExpoMaster
+          entity='UserExpoRole'
+          :idExpo="record.idExpo"
+          :relatedFields="['idUser','idRole']"
+          :idRole="2"
+          sql='list_expo_guest'
+          :columns="[
+            {name:'selected',field:'selected',align:'left'},
+            {name:'idUser',field:'idUser',align:'left'},
+            {name:'idRole',field:'idRole',align:'left'},
+            {name:'lastName',field:'lastName',headerClasses: 'col-name'},
+            {name:'firstName',field:'firstName',headerClasses: 'col-name'},
+            {name:'url',field:'url'}]"
+          :visible="['selected','lastName','firstName','url']"
+          :titles="[
+            $t('comps.form_details.expos.tables.guest-left.title'),
+            $t('comps.form_details.expos.tables.guest-right.title')]"
+          @tab-unsaved="(val) => {
+            tabUnsaved=val
+            emit('tabUnsaved',val)
+          }"
+        >
         </ExpoMaster>
       </q-tab-panel>
       <q-tab-panel v-if="entity.model==='Expo'" name='jury' >
-          <ExpoMaster
-            entity='UserExpoRole'
-            :idExpo="record.idExpo"
-            :relatedIdModel="['idUser','idRole']"
-            :idRole="4"
-            sql='list_expo_jury'
-            :columns="[
-              {name:'selected',field:'selected',align:'left'},
-              {name:'idUser',field:'idUser',align:'left'},
-              {name:'idRole',field:'idRole',align:'left'},
-              {name:'lastName',field:'lastName',headerClasses: 'col-name'},
-              {name:'firstName',field:'firstName',headerClasses: 'col-name'},
-              {name:'url',field:'url'}]"
-            :visible="['selected','lastName','firstName','url']"
-            :titles="[
-              $t('comps.form_details.expos.tables.jury-left.title'),
-              $t('comps.form_details.expos.tables.jury-right.title')]"
-            @tab-unsaved="(val) => {
-              tabUnsaved=val
-              emit('tabUnsaved',val)
-            }"
-          >
+        <ExpoMaster
+          entity='UserExpoRole'
+          :idExpo="record.idExpo"
+          :relatedFields="['idUser','idRole']"
+          :idRole="4"
+          sql='list_expo_jury'
+          :columns="[
+            {name:'selected',field:'selected',align:'left'},
+            {name:'idUser',field:'idUser',align:'left'},
+            {name:'idRole',field:'idRole',align:'left'},
+            {name:'lastName',field:'lastName',headerClasses: 'col-name'},
+            {name:'firstName',field:'firstName',headerClasses: 'col-name'},
+            {name:'url',field:'url'}]"
+          :visible="['selected','lastName','firstName','url']"
+          :titles="[
+            $t('comps.form_details.expos.tables.jury-left.title'),
+            $t('comps.form_details.expos.tables.jury-right.title')]"
+          @tab-unsaved="(val) => {
+            tabUnsaved=val
+            emit('tabUnsaved',val)
+          }"
+        >
         </ExpoMaster>
       </q-tab-panel>
-      <q-tab-panel v-if="entity.model==='Expo'" name='partner' >
-          <ExpoMaster
-            entity='ExpoPartner'
-            :idExpo="record.idExpo"
-            :relatedIdModel="['idPartner']"
-            sql='list_expo_partner'
-            :columns="[
-              {name:'selected',field:'selected',align:'left'},
-              {name:'idPartner',field:'idPartner',align:'left'},
-              {name:'name',field:'name',headerClasses: 'col-name'},
-              {name:'url',field:'url'}]"
-            :visible="['selected','name','url']"
-            :titles="[
-              $t('comps.form_details.expos.tables.partner-left.title'),
-              $t('comps.form_details.expos.tables.partner-right.title')]"
-            @tab-unsaved="(val) => {
-              tabUnsaved=val
-              emit('tabUnsaved',val)
-            }"
-          >
-          </ExpoMaster>
+      <q-tab-panel v-if="entity.model==='Expo'" name='partner'>
+        <ExpoMaster
+          entity='ExpoPartner'
+          :idExpo="record.idExpo"
+          :relatedFields="['idPartner']"
+          sql='list_expo_partner'
+          :columns="[
+            {name:'selected',field:'selected',align:'left'},
+            {name:'idPartner',field:'idPartner',align:'left'},
+            {name:'name',field:'name',headerClasses: 'col-name'},
+            {name:'url',field:'url'}]"
+          :visible="['selected','name','url']"
+          :titles="[
+            $t('comps.form_details.expos.tables.partner-left.title'),
+            $t('comps.form_details.expos.tables.partner-right.title')]"
+          @tab-unsaved="(val) => {
+            tabUnsaved=val
+            emit('tabUnsaved',val)
+          }"
+        >
+        </ExpoMaster>
+      </q-tab-panel>
+      <q-tab-panel v-if="entity.model==='Expo'" name='award' >
+        <ExpoAward
+          entity='ExpoPrizeUser'
+          :idExpo="record.idExpo"
+          :relatedFields="['idUser','idPrize','applicable']"
+          sql='list_expo_prize_user'
+          :columns="[
+            {name:'selected',field:'selected',align:'left'},
+            {name:'idPrize',field:'idPrize',align:'left'},
+            {name:'idExpo',field:'idExpo',align:'left'},
+            {name:`prize_${locale}`,field:'name'},
+            {name:'applicable',field:'idUser',align:'left'},
+            {name:'idUser',field:'idUser',align:'left'}]"
+          :visible="['selected',`prize_${locale}`,'applicable','idUser']"
+          @tab-unsaved="(val) => {
+            tabUnsaved=val
+            emit('tabUnsaved',val)
+          }"
+        >
+        </ExpoAward>
       </q-tab-panel>
     </q-tab-panels>
 </template>
@@ -250,8 +272,14 @@
     position:absolute;
     top:0;
     z-index:1000;
-    width:500px;
+    width:100%;   
   }
+  ::v-deep( div.q-tabs__content) {
+    justify-content: left;
+  }
+  /* ::v-deep( div.q-tabs__row) {
+    margin-right:50px;
+  } */
   .q-tab-panels {
     padding:0 10px 20px;
   }

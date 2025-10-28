@@ -74,4 +74,8 @@
     width: 400px;
     height:250px;
   }
+  div.q-table__container.award {
+    width: 100%;
+    height:280px;
+  }
 </style>
