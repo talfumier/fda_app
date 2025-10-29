@@ -10,6 +10,7 @@
     count:{type:Number},
     data:{type:Object}
   })  
+  
   const {token}=inject('userCookie')
   const images=ref(null)
   // IMAGE DATA LOADING
@@ -39,7 +40,7 @@
       :fileYes="fileYes"
       :model="model"
       :fields="fields"
-      :data="images[idx-1]?images[idx-1]:data"
+      :data="images[idx-1]?images[idx-1]:{...data,idImage:null}"
     >
     </FieldsetFile>
   </div>

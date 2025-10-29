@@ -1,5 +1,5 @@
 <script setup>
-  import {ref,inject,onUnmounted} from 'vue'
+  import {ref,computed,inject,onUnmounted} from 'vue'
   import { useRouter,useRoute } from 'vue-router'
   import { useQuasar } from 'quasar';
   import { useI18n } from 'vue-i18n'
@@ -22,25 +22,29 @@
     fields:{type:Array},
     data:{type:Object}
   })
-  
   const {t,locale}=useI18n()  
   const $q=useQuasar()
   const router = useRouter()
   const route = useRoute()
   const {token,decoded}=inject('userCookie')
   const {formatDateTime}=useFormatDate()
+
+  const type=computed(() => {
+    const flg=props.fileYes.includes('image')?0:1
+    return {model:flg===0?'Image':'File',id:flg===0?'idImage':'idFile'}
+  })
   
   const file=ref(null)
   const loading=ref(false)
-  if (!props.data?.idImage) file.value=getEmptyFile()
-  else file.value={
-    idImage:props.data.idImage,
-    fileName:props.data.fileName,
-    fileSize:fileSize(props.data.fileSize),
-    fileLastModified:formatDateTime(props.data.fileLastModified),
-    url:props.data.url
+  if (!props.data[type.value.id]) file.value=getEmptyFile()
+  else 
+    file.value={
+      [type.value.id]:props.data[type.value.id],
+      fileName:props.data.fileName,
+      fileSize:fileSize(props.data.fileSize),
+      fileLastModified:formatDateTime(props.data.fileLastModified),
+      url:props.data.url
   }
-  const emit=defineEmits('fileChange')
 
   const ctrl=new AbortController()  
   onUnmounted(() => { // clean-up code after component has unmounted
@@ -54,23 +58,22 @@
       case 'delete':
         if (!(await confirm($q,t('comps.file_upload.file_delete'),'cancel'))) return false 
         loading.value=true
-        const idImage=file.value.idImage
+        const id=file.value[type.value.id]
         switch(props.model) {
           case 'Expo':  //do nothing >>> record in texpo_image deleted by cascade delete from timage  
             break
-          default: //update idImage in mariaDB tmodel (tuser ...)
-            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage:null},token.value,ctrl.signal)).data
+          default: //update idImage in mariaDB tmodel (tuser, tpartner) update idFile in tDoc
+            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{[type.value.id]:null},token.value,ctrl.signal)).data
             if(res1.statusCode!==200) return
         }            
-        const {data:res2}=await deleteEntity('Image',idImage,token.value,ctrl.signal) //delete idImage record in timage
+        const {data:res2}=await deleteEntity(type.value.model,id,token.value,ctrl.signal) //delete idImage/idFile record in timage/tfile
         if(res2.statusCode===200) {     //update state
           file.value=getEmptyFile()
-          emit('fileChange',file.value)
         } 
         if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
           router.go(0)  //page refresh without full reload
         try {
-          await deleteInCloud(idImage,token.value,ctrl.signal)  //delete asset on Cloudinary.com
+          await deleteInCloud(id,token.value,ctrl.signal)  //delete asset on Cloudinary.com
         } catch (error) {}  //asset no longer present
     }  
     loading.value=false
@@ -79,26 +82,29 @@
     if(props.data[`id${props.model}`]<=0){  //new record creation 
       toastWarning(t('comps.form_details.newRec'))
       return
-    }
+    }   
     loading.value=true
-    const idImage=getRandomInt(1,214e7)
-    const {data:res1}=await postInCloud(idImage,obj.data,token.value,ctrl.signal) //create asset on Cloudinary.com
+    const idFile=getRandomInt(1,214e7)
+    const {data:res1}=await postInCloud(idFile,obj.data,token.value,ctrl.signal) //create asset on Cloudinary.com
     if(res1.statusCode===200){  
-      obj.idImage=idImage
+      obj[type.value.id]=idFile
       obj.data=undefined  
       obj.url=res1.data
       const {data,...body}=_.cloneDeep(obj)
-      const {data:res2}=await postEntity('Image',body,token.value,ctrl.signal)  //create image record in mariaDB timage
+      const {data:res2}=await postEntity(type.value.model,body,token.value,ctrl.signal)  //create image/file record in mariaDB timage/tfile
       if(res2.statusCode===200) {
         let res3=null
         switch(props.model){
           case 'Expo':  //multiple upload
-            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage},token.value,ctrl.signal)).data
+            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage:idFile},token.value,ctrl.signal)).data
             break
-          default:  //single upload
-            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)).data  //update idImage (avatar) in mariaDB tModel
+          case 'User':  //single upload
+          case 'Partner':
+          case 'Oeuvre':
+          case 'Doc':
+            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{[type.value.id]:idFile},token.value,ctrl.signal)).data  //update idImage/idFile in mariaDB tModel
         }
-        if(res3.statusCode===200) 
+        if(!res3 || res3.statusCode===200) 
           file.value={    //update state
             ...body
           }   
@@ -106,7 +112,6 @@
     }
     if((props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser)) //avatar  update after upload
       router.go(0)  //page refresh without full reload
-    emit('fileChange',file.value)
     loading.value=false
   }
   function handleSelectedFile(e){    
@@ -114,7 +119,7 @@
     let val = getEmptyFile()    
     if (typeof file !== "undefined") {
       const reader1 = new FileReader();
-      if (props.fileYes.includes("image")) {
+      if (props.fileYes.includes("image")) { // image file
         reader1.onload = async function () {
           let name = file.name;
           const blob = await arrayBufferToWebP(reader1.result);
@@ -148,8 +153,8 @@
         };
         reader1.readAsArrayBuffer(file);
       }
-      if (!props.fileYes.includes('image')) {
-        reader1.readAsText(file);
+      if (!props.fileYes.includes('image')) {  //non image filr
+        reader1.readAsDataURL(file);
         reader1.onload = function () {
           val = {
             ...val,
@@ -157,12 +162,12 @@
             fileSize: file.size,
             fileLastModified: file.lastModified,
             url: null,
-            data: btoa(reader1.result),
+            data: reader1.result,
           };
           processFileData(val);
         };
         reader1.onerror = function (error) {
-          console.log("Error during umap file upload in FieldsetFile.vue: ", error);
+          console.log("Error during non image file upload in FieldsetFile.vue: ", error);
         };
       }
     } else processFileData(val);
@@ -173,6 +178,7 @@
     switch(route.name){
       case 'member user':
       case 'member expos':
+      case 'member docs':
       case 'member partners':
         return true
       case 'member users':
@@ -204,7 +210,7 @@
           no-wrap
           icon="upload"
           :label="$t('comps.file_upload.upload')"
-          :disabled="data.idOeuvre<0 || data.idExpo<0?true:false"
+          :disabled="data.idOeuvre<0 || data.idExpo<0| data.idDoc<0?true:false"
           @click="handleClick('upload')"
         >
           <input
@@ -215,7 +221,7 @@
             @change="handleSelectedFile"
           />
         </q-btn>
-        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip>  
+        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip>  
       </div>
       <div className="file-details">
         <InputField v-for="(item,idx) in fields"

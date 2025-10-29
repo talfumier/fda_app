@@ -18,7 +18,7 @@
     selectedId:{type:Number},
     infos:{type:Array},
   })
-
+  
   const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
@@ -56,6 +56,7 @@
       case 'Oeuvre':
       case 'Expo':
       case 'Partner':
+      case 'Doc':
         return ['1.1']
       case 'Booking':
         return ['1.1','2.1']

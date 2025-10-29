@@ -1276,7 +1276,7 @@
         "fields": [
           {
             "name": "short",
-            "label_fr": "Nom cours",
+            "label_fr": "Nom court",
             "label_en": "Short name",
             "field_type": "input",
             "required": true,
@@ -1454,6 +1454,90 @@
         "type": "single-upload",
         "legend_fr": "Photo",
         "legend_en": "Photo",
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "entity": {
+      "idx": 8,
+      "url": "/member/docs",
+      "name": "member docs",
+      "roles": [5, 6, 7],
+      "model": "Doc",
+      "sql": "list_items_doc",
+      "newRecord": true,
+      "noList": false,
+      "listType": ["simple"],
+      "fileYes": "doc/docx doc/xlsx doc/pdf doc/pptx"
+    },
+    "fieldsets": [
+      {
+        "name": "name",
+        "type": "standard",
+        "legend_fr": "Nom court",
+        "legend_en": "Short name",
+        "fields": [
+          {
+            "name": "short",
+            "field_type": "input",
+            "required": true,
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "description",
+        "type": "translate",
+        "legend_fr": "Description",
+        "legend_en": "Description",
+        "info": false,
+        "fields": [
+          {
+            "name": "desc_fr",
+            "field_type": "textarea",
+            "required": false,
+            "rows": 2,
+            "max_length": 100
+          },
+          {
+            "name": "desc_en",
+            "field_type": "textarea",
+            "required": false,
+            "rows": 2,
+            "max_length": 100
+          }
+        ]
+      },
+      {
+        "name": "file",
+        "type": "single-upload",
+        "legend_fr": "Fichier",
+        "legend_en": "File",
+        "info": true,
+        "info_path": "comps.infos.file",
         "fields": [
           {
             "name": "fileName",

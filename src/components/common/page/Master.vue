@@ -76,8 +76,7 @@
   function handleOpenDetails(id){
     selectedId.value=id
   }
-  function isEqual(val1,val2,name){
-    if(name && name.includes('file') || name && name==='url' || name && name==='idImage') return true
+  function isEqual(val1,val2){
     if((val1==='' || val1===null) && (val2==='' || val2===null)) return true
     return _.isEqual(val1,val2)  //deep comparison
   }
@@ -97,7 +96,7 @@
   function handleChange(name,valid,val,option){
     const idx=getIndex()
     if(name !==idModel){
-      actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
+      actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val)
       // if(!option) state.value[0][idx][name]=val
       state.value[0][idx][name]=val
       if(option && option.data) handleSelectOption(name,val,idx,option)
@@ -507,7 +506,29 @@
             handleDelete(idx)
         }
       }
-      break      
+      break  
+    case 'Doc':
+      listItemsFilter=ref({search:'',doc_status:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })      
+      handleAction = async(cs)=>{    
+        const idx=getIndex()
+        switch(cs){     
+          case "deletion":
+            handleDelete(idx)
+        }
+      }
+      break        
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -775,7 +796,7 @@
               default:
                 state.value[0][index][prop[0]]=prop.length===1?null:prop[1] 
             }
-            actualChanges.value[index][prop[0]]=!isEqual(initialValues[index][prop[0]],state.value[0][index][prop[0]],prop[0])
+            actualChanges.value[index][prop[0]]=!isEqual(initialValues[index][prop[0]],state.value[0][index][prop[0]])
           } 
         })
         break

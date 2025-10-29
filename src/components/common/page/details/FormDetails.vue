@@ -57,11 +57,6 @@
   function handleTranslate(params) {
     emit('translate',params)
   }
-  function handleFileChange(file){
-    Object.keys(file).map((key) => {
-      handleChange(key,true,file[key])
-    })
-  }
   function handleButtonAction(name){
     emit('buttonAction',name)
     }
@@ -125,16 +120,14 @@
             }"
           >
           </FieldsetTranslate>
-          <FieldsetFile
+          <!-- file change monitoring not required for FieldsetFile >>> toolbar save is not involved in upload & delete operations -->
+          <FieldsetFile   
             v-if="item.type==='single-upload'"          
             :key="getRandomInt(100,3e3)"
             :fileYes="entity.fileYes"
             :model="entity.model"
             :fields="item.fields"
             :data="record"
-            @file-change="(file) => {
-              handleFileChange(file)
-            }"
           >
           </FieldsetFile>
           <FieldsetFiles

@@ -49,6 +49,13 @@
     "roles": [5, 6, 7]
   },
   {
+    "url": "/member/docs",
+    "icon": "folder_open",
+    "text": "docs",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
     "url": "/member/admin",
     "icon": "settings",
     "text": "admin_settings",

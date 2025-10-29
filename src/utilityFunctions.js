@@ -22,7 +22,7 @@ export function getEmptyFile() {
     fileSize: 0,
     fileLastModified: 0,
     url: null,
-    data: null,
+    // data: null,
   }
 }
 export function fileSize(size) {
