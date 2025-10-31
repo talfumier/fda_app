@@ -1,7 +1,8 @@
 <script setup>
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import _ from 'lodash'
+  import _ from 'lodash'  
+  import { useFormatDate } from '@/composable/useFormatDate.js'
 
   const props=defineProps({
     id:{type:Number},
@@ -10,7 +11,8 @@
     rowSchema:{type:Array}
   })
 
-  const {locale}=useI18n()
+  const {locale}=useI18n()  
+  const {formatDateTime}=useFormatDate()
   const filteredMaster=computed(() => {
     return _.filter(props.master,(mstr) => {
       if(mstr.name.endsWith('_fr') || mstr.name.endsWith('_en')) return mstr.name.endsWith(locale.value)
@@ -70,7 +72,8 @@
       case '2.1':
         n=len.value-1
     }
-    if(len.value>=1 && props.item[filteredMaster.value[n].name]) return props.item[filteredMaster.value[n].name]
+    const field=filteredMaster.value[n]
+    if(len.value>=1 && props.item[field.name]) return field.format==='date-time'?formatDateTime(props.item[field.name]):props.item[field.name]
     return ''
   }
 

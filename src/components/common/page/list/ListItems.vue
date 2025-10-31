@@ -57,7 +57,7 @@
       case 'Expo':
       case 'Partner':
       case 'Doc':
-        return ['1.1']
+        return ['1.1','2.1']
       case 'Booking':
         return ['1.1','2.1']
       default:

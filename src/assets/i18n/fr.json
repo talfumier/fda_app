@@ -121,7 +121,9 @@
       "upload": "Télécharger",
       "tooltip": "Sauvegarder l'enregistrement avant le téléchargement du fichier.",
       "max_exceeded": "La taille du fichier est supérieure à la valeur max autorisée (",
-      "file_delete": "Merci de confirmer la suppression du fichier."
+      "file_delete": "Merci de confirmer la suppression du fichier.",
+      "file_ext1": "Extension de fichier",
+      "file_ext2": "non supportée."
     },
     "master": {
       "add_btn": "Ajouter un nouvel enregistrement"

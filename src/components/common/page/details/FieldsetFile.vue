@@ -1,12 +1,13 @@
 <script setup>
   import {ref,computed,inject,onUnmounted} from 'vue'
   import { useRouter,useRoute } from 'vue-router'
-  import { useQuasar } from 'quasar';
+  import VuePdfEmbed from 'vue-pdf-embed'
+  import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import {arrayBufferToWebP} from "webp-converter-browser"
-  import _ from 'lodash'
+  import _ from 'lodash'  
   import InputField from '../../fields/InputField.vue'
-  import { getEmptyFile, getRandomInt } from '@/utilityFunctions.js'
+  import { getEmptyFile, getRandomInt,getFileExtension } from '@/utilityFunctions.js'
   import { fileSize } from '@/utilityFunctions.js'
   import { environment } from '@/config/environment.js'
   import { toastError, toastWarning } from '@/composable/toast.js'
@@ -17,7 +18,7 @@
   import Tooltip from '../../Tooltip.vue'
 
   const props = defineProps({
-    fileYes:{type:String},
+    fileYes:{type:Array},
     model:{type:String},
     fields:{type:Array},
     data:{type:Object}
@@ -30,7 +31,7 @@
   const {formatDateTime}=useFormatDate()
 
   const type=computed(() => {
-    const flg=props.fileYes.includes('image')?0:1
+    const flg=props.model==='Doc'?1:0
     return {model:flg===0?'Image':'File',id:flg===0?'idImage':'idFile'}
   })
   
@@ -78,14 +79,16 @@
     }  
     loading.value=false
   }
-  async function processFileData(obj) {
-    if(props.data[`id${props.model}`]<=0){  //new record creation 
+  async function processFileData(obj,option=null) {
+    if(props.data[`id${props.model}`]<=0){  //new record creation >>> no file upload until actual save
       toastWarning(t('comps.form_details.newRec'))
       return
     }   
     loading.value=true
-    const idFile=getRandomInt(1,214e7)
-    const {data:res1}=await postInCloud(idFile,obj.data,token.value,ctrl.signal) //create asset on Cloudinary.com
+    let idFile=getRandomInt(1,214e7).toString()
+    const ext=getFileExtension(obj.fileName)
+    if(option && ext!=='.pdf') idFile=`${idFile}${ext}`  //add file extension in cloudinary publicId for msoffice files
+    const {data:res1}=await postInCloud(idFile,obj.data,token.value,ctrl.signal,option) //create asset on Cloudinary.com
     if(res1.statusCode===200){  
       obj[type.value.id]=idFile
       obj.data=undefined  
@@ -114,14 +117,31 @@
       router.go(0)  //page refresh without full reload
     loading.value=false
   }
+  const supported={
+    image:[".jpg", ".jpeg", ".png", ".webp"],  
+    msoffice:[".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt",".csv",".zip"],
+    pdf:[".pdf"]
+  }
+  const exts=[]
+  props.fileYes.forEach((cat) => {
+    supported[cat].forEach((ext) => {      
+    exts.push(ext)
+    })
+  })
+  let ext=null
   function handleSelectedFile(e){    
-    const file = e.target.files[0];
-    let val = getEmptyFile()    
-    if (typeof file !== "undefined") {
+    const selectedFile = e.target.files[0]
+    ext=getFileExtension(selectedFile.name)
+    let val = getEmptyFile()  
+    if (typeof selectedFile !== undefined) {      
+      if(!exts.includes(ext)) { //check supported extensions
+        toastWarning(`${t('comps.file_upload.file_ext1')} ${ext} ${t('comps.file_upload.file_ext2')}`)
+        return
+      }
       const reader1 = new FileReader();
-      if (props.fileYes.includes("image")) { // image file
+      if (props.fileYes.includes("image") && supported.image.includes(ext)) { //image file
         reader1.onload = async function () {
-          let name = file.name;
+          let name = selectedFile.name;
           const blob = await arrayBufferToWebP(reader1.result);
           if (blob.size > environment.max_file_size) {
             toastError(`${t('comps.file_upload.max_exceeded')} ${environment.max_file_size}`)
@@ -129,8 +149,8 @@
           }
           const reader2 = new FileReader();
           reader2.onload = function () {
-            if (!file.type.includes("webp")) {
-              name = file.name.split(".");
+            if (!selectedFile.type.includes("webp")) {
+              name = selectedFile.name.split(".");
               name.splice(-1, 1);
               name = name.join(".") + ".webp";
             }
@@ -138,9 +158,10 @@
               ...val,
               fileName:name,
               fileSize: blob.size,
-              fileLastModified: file.lastModified,
+              fileLastModified: selectedFile.lastModified,
               url: null,
-              data: reader2.result,};
+              data: reader2.result
+            };
             processFileData(val);
           };
           reader2.readAsDataURL(blob);
@@ -151,20 +172,21 @@
             error
           );
         };
-        reader1.readAsArrayBuffer(file);
+        reader1.readAsArrayBuffer(selectedFile);
       }
-      if (!props.fileYes.includes('image')) {  //non image filr
-        reader1.readAsDataURL(file);
+      if ((props.fileYes.includes("msoffice") && supported.msoffice.includes(ext)) ||  //non image file
+          props.fileYes.includes("pdf") && supported.pdf.includes(ext)) { 
+        reader1.readAsDataURL(selectedFile);
         reader1.onload = function () {
           val = {
             ...val,
-            fileName: file.name,
-            fileSize: file.size,
-            fileLastModified: file.lastModified,
+            fileName: selectedFile.name,
+            fileSize: selectedFile.size,
+            fileLastModified: selectedFile.lastModified,
             url: null,
-            data: reader1.result,
+            data: reader1.result
           };
-          processFileData(val);
+          processFileData(val,'?option=raw');
         };
         reader1.onerror = function (error) {
           console.log("Error during non image file upload in FieldsetFile.vue: ", error);
@@ -188,6 +210,10 @@
         return true
     }
   }
+  function getMScompatibleUrl(url){
+
+  }
+
 </script>
 
 <template>
@@ -217,7 +243,7 @@
             id="select-file"
             class="upload"
             type="file"
-            :accept="fileYes"
+            :accept="fileYes.length>0"
             @change="handleSelectedFile"
           />
         </q-btn>
@@ -238,8 +264,16 @@
         </q-inner-loading>
       </div>
     </div>
-    <div v-if="file.url && fileYes.includes('image')" class="image">
+    <div v-if="file.url && fileYes.includes('image') && supported.image.includes(getFileExtension(file.fileName))" class="image">
       <img :src="file.url" :alt="file.fileName">
+    </div>
+    <div v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(getFileExtension(file.fileName))">
+      <iframe 
+        :src="`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file.url)}`"        
+      ></iframe>
+    </div>
+    <div v-if="file.url && fileYes.includes('pdf') && getFileExtension(file.fileName)==='.pdf'">
+      <vue-pdf-embed :source="file.url" />
     </div>
   </div>
 </template>
@@ -284,5 +318,19 @@
     padding:5px;
     border:1px solid lightgrey;
     margin-left: 0;
+  }
+  div.vue-pdf-embed {
+    padding:5px;
+    border:1px solid lightgrey;
+    margin-left: 0;
+    height:223px;
+    overflow-y:auto;
+  }
+  iframe {    
+    padding:5px;
+    border:1px solid lightgrey;
+    margin-left: 0;
+    height:223px;
+    overflow-y:auto;
   }
 </style>

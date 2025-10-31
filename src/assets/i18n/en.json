@@ -121,7 +121,9 @@
       "upload": "Upload",
       "tooltip": "Save record before file upload.",
       "max_exceeded": "File size is above the accepted limit (",
-      "file_delete": "Please confirm file deletion."
+      "file_delete": "Please confirm file deletion.",
+      "file_ext1": "File extension",
+      "file_ext2": "not supported."
     },
     "master": {
       "add_btn": "Add a new record"

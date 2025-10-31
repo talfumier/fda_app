@@ -8,7 +8,7 @@
       "model": "User",
       "sql": "list_items_user0",
       "orderBy": { "field": "lastName", "order": "asc" },
-      "fileYes": "image/png, image/jpeg, image/webp",
+      "fileYes": ["image"],
       "newRecord": false,
       "noList": false,
       "listType": ["simple"]
@@ -340,7 +340,7 @@
       "roles": [1, 3, 5, 6, 7],
       "model": "User",
       "sql": "list_items_user1",
-      "fileYes": "image/png, image/jpeg, image/webp",
+      "fileYes": ["image"],
       "noList": true
     },
     "fieldsets": [
@@ -388,7 +388,7 @@
         { "name": "partner", "label": "comps.form_details.expos.tabs.partner" },
         { "name": "award", "label": "comps.form_details.expos.tabs.award" }
       ],
-      "fileYes": "image/png, image/jpeg, image/webp"
+      "fileYes": ["image"]
     },
     "fieldsets": [
       {
@@ -665,7 +665,7 @@
       "newRecord": true,
       "noList": false,
       "listType": ["simple"],
-      "fileYes": "image/png, image/jpeg, image/webp"
+      "fileYes": ["image"]
     },
     "fieldsets": [
       {
@@ -882,7 +882,7 @@
       "sql": "list_items_oeuvre_org",
       "noList": false,
       "listType": ["groupby", "idUser", "lastName", "firstName"],
-      "fileYes": "image/png, image/jpeg, image/webp"
+      "fileYes": ["image"]
     },
     "fieldsets": [
       {
@@ -1262,7 +1262,7 @@
       "roles": [5, 6, 7],
       "model": "Partner",
       "sql": ["list_items_partners"],
-      "fileYes": "image/png, image/jpeg, image/webp",
+      "fileYes": ["image"],
       "newRecord": true,
       "noList": false,
       "listType": ["simple"]
@@ -1491,7 +1491,7 @@
       "newRecord": true,
       "noList": false,
       "listType": ["simple"],
-      "fileYes": "doc/docx doc/xlsx doc/pdf doc/pptx"
+      "fileYes": ["msoffice", "image", "pdf"]
     },
     "fieldsets": [
       {
@@ -1558,7 +1558,9 @@
             "label_fr": "Date de modification",
             "label_en": "Date modified",
             "field_type": "input",
-            "disabled": true
+            "format": "date-time",
+            "disabled": true,
+            "listMaster": true
           }
         ]
       }
