@@ -119,6 +119,7 @@
     "file_upload": {
       "delete": "Delete",
       "upload": "Upload",
+      "download": "Download",
       "tooltip": "Save record before file upload.",
       "max_exceeded": "File size is above the accepted limit (",
       "file_delete": "Please confirm file deletion.",
@@ -205,7 +206,8 @@
           "guest": "Guest",
           "jury": "Jury",
           "partner": "Partnership",
-          "award": "Awards"
+          "award": "Awards",
+          "doc": "Documents"
         },
         "tables": {
           "partner-left": {
@@ -214,6 +216,13 @@
           "partner-right": {
             "title": "Engaged partners"
           },
+          "doc-left": {
+            "title": "Referenced documents"
+          },
+          "doc-right": {
+            "title": "Linked documents"
+          },
+          "doc-tip": "Click to open file preview",
           "guest-left": {
             "title": "Referenced artists"
           },

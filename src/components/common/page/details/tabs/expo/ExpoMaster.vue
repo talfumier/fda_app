@@ -2,9 +2,11 @@
   import {ref,watch,inject,onMounted,onUnmounted} from 'vue'
   import _ from 'lodash'
   import { getEntitiesBySql } from '@/services/httpEntities.js'
-  import { newController,doneController,cancelAllInFlight, getRandomInt } from '@/utilityFunctions.js'
+  import { newController,doneController,cancelAllInFlight, getRandomInt,getFileExtension } from '@/utilityFunctions.js'
   import GenericTable from './GenericTable.vue'
   import FieldsetButton from '../../FieldsetButton.vue'
+  import FileViewerModal from '../../FileViewerModal.vue'
+  import Tooltip from '@/components/common/Tooltip.vue'
   import { isEqual,handleSaveMaster } from './expoFunctions.js'
 
   const props=defineProps({
@@ -17,7 +19,7 @@
     visible:{type:Array},
     titles:{type:Array} //table titles
   })
-
+  
   const {token}=inject('userCookie')
   const state=ref([])
   let initialValues=null
@@ -94,6 +96,15 @@
     initSelected()
     disabled.value=[true,true,disabled.value[2]]
   }
+  //File viewer modal
+  const isOpen = ref(false)
+  function openModal() {
+    if(props.entity!=='ExpoDoc') return
+    isOpen.value = true
+  }
+  function closeModal() {
+    isOpen.value = false
+  }
 
 </script>
 
@@ -120,14 +131,22 @@
           }"
         >
           <template #body="slotProps">
-            <q-td>
-              {{ slotProps.row[visible[1]] }}
-            </q-td>
+            <q-td :class="entity==='ExpoDoc' && slotProps.row.selected?'pointer':''" @click="openModal">
+              <span>{{ slotProps.row[visible[1]] }}
+                <Tooltip v-if="entity==='ExpoDoc' && slotProps.row.selected" :tt_text=" $t('comps.form_details.expos.tables.doc-tip')"></Tooltip>  
+              </span>     
+            </q-td>    
+            <FileViewerModal 
+              v-if="isOpen && slotProps.row.selected"
+              :file="{url:slotProps.row.url,name:slotProps.row.fileName,ext:getFileExtension(slotProps.row.fileName)}"
+              @close-modal="closeModal"
+            >
+            </FileViewerModal>  
             <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
               {{ slotProps.row[visible[2]] }}
             </q-td>
             <q-td>
-              <img v-if="slotProps.row.url" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
+              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
             </q-td>
           </template>
         </GenericTable>      
@@ -152,14 +171,22 @@
           }"
         >
           <template #body="slotProps">
-            <q-td>
-              {{ slotProps.row[visible[1]] }}
-            </q-td>
+            <q-td :class="entity==='ExpoDoc' && slotProps.row.selected?'pointer':''" @click="openModal">
+              <span>{{ slotProps.row[visible[1]] }}
+                <Tooltip v-if="entity==='ExpoDoc' && slotProps.row.selected" :tt_text=" $t('comps.form_details.expos.tables.doc-tip')"></Tooltip>  
+              </span>     
+            </q-td>    
+            <FileViewerModal 
+              v-if="isOpen && slotProps.row.selected"
+              :file="{url:slotProps.row.url,name:slotProps.row.fileName,ext:getFileExtension(slotProps.row.fileName)}"
+              @close-modal="closeModal"
+            >
+            </FileViewerModal>  
             <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
               {{ slotProps.row[visible[2]] }}
             </q-td>
             <q-td>
-              <img v-if="slotProps.row.url" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
+              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
             </q-td>
           </template>
         </GenericTable> 
@@ -189,6 +216,9 @@
 <style scoped>
   td, tr {
     max-height:2rem;
+  }
+  td.pointer {
+    cursor: pointer;
   }
   div.tables-container {
     display:flex;

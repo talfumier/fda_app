@@ -1,14 +1,14 @@
 <script setup>
   import {ref,computed,inject,onUnmounted} from 'vue'
   import { useRouter,useRoute } from 'vue-router'
-  import VuePdfEmbed from 'vue-pdf-embed'
   import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import {arrayBufferToWebP} from "webp-converter-browser"
   import _ from 'lodash'  
   import InputField from '../../fields/InputField.vue'
-  import { getEmptyFile, getRandomInt,getFileExtension } from '@/utilityFunctions.js'
-  import { fileSize } from '@/utilityFunctions.js'
+  import FileViewer from './FileViewer.vue'
+  import { getEmptyFile, getRandomInt,getFileExtension,fileSize } from '@/utilityFunctions.js'
+  import supported from './supported.json'
   import { environment } from '@/config/environment.js'
   import { toastError, toastWarning } from '@/composable/toast.js'
   import { useFormatDate } from '@/composable/useFormatDate.js'
@@ -30,22 +30,20 @@
   const {token,decoded}=inject('userCookie')
   const {formatDateTime}=useFormatDate()
 
-  const type=computed(() => {
-    const flg=props.model==='Doc'?1:0
-    return {model:flg===0?'Image':'File',id:flg===0?'idImage':'idFile'}
-  })
-  
-  const file=ref(null)
   const loading=ref(false)
-  if (!props.data[type.value.id]) file.value=getEmptyFile()
+  const file=ref(null)
+  if (!props.data.idFile) file.value=getEmptyFile()
   else 
     file.value={
-      [type.value.id]:props.data[type.value.id],
+      idFile:props.data.idFile,
       fileName:props.data.fileName,
       fileSize:fileSize(props.data.fileSize),
       fileLastModified:formatDateTime(props.data.fileLastModified),
       url:props.data.url
-  }
+    }
+  const file_ext=computed(() => {
+    return getFileExtension(file.value.fileName)
+  })
 
   const ctrl=new AbortController()  
   onUnmounted(() => { // clean-up code after component has unmounted
@@ -59,22 +57,22 @@
       case 'delete':
         if (!(await confirm($q,t('comps.file_upload.file_delete'),'cancel'))) return false 
         loading.value=true
-        const id=file.value[type.value.id]
+        const id=file.value.idFile
         switch(props.model) {
           case 'Expo':  //do nothing >>> record in texpo_image deleted by cascade delete from timage  
             break
-          default: //update idImage in mariaDB tmodel (tuser, tpartner) update idFile in tDoc
-            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{[type.value.id]:null},token.value,ctrl.signal)).data
+          default: //update idFile in mariaDB tmodel (tuser, tpartner,tdoc)
+            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{idFile:null},token.value,ctrl.signal)).data
             if(res1.statusCode!==200) return
         }            
-        const {data:res2}=await deleteEntity(type.value.model,id,token.value,ctrl.signal) //delete idImage/idFile record in timage/tfile
+        const {data:res2}=await deleteEntity('File',id,token.value,ctrl.signal) //delete idFile record in tfile
         if(res2.statusCode===200) {     //update state
           file.value=getEmptyFile()
         } 
         if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
           router.go(0)  //page refresh without full reload
         try {
-          await deleteInCloud(id,token.value,ctrl.signal)  //delete asset on Cloudinary.com
+          await deleteInCloud(id,token.value,ctrl.signal,getFileExtension(id).length>0?'?option=raw':'')  //delete asset on Cloudinary.com
         } catch (error) {}  //asset no longer present
     }  
     loading.value=false
@@ -90,22 +88,22 @@
     if(option && ext!=='.pdf') idFile=`${idFile}${ext}`  //add file extension in cloudinary publicId for msoffice files
     const {data:res1}=await postInCloud(idFile,obj.data,token.value,ctrl.signal,option) //create asset on Cloudinary.com
     if(res1.statusCode===200){  
-      obj[type.value.id]=idFile
+      obj.idFile=idFile
       obj.data=undefined  
       obj.url=res1.data
       const {data,...body}=_.cloneDeep(obj)
-      const {data:res2}=await postEntity(type.value.model,body,token.value,ctrl.signal)  //create image/file record in mariaDB timage/tfile
+      const {data:res2}=await postEntity('File',body,token.value,ctrl.signal)  //create file record in mariaDB tfile
       if(res2.statusCode===200) {
         let res3=null
         switch(props.model){
           case 'Expo':  //multiple upload
-            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage:idFile},token.value,ctrl.signal)).data
+            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idFile},token.value,ctrl.signal)).data
             break
           case 'User':  //single upload
           case 'Partner':
           case 'Oeuvre':
           case 'Doc':
-            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{[type.value.id]:idFile},token.value,ctrl.signal)).data  //update idImage/idFile in mariaDB tModel
+            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idFile},token.value,ctrl.signal)).data  //update idFile in mariaDB tModel
         }
         if(!res3 || res3.statusCode===200) 
           file.value={    //update state
@@ -117,19 +115,15 @@
       router.go(0)  //page refresh without full reload
     loading.value=false
   }
-  const supported={
-    image:[".jpg", ".jpeg", ".png", ".webp"],  
-    msoffice:[".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt",".csv",".zip"],
-    pdf:[".pdf"]
-  }
+ 
   const exts=[]
   props.fileYes.forEach((cat) => {
     supported[cat].forEach((ext) => {      
     exts.push(ext)
     })
   })
-  let ext=null
-  function handleSelectedFile(e){    
+  function handleSelectedFile(e){   
+    let ext=null 
     const selectedFile = e.target.files[0]
     ext=getFileExtension(selectedFile.name)
     let val = getEmptyFile()  
@@ -210,23 +204,19 @@
         return true
     }
   }
-  function getMScompatibleUrl(url){
-
-  }
 
 </script>
 
 <template>
   <div className="file-container">
     <div class="action-infos">
-      <div className="buttons-container">
         <q-btn v-if="file.url && roleRouteCondition()"
           color='primary'
           rounded standout pulse
           no-wrap
           icon="delete"
           :label="$t('comps.file_upload.delete')"
-          :disabled="false"
+          :disable="false"
           @click="handleClick('delete')"
         >
         </q-btn >    
@@ -236,7 +226,7 @@
           no-wrap
           icon="upload"
           :label="$t('comps.file_upload.upload')"
-          :disabled="data.idOeuvre<0 || data.idExpo<0| data.idDoc<0?true:false"
+          :disable="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0?true:false"
           @click="handleClick('upload')"
         >
           <input
@@ -247,8 +237,7 @@
             @change="handleSelectedFile"
           />
         </q-btn>
-        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip>  
-      </div>
+        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip> 
       <div className="file-details">
         <InputField v-for="(item,idx) in fields"
           :key="getRandomInt(1,3e6)"
@@ -263,18 +252,25 @@
           <q-spinner size='8rem' color="green" :thickness="4"/>
         </q-inner-loading>
       </div>
+      <a :href="file.url">
+        <q-btn v-if="file.url && roleRouteCondition() && route.name==='member docs'"
+          color='primary'
+          rounded standout pulse
+          no-wrap
+          icon="download"
+          :label="$t('comps.file_upload.download')"
+          :disable="false"
+        >
+        </q-btn>
+      </a>
     </div>
-    <div v-if="file.url && fileYes.includes('image') && supported.image.includes(getFileExtension(file.fileName))" class="image">
-      <img :src="file.url" :alt="file.fileName">
-    </div>
-    <div v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(getFileExtension(file.fileName))">
-      <iframe 
-        :src="`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file.url)}`"        
-      ></iframe>
-    </div>
-    <div v-if="file.url && fileYes.includes('pdf') && getFileExtension(file.fileName)==='.pdf'">
-      <vue-pdf-embed :source="file.url" />
-    </div>
+    <FileViewer v-if="file"
+      :file="{name:file.fileName,url:file.url,ext:file_ext}"
+      :fileYes="fileYes",
+      :supported="supported"
+      :size="roleRouteCondition()?(route.name==='member docs'?'large':'medium'):'small'"
+    >
+    </FileViewer>
   </div>
 </template>
 
@@ -291,14 +287,12 @@
     display:flex;
     flex-direction: column;
   }
-  div.buttons-container {
-    display:flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-  }
   .q-btn {
     width:100%;
     max-height: 3.6rem;
+  }
+  a .q-btn {
+    margin:5px 0;
   }
   input.upload {
     display:none;
@@ -311,26 +305,5 @@
     top:30%;
     font-size: 9rem;
     font-weight: 900;
-  }
-  img {
-    object-fit: cover;
-    height:223px;
-    padding:5px;
-    border:1px solid lightgrey;
-    margin-left: 0;
-  }
-  div.vue-pdf-embed {
-    padding:5px;
-    border:1px solid lightgrey;
-    margin-left: 0;
-    height:223px;
-    overflow-y:auto;
-  }
-  iframe {    
-    padding:5px;
-    border:1px solid lightgrey;
-    margin-left: 0;
-    height:223px;
-    overflow-y:auto;
   }
 </style>

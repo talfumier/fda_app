@@ -4,7 +4,7 @@
   import { getEntitiesBySql } from '@/services/httpEntities.js'
   
   const props = defineProps({
-    fileYes:{type:String},
+    fileYes:{type:Array},
     model:{type:String},
     fields:{type:Array},
     count:{type:Number},
@@ -40,7 +40,7 @@
       :fileYes="fileYes"
       :model="model"
       :fields="fields"
-      :data="images[idx-1]?images[idx-1]:{...data,idImage:null}"
+      :data="images[idx-1]?images[idx-1]:{...data,idFile:null}"
     >
     </FieldsetFile>
   </div>

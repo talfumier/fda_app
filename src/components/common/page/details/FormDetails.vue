@@ -266,6 +266,28 @@
         >
         </ExpoAward>
       </q-tab-panel>
+      <q-tab-panel v-if="entity.model==='Expo'" name='doc'>
+        <ExpoMaster
+          entity='ExpoDoc'
+          :idExpo="record.idExpo"
+          :relatedFields="['idDoc']"
+          sql='list_expo_doc'
+          :columns="[
+            {name:'selected',field:'selected',align:'left'},
+            {name:'idDoc',field:'idDoc',align:'left'},
+            {name:'short',field:'short',headerClasses: 'col-name'},
+            {name:'fileName',field:'fileName'}]"
+          :visible="['selected','short']"
+          :titles="[
+            $t('comps.form_details.expos.tables.doc-left.title'),
+            $t('comps.form_details.expos.tables.doc-right.title')]"
+          @tab-unsaved="(val) => {
+            tabUnsaved=val
+            emit('tabUnsaved',val)
+          }"
+        >
+        </ExpoMaster>
+      </q-tab-panel>
     </q-tab-panels>
 </template>
 

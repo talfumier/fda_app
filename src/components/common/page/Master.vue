@@ -15,7 +15,7 @@
   import clearables from "../page/details/clearables.json"
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
-  import { newController,doneController,cancelAllInFlight,getRandomInt } from '@/utilityFunctions.js'
+  import { newController,doneController,cancelAllInFlight,getRandomInt, getFileExtension } from '@/utilityFunctions.js'
   import { orgExcluded, setGlobals, statusText } from '@/globals/globals.js'
 
   const props=defineProps({
@@ -267,9 +267,9 @@
     initialValues.splice(idx,1)
     actualChanges.value.splice(idx,1)    
   }
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idFile as a field in table, tbooking >>> no idFile
     const ctrl = newController(inFlight)
-    const idImage=state.value[0][idx].idImage 
+    const idFile=state.value[0][idx].idFile 
     if(selectedId.value>0) {
       try {
         const res=await deleteEntity(props.entity.model,selectedId.value,token.value,ctrl.signal)  //delete record in tuser, toeuvre, tbooking ...  
@@ -282,13 +282,13 @@
       }      
     }      
     afterDelete(idx)  //update state, initialValues, actualChanges    
-    if(idImage) {
+    if(idFile) {
       const ctrl = newController(inFlight)
       try {
-        const {data:res}= await deleteEntity('Image',idImage,token.value,ctrl.signal)  //delete record in timage
+        const {data:res}= await deleteEntity('File',idFile,token.value,ctrl.signal)  //delete record in tfile
         if(res.statusCode===200) 
           try {
-            await deleteInCloud(idImage,token.value,ctrl.signal) //delete asset on Cloudinary.com                  
+            await deleteInCloud(idFile,token.value,ctrl.signal,getFileExtension(idFile).length>0?'?option=raw':'') //delete asset on Cloudinary.com                  
           } catch (error) {}  //asset no longer present        
       } catch (error) {
         console.error(error)
@@ -420,13 +420,13 @@
                 res=await deleteEntity('Expo',selectedId.value,token.value, ctrl.signal) 
                 if(res.data.statusCode!==200) return 
               } 
-              //delete images in timage and delete asset on Cloudinary.com
+              //delete images in tfile and delete asset on Cloudinary.com
               await Promise.all(images[0].map(async(image) => {
-                //delete record in timage
-                res=await deleteEntity('Image',image.idImage,token.value, ctrl.signal)  
+                //delete record in tfile
+                res=await deleteEntity('File',image.idFile,token.value, ctrl.signal)  
                 if(res.data.statusCode===200) { 
                   try {   //delete asset on Cloudinary.com
-                    await deleteInCloud(image.idImage,token.value,ctrl.signal)                   
+                    await deleteInCloud(image.idFile,token.value,ctrl.signal)                   
                   } catch (error) {}  //asset no longer present
                 }
               })   )  
@@ -560,7 +560,7 @@
         obj.idDomain=null
         obj.idTech=null
         obj.idMedia=null
-        obj.idImage=null
+        obj.idFile=null
         obj.reserved=0
         break
       case 'Booking':
@@ -1066,7 +1066,7 @@
               </div>
             </template>
             <template #delete> <!--named scoped slot -->              
-              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' || entity.model==='Partner'" class="delete">        
+              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' || entity.model==='Partner' || entity.model==='Doc'" class="delete">        
                 <q-btn round flat icon="delete" size="1.6rem" 
                   :disable="toolbarDisableItem.delete"
                   @click="async() => {

@@ -119,6 +119,7 @@
     "file_upload": {
       "delete": "Supprimer",
       "upload": "Télécharger",
+      "download": "Télécharger",
       "tooltip": "Sauvegarder l'enregistrement avant le téléchargement du fichier.",
       "max_exceeded": "La taille du fichier est supérieure à la valeur max autorisée (",
       "file_delete": "Merci de confirmer la suppression du fichier.",
@@ -205,7 +206,8 @@
           "guest": "Invité d'honneur",
           "jury": "Jury",
           "partner": "Partenariat",
-          "award": "Remise des prix"
+          "award": "Remise des prix",
+          "doc": "Documents"
         },
         "tables": {
           "partner-left": {
@@ -214,6 +216,13 @@
           "partner-right": {
             "title": "Partenaires engagés"
           },
+          "doc-left": {
+            "title": "Documents référencés"
+          },
+          "doc-right": {
+            "title": "Documents associés"
+          },
+          "doc-tip": "Cliquer pour visualiser le fichier",
           "guest-left": {
             "title": "Artistes référencés"
           },

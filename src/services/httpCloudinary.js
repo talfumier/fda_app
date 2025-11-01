@@ -12,9 +12,9 @@ export function postInCloud(publicId, data, token, signal, option = null) {
     },
   )
 }
-export function deleteInCloud(publicId, token, signal) {
+export function deleteInCloud(publicId, token, signal, option = null) {
   return http.post(
-    `${api}/files/cloudinary-delete`,
+    `${api}/files/cloudinary-delete${option ? option : ''}`,
     { publicId },
     {
       headers: { 'x-auth-token': token },

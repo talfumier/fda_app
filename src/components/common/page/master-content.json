@@ -386,7 +386,8 @@
         { "name": "guest", "label": "comps.form_details.expos.tabs.guest" },
         { "name": "jury", "label": "comps.form_details.expos.tabs.jury" },
         { "name": "partner", "label": "comps.form_details.expos.tabs.partner" },
-        { "name": "award", "label": "comps.form_details.expos.tabs.award" }
+        { "name": "award", "label": "comps.form_details.expos.tabs.award" },
+        { "name": "doc", "label": "comps.form_details.expos.tabs.doc" }
       ],
       "fileYes": ["image"]
     },
