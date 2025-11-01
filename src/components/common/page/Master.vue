@@ -15,7 +15,7 @@
   import clearables from "../page/details/clearables.json"
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
-  import { newController,doneController,cancelAllInFlight,getRandomInt } from '@/utilityFunctions.js'
+  import { newController,doneController,cancelAllInFlight,getRandomInt, getFileExtension } from '@/utilityFunctions.js'
   import { orgExcluded, setGlobals, statusText } from '@/globals/globals.js'
 
   const props=defineProps({
@@ -76,8 +76,7 @@
   function handleOpenDetails(id){
     selectedId.value=id
   }
-  function isEqual(val1,val2,name){
-    if(name && name.includes('file') || name && name==='url' || name && name==='idImage') return true
+  function isEqual(val1,val2){
     if((val1==='' || val1===null) && (val2==='' || val2===null)) return true
     return _.isEqual(val1,val2)  //deep comparison
   }
@@ -97,7 +96,7 @@
   function handleChange(name,valid,val,option){
     const idx=getIndex()
     if(name !==idModel){
-      actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val,name)
+      actualChanges.value[idx][name]=!isEqual(initialValues[idx][name],val)
       // if(!option) state.value[0][idx][name]=val
       state.value[0][idx][name]=val
       if(option && option.data) handleSelectOption(name,val,idx,option)
@@ -268,9 +267,9 @@
     initialValues.splice(idx,1)
     actualChanges.value.splice(idx,1)    
   }
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idImage as a field in table, tbooking >>> no idImage
+  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idFile as a field in table, tbooking >>> no idFile
     const ctrl = newController(inFlight)
-    const idImage=state.value[0][idx].idImage 
+    const idFile=state.value[0][idx].idFile 
     if(selectedId.value>0) {
       try {
         const res=await deleteEntity(props.entity.model,selectedId.value,token.value,ctrl.signal)  //delete record in tuser, toeuvre, tbooking ...  
@@ -283,13 +282,13 @@
       }      
     }      
     afterDelete(idx)  //update state, initialValues, actualChanges    
-    if(idImage) {
+    if(idFile) {
       const ctrl = newController(inFlight)
       try {
-        const {data:res}= await deleteEntity('Image',idImage,token.value,ctrl.signal)  //delete record in timage
+        const {data:res}= await deleteEntity('File',idFile,token.value,ctrl.signal)  //delete record in tfile
         if(res.statusCode===200) 
           try {
-            await deleteInCloud(idImage,token.value,ctrl.signal) //delete asset on Cloudinary.com                  
+            await deleteInCloud(idFile,token.value,ctrl.signal,getFileExtension(idFile).length>0?'?option=raw':'') //delete asset on Cloudinary.com                  
           } catch (error) {}  //asset no longer present        
       } catch (error) {
         console.error(error)
@@ -421,13 +420,13 @@
                 res=await deleteEntity('Expo',selectedId.value,token.value, ctrl.signal) 
                 if(res.data.statusCode!==200) return 
               } 
-              //delete images in timage and delete asset on Cloudinary.com
+              //delete images in tfile and delete asset on Cloudinary.com
               await Promise.all(images[0].map(async(image) => {
-                //delete record in timage
-                res=await deleteEntity('Image',image.idImage,token.value, ctrl.signal)  
+                //delete record in tfile
+                res=await deleteEntity('File',image.idFile,token.value, ctrl.signal)  
                 if(res.data.statusCode===200) { 
                   try {   //delete asset on Cloudinary.com
-                    await deleteInCloud(image.idImage,token.value,ctrl.signal)                   
+                    await deleteInCloud(image.idFile,token.value,ctrl.signal)                   
                   } catch (error) {}  //asset no longer present
                 }
               })   )  
@@ -507,7 +506,29 @@
             handleDelete(idx)
         }
       }
-      break      
+      break  
+    case 'Doc':
+      listItemsFilter=ref({search:'',doc_status:''})  
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
+          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })      
+      handleAction = async(cs)=>{    
+        const idx=getIndex()
+        switch(cs){     
+          case "deletion":
+            handleDelete(idx)
+        }
+      }
+      break        
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -539,7 +560,7 @@
         obj.idDomain=null
         obj.idTech=null
         obj.idMedia=null
-        obj.idImage=null
+        obj.idFile=null
         obj.reserved=0
         break
       case 'Booking':
@@ -775,7 +796,7 @@
               default:
                 state.value[0][index][prop[0]]=prop.length===1?null:prop[1] 
             }
-            actualChanges.value[index][prop[0]]=!isEqual(initialValues[index][prop[0]],state.value[0][index][prop[0]],prop[0])
+            actualChanges.value[index][prop[0]]=!isEqual(initialValues[index][prop[0]],state.value[0][index][prop[0]])
           } 
         })
         break
@@ -1045,7 +1066,7 @@
               </div>
             </template>
             <template #delete> <!--named scoped slot -->              
-              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' || entity.model==='Partner'" class="delete">        
+              <div v-if="entity.model==='Oeuvre' || entity.model==='Booking' || entity.model==='Partner' || entity.model==='Doc'" class="delete">        
                 <q-btn round flat icon="delete" size="1.6rem" 
                   :disable="toolbarDisableItem.delete"
                   @click="async() => {

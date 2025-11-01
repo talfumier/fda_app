@@ -1,13 +1,14 @@
 <script setup>
-  import {ref,inject,onUnmounted} from 'vue'
+  import {ref,computed,inject,onUnmounted} from 'vue'
   import { useRouter,useRoute } from 'vue-router'
-  import { useQuasar } from 'quasar';
+  import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import {arrayBufferToWebP} from "webp-converter-browser"
-  import _ from 'lodash'
+  import _ from 'lodash'  
   import InputField from '../../fields/InputField.vue'
-  import { getEmptyFile, getRandomInt } from '@/utilityFunctions.js'
-  import { fileSize } from '@/utilityFunctions.js'
+  import FileViewer from './FileViewer.vue'
+  import { getEmptyFile, getRandomInt,getFileExtension,fileSize } from '@/utilityFunctions.js'
+  import supported from './supported.json'
   import { environment } from '@/config/environment.js'
   import { toastError, toastWarning } from '@/composable/toast.js'
   import { useFormatDate } from '@/composable/useFormatDate.js'
@@ -17,30 +18,32 @@
   import Tooltip from '../../Tooltip.vue'
 
   const props = defineProps({
-    fileYes:{type:String},
+    fileYes:{type:Array},
     model:{type:String},
     fields:{type:Array},
     data:{type:Object}
   })
-  
   const {t,locale}=useI18n()  
   const $q=useQuasar()
   const router = useRouter()
   const route = useRoute()
   const {token,decoded}=inject('userCookie')
   const {formatDateTime}=useFormatDate()
-  
-  const file=ref(null)
+
   const loading=ref(false)
-  if (!props.data?.idImage) file.value=getEmptyFile()
-  else file.value={
-    idImage:props.data.idImage,
-    fileName:props.data.fileName,
-    fileSize:fileSize(props.data.fileSize),
-    fileLastModified:formatDateTime(props.data.fileLastModified),
-    url:props.data.url
-  }
-  const emit=defineEmits('fileChange')
+  const file=ref(null)
+  if (!props.data.idFile) file.value=getEmptyFile()
+  else 
+    file.value={
+      idFile:props.data.idFile,
+      fileName:props.data.fileName,
+      fileSize:fileSize(props.data.fileSize),
+      fileLastModified:formatDateTime(props.data.fileLastModified),
+      url:props.data.url
+    }
+  const file_ext=computed(() => {
+    return getFileExtension(file.value.fileName)
+  })
 
   const ctrl=new AbortController()  
   onUnmounted(() => { // clean-up code after component has unmounted
@@ -54,51 +57,55 @@
       case 'delete':
         if (!(await confirm($q,t('comps.file_upload.file_delete'),'cancel'))) return false 
         loading.value=true
-        const idImage=file.value.idImage
+        const id=file.value.idFile
         switch(props.model) {
           case 'Expo':  //do nothing >>> record in texpo_image deleted by cascade delete from timage  
             break
-          default: //update idImage in mariaDB tmodel (tuser ...)
-            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage:null},token.value,ctrl.signal)).data
+          default: //update idFile in mariaDB tmodel (tuser, tpartner,tdoc)
+            const res1=(await patchEntity(props.model,props.data[`id${props.model}`],{idFile:null},token.value,ctrl.signal)).data
             if(res1.statusCode!==200) return
         }            
-        const {data:res2}=await deleteEntity('Image',idImage,token.value,ctrl.signal) //delete idImage record in timage
+        const {data:res2}=await deleteEntity('File',id,token.value,ctrl.signal) //delete idFile record in tfile
         if(res2.statusCode===200) {     //update state
           file.value=getEmptyFile()
-          emit('fileChange',file.value)
         } 
         if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
           router.go(0)  //page refresh without full reload
         try {
-          await deleteInCloud(idImage,token.value,ctrl.signal)  //delete asset on Cloudinary.com
+          await deleteInCloud(id,token.value,ctrl.signal,getFileExtension(id).length>0?'?option=raw':'')  //delete asset on Cloudinary.com
         } catch (error) {}  //asset no longer present
     }  
     loading.value=false
   }
-  async function processFileData(obj) {
-    if(props.data[`id${props.model}`]<=0){  //new record creation 
+  async function processFileData(obj,option=null) {
+    if(props.data[`id${props.model}`]<=0){  //new record creation >>> no file upload until actual save
       toastWarning(t('comps.form_details.newRec'))
       return
-    }
+    }   
     loading.value=true
-    const idImage=getRandomInt(1,214e7)
-    const {data:res1}=await postInCloud(idImage,obj.data,token.value,ctrl.signal) //create asset on Cloudinary.com
+    let idFile=getRandomInt(1,214e7).toString()
+    const ext=getFileExtension(obj.fileName)
+    if(option && ext!=='.pdf') idFile=`${idFile}${ext}`  //add file extension in cloudinary publicId for msoffice files
+    const {data:res1}=await postInCloud(idFile,obj.data,token.value,ctrl.signal,option) //create asset on Cloudinary.com
     if(res1.statusCode===200){  
-      obj.idImage=idImage
+      obj.idFile=idFile
       obj.data=undefined  
       obj.url=res1.data
       const {data,...body}=_.cloneDeep(obj)
-      const {data:res2}=await postEntity('Image',body,token.value,ctrl.signal)  //create image record in mariaDB timage
+      const {data:res2}=await postEntity('File',body,token.value,ctrl.signal)  //create file record in mariaDB tfile
       if(res2.statusCode===200) {
         let res3=null
         switch(props.model){
           case 'Expo':  //multiple upload
-            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idImage},token.value,ctrl.signal)).data
+            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idFile},token.value,ctrl.signal)).data
             break
-          default:  //single upload
-            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idImage},token.value,ctrl.signal)).data  //update idImage (avatar) in mariaDB tModel
+          case 'User':  //single upload
+          case 'Partner':
+          case 'Oeuvre':
+          case 'Doc':
+            res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idFile},token.value,ctrl.signal)).data  //update idFile in mariaDB tModel
         }
-        if(res3.statusCode===200) 
+        if(!res3 || res3.statusCode===200) 
           file.value={    //update state
             ...body
           }   
@@ -106,17 +113,29 @@
     }
     if((props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser)) //avatar  update after upload
       router.go(0)  //page refresh without full reload
-    emit('fileChange',file.value)
     loading.value=false
   }
-  function handleSelectedFile(e){    
-    const file = e.target.files[0];
-    let val = getEmptyFile()    
-    if (typeof file !== "undefined") {
+ 
+  const exts=[]
+  props.fileYes.forEach((cat) => {
+    supported[cat].forEach((ext) => {      
+    exts.push(ext)
+    })
+  })
+  function handleSelectedFile(e){   
+    let ext=null 
+    const selectedFile = e.target.files[0]
+    ext=getFileExtension(selectedFile.name)
+    let val = getEmptyFile()  
+    if (typeof selectedFile !== undefined) {      
+      if(!exts.includes(ext)) { //check supported extensions
+        toastWarning(`${t('comps.file_upload.file_ext1')} ${ext} ${t('comps.file_upload.file_ext2')}`)
+        return
+      }
       const reader1 = new FileReader();
-      if (props.fileYes.includes("image")) {
+      if (props.fileYes.includes("image") && supported.image.includes(ext)) { //image file
         reader1.onload = async function () {
-          let name = file.name;
+          let name = selectedFile.name;
           const blob = await arrayBufferToWebP(reader1.result);
           if (blob.size > environment.max_file_size) {
             toastError(`${t('comps.file_upload.max_exceeded')} ${environment.max_file_size}`)
@@ -124,8 +143,8 @@
           }
           const reader2 = new FileReader();
           reader2.onload = function () {
-            if (!file.type.includes("webp")) {
-              name = file.name.split(".");
+            if (!selectedFile.type.includes("webp")) {
+              name = selectedFile.name.split(".");
               name.splice(-1, 1);
               name = name.join(".") + ".webp";
             }
@@ -133,9 +152,10 @@
               ...val,
               fileName:name,
               fileSize: blob.size,
-              fileLastModified: file.lastModified,
+              fileLastModified: selectedFile.lastModified,
               url: null,
-              data: reader2.result,};
+              data: reader2.result
+            };
             processFileData(val);
           };
           reader2.readAsDataURL(blob);
@@ -146,23 +166,24 @@
             error
           );
         };
-        reader1.readAsArrayBuffer(file);
+        reader1.readAsArrayBuffer(selectedFile);
       }
-      if (!props.fileYes.includes('image')) {
-        reader1.readAsText(file);
+      if ((props.fileYes.includes("msoffice") && supported.msoffice.includes(ext)) ||  //non image file
+          props.fileYes.includes("pdf") && supported.pdf.includes(ext)) { 
+        reader1.readAsDataURL(selectedFile);
         reader1.onload = function () {
           val = {
             ...val,
-            fileName: file.name,
-            fileSize: file.size,
-            fileLastModified: file.lastModified,
+            fileName: selectedFile.name,
+            fileSize: selectedFile.size,
+            fileLastModified: selectedFile.lastModified,
             url: null,
-            data: btoa(reader1.result),
+            data: reader1.result
           };
-          processFileData(val);
+          processFileData(val,'?option=raw');
         };
         reader1.onerror = function (error) {
-          console.log("Error during umap file upload in FieldsetFile.vue: ", error);
+          console.log("Error during non image file upload in FieldsetFile.vue: ", error);
         };
       }
     } else processFileData(val);
@@ -173,6 +194,7 @@
     switch(route.name){
       case 'member user':
       case 'member expos':
+      case 'member docs':
       case 'member partners':
         return true
       case 'member users':
@@ -182,19 +204,19 @@
         return true
     }
   }
+
 </script>
 
 <template>
   <div className="file-container">
     <div class="action-infos">
-      <div className="buttons-container">
         <q-btn v-if="file.url && roleRouteCondition()"
           color='primary'
           rounded standout pulse
           no-wrap
           icon="delete"
           :label="$t('comps.file_upload.delete')"
-          :disabled="false"
+          :disable="false"
           @click="handleClick('delete')"
         >
         </q-btn >    
@@ -204,19 +226,18 @@
           no-wrap
           icon="upload"
           :label="$t('comps.file_upload.upload')"
-          :disabled="data.idOeuvre<0 || data.idExpo<0?true:false"
+          :disable="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0?true:false"
           @click="handleClick('upload')"
         >
           <input
             id="select-file"
             class="upload"
             type="file"
-            :accept="fileYes"
+            :accept="fileYes.length>0"
             @change="handleSelectedFile"
           />
         </q-btn>
-        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip>  
-      </div>
+        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip> 
       <div className="file-details">
         <InputField v-for="(item,idx) in fields"
           :key="getRandomInt(1,3e6)"
@@ -231,10 +252,25 @@
           <q-spinner size='8rem' color="green" :thickness="4"/>
         </q-inner-loading>
       </div>
+      <a :href="file.url">
+        <q-btn v-if="file.url && roleRouteCondition() && route.name==='member docs'"
+          color='primary'
+          rounded standout pulse
+          no-wrap
+          icon="download"
+          :label="$t('comps.file_upload.download')"
+          :disable="false"
+        >
+        </q-btn>
+      </a>
     </div>
-    <div v-if="file.url && fileYes.includes('image')" class="image">
-      <img :src="file.url" :alt="file.fileName">
-    </div>
+    <FileViewer v-if="file"
+      :file="{name:file.fileName,url:file.url,ext:file_ext}"
+      :fileYes="fileYes",
+      :supported="supported"
+      :size="roleRouteCondition()?(route.name==='member docs'?'large':'medium'):'small'"
+    >
+    </FileViewer>
   </div>
 </template>
 
@@ -251,14 +287,12 @@
     display:flex;
     flex-direction: column;
   }
-  div.buttons-container {
-    display:flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-  }
   .q-btn {
     width:100%;
     max-height: 3.6rem;
+  }
+  a .q-btn {
+    margin:5px 0;
   }
   input.upload {
     display:none;
@@ -271,12 +305,5 @@
     top:30%;
     font-size: 9rem;
     font-weight: 900;
-  }
-  img {
-    object-fit: cover;
-    height:223px;
-    padding:5px;
-    border:1px solid lightgrey;
-    margin-left: 0;
   }
 </style>

@@ -57,11 +57,6 @@
   function handleTranslate(params) {
     emit('translate',params)
   }
-  function handleFileChange(file){
-    Object.keys(file).map((key) => {
-      handleChange(key,true,file[key])
-    })
-  }
   function handleButtonAction(name){
     emit('buttonAction',name)
     }
@@ -125,16 +120,14 @@
             }"
           >
           </FieldsetTranslate>
-          <FieldsetFile
+          <!-- file change monitoring not required for FieldsetFile >>> toolbar save is not involved in upload & delete operations -->
+          <FieldsetFile   
             v-if="item.type==='single-upload'"          
             :key="getRandomInt(100,3e3)"
             :fileYes="entity.fileYes"
             :model="entity.model"
             :fields="item.fields"
             :data="record"
-            @file-change="(file) => {
-              handleFileChange(file)
-            }"
           >
           </FieldsetFile>
           <FieldsetFiles
@@ -272,6 +265,28 @@
           }"
         >
         </ExpoAward>
+      </q-tab-panel>
+      <q-tab-panel v-if="entity.model==='Expo'" name='doc'>
+        <ExpoMaster
+          entity='ExpoDoc'
+          :idExpo="record.idExpo"
+          :relatedFields="['idDoc']"
+          sql='list_expo_doc'
+          :columns="[
+            {name:'selected',field:'selected',align:'left'},
+            {name:'idDoc',field:'idDoc',align:'left'},
+            {name:'short',field:'short',headerClasses: 'col-name'},
+            {name:'fileName',field:'fileName'}]"
+          :visible="['selected','short']"
+          :titles="[
+            $t('comps.form_details.expos.tables.doc-left.title'),
+            $t('comps.form_details.expos.tables.doc-right.title')]"
+          @tab-unsaved="(val) => {
+            tabUnsaved=val
+            emit('tabUnsaved',val)
+          }"
+        >
+        </ExpoMaster>
       </q-tab-panel>
     </q-tab-panels>
 </template>

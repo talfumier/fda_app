@@ -18,7 +18,7 @@
     selectedId:{type:Number},
     infos:{type:Array},
   })
-
+  
   const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
@@ -54,9 +54,10 @@
   function getRowSchema(){
     switch(props.entity.model){
       case 'Oeuvre':
-      case 'Expo':
       case 'Partner':
         return ['1.1']
+      case 'Expo':
+      case 'Doc':
       case 'Booking':
         return ['1.1','2.1']
       default:

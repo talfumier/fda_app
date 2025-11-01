@@ -22,7 +22,7 @@ export function getEmptyFile() {
     fileSize: 0,
     fileLastModified: 0,
     url: null,
-    data: null,
+    // data: null,
   }
 }
 export function fileSize(size) {
@@ -51,4 +51,8 @@ export function cancelAllInFlight(inFlight) {
     ctrl.abort()
   })
   inFlight.clear()
+}
+export function getFileExtension(filename) {
+  if (!filename.includes('.')) return ''
+  return '.' + filename.split('.').pop().toLowerCase()
 }

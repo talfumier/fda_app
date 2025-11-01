@@ -66,6 +66,7 @@
       "oeuvres_org": "Art works",
       "bookings": "My bookings",
       "partners": "Partner forms",
+      "docs": "Documents",
       "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
@@ -101,6 +102,7 @@
       "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
       "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
       "picture": "Please make sure the record is actually saved before uploading any picture.",
+      "file": "Please make sure the record is actually saved before uploading any file.",
       "booking": "Please select the exhition you wish to register to.",
       "closure": "Be aware that after the closure date, your will not be able to register nor modify/delete any on-going registration.",
       "events": "Please indicate the events you plan to attend.",
@@ -117,9 +119,12 @@
     "file_upload": {
       "delete": "Delete",
       "upload": "Upload",
+      "download": "Download",
       "tooltip": "Save record before file upload.",
       "max_exceeded": "File size is above the accepted limit (",
-      "file_delete": "Please confirm file deletion."
+      "file_delete": "Please confirm file deletion.",
+      "file_ext1": "File extension",
+      "file_ext2": "not supported."
     },
     "master": {
       "add_btn": "Add a new record"
@@ -201,7 +206,8 @@
           "guest": "Guest",
           "jury": "Jury",
           "partner": "Partnership",
-          "award": "Awards"
+          "award": "Awards",
+          "doc": "Documents"
         },
         "tables": {
           "partner-left": {
@@ -210,6 +216,13 @@
           "partner-right": {
             "title": "Engaged partners"
           },
+          "doc-left": {
+            "title": "Referenced documents"
+          },
+          "doc-right": {
+            "title": "Linked documents"
+          },
+          "doc-tip": "Click to open file preview",
           "guest-left": {
             "title": "Referenced artists"
           },

@@ -2,9 +2,9 @@ import http from './httpService.js'
 import { environment } from '@/config/environment.js'
 
 const api = environment.api_url
-export function postInCloud(publicId, data, token, signal) {
+export function postInCloud(publicId, data, token, signal, option = null) {
   return http.post(
-    `${api}/files/cloudinary-upload-base64`,
+    `${api}/files/cloudinary-upload${option ? option : ''}`,
     { publicId, data },
     {
       headers: { 'x-auth-token': token },
@@ -12,9 +12,9 @@ export function postInCloud(publicId, data, token, signal) {
     },
   )
 }
-export function deleteInCloud(publicId, token, signal) {
+export function deleteInCloud(publicId, token, signal, option = null) {
   return http.post(
-    `${api}/files/cloudinary-delete`,
+    `${api}/files/cloudinary-delete${option ? option : ''}`,
     { publicId },
     {
       headers: { 'x-auth-token': token },
