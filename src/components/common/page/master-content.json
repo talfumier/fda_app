@@ -460,7 +460,8 @@
             "label_fr": "Ouverture",
             "label_en": "Opening",
             "field_type": "input",
-            "format": "date-time"
+            "format": "date-time",
+            "listMaster": true
           },
           {
             "name": "vernissageDateTime",

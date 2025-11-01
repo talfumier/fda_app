@@ -12,7 +12,7 @@
   })
 
   const {locale}=useI18n()  
-  const {formatDateTime}=useFormatDate()
+  const {formatDate}=useFormatDate()
   const filteredMaster=computed(() => {
     return _.filter(props.master,(mstr) => {
       if(mstr.name.endsWith('_fr') || mstr.name.endsWith('_en')) return mstr.name.endsWith(locale.value)
@@ -73,7 +73,7 @@
         n=len.value-1
     }
     const field=filteredMaster.value[n]
-    if(len.value>=1 && props.item[field.name]) return field.format==='date-time'?formatDateTime(props.item[field.name]):props.item[field.name]
+    if(len.value>=1 && props.item[field.name]) return field.format==='date-time'?formatDate(props.item[field.name]):props.item[field.name]
     return ''
   }
 

@@ -53,5 +53,6 @@ export function cancelAllInFlight(inFlight) {
   inFlight.clear()
 }
 export function getFileExtension(filename) {
+  if (!filename.includes('.')) return ''
   return '.' + filename.split('.').pop().toLowerCase()
 }
