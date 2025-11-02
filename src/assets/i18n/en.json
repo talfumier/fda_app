@@ -248,7 +248,8 @@
       }
     },
     "public_site": {
-      "home": {}
+      "home": {},
+      "check": "enenen"
     },
     "back_office": {}
   },

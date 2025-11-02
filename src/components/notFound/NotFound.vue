@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div className="page-not-found">
+  <div class="page-not-found">
     <h2>
       {{ $t('comps.notfound.error') }}&nbsp;404&nbsp;:&nbsp;{{ $t('comps.notfound.text') }}&nbsp;!
     </h2>

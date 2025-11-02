@@ -248,7 +248,8 @@
       }
     },
     "public_site": {
-      "home": {}
+      "home": {},
+      "check": "frfrfr"
     },
     "back_office": {}
   },

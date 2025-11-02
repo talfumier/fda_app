@@ -25,7 +25,6 @@
   <div v-if="file.url && fileYes.includes('pdf') && file.ext==='.pdf'">
     <vue-pdf-embed :source="file.url" />
   </div>
-
 </template>
 
 <style scoped>

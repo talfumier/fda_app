@@ -17,6 +17,10 @@
   import { confirm } from '../../dialog/dialog.js'
   import Tooltip from '../../Tooltip.vue'
 
+  defineOptions({
+    inheritAttrs: false
+  })
+
   const props = defineProps({
     fileYes:{type:Array},
     model:{type:String},
@@ -208,37 +212,37 @@
 </script>
 
 <template>
-  <div className="file-container">
+  <div class="file-container">
     <div class="action-infos">
-        <q-btn v-if="file.url && roleRouteCondition()"
-          color='primary'
-          rounded standout pulse
-          no-wrap
-          icon="delete"
-          :label="$t('comps.file_upload.delete')"
-          :disable="false"
-          @click="handleClick('delete')"
-        >
-        </q-btn >    
-        <q-btn v-if="!file.url && roleRouteCondition()"
-          color='primary'
-          rounded standout pulse
-          no-wrap
-          icon="upload"
-          :label="$t('comps.file_upload.upload')"
-          :disable="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0?true:false"
-          @click="handleClick('upload')"
-        >
-          <input
-            id="select-file"
-            class="upload"
-            type="file"
-            :accept="fileYes.length>0"
-            @change="handleSelectedFile"
-          />
-        </q-btn>
-        <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip> 
-      <div className="file-details">
+      <q-btn v-if="file.url && roleRouteCondition()"
+        color='primary'
+        rounded standout pulse
+        no-wrap
+        icon="delete"
+        :label="$t('comps.file_upload.delete')"
+        :disable="false"
+        @click="handleClick('delete')"
+      >
+      </q-btn >    
+      <q-btn v-if="!file.url && roleRouteCondition()"
+        color='primary'
+        rounded standout pulse
+        no-wrap
+        icon="upload"
+        :label="$t('comps.file_upload.upload')"
+        :disable="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0?true:false"
+        @click="handleClick('upload')"
+      >
+        <input
+          id="select-file"
+          class="upload"
+          type="file"
+          :accept="exts.join(',')"
+          @change="handleSelectedFile"
+        />
+      </q-btn>
+      <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip> 
+      <div class="file-details">
         <InputField v-for="(item,idx) in fields"
           :key="getRandomInt(1,3e6)"
           :name="item.name"
@@ -266,7 +270,7 @@
     </div>
     <FileViewer v-if="file"
       :file="{name:file.fileName,url:file.url,ext:file_ext}"
-      :fileYes="fileYes",
+      :fileYes="fileYes"
       :supported="supported"
       :size="roleRouteCondition()?(route.name==='member docs'?'large':'medium'):'small'"
     >

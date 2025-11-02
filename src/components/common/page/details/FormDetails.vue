@@ -70,225 +70,225 @@
 </script>
 
 <template>
-    <slot name="toolbar"></slot>
-    <q-card v-if="entity.detailsTabs">
-      <q-tabs
-        v-model="tab"
-        dense
-        class='text-grey'
-        active-color='primary'
-        indicator-color='primary'
-        narrow-indicator
+  <slot name="toolbar"></slot>
+  <q-card v-if="entity.detailsTabs">
+    <q-tabs
+      v-model="tab"
+      dense
+      class='text-grey'
+      active-color='primary'
+      indicator-color='primary'
+      narrow-indicator
+    >
+      <q-tab v-for="(item) in entity.detailsTabs" :name="item.name" :label="$t(item.label)" />
+    </q-tabs>
+  </q-card>
+  <q-tab-panels v-model="tab" :class="entity.detailsTabs?'offset':''" animated>
+    <q-tab-panel name='default' >
+      <fieldset :class="[item.type,item.name]" v-for="(item,idx) in filteredFieldsets" >
+        <legend > 
+            {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path" :color="item.info_color"></DialogInfo>
+        </legend>
+        <FieldsetStandard
+          v-if="item.type==='standard'"
+          :key="getUniqueKey()"
+          :fields="item.fields"
+          :data="record"
+          @change="handleChange"
+        >
+        </FieldsetStandard>    
+        <FieldsetAddress
+          v-if="item.type==='address'"
+          :key="idx"
+          :fields="item.fields"
+          :data="record"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val)
+          }"
+        >
+        </FieldsetAddress>      
+        <FieldsetTranslate
+          v-if="item.type==='translate'"
+          :key="idx"
+          :fields="item.fields"
+          :data="record"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val)
+          }"
+          @translate="(params) => {
+            handleTranslate(params)
+          }"
+        >
+        </FieldsetTranslate>
+        <!-- file change monitoring not required for FieldsetFile >>> toolbar save is not involved in upload & delete operations -->
+        <FieldsetFile   
+          v-if="item.type==='single-upload'"          
+          :key="getRandomInt(100,3e3)"
+          :fileYes="entity.fileYes"
+          :model="entity.model"
+          :fields="item.fields"
+          :data="record"
+        >
+        </FieldsetFile>
+        <FieldsetFiles
+          v-if="item.type==='multiple-upload'"          
+          :key="getRandomInt(1e3,3e5)"
+          :fileYes="entity.fileYes"
+          :model="entity.model"
+          :fields="item.fields"
+          :count="item.count"
+          :data="record"
+        >
+        </FieldsetFiles>
+        <FieldsetDomainTechMedia
+          v-if="item.type==='domain-tech-media'"
+          :data="[record.domain,record.tech,record.media]"
+          @change="handleChange"
+          @delete-row="(model,id) => {
+            emit('deleteRow',model,id)
+          }"
+        >
+        </FieldsetDomainTechMedia>
+        <FieldsetPrize
+          v-if="item.type==='prize'"
+          :data="record.prize"
+          @change="handleChange"
+          @delete-row="(model,id) => {
+            emit('deleteRow',model,id)
+          }"          
+        ></FieldsetPrize>
+        <FieldsetBookingOeuvre
+          v-if="item.type==='booking-oeuvre'"  
+          :data="record"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val)
+          }"
+        >
+        </FieldsetBookingOeuvre>
+        <FieldsetButton  
+          v-if="item.type==='button'"
+          :buttons="item.buttons"  
+          @button-action="handleButtonAction"      
+        >
+        </FieldsetButton>
+      </fieldset>
+    </q-tab-panel>
+    <q-tab-panel v-if="entity.model==='Expo'" name='guest' >
+      <ExpoMaster
+        entity='UserExpoRole'
+        :idExpo="record.idExpo"
+        :relatedFields="['idUser','idRole']"
+        :idRole="2"
+        sql='list_expo_guest'
+        :columns="[
+          {name:'selected',field:'selected',align:'left'},
+          {name:'idUser',field:'idUser',align:'left'},
+          {name:'idRole',field:'idRole',align:'left'},
+          {name:'lastName',field:'lastName',headerClasses: 'col-name'},
+          {name:'firstName',field:'firstName',headerClasses: 'col-name'},
+          {name:'url',field:'url'}]"
+        :visible="['selected','lastName','firstName','url']"
+        :titles="[
+          $t('comps.form_details.expos.tables.guest-left.title'),
+          $t('comps.form_details.expos.tables.guest-right.title')]"
+        @tab-unsaved="(val) => {
+          tabUnsaved=val
+          emit('tabUnsaved',val)
+        }"
       >
-        <q-tab v-for="(item) in entity.detailsTabs" :name="item.name" :label="$t(item.label)" />
-      </q-tabs>
-    </q-card>
-    <q-tab-panels v-model="tab" :class="entity.detailsTabs?'offset':''" animated>
-      <q-tab-panel name='default' >
-        <fieldset :class="[item.type,item.name]" v-for="(item,idx) in filteredFieldsets" >
-          <legend > 
-              {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path" :color="item.info_color"></DialogInfo>
-          </legend>
-          <FieldsetStandard
-            v-if="item.type==='standard'"
-            :key="getUniqueKey()"
-            :fields="item.fields"
-            :data="record"
-            @change="handleChange"
-          >
-          </FieldsetStandard>    
-          <FieldsetAddress
-            v-if="item.type==='address'"
-            :key="idx"
-            :fields="item.fields"
-            :data="record"
-            @change="(name,valid,val) => {
-              handleChange(name,valid,val)
-            }"
-          >
-          </FieldsetAddress>      
-          <FieldsetTranslate
-            v-if="item.type==='translate'"
-            :key="idx"
-            :fields="item.fields"
-            :data="record"
-            @change="(name,valid,val) => {
-              handleChange(name,valid,val)
-            }"
-            @translate="(params) => {
-              handleTranslate(params)
-            }"
-          >
-          </FieldsetTranslate>
-          <!-- file change monitoring not required for FieldsetFile >>> toolbar save is not involved in upload & delete operations -->
-          <FieldsetFile   
-            v-if="item.type==='single-upload'"          
-            :key="getRandomInt(100,3e3)"
-            :fileYes="entity.fileYes"
-            :model="entity.model"
-            :fields="item.fields"
-            :data="record"
-          >
-          </FieldsetFile>
-          <FieldsetFiles
-            v-if="item.type==='multiple-upload'"          
-            :key="getRandomInt(1e3,3e5)"
-            :fileYes="entity.fileYes"
-            :model="entity.model"
-            :fields="item.fields"
-            :count="item.count"
-            :data="record"
-          >
-          </FieldsetFiles>
-          <FieldsetDomainTechMedia
-            v-if="item.type==='domain-tech-media'"
-            :data="[record.domain,record.tech,record.media]"
-            @change="handleChange"
-            @delete-row="(model,id) => {
-              emit('deleteRow',model,id)
-            }"
-          >
-          </FieldsetDomainTechMedia>
-          <FieldsetPrize
-            v-if="item.type==='prize'"
-            :data="record.prize"
-            @change="handleChange"
-            @delete-row="(model,id) => {
-              emit('deleteRow',model,id)
-            }"          
-          ></FieldsetPrize>
-          <FieldsetBookingOeuvre
-            v-if="item.type==='booking-oeuvre'"  
-            :data="record"
-            @change="(name,valid,val) => {
-              handleChange(name,valid,val)
-            }"
-          >
-          </FieldsetBookingOeuvre>
-          <FieldsetButton  
-            v-if="item.type==='button'"
-            :buttons="item.buttons"  
-            @button-action="handleButtonAction"      
-          >
-          </FieldsetButton>
-        </fieldset>
-      </q-tab-panel>
-      <q-tab-panel v-if="entity.model==='Expo'" name='guest' >
-        <ExpoMaster
-          entity='UserExpoRole'
-          :idExpo="record.idExpo"
-          :relatedFields="['idUser','idRole']"
-          :idRole="2"
-          sql='list_expo_guest'
-          :columns="[
-            {name:'selected',field:'selected',align:'left'},
-            {name:'idUser',field:'idUser',align:'left'},
-            {name:'idRole',field:'idRole',align:'left'},
-            {name:'lastName',field:'lastName',headerClasses: 'col-name'},
-            {name:'firstName',field:'firstName',headerClasses: 'col-name'},
-            {name:'url',field:'url'}]"
-          :visible="['selected','lastName','firstName','url']"
-          :titles="[
-            $t('comps.form_details.expos.tables.guest-left.title'),
-            $t('comps.form_details.expos.tables.guest-right.title')]"
-          @tab-unsaved="(val) => {
-            tabUnsaved=val
-            emit('tabUnsaved',val)
-          }"
-        >
-        </ExpoMaster>
-      </q-tab-panel>
-      <q-tab-panel v-if="entity.model==='Expo'" name='jury' >
-        <ExpoMaster
-          entity='UserExpoRole'
-          :idExpo="record.idExpo"
-          :relatedFields="['idUser','idRole']"
-          :idRole="4"
-          sql='list_expo_jury'
-          :columns="[
-            {name:'selected',field:'selected',align:'left'},
-            {name:'idUser',field:'idUser',align:'left'},
-            {name:'idRole',field:'idRole',align:'left'},
-            {name:'lastName',field:'lastName',headerClasses: 'col-name'},
-            {name:'firstName',field:'firstName',headerClasses: 'col-name'},
-            {name:'url',field:'url'}]"
-          :visible="['selected','lastName','firstName','url']"
-          :titles="[
-            $t('comps.form_details.expos.tables.jury-left.title'),
-            $t('comps.form_details.expos.tables.jury-right.title')]"
-          @tab-unsaved="(val) => {
-            tabUnsaved=val
-            emit('tabUnsaved',val)
-          }"
-        >
-        </ExpoMaster>
-      </q-tab-panel>
-      <q-tab-panel v-if="entity.model==='Expo'" name='partner'>
-        <ExpoMaster
-          entity='ExpoPartner'
-          :idExpo="record.idExpo"
-          :relatedFields="['idPartner']"
-          sql='list_expo_partner'
-          :columns="[
-            {name:'selected',field:'selected',align:'left'},
-            {name:'idPartner',field:'idPartner',align:'left'},
-            {name:'name',field:'name',headerClasses: 'col-name'},
-            {name:'url',field:'url'}]"
-          :visible="['selected','name','url']"
-          :titles="[
-            $t('comps.form_details.expos.tables.partner-left.title'),
-            $t('comps.form_details.expos.tables.partner-right.title')]"
-          @tab-unsaved="(val) => {
-            tabUnsaved=val
-            emit('tabUnsaved',val)
-          }"
-        >
-        </ExpoMaster>
-      </q-tab-panel>
-      <q-tab-panel v-if="entity.model==='Expo'" name='award' >
-        <ExpoAward
-          entity='ExpoPrizeUser'
-          :idExpo="record.idExpo"
-          :relatedFields="['idUser','idPrize','applicable']"
-          sql='list_expo_prize_user'
-          :columns="[
-            {name:'selected',field:'selected',align:'left'},
-            {name:'idPrize',field:'idPrize',align:'left'},
-            {name:'idExpo',field:'idExpo',align:'left'},
-            {name:`prize_${locale}`,field:'name'},
-            {name:'applicable',field:'idUser',align:'left'},
-            {name:'idUser',field:'idUser',align:'left'}]"
-          :visible="['selected',`prize_${locale}`,'applicable','idUser']"
-          @tab-unsaved="(val) => {
-            tabUnsaved=val
-            emit('tabUnsaved',val)
-          }"
-        >
-        </ExpoAward>
-      </q-tab-panel>
-      <q-tab-panel v-if="entity.model==='Expo'" name='doc'>
-        <ExpoMaster
-          entity='ExpoDoc'
-          :idExpo="record.idExpo"
-          :relatedFields="['idDoc']"
-          sql='list_expo_doc'
-          :columns="[
-            {name:'selected',field:'selected',align:'left'},
-            {name:'idDoc',field:'idDoc',align:'left'},
-            {name:'short',field:'short',headerClasses: 'col-name'},
-            {name:'fileName',field:'fileName'}]"
-          :visible="['selected','short']"
-          :titles="[
-            $t('comps.form_details.expos.tables.doc-left.title'),
-            $t('comps.form_details.expos.tables.doc-right.title')]"
-          @tab-unsaved="(val) => {
-            tabUnsaved=val
-            emit('tabUnsaved',val)
-          }"
-        >
-        </ExpoMaster>
-      </q-tab-panel>
-    </q-tab-panels>
+      </ExpoMaster>
+    </q-tab-panel>
+    <q-tab-panel v-if="entity.model==='Expo'" name='jury' >
+      <ExpoMaster
+        entity='UserExpoRole'
+        :idExpo="record.idExpo"
+        :relatedFields="['idUser','idRole']"
+        :idRole="4"
+        sql='list_expo_jury'
+        :columns="[
+          {name:'selected',field:'selected',align:'left'},
+          {name:'idUser',field:'idUser',align:'left'},
+          {name:'idRole',field:'idRole',align:'left'},
+          {name:'lastName',field:'lastName',headerClasses: 'col-name'},
+          {name:'firstName',field:'firstName',headerClasses: 'col-name'},
+          {name:'url',field:'url'}]"
+        :visible="['selected','lastName','firstName','url']"
+        :titles="[
+          $t('comps.form_details.expos.tables.jury-left.title'),
+          $t('comps.form_details.expos.tables.jury-right.title')]"
+        @tab-unsaved="(val) => {
+          tabUnsaved=val
+          emit('tabUnsaved',val)
+        }"
+      >
+      </ExpoMaster>
+    </q-tab-panel>
+    <q-tab-panel v-if="entity.model==='Expo'" name='partner'>
+      <ExpoMaster
+        entity='ExpoPartner'
+        :idExpo="record.idExpo"
+        :relatedFields="['idPartner']"
+        sql='list_expo_partner'
+        :columns="[
+          {name:'selected',field:'selected',align:'left'},
+          {name:'idPartner',field:'idPartner',align:'left'},
+          {name:'name',field:'name',headerClasses: 'col-name'},
+          {name:'url',field:'url'}]"
+        :visible="['selected','name','url']"
+        :titles="[
+          $t('comps.form_details.expos.tables.partner-left.title'),
+          $t('comps.form_details.expos.tables.partner-right.title')]"
+        @tab-unsaved="(val) => {
+          tabUnsaved=val
+          emit('tabUnsaved',val)
+        }"
+      >
+      </ExpoMaster>
+    </q-tab-panel>
+    <q-tab-panel v-if="entity.model==='Expo'" name='award' >
+      <ExpoAward
+        entity='ExpoPrizeUser'
+        :idExpo="record.idExpo"
+        :relatedFields="['idUser','idPrize','applicable']"
+        sql='list_expo_prize_user'
+        :columns="[
+          {name:'selected',field:'selected',align:'left'},
+          {name:'idPrize',field:'idPrize',align:'left'},
+          {name:'idExpo',field:'idExpo',align:'left'},
+          {name:`prize_${locale}`,field:'name'},
+          {name:'applicable',field:'idUser',align:'left'},
+          {name:'idUser',field:'idUser',align:'left'}]"
+        :visible="['selected',`prize_${locale}`,'applicable','idUser']"
+        @tab-unsaved="(val) => {
+          tabUnsaved=val
+          emit('tabUnsaved',val)
+        }"
+      >
+      </ExpoAward>
+    </q-tab-panel>
+    <q-tab-panel v-if="entity.model==='Expo'" name='doc'>
+      <ExpoMaster
+        entity='ExpoDoc'
+        :idExpo="record.idExpo"
+        :relatedFields="['idDoc']"
+        sql='list_expo_doc'
+        :columns="[
+          {name:'selected',field:'selected',align:'left'},
+          {name:'idDoc',field:'idDoc',align:'left'},
+          {name:'short',field:'short',headerClasses: 'col-name'},
+          {name:'fileName',field:'fileName'}]"
+        :visible="['selected','short']"
+        :titles="[
+          $t('comps.form_details.expos.tables.doc-left.title'),
+          $t('comps.form_details.expos.tables.doc-right.title')]"
+        @tab-unsaved="(val) => {
+          tabUnsaved=val
+          emit('tabUnsaved',val)
+        }"
+      >
+      </ExpoMaster>
+    </q-tab-panel>
+  </q-tab-panels>
 </template>
 
 <style scoped>

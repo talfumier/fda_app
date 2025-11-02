@@ -1,0 +1,270 @@
+{
+  "en": {
+    "owner": {
+      "h1": {
+        "title": "Website Owner",
+        "par1": {
+          "text": "The website www.festivaldesarts.merville31.fr is the property of the Mayor of Merville, responsible for organizing this event."
+        }
+      },
+      "h21": {
+        "title": "Publication Manager",
+        "par1": {
+          "address1": "Merville Town Hall",
+          "adress2": "Place du 11 Novembre-1918",
+          "address3": "31330 Merville",
+          "email": "festivaldesarts@merville31.fr",
+          "phone": "0562134100"
+        }
+      },
+      "h22": {
+        "title": "Publication Director",
+        "par1": {
+          "text": "Chantal AYGAT"
+        }
+      }
+    },
+    "design_hosting": {
+      "h1": {
+        "title": "Design, Development and Hosting",
+        "par1": {
+          "text": "The website was designed and developed by the company ht consultant",
+          "address1": "4, impasse du Pigeonnier",
+          "address2": "31330 Larra",
+          "email": "henri.talfumier@gmail.com",
+          "phone": "0616096567"
+        },
+        "par2": {
+          "text": "The website is hosted by the company OVH",
+          "address1": "2, rue Kellermann",
+          "address2": "59100 Roubaix"
+        }
+      }
+    },
+    "property": {
+      "h1": {
+        "title": "Copyright and Intellectual Property",
+        "par1": {
+          "text": "All content on this website (textual, visual, photographic, iconographic elements, etc.) is the exclusive property of the Merville Town Hall or third parties who have authorized its use."
+        },
+        "par2": {
+          "text": "The works presented are those of the artists, who remain the copyright holders. The rights of representation and reproduction of the works featured on the website www.festivaldesarts.merville31.fr belong to their authors. Authorization is required for any use of these rights."
+        },
+        "par3": {
+          "text": "For any request regarding potential use of certain elements from this site, please contact the Merville Town Hall at: festivaldesarts@merville31.fr"
+        }
+      }
+    },
+    "image": {
+      "h1": {
+        "title": "Image Rights",
+        "par1": {
+          "text": "In accordance with the provisions related to image rights, any non-public individual appearing in a photograph and who has not authorized its publication on the municipality’s website may request its removal by simple email to festivaldesarts@merville31.fr"
+        }
+      }
+    },
+    "hyperlinks": {
+      "h1": {
+        "title": "Hyperlinks",
+        "par1": {
+          "text": "Hyperlinks are present on the website www.festivaldesarts.merville31.fr to allow users to access external websites, particularly those of the artists, over which the Merville Town Hall has no control. It therefore cannot be held responsible for any damage resulting from the content of these external sites or sources."
+        }
+      }
+    },
+    "cgu": {
+      "h1": {
+        "title": "Terms of Use (CGU)",
+        "h21": {
+          "title": "Website Access",
+          "par1": {
+            "text": "Access to the website www.festivaldesarts.merville31.fr is free and open to all, without identity check or login. Only artists, partners, and organizers may have a private account to manage their exhibition registration. See privacy policy (link to be created)."
+          },
+          "par2": {
+            "text": "The Town Hall cannot be held responsible in case of technical failure or unavailability of the Site, regardless of the duration."
+          }
+        },
+        "h22": {
+          "title": "Published Content",
+          "par1": {
+            "text": "The website www.festivaldesarts.merville31.fr aims to present past and upcoming exhibitions organized as part of the annual Festival des Arts in Merville."
+          },
+          "par2": {
+            "text": "The published data is provided for informational purposes only and has no legal value. The Town Hall declines any responsibility for damages that may result from the use or interpretation of the published information."
+          }
+        }
+      }
+    },
+    "rgpd": {
+      "h1": {
+        "title": "Collected Data",
+        "par1": {
+          "text": "When visiting the website www.festivaldesarts.merville31.fr, no personal data is collected from simple visitors."
+        },
+        "par2": {
+          "text": "Artists wishing to exhibit must create a personal account. Personal data is collected in this context: last name, first name, email address, postal address, phone number."
+        },
+        "par3": {
+          "text": "The processing of this data aims to ensure registration follow-up and/or promote the artists on the website, only with their consent. Data is kept only as long as necessary to provide the requested service."
+        },
+        "par4": {
+          "text": "This data is never shared with third parties."
+        },
+        "par5": {
+          "text": "In accordance with GDPR provisions, you have the following rights:",
+          "bullet": {
+            "b1": "the right to withdraw your consent at any time,",
+            "b2": "the right to access, rectify, or delete your data,",
+            "b3": "the right to restrict or object to the processing of your data."
+          }
+        },
+        "par6": {
+          "text": "If you wish to exercise any of these rights, please contact the Data Protection Officer by email.",
+          "email": "rgpd@merville31.fr"
+        }
+      }
+    },
+    "cookie": {
+      "h1": {
+        "title": "Cookies",
+        "par1": "Users are informed that during their visits to this website, cookies (elements that do not allow identification but serve to record browsing information) may automatically be installed on their browser software.",
+        "par2": "Non-personal data, usually for statistical purposes, may then be automatically collected regarding user navigation on www.festivaldesarts.merville31.fr.",
+        "par3": "Users are informed of the presence of these cookies, of their option to refuse them, and of the fact that disabling cookies may technically limit access to part or all of the website.",
+        "par4": "It is also possible to disable cookies by adjusting your browser settings."
+      }
+    }
+  },
+  "fr": {
+    "owner": {
+      "h1": {
+        "title": "Propriétaire du site",
+        "par1": {
+          "text": "Le site www.festivaldesarts.merville31.fr est la propriété de la Maire de Merville, en charge de l’organisation de cet événement."
+        }
+      },
+      "h21": {
+        "title": "Responsable de la publication",
+        "par1": {
+          "address1": "Mairie de Merville",
+          "adress2": "Place du 11 Novembre-1918",
+          "address3": "31330 Merville",
+          "email": "festivaldesarts@merville31.fr",
+          "phone": "0562134100"
+        }
+      },
+      "h22": {
+        "title": "Directeur de la publication",
+        "par1": {
+          "text": "Chantal AYGAT"
+        }
+      }
+    },
+    "design_hosting": {
+      "h1": {
+        "title": "Conception, développement et hébergement",
+        "par1": {
+          "text": "Le site a été conçu et développé par l’entreprise ht consultant",
+          "address1": "4, impasse du Pigeonnier",
+          "address2": "31330 Larra",
+          "email": "henri.talfumier@gmail.com",
+          "phone": "0616096567"
+        },
+        "par2": {
+          "text": "Le site est hébergé par la Société OVH",
+          "address1": "2, rue Kellermann",
+          "address2": "59100 Roubaix"
+        }
+      }
+    },
+    "property": {
+      "h1": {
+        "title": "Droit d’auteur et Propriété intellectuelle",
+        "par1": {
+          "text": "Tout le contenu de ce site (éléments textuels, visuels, photographiques, iconographiques, etc.) est la propriété exclusive de la Mairie de Merville ou de tiers ayant autorisé la mairie à les utiliser."
+        },
+        "par2": {
+          "text": "Les œuvres présentées sont celles des artistes qui restent propriétaires des droits d’auteur. Les droits de représentation et de reproduction des œuvres présentes sur le site www.festivaldesarts.merville31.fr appartiennent à leurs auteurs. Il est nécessaire d’avoir leur autorisation pour toute exploitation de ces droits."
+        },
+        "par3": {
+          "text": "Pour toute demande relative à une éventuelle utilisation de certains éléments de ce site, merci de contacter la Mairie de Merville à l’adresse mail : festivaldesarts@merville31.fr"
+        }
+      }
+    },
+    "image": {
+      "h1": {
+        "title": "Droit à l'image",
+        "par1": {
+          "text": "Conformément aux dispositions relevant du droit à l’image, toute personne (non publique) apparaissant sur une photographie et n’ayant pas autorisé sa diffusion sur le site de la commune peut solliciter son retrait sur simple demande à festivaldesarts@merville31.fr"
+        }
+      }
+    },
+    "hyperlinks": {
+      "h1": {
+        "title": "Liens hypertextes",
+        "par1": {
+          "text": "Des liens hypertextes sont présents sur le site www.festivaldesarts.merville31.fr pour permettre aux utilisateurs d’accéder à des sites internet externes, notamment ceux des artistes, sur lesquels la Mairie de Merville ne dispose d’aucun contrôle. Elle ne saurait donc être tenue pour responsable de quelque dommage que ce soit résultant du contenu de ces sites ou sources externes."
+        }
+      }
+    },
+    "cgu": {
+      "h1": {
+        "title": "Conditions Générales d'Utilisation (CGU)",
+        "h21": {
+          "title": "Accès au site",
+          "par1": {
+            "text": "L’accès au site www.festivaldesarts.merville31.fr est gratuit et ouvert à tous, sans contrôle d’identité ; ni identification. Seuls les artistes, les partenaires et les organisateurs pourront disposer d’un compte privatif pour gérer son inscription à une exposition. Voir politique de confidentialité (créer un lien vers confidentialité)."
+          },
+          "par2": {
+            "text": "La Mairie ne pourra être tenu responsable en cas de défaillance technique ou d’indisponibilité du Site, quelle qu’en soit la durée."
+          }
+        },
+        "h22": {
+          "title": "Contenus publiés",
+          "par1": {
+            "text": "Le site www.festivaldesarts.merville31.fr a pour objectif de présenter les expositions passées et à venir dans le cadre du Festival des Arts organisés chaque année à Merville."
+          },
+          "par2": {
+            "text": "Les données publiées sont fournies à titre d’information uniquement et n’ont aucun caractère légal. La Mairie décline toute responsabilité pour les dommages pouvant résulter de l’utilisation ou de l’interprétation des informations publiées."
+          }
+        }
+      }
+    },
+    "rgpd": {
+      "h1": {
+        "title": "Données collectées",
+        "par1": {
+          "text": "Lors de la consultation du site www.festivaldesarts.merville31.fr, aucune donnée personnelle n’est collectée pour les simples visiteurs. "
+        },
+        "par2": {
+          "text": "Les artistes qui souhaitent exposer doivent créer un compte personnel. Des données personnelles sont alors collectées dans ce cadre : nom, prénom, adresse électronique, adresse postale, numéro de téléphone."
+        },
+        "par3": {
+          "text": "Le traitement de ces données a pour finalité d’assurer le suivi des inscriptions et/ou la promotion des artistes sur le site internet, uniquement avec leur accord. Les données sont conservées le temps nécessaire à leur exploitation pour rendre le service sollicité."
+        },
+        "par4": {
+          "text": "Ces données ne sont en aucun cas cédées à des tiers."
+        },
+        "par5": {
+          "text": "Conformément aux dispositions du RGPD, vous disposez :",
+          "bullet": {
+            "b1": "du droit de retirer à tout moment votre consentement,",
+            "b2": "d’un droit d’accès, de rectification ou d’effacement de vos données,",
+            "b3": "d’un droit de limitation ou d’opposition au traitement qui en est fait."
+          }
+        },
+        "par6": {
+          "text": "Si vous souhaitez exercer l’un de ces droits, merci de prendre contact par mail auprès du Délégué à la protection des données.",
+          "email": "rgpd@merville31.fr"
+        }
+      }
+    },
+    "cookie": {
+      "h1": {
+        "title": "Cookies",
+        "par1": "Les utilisateurs sont informés que lors de leurs visites sur ce site, des cookies (éléments ne permettant pas de les identifier mais servant à enregistrer des informations sur leur navigation) peuvent s’installer automatiquement sur leur logiciel de navigation.",
+        "par2": "Sont alors recueillies de manière automatique des données non nominatives, le plus souvent à usage statistique, concernant la navigation sur le site www.festivaldesarts.merville31.fr par son utilisateur.",
+        "par3": "Les utilisateurs sont informés de la présence de ces cookies, de la possibilité qui leurs est offerte de les refuser et du fait que la désactivation des cookies peut techniquement limiter leur accès à tout ou partie du site.",
+        "par4": "Il est par ailleurs possible de désactiver les cookies en paramétrant son navigateur."
+      }
+    }
+  }
+}
