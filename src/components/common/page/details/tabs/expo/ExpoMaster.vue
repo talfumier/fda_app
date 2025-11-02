@@ -76,9 +76,15 @@
     switch(cs){
       case 'left':
         disabled.value[0]=val?false:true
+        if(val) state.value[1].map((item) => {
+          return item.selected=false
+        })
         break
       case 'right':
         disabled.value[1]=val?false:true
+        if(val) state.value[0].map((item) => {
+          return item.selected=false
+        })
     }
   }
   function handleClick(cs){
@@ -97,9 +103,11 @@
     disabled.value=[true,true,disabled.value[2]]
   }
   //File viewer modal
+  const file=ref(null)
   const isOpen = ref(false)
-  function openModal() {
-    if(props.entity!=='ExpoDoc') return
+  function openModal(row) {
+    if(props.entity!=='ExpoDoc' || !row.selected) return
+    file.value={url:row.url,name:row.fileName,ext:getFileExtension(row.fileName)}
     isOpen.value = true
   }
   function closeModal() {
@@ -109,6 +117,12 @@
 </script>
 
 <template>
+  <FileViewerModal 
+    v-if="isOpen"
+    :file="file"
+    @close-modal="closeModal"
+  >
+  </FileViewerModal> 
   <div class="top-container">
     <div class="tables-container">
       <div class="container left">      
@@ -131,17 +145,11 @@
           }"
         >
           <template #body="slotProps">
-            <q-td :class="entity==='ExpoDoc' && slotProps.row.selected?'pointer':''" @click="openModal">
+            <q-td :class="entity==='ExpoDoc' && slotProps.row.selected?'pointer':''" @click="openModal(slotProps.row)">
               <span>{{ slotProps.row[visible[1]] }}
                 <Tooltip v-if="entity==='ExpoDoc' && slotProps.row.selected" :tt_text=" $t('comps.form_details.expos.tables.doc-tip')"></Tooltip>  
               </span>     
-            </q-td>    
-            <FileViewerModal 
-              v-if="isOpen && slotProps.row.selected"
-              :file="{url:slotProps.row.url,name:slotProps.row.fileName,ext:getFileExtension(slotProps.row.fileName)}"
-              @close-modal="closeModal"
-            >
-            </FileViewerModal>  
+            </q-td>                 
             <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
               {{ slotProps.row[visible[2]] }}
             </q-td>
@@ -171,17 +179,11 @@
           }"
         >
           <template #body="slotProps">
-            <q-td :class="entity==='ExpoDoc' && slotProps.row.selected?'pointer':''" @click="openModal">
+            <q-td :class="entity==='ExpoDoc' && slotProps.row.selected?'pointer':''" @click="openModal(slotProps.row)">
               <span>{{ slotProps.row[visible[1]] }}
                 <Tooltip v-if="entity==='ExpoDoc' && slotProps.row.selected" :tt_text=" $t('comps.form_details.expos.tables.doc-tip')"></Tooltip>  
               </span>     
-            </q-td>    
-            <FileViewerModal 
-              v-if="isOpen && slotProps.row.selected"
-              :file="{url:slotProps.row.url,name:slotProps.row.fileName,ext:getFileExtension(slotProps.row.fileName)}"
-              @close-modal="closeModal"
-            >
-            </FileViewerModal>  
+            </q-td> 
             <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
               {{ slotProps.row[visible[2]] }}
             </q-td>
