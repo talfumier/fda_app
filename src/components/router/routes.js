@@ -76,7 +76,7 @@ const router = createRouter({
     {
       path: '/public/legal',
       name: 'public legal',
-      component: () => import('../general/LegalNotice.vue'), //lazy loading
+      component: () => import('../general/legal/LegalNotice.vue'), //lazy loading
       props: (route) => ({
         id: route.query.id ?? null,
         random: route.query.random ?? null,
