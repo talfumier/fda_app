@@ -15,7 +15,7 @@
   import clearables from "../page/details/clearables.json"
   import { confirm } from '../dialog/dialog.js'
   import { translate } from '@/services/httpGoogleServices.js'
-  import { newController,doneController,cancelAllInFlight,getRandomInt, getFileExtension } from '@/utilityFunctions.js'
+  import { newController,doneController,cancelAllInFlight,getRandomInt, getFileExtension,bodyCleanUp } from '@/utilityFunctions.js'
   import { orgExcluded, setGlobals, statusText } from '@/globals/globals.js'
 
   const props=defineProps({
@@ -589,15 +589,6 @@
     }
     return obj
   }
-  async function bodyCleanUp(model,body,signal){  //remove fields not belonging to the model and idModel
-    const {data:res}=await getEntityFields(model,token.value,signal)
-    if(res.statusCode!==200) return body
-    const obj={}
-    res.data.map((field) => {
-      if(body[field]!==undefined) obj[field]=body[field]
-    })
-    return obj
-  }
   function handleNewRecord(){
     state.value[0]=[...state.value[0],_.cloneDeep(initNewrec())] 
     initInitialValues(newRecId) 
@@ -611,7 +602,7 @@
     await Promise.all(
       body.map(async(bo,i) => {
         if(bo.selected && bo.idBookingOeuvre<0){  //new record case
-          obj=await bodyCleanUp('BookingOeuvre',bo,signal)
+          obj=await bodyCleanUp('BookingOeuvre',bo,token.value,signal)
           res=await postEntity('BookingOeuvre',obj,token.value, signal)  //creation of corresponding record in tstatus_tracking at the same time (idStatus:14 >>> draft)
           if(res.data.statusCode!==200) return
           newId=res.data.data.idBookingOeuvre
@@ -633,7 +624,7 @@
               state.value[0][idx].bookingOeuvre[i]={...state.value[0][idx].bookingOeuvre[i],...statusText[14]}
           } 
           else  { 
-            obj=await bodyCleanUp('BookingOeuvre',bo,signal)
+            obj=await bodyCleanUp('BookingOeuvre',bo,token.value,signal)
             res=await patchEntity('BookingOeuvre',bo.idBookingOeuvre,obj,token.value, signal)
             if(res.data.statusCode!==200) return        
           }          
@@ -662,7 +653,7 @@
       const model=_.capitalize(key)
       for (const id of ids[key]) {
         const idx1 = findIndex(body[key], key, id)
-        const cleaned = await bodyCleanUp(model, body[key][idx1], signal)
+        const cleaned = await bodyCleanUp(model, body[key][idx1], token.value,signal)
         const {data:res}=await(id<0?postEntity(model,cleaned, token.value, signal):patchEntity(model, id, cleaned, token.value, signal))
         if(res.statusCode===200){
           if(id>0){
@@ -714,7 +705,7 @@
               bodyDTMP={...bodyDTMP,prize:body.prize}}
             const ctrl=newController(inFlight)
             try {
-              body=await bodyCleanUp(props.entity.model,body,ctrl.signal)
+              body=await bodyCleanUp(props.entity.model,body,token.value,ctrl.signal)
             } catch (error) {
                 console.error(error)
             }

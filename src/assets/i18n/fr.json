@@ -46,7 +46,7 @@
       "register": "Créer le compte",
       "pwd_forgot": "mot de passe oublié ?",
       "no_account": "pas encore de compte ?",
-      "cgu_cgv": "J'ai lu et accepte les <a href=/legal-notice?register=true target=blank tabindex=-1>termes et conditions</a>",
+      "cgu_cgv": "J'ai lu et accepte les <a href=/public/legal?register=true target=blank tabindex=-1>termes et conditions</a>",
       "execute": "Changer le mot de passe",
       "token_expiry": {
         "warning": "Votre jeton d'authentification va expirer à",
@@ -57,6 +57,9 @@
       "error": "Erreur",
       "text": "la page demandée est introuvable",
       "home": "Page d'accueil"
+    },
+    "notYet": {
+      "text": "Cette page n'est pas encore développée."
     },
     "navbar": {
       "dashboard": "Tableau de bord",

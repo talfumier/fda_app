@@ -1,4 +1,5 @@
 <script setup>
+  import notYet from './notYet.vue'
 
   defineProps({
   })
@@ -6,7 +7,7 @@
 </script>
 
 <template>
-  <h1> SITE MAP PAGE</h1>
+  <NotYet :icon="true"></NotYet>
 </template>
 
 <style scoped>
