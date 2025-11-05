@@ -1,5 +1,5 @@
 <script setup>
-  import NotYet from '../general/notYet.vue'
+  import NotYet from '../general/NotYetDev.vue'
 
   defineProps({
   })
