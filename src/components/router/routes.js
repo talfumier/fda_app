@@ -57,29 +57,23 @@ const router = createRouter({
       path: '/public/resetpassword',
       name: 'public resetpassword',
       component: () => import('../login/FormRecover.vue'), //lazy loading
-      props: (route) => ({
-        id: route.query.id ?? null,
-        random: route.query.random ?? null,
-      }),
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
       path: '/public/privacy',
       name: 'public privacy',
-      component: () => import('../general/Privacy.vue'), //lazy loading
+      component: () => import('../general/LegalPrivacy.vue'), //lazy loading
       props: (route) => ({
-        id: route.query.id ?? null,
-        random: route.query.random ?? null,
+        type: 'privacy',
       }),
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
       path: '/public/legal',
       name: 'public legal',
-      component: () => import('../general/legal/LegalNotice.vue'), //lazy loading
+      component: () => import('../general/LegalPrivacy.vue'), //lazy loading
       props: (route) => ({
-        id: route.query.id ?? null,
-        random: route.query.random ?? null,
+        type: 'legal',
       }),
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
@@ -87,20 +81,12 @@ const router = createRouter({
       path: '/public/sitemap',
       name: 'public sitemap',
       component: () => import('../general/SiteMap.vue'), //lazy loading
-      props: (route) => ({
-        id: route.query.id ?? null,
-        random: route.query.random ?? null,
-      }),
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
       path: '/public/contact',
       name: 'public contact',
-      component: () => import('../general/Contact.vue'), //lazy loading
-      props: (route) => ({
-        id: route.query.id ?? null,
-        random: route.query.random ?? null,
-      }),
+      component: () => import('../general/contact/Contact.vue'), //lazy loading
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {

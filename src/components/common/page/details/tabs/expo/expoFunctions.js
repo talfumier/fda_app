@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { postEntity, deleteEntity, patchEntity } from '@/services/httpEntities.js'
-import { newController, doneController } from '@/utilityFunctions.js'
+import { newController, doneController, bodyCleanUp } from '@/utilityFunctions.js'
 export function isEqual(arr1, arr2) {
   const arr = arr1.map((row) => {
     const { selected, ...obj } = row
@@ -31,7 +31,12 @@ export async function handleSaveMaster(state, initialValues, entity, token, inFl
       _.cloneDeep(state).map(async (row, idx) => {
         const { ID, ...body } = row
         if (ID) return //state record(s) not saved in database when ID is null >>> null ID set in ExpoMaster.vue handleClick()
-        const { data: res } = await postEntity(entity, body, token, ctrl.signal)
+        const { data: res } = await postEntity(
+          entity,
+          await bodyCleanUp(entity, body, token, ctrl.signal),
+          token,
+          ctrl.signal,
+        )
         if (res.statusCode !== 200) return
         const newID = res.data[`id${entity}`]
         state[idx].ID = newID

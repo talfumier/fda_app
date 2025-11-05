@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { getEntityFields } from './services/httpEntities.js'
 export function zipToObject(keys, values, dflt = null) {
   //construct an object based on keys and values
   return keys.reduce((obj, key, i) => {
@@ -55,4 +55,14 @@ export function cancelAllInFlight(inFlight) {
 export function getFileExtension(filename) {
   if (!filename.includes('.')) return ''
   return '.' + filename.split('.').pop().toLowerCase()
+}
+export async function bodyCleanUp(model, body, token, signal) {
+  //remove fields not belonging to the model and idModel
+  const { data: res } = await getEntityFields(model, token, signal)
+  if (res.statusCode !== 200) return body
+  const obj = {}
+  res.data.map((field) => {
+    if (body[field] !== undefined) obj[field] = body[field]
+  })
+  return obj
 }

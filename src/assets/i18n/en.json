@@ -46,7 +46,7 @@
       "register": "Register",
       "pwd_forgot": "forgot password ?",
       "no_account": "don't have an account ?",
-      "cgu_cgv": "I have read and agree with the <a href=/legal-notice?register=true target=blank tabindex=-1>terms & conditions</a>",
+      "cgu_cgv": "I have read and agree with the <a href=/public/legal?register=true target=blank tabindex=-1>terms & conditions</a>",
       "execute": "Change password",
       "token_expiry": {
         "warning": "Your authentication token is going to expire at",
@@ -57,6 +57,9 @@
       "error": "Error",
       "text": "page cannot be found",
       "home": "Go home"
+    },
+    "notYet": {
+      "text": "This page is not yet developed."
     },
     "navbar": {
       "dashboard": "Dashboard",

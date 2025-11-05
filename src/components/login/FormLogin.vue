@@ -13,8 +13,7 @@
   import { translate } from '@/services/httpGoogleServices.js'
   import { setUpTokenExpiry } from './tokenExpiry.js'
   import { orgExcluded } from '@/globals/globals.js'
-
-  defineProps({})
+  
   const{locale,t}=useI18n()
   const {read, set} = inject('userCookie')
   const router=useRouter()
@@ -166,6 +165,7 @@
     position:fixed;
     top:25%;
     left:50%;
+    z-index:2000;
   }
   div.modal-content {
     display:grid;

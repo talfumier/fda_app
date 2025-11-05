@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, reactive } from 'vue';
+  import NotYet from '../general/notYet.vue'
 
   defineProps({
   })
@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <h1>DASHBOARD PAGE</h1>
+  <NotYet :icon="false"></NotYet>
 </template>
 
 <style scoped>

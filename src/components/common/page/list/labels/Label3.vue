@@ -23,7 +23,7 @@
     return filteredMaster.value.length
   })
   const status=computed(() => {
-    if(!props.item.idStatus) return [1,'warning'] 
+    if(!props.item.idStatus) return [] 
     switch (props.item.idStatus){
         case 1:
         case 7:
