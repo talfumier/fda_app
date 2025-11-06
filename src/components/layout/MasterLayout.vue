@@ -1,11 +1,11 @@
 <script setup>
   import {ref,inject,useSlots} from 'vue'
-  import { useRouter,useRoute,RouterLink } from 'vue-router';
-  import { useI18n } from 'vue-i18n';
-  import { setUpTokenExpiry } from '../login/tokenExpiry.js';
+  import { useRouter,useRoute,RouterLink } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
+  import { setUpTokenExpiry } from '../login/tokenExpiry.js'
   import HeaderMember from './header/HeaderMember.vue'
-  import LangSwitcher from './header/LangSwitcher.vue';
-  import NavBar from './navbar/NavBar.vue';
+  import LangSwitcher from './header/LangSwitcher.vue'
+  import NavBar from './navbar/NavBar.vue'
   
   const route=useRoute()
   const router=useRouter()
@@ -31,7 +31,7 @@
       </RouterLink>
       <div class="container">
         <h1 >
-          <span class="span-lh"style="color:#fcb414;">Festival des Arts</span>
+          <span class="span-lh">Festival des Arts</span>
           <span class="span-rh">Merville</span>
         </h1>
         <div class="container-public-member">
@@ -48,8 +48,8 @@
       </div>
     </header>
     <aside>
-      <Transition v-if="route.name?.includes('member')" name="fade">
-        <NavBar ></NavBar>
+      <Transition name="fade">
+        <NavBar :type="route.name?.includes('member')?'member':'public'" ></NavBar>
       </Transition>
     </aside>
     <main>
@@ -94,11 +94,12 @@
     text-align: center; 
     min-width:525px;
   }
- .logo {
+  header .logo {
     position: absolute;
     top:0px;
-    margin-left:-29px;
+    left:-20px;
     height: 132px;
+    border-radius: 8px 0 0 0;
   } 
   .container {
     display:flex;
@@ -107,19 +108,25 @@
     position:absolute;
     left:60px;
     width:calc(100% - 60px);
+    margin-left:20px;
     padding:0 20px;
   } 
   h1 {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
     font-size: 4rem;
-    margin:0;
-    padding-right: 20px;
+    padding: 0 20px;
     font-family: 'Berlin Sans FB', Arial;
   }
   .span-lh {
     color:var(--orange);
+    text-wrap: nowrap;
+    padding-right:20px;
   }
   .span-rh {
-    padding:0 0 0 30px;
+    display:none;
     color:var(--white);
   }
   .container-public-member {
@@ -141,20 +148,26 @@
     height:50px;
   }
   @media screen and (min-width: 600px) {
-    .logo {
-      left:30px;
-    }
     .container {
       left:100px;
       width:calc(100% - 100px);
     }
-  }
-  @media screen and (min-width: 1000px) {
-    h1 {    
-      font-size: 5rem;   
+    header .logo {
+      left:0px;
     }
   }
-  @media screen and (min-width: 1100px) {
+  @media screen and (min-width: 630px) {
+    .container-public-member{
+      flex-wrap: nowrap; 
+      padding-right:20px;     
+    }
+  } 
+  @media screen and (min-width: 788px) {
+    .span-rh {
+      display:block;
+    }
+  } 
+  @media screen and (min-width: 1200px) {
     h1 {    
       font-size: 6rem;   
     }
@@ -163,14 +176,8 @@
       width:calc(100% - 140px);
     }
   } 
-  @media screen and (min-width: 830px) {
-    .container-public-member{
-      flex-wrap: nowrap;      
-    }
-  } 
   @media screen and (min-width: 1300px) {
     .container-public-member{
-      /* flex-direction: row; */
       gap: 20px;
       padding-right: 40px;
     }

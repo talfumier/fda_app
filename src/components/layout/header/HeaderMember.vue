@@ -59,6 +59,10 @@
   function forceClose () {
     showPopup.value = false
   }
+  function getLabel(){
+    if($q.screen.width<=930) return ''
+    return t(`comps.header.${route.name?.includes('member')?'public-btn':'member-btn'}.text`)
+  }
 
 </script>
 
@@ -68,7 +72,7 @@
     rounded standout
     icon="login" 
     no-wrap
-    :label="$t(`comps.header.${route.name?.includes('member')?'public-btn':'member-btn'}.text`)"
+    :label="getLabel()"
     @click="handleClick"
     tabindex="-1"
     >
@@ -78,10 +82,10 @@
     <FormLogin  @close-form="openLogin=false" @log-in="handleLogIn"></FormLogin>
   </Transition>
   <div :key="token" :class="['icons',token?'visible':'hidden']" 
-      @mouseenter="openMenu"
-      @mouseleave="scheduleClose"
-      @click="openMenu"
-    >     
+    @mouseenter="openMenu"
+    @mouseleave="scheduleClose"
+    @click="openMenu"
+  >     
     <q-icon 
       name="account_circle"
       role="button"
@@ -146,12 +150,12 @@
     opacity: 0;
   }
   .btn {
-    color:var(--white);
     font-size: 1.5rem;
     color: blue;
     font-weight: bolder;
     text-transform: capitalize;
     padding:0 15px;
+    width:60px;
   }
   .no-cap {
     text-transform:lowercase;
@@ -181,4 +185,9 @@
   .hidden {
     visibility: hidden;
   }
+  @media screen and (min-width: 930px) {   
+    .btn {
+      width:100%;
+    }
+  } 
 </style>

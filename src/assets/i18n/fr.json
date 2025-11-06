@@ -74,7 +74,10 @@
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
       "map": "Plan du site",
-      "contact": "Contact"
+      "contact": "Contact",
+      "home": "Accueil",
+      "rules": "Règlement",
+      "faq": "FAQ"
     },
     "toolbar": {
       "booking_delete": "L'inscription ne peut pas être supprimée. Merci de contacter les organisateurs si besoin ...",

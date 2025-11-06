@@ -12,10 +12,10 @@
 
 <template>
   <RouterLink :to="url" tabindex="-1">
-    <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="$t(text)" :wrap="wrap"></Tooltip>
+    <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="text?$t(text):''" :wrap="wrap"></Tooltip>
     <div :class="[isRotated?'folded':'']">
       <q-icon v-if="icon" :name="icon" size="3rem"></q-icon>
-      <p>{{ $t(text) }}</p>
+      <p>{{ text?$t(text):'' }}</p>
     </div>
   </RouterLink>
 </template>

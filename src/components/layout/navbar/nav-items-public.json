@@ -1,0 +1,20 @@
+[
+  {
+    "url": "/public/home",
+    "icon": "home",
+    "text": "home",
+    "wrap": false
+  },
+  {
+    "url": "/public/rules",
+    "icon": "receipt_long",
+    "text": "rules",
+    "wrap": false
+  },
+  {
+    "url": "/public/faq",
+    "icon": "help",
+    "text": "faq",
+    "wrap": false
+  }
+]

@@ -4,6 +4,8 @@ import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
 import content from '../common/page/master-content.json'
 import Home from '../home/Home.vue'
+import Rules from '../general/rules/Rules.vue'
+import Faq from '../general/faq/Faq.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
 import NotFound from '../notFound/NotFound.vue'
@@ -46,6 +48,8 @@ const router = createRouter({
       },
     },
     { path: '/public/home', name: 'public home', component: Home, meta: { roles: [-1] } }, //no specific role requirement, nor authentication
+    { path: '/public/rules', name: 'public rules', component: Rules, meta: { roles: [-1] } },
+    { path: '/public/faq', name: 'public faq', component: Faq, meta: { roles: [-1] } },
     {
       path: '/member/home',
       name: 'member home',

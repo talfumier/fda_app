@@ -74,7 +74,10 @@
       "privacy": "Privacy policy",
       "legal": "Legal notice",
       "map": "Site map",
-      "contact": "Contact"
+      "contact": "Contact",
+      "home": "Home",
+      "rules": "Exhibition rules",
+      "faq": "FAQ"
     },
     "toolbar": {
       "booking_delete": "Registration cannot be deleted. Please contact the organsisation if needed ...",
