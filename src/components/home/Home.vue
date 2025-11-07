@@ -67,10 +67,10 @@
     flex-direction: column;
     align-items: center;
     font-family: 'Berlin Sans FB', Arial;
-    font-size:3rem;
+    font-size:2.5rem;
   }
   h2 {
-    font-size:4rem;
+    font-size:3.5rem;
     text-align: center;
     margin:25px 0;
     color:#0042A4;
@@ -131,10 +131,7 @@
   .bottom img {
     height:190px;
   }
-  @media screen and (min-width: 1020px) {   
-    h2 {
-      font-size:5rem;
-    }
+  @media screen and (min-width: 1020px) { 
     div.main {
       flex-direction: row;
       justify-content: center;
@@ -155,4 +152,12 @@
       z-index: 1000;
     }
   } 
+  @media screen and (min-width: 1200px) {   
+    h2 {
+      font-size:5rem;
+    }
+    section.top, section.middle {
+      font-size:3rem;
+    }
+    }
 </style>

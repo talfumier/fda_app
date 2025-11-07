@@ -35,7 +35,7 @@
           <span class="span-rh">Merville</span>
         </h1>
         <div class="container-public-member">
-          <LangSwitcher 
+          <LangSwitcher v-if="$q.screen.width>=655"
             :key="preferred"
             :preferred="preferred"
           >
@@ -105,10 +105,7 @@
     display:flex;
     justify-content:space-between;
     align-items: center;
-    position:absolute;
-    left:60px;
-    width:calc(100% - 60px);
-    margin-left:20px;
+    width:calc(100% - 112px);
     padding:0 20px;
   } 
   h1 {
@@ -132,9 +129,9 @@
   .container-public-member {
     display:flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items:center;  
-    justify-content:flex-start;
+    justify-content:flex-end;
     gap: 3px;
   }
   main {
@@ -149,22 +146,20 @@
   }
   @media screen and (min-width: 600px) {
     .container {
-      left:100px;
-      width:calc(100% - 100px);
+      width:calc(100% - 132px);
     }
     header .logo {
       left:0px;
     }
   }
-  @media screen and (min-width: 630px) {
-    .container-public-member{
-      flex-wrap: nowrap; 
-      padding-right:20px;     
-    }
-  } 
-  @media screen and (min-width: 788px) {
+  @media screen and (min-width: 820px) {
     .span-rh {
       display:block;
+    }
+  } 
+  @media screen and (min-width: 1100px) {
+    h1 {    
+      font-size: 4.5rem;   
     }
   } 
   @media screen and (min-width: 1200px) {
@@ -172,14 +167,15 @@
       font-size: 6rem;   
     }
     .container {
-      left:140px;
-      width:calc(100% - 140px);
+      padding-left:50px;
     }
   } 
   @media screen and (min-width: 1300px) {
+    .container {
+      padding-left:80px;
+    }
     .container-public-member{
       gap: 20px;
-      padding-right: 40px;
     }
   }
 </style>

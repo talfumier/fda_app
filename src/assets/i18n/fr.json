@@ -213,7 +213,8 @@
           "jury": "Jury",
           "partner": "Partenariat",
           "award": "Remise des prix",
-          "doc": "Documents"
+          "doc": "Documents",
+          "selection": "Sélection"
         },
         "tables": {
           "partner-left": {

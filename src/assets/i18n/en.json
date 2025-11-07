@@ -213,7 +213,8 @@
           "jury": "Jury",
           "partner": "Partnership",
           "award": "Awards",
-          "doc": "Documents"
+          "doc": "Documents",
+          "selection": "Selection"
         },
         "tables": {
           "partner-left": {

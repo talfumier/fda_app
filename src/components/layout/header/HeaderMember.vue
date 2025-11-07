@@ -60,7 +60,7 @@
     showPopup.value = false
   }
   function getLabel(){
-    if($q.screen.width<=930) return ''
+    if($q.screen.width<965) return ''
     return t(`comps.header.${route.name?.includes('member')?'public-btn':'member-btn'}.text`)
   }
 

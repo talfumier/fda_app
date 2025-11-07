@@ -30,17 +30,16 @@ export async function handleSaveMaster(state, initialValues, entity, token, inFl
     await Promise.all(
       _.cloneDeep(state).map(async (row, idx) => {
         const { ID, ...body } = row
-        if (ID) return //state record(s) not saved in database when ID is null >>> null ID set in ExpoMaster.vue handleClick()
-        const { data: res } = await postEntity(
-          entity,
-          await bodyCleanUp(entity, body, token, ctrl.signal),
-          token,
-          ctrl.signal,
-        )
+        const cleaned = await bodyCleanUp(entity, body, token, ctrl.signal)
+        const { data: res } = !ID //state record(s) not saved in database when ID is null >>> null ID set in ExpoMaster.vue handleClick()
+          ? await postEntity(entity, cleaned, token, ctrl.signal)
+          : await patchEntity(entity, ID, cleaned, token, ctrl.signal) //patch only with ExpoDoc model
         if (res.statusCode !== 200) return
-        const newID = res.data[`id${entity}`]
-        state[idx].ID = newID
-        initialValues.push({ ...body, ID: parseInt(newID) })
+        if (!ID) {
+          const newID = res.data[`id${entity}`]
+          state[idx].ID = newID
+          initialValues.push({ ...body, ID: parseInt(newID) })
+        } else initialValues[idx].idType = body.idType //ExpoDoc patch case
       }),
     )
     return initialValues
