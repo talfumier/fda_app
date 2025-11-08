@@ -21,6 +21,8 @@
     preferred.value=lang
   }
 
+  const folded=ref(false)
+
   </script>
 
 <template>
@@ -49,7 +51,9 @@
     </header>
     <aside>
       <Transition name="fade">
-        <NavBar :type="route.name?.includes('member')?'member':'public'" ></NavBar>
+        <NavBar 
+          :type="route.name?.includes('member')?'member':'public'" 
+        ></NavBar>
       </Transition>
     </aside>
     <main>

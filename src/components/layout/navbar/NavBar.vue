@@ -4,7 +4,7 @@
   import Tooltip from '../../common/Tooltip.vue'
   import public_items from './nav-items-public.json'
   import member_items from "./nav-items-member.json"
-  import NavBarItem from './NavBarItem.vue';
+  import NavBarItem from './NavBarItem.vue'
   import { getEntitiesBySql } from '@/services/httpEntities.js'
   
   const props = defineProps({
@@ -64,12 +64,12 @@
         <hr v-if="type==='member'" ></hr>
         <li v-for="(item, idx) in roleFilteredItems" :key="idx">
           <NavBarItem 
-            :url="item.url" 
-            :icon="item.icon" 
+            :item="item" 
             :isRotated="isRotated" 
-            :text="`${$q.screen.width>850?('comps.navbar.'+item.text):''}`" 
-            :wrap="item.wrap"/>
+            :screen="850"
+          />
         </li>
+
       </ul>
     </nav>
 </template>
@@ -81,10 +81,6 @@
     background-color:var(--blue-navbar);    
     border: 1px solid #ddd;
     transition: width 0.6s ease;
-  }
-  nav.public {    
-    width: 200px;
-    background-color:var(--blue-navbar-opaque8);  
   }
   nav.public hr {
     border-color: transparent;
