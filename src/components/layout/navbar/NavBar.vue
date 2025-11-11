@@ -1,5 +1,5 @@
 <script setup>
-  import { ref,inject,computed, onMounted, onUnmounted } from 'vue'
+  import { ref,watch,inject,computed, onMounted, onUnmounted } from 'vue'  
   import _ from 'lodash'
   import Tooltip from '../../common/Tooltip.vue'
   import public_items from './nav-items-public.json'
@@ -11,6 +11,15 @@
     type:{type:String},
     wrap:{type:Boolean,default:false}
   })
+  
+  const ctrl=new AbortController()  
+  watch(
+    () => props.type, //getter function
+    async() => {  
+      if(props.type==='member') await fetch(ctrl.signal)
+    }
+  )
+  
   const url=ref(null)
   const isRotated = ref(false)
   function rotateIcon() {
@@ -23,19 +32,22 @@
       return decoded.value.idRole?item.roles.includes(decoded.value.idRole):false
     })
   })
-  const ctrl=new AbortController()  
-  onMounted(async() => {
-    if(props.type==='public') return
+  
+  async function fetch(signal){
     const {data:res}=await getEntitiesBySql(
       'avatar',
       token.value,
-      ctrl.signal,
+      signal,
       ':idUser', 
       decoded.value.idUser
     )
     if(res.statusCode===200) {
       url.value=res.data[0][0]?.url
     }
+  }
+  onMounted(async() => {
+    if(props.type==='public') return
+    await fetch(ctrl.signal)
   })
   onUnmounted(() => { // clean-up code after component has unmounted
     ctrl.abort()
@@ -54,7 +66,7 @@
         <hr v-if="type==='public'" ></hr>
         <li>
           <RouterLink v-if="type==='member'" to="/member/user" tabindex="-1">
-            <img v-if="url" class="avatar" :src="url" alt="'avatar'">
+            <img v-if="url" class="avatar" :src="url" alt='avatar'>
             <div v-if="!url" class="avatar">
               <q-icon  class='avatar' name="account_circle" ></q-icon>
             </div>
@@ -64,6 +76,7 @@
         <hr v-if="type==='member'" ></hr>
         <li v-for="(item, idx) in roleFilteredItems" :key="idx">
           <NavBarItem 
+            :key="roleFilteredItems"
             :item="item" 
             :isRotated="isRotated" 
             :screen="850"

@@ -64,8 +64,8 @@
     <q-icon name="keyboard_arrow_down" size="3rem" :class="expand?'rotate':''"></q-icon>
   </div>
   <div v-if="item && expand"  class="sub">
-    <li v-for="(link) in state[0]" :class="['dropdown',expand?'visible':'hidden']">
-      <RouterLink :to="`${item.url}/${link.idExpo}`" >    
+    <li v-for="(link) in state[0]" :class="['dropdown',expand?'visible':'visible']">
+      <RouterLink :to="`${item.url}/${link.idExpo}?idStatus=${link.idStatus}`" >    
         <div :class="[isRotated?'folded':'']">
           <p>{{link.short_en }}</p>
         </div>    

@@ -5,7 +5,8 @@
     file:{type:Object},
     fileYes:{type:Array},
     supported:{type:Object},
-    size:{type:String}
+    size:{type:String},
+    height:{type:String,default:null}
   })
 
 </script>
@@ -13,16 +14,20 @@
 <template>
   <div 
     v-if="file.url && fileYes.includes('image') && supported.image.includes(file.ext)" class="image"
-    :class="size"
+    :class="[height?'full':'',size]"
   >
     <img :src="file.url" :alt="file.name">
   </div>
-  <div v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(file.ext)">
+  <div v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(file.ext)"
+    :class="[height?'full':'']"
+    >
     <iframe 
       :src="`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file.url)}`"        
     ></iframe>
   </div>
-  <div v-if="file.url && fileYes.includes('pdf') && file.ext==='.pdf'">
+  <div v-if="file.url && fileYes.includes('pdf') && file.ext==='.pdf'"
+    :class="[height?'full':'']"
+  >
     <vue-pdf-embed :source="file.url" />
   </div>
 </template>
@@ -56,6 +61,13 @@
     margin-left: 0;
     height:270px;
     overflow-y:auto;
+  }
+  div.full {
+    overflow-x: hidden;
+  }
+  div.full div.vue-pdf-embed {
+    overflow-x: hidden;
+    height:100%;
   }
 
 </style>

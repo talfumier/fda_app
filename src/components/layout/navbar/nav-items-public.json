@@ -7,7 +7,7 @@
   },
   {
     "type": "nested",
-    "url": "/public/home/expos",
+    "url": "/public/expos",
     "icon": "photo_frame",
     "text": "expos",
     "wrap": false,
@@ -18,7 +18,7 @@
   },
   {
     "type": "nested",
-    "url": "/public/home/archived",
+    "url": "/public/expos",
     "icon": "work_history",
     "text": "archived",
     "wrap": false,

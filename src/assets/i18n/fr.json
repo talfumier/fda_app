@@ -257,7 +257,19 @@
     },
     "public_site": {
       "home": {},
-      "check": "frfrfr"
+      "check": "frfrfr",
+      "expos": {
+        "tabs": {
+          "infos": "Infos générales",
+          "rules": "Règlement",
+          "partner": "Partenariat",
+          "awards": "Prix",
+          "guest": "Invités d'honneur",
+          "catalog": "Catalogue",
+          "photos": "Galerie photos",
+          "attendance": "Participation"
+        }
+      }
     },
     "back_office": {}
   },

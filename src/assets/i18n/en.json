@@ -257,9 +257,20 @@
     },
     "public_site": {
       "home": {},
-      "check": "enenen"
-    },
-    "back_office": {}
+      "check": "enenen",
+      "expos": {
+        "tabs": {
+          "infos": "General info",
+          "rules": "Rules",
+          "partner": "Partnership",
+          "awards": "Awards",
+          "guest": "Guest",
+          "catalog": "Catalogue",
+          "photos": "Photo gallery",
+          "attendance": "Attendance"
+        }
+      }
+    }
   },
   "errors": {}
 }

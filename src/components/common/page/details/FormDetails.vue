@@ -305,9 +305,6 @@
   ::v-deep( div.q-tabs__content) {
     justify-content: left;
   }
-  /* ::v-deep( div.q-tabs__row) {
-    margin-right:50px;
-  } */
   .q-tab-panels {
     padding:0 10px 20px;
   }

@@ -68,13 +68,13 @@ export async function handleSaveAward(
       obj[field] = row[field]
     })
     if (!row.ID) {
-      //record has no ID >>> does not exit in database
-      if ((obj.idUser && obj.applicable === 1) || (!obj.idUser && obj.applicable === 0))
+      //record has no ID >>> does not exist in database
+      if ((obj.idUser && obj.applicable === 1) || (!obj.idUser && obj.applicable === 1))
         post.push(obj)
     } else {
       //existing record in database
-      if (!obj.idUser && obj.applicable === 1) del.push(row.ID) //delete if equal to initial state (database SQL query)
-      if ((!obj.idUser && obj.applicable === 0) || (obj.idUser && obj.applicable === 1))
+      if (!obj.idUser && obj.applicable === 0) del.push(row.ID) //delete if equal to initial state (database SQL query)
+      if ((!obj.idUser && obj.applicable === 1) || (obj.idUser && obj.applicable === 1))
         edit.push([row.ID, { idUser: obj.idUser, applicable: obj.applicable }]) //update if not applicable or in case of idUser change
     }
   })
@@ -89,7 +89,7 @@ export async function handleSaveAward(
           return item.ID === id
         })
         if (idx !== -1) {
-          const obj = { ID: null, idUser: null, applicable: 1 }
+          const obj = { ID: null, idUser: null, applicable: 0 }
           state[idx] = { ...state[idx], ...obj }
           initialValues[idx] = { ...initialValues[idx], ...obj }
         }

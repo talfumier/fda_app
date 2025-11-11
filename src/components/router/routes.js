@@ -3,9 +3,7 @@ import cookies from 'js-cookie'
 import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
 import content from '../common/page/master-content.json'
-import Home from '../home/Home.vue'
-import Rules from '../general/rules/Rules.vue'
-import Faq from '../general/faq/Faq.vue'
+import Home from '../public/home/Home.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
 import NotFound from '../notFound/NotFound.vue'
@@ -48,8 +46,27 @@ const router = createRouter({
       },
     },
     { path: '/public/home', name: 'public home', component: Home, meta: { roles: [-1] } }, //no specific role requirement, nor authentication
-    { path: '/public/rules', name: 'public rules', component: Rules, meta: { roles: [-1] } },
-    { path: '/public/faq', name: 'public faq', component: Faq, meta: { roles: [-1] } },
+    {
+      path: '/public/expos/:idExpo',
+      name: 'public expos',
+      component: () => import('../public/expo/Expo.vue'), //lazy loading
+      props: (route) => ({
+        idExpo: route.params.idExpo,
+      }),
+      meta: { roles: [-1] },
+    },
+    {
+      path: '/public/faq',
+      name: 'public faq',
+      component: () => import('../public/faq/Faq.vue'),
+      meta: { roles: [-1] },
+    },
+    {
+      path: '/member/faq',
+      name: 'member faq',
+      component: () => import('../general/faq/Faq.vue'),
+      meta: { roles: [5, 6, 7] },
+    },
     {
       path: '/member/home',
       name: 'member home',

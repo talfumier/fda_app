@@ -1,6 +1,6 @@
 <script setup>
   import {ref,inject,useSlots} from 'vue'
-  import { useRouter,useRoute,RouterLink } from 'vue-router'
+  import { useRouter,useRoute,RouterLink} from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { setUpTokenExpiry } from '../login/tokenExpiry.js'
   import HeaderMember from './header/HeaderMember.vue'
@@ -9,6 +9,7 @@
   
   const route=useRoute()
   const router=useRouter()
+
   const {t}=useI18n()
   const {decoded} = inject('userCookie')
   // handling the case where a user has closed the app without actual log-out
@@ -21,9 +22,7 @@
     preferred.value=lang
   }
 
-  const folded=ref(false)
-
-  </script>
+</script>
 
 <template>
   <div class="layout">
