@@ -16,6 +16,7 @@
   const inFlight=new Set()
 
   async function fetch(signal){
+    console.log('fetch',props.item)
     if(!props.item) return
     const {data:res}=await getEntitiesBySql(
       props.item.sql,

@@ -8,6 +8,7 @@ export function getEntities(entity, signal) {
   })
 }
 export function getEntitiesBySql(stored_proc, token, signal, params, paramsValues) {
+  console.log('getEntitiesBySql', stored_proc, params, paramsValues)
   if (!params)
     return http.get(`${api}/sql-entities/noparams/${stored_proc}`, {
       headers: { 'x-auth-token': token },
