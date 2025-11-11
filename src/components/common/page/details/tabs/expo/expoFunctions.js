@@ -30,17 +30,16 @@ export async function handleSaveMaster(state, initialValues, entity, token, inFl
     await Promise.all(
       _.cloneDeep(state).map(async (row, idx) => {
         const { ID, ...body } = row
-        if (ID) return //state record(s) not saved in database when ID is null >>> null ID set in ExpoMaster.vue handleClick()
-        const { data: res } = await postEntity(
-          entity,
-          await bodyCleanUp(entity, body, token, ctrl.signal),
-          token,
-          ctrl.signal,
-        )
+        const cleaned = await bodyCleanUp(entity, body, token, ctrl.signal)
+        const { data: res } = !ID //state record(s) not saved in database when ID is null >>> null ID set in ExpoMaster.vue handleClick()
+          ? await postEntity(entity, cleaned, token, ctrl.signal)
+          : await patchEntity(entity, ID, cleaned, token, ctrl.signal) //patch only with ExpoDoc model
         if (res.statusCode !== 200) return
-        const newID = res.data[`id${entity}`]
-        state[idx].ID = newID
-        initialValues.push({ ...body, ID: parseInt(newID) })
+        if (!ID) {
+          const newID = res.data[`id${entity}`]
+          state[idx].ID = newID
+          initialValues.push({ ...body, ID: parseInt(newID) })
+        } else initialValues[idx].idType = body.idType //ExpoDoc patch case
       }),
     )
     return initialValues
@@ -69,13 +68,13 @@ export async function handleSaveAward(
       obj[field] = row[field]
     })
     if (!row.ID) {
-      //record has no ID >>> does not exit in database
-      if ((obj.idUser && obj.applicable === 1) || (!obj.idUser && obj.applicable === 0))
+      //record has no ID >>> does not exist in database
+      if ((obj.idUser && obj.applicable === 1) || (!obj.idUser && obj.applicable === 1))
         post.push(obj)
     } else {
       //existing record in database
-      if (!obj.idUser && obj.applicable === 1) del.push(row.ID) //delete if equal to initial state (database SQL query)
-      if ((!obj.idUser && obj.applicable === 0) || (obj.idUser && obj.applicable === 1))
+      if (!obj.idUser && obj.applicable === 0) del.push(row.ID) //delete if equal to initial state (database SQL query)
+      if ((!obj.idUser && obj.applicable === 1) || (obj.idUser && obj.applicable === 1))
         edit.push([row.ID, { idUser: obj.idUser, applicable: obj.applicable }]) //update if not applicable or in case of idUser change
     }
   })
@@ -90,7 +89,7 @@ export async function handleSaveAward(
           return item.ID === id
         })
         if (idx !== -1) {
-          const obj = { ID: null, idUser: null, applicable: 1 }
+          const obj = { ID: null, idUser: null, applicable: 0 }
           state[idx] = { ...state[idx], ...obj }
           initialValues[idx] = { ...initialValues[idx], ...obj }
         }

@@ -1,0 +1,36 @@
+[
+  {
+    "url": "/public/home",
+    "icon": "home",
+    "text": "home",
+    "wrap": false
+  },
+  {
+    "type": "nested",
+    "url": "/public/expos",
+    "icon": "photo_frame",
+    "text": "expos",
+    "wrap": false,
+    "sql": "list_public_expo",
+    "sql_param": ":idStatus",
+    "param_value": 12,
+    "expand": true
+  },
+  {
+    "type": "nested",
+    "url": "/public/expos",
+    "icon": "work_history",
+    "text": "archived",
+    "wrap": false,
+    "sql": "list_public_expo",
+    "sql_param": ":idStatus",
+    "param_value": 13,
+    "expand": false
+  },
+  {
+    "url": "/public/faq",
+    "icon": "help",
+    "text": "faq",
+    "wrap": false
+  }
+]

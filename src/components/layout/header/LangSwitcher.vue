@@ -61,7 +61,7 @@
     <template v-slot:selected >
       <div class="row items-center no-wrap q-pa-xs q-selected" >
         <img :src="selectedOption.img" :alt="selectedOption.alt"/>
-        {{ selectedOption.label }}
+        <div v-if="$q.screen.width>930">{{ selectedOption.label }}</div>
       </div>
     </template>
     <template v-slot:option="scope" class="q-item">
@@ -69,7 +69,7 @@
         <q-item-section avatar>
           <img :src="scope.opt.img" :alt="scope.opt.alt" />
         </q-item-section>
-        <q-item-section >{{ scope.opt.label }}</q-item-section>
+        <q-item-section v-if="$q.screen.width>930" >{{ scope.opt.label }}</q-item-section>
       </q-item>
     </template>
   </q-select>
@@ -77,7 +77,7 @@
 
 <style scoped >
 .q-select {
-  width:150px;
+  width:80px;
   padding:0;
   font-size:1.5rem;
 }
@@ -93,4 +93,9 @@ img {
   height:15px;
   margin-right: 10px;
 }
+@media screen and (min-width: 850px) {   
+  .q-select {
+    width:100%;
+  }
+} 
 </style>

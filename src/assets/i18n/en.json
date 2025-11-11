@@ -65,6 +65,7 @@
       "dashboard": "Dashboard",
       "users": "User accounts",
       "expos": "Exhibitions",
+      "archived": "Past events",
       "oeuvres": "My art works",
       "oeuvres_org": "Art works",
       "bookings": "My bookings",
@@ -74,7 +75,10 @@
       "privacy": "Privacy policy",
       "legal": "Legal notice",
       "map": "Site map",
-      "contact": "Contact"
+      "contact": "Contact",
+      "home": "Home",
+      "rules": "Exhibition rules",
+      "faq": "FAQ"
     },
     "toolbar": {
       "booking_delete": "Registration cannot be deleted. Please contact the organsisation if needed ...",
@@ -210,7 +214,8 @@
           "jury": "Jury",
           "partner": "Partnership",
           "award": "Awards",
-          "doc": "Documents"
+          "doc": "Documents",
+          "selection": "Selection"
         },
         "tables": {
           "partner-left": {
@@ -252,9 +257,20 @@
     },
     "public_site": {
       "home": {},
-      "check": "enenen"
-    },
-    "back_office": {}
+      "check": "enenen",
+      "expos": {
+        "tabs": {
+          "infos": "General info",
+          "rules": "Rules",
+          "partner": "Partnership",
+          "awards": "Awards",
+          "guest": "Guest",
+          "catalog": "Catalogue",
+          "photos": "Photo gallery",
+          "attendance": "Attendance"
+        }
+      }
+    }
   },
   "errors": {}
 }

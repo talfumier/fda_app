@@ -1,5 +1,6 @@
 <script setup>
   import {ref,watch,inject,onMounted,onUnmounted} from 'vue'
+  import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
   import { getEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight, getRandomInt,getFileExtension } from '@/utilityFunctions.js'
@@ -20,6 +21,7 @@
     titles:{type:Array} //table titles
   })
   
+  const {locale}=useI18n()
   const {token}=inject('userCookie')
   const state=ref([])
   let initialValues=null
@@ -66,7 +68,7 @@
   watch(() => {
     if(state.value.length>0) return state.value[1]
   }, (newValue, oldValue) => {
-    const cond=isEqual(_.cloneDeep(state.value[1]),initialValues)  
+    const cond=isEqual(_.cloneDeep(state.value[1]),initialValues) 
     disabled.value[2]=cond //bottom action button disabled condition
     // if(!cond) emit('tabUnsaved',true)  //track actual changes    
     emit('tabUnsaved',!cond?true:false)  //track actual changes
@@ -95,6 +97,7 @@
     })
     const obj={}
     if(props.idRole) obj.idRole=props.idRole
+    if(props.entity==='ExpoDoc') obj.idType=cs==='left'?5:null
     state.value[to].push({...state.value[from][idx],ID:null,idExpo:props.idExpo,...obj})
     state.value[from]=_.filter(state.value[from],(row,i) => {
       return !row.selected
@@ -184,6 +187,20 @@
                 <Tooltip v-if="entity==='ExpoDoc' && slotProps.row.selected" :tt_text=" $t('comps.form_details.expos.tables.doc-tip')"></Tooltip>  
               </span>     
             </q-td> 
+            <q-td v-if="entity==='ExpoDoc'">
+              <q-select
+                filled
+                v-model="slotProps.row.idType"
+                :options="state[2]"
+                option-value='idType'
+                :option-label="`type_${locale}`"
+                :disable="!slotProps.row.selected"
+                emit-value
+                map-options
+                dense
+              >
+              </q-select>
+            </q-td>
             <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
               {{ slotProps.row[visible[2]] }}
             </q-td>

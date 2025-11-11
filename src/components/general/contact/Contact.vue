@@ -7,18 +7,8 @@
 
 <template>
   <div class="contact-container">
-    <a href="/public/home">
-  </a>  
     <h1>Contact</h1>
     <div class="contact">
-      <a href="/public/home">
-        <q-icon  
-          name="home"
-          size="4rem"
-          color='primary'
-        >
-        </q-icon>
-      </a>
       <p v-if="locale==='en'">
         The <strong>Festival des Arts de Merville</strong> is organized by the
         <strong>Municipality of Merville</strong>.
@@ -64,17 +54,9 @@
     padding:10px 0;
   }
   div.contact {
-    position:relative;
     padding-top: 40px;
     border-top: 1px solid #0042A4;
   }
-  .q-icon {
-    position:absolute;
-    top:-55px;
-    left:0;
-    cursor: pointer;
-    z-index: 1000;
-  } 
   p {    
     line-height: 2.2rem;
     margin-bottom:10px;

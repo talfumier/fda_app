@@ -65,6 +65,7 @@
       "dashboard": "Tableau de bord",
       "users": "Comptes utilisateur",
       "expos": "Expositions",
+      "archived": "Expos passées",
       "oeuvres": "Mes oeuvres",
       "oeuvres_org": "Oeuvres",
       "bookings": "Mes inscriptions",
@@ -74,7 +75,10 @@
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
       "map": "Plan du site",
-      "contact": "Contact"
+      "contact": "Contact",
+      "home": "Accueil",
+      "rules": "Règlement",
+      "faq": "FAQ"
     },
     "toolbar": {
       "booking_delete": "L'inscription ne peut pas être supprimée. Merci de contacter les organisateurs si besoin ...",
@@ -210,7 +214,8 @@
           "jury": "Jury",
           "partner": "Partenariat",
           "award": "Remise des prix",
-          "doc": "Documents"
+          "doc": "Documents",
+          "selection": "Sélection"
         },
         "tables": {
           "partner-left": {
@@ -252,7 +257,19 @@
     },
     "public_site": {
       "home": {},
-      "check": "frfrfr"
+      "check": "frfrfr",
+      "expos": {
+        "tabs": {
+          "infos": "Infos générales",
+          "rules": "Règlement",
+          "partner": "Partenariat",
+          "awards": "Prix",
+          "guest": "Invités d'honneur",
+          "catalog": "Catalogue",
+          "photos": "Galerie photos",
+          "attendance": "Participation"
+        }
+      }
     },
     "back_office": {}
   },

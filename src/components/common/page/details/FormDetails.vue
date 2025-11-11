@@ -15,6 +15,7 @@
   import FieldsetPrize from './FieldsetPrize.vue'
   import ExpoMaster from './tabs/expo/ExpoMaster.vue'
   import ExpoAward from './tabs/expo/ExpoAward.vue'
+  import ExpoSelection from './tabs/expo/ExpoSelection.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
   import { confirm } from '../../dialog/dialog.js'
 
@@ -276,7 +277,7 @@
           {name:'selected',field:'selected',align:'left'},
           {name:'idDoc',field:'idDoc',align:'left'},
           {name:'short',field:'short',headerClasses: 'col-name'},
-          {name:'fileName',field:'fileName'}]"
+          {name:'idType',field:'idType',align:'left'}]"
         :visible="['selected','short']"
         :titles="[
           $t('comps.form_details.expos.tables.doc-left.title'),
@@ -287,6 +288,9 @@
         }"
       >
       </ExpoMaster>
+    </q-tab-panel >
+    <q-tab-panel v-if="entity.model==='Expo'" name='selection'>
+      <ExpoSelection></ExpoSelection>
     </q-tab-panel>
   </q-tab-panels>
 </template>
@@ -301,9 +305,6 @@
   ::v-deep( div.q-tabs__content) {
     justify-content: left;
   }
-  /* ::v-deep( div.q-tabs__row) {
-    margin-right:50px;
-  } */
   .q-tab-panels {
     padding:0 10px 20px;
   }

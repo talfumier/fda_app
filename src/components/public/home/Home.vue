@@ -1,9 +1,9 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
-  import photo1 from '../../assets/images/home/photo1.jpg'
-  import photo2 from '../../assets/images/home/photo2.jpg'
-  import photo3 from '../../assets/images/home/photo3.jpg'
-  import photo4 from '../../assets/images/home/photo4.jpg'
+  import photo1 from '../../../assets/images/home/photo1.jpg'
+  import photo2 from '../../../assets/images/home/photo2.jpg'
+  import photo3 from '../../../assets/images/home/photo3.jpg'
+  import photo4 from '../../../assets/images/home/photo4.jpg'
 
   const {locale}=useI18n()
   const photos = [photo1, photo2, photo3, photo4]
@@ -14,7 +14,7 @@
     <section class='top' >
       <h2>Bienvenue sur le site du Festival des Arts </h2>
       <div class="main">
-        <img src="../../assets/images/home/fda_10.jpg" alt="Festival des arts 10e anniversaire"/>
+        <img src="../../../assets/images/home/fda_10.jpg" alt="Festival des arts 10e anniversaire"/>
         <div class="text">
           <p class="first">La 10e édition du Festival des Arts se tiendra du <span>10 au 12 avril 2026 !</span></p>
           <p>Pendant 3 jours, 70 artistes exposeront peintures, sculptures et photographies au complexe culturel l'Arpège de Merville.</p>
@@ -38,7 +38,7 @@
     <section class="top">
       <h2>Welcome to the Festival of Arts website</h2>
       <div class="main">
-        <img src="../../assets/images/home/fda_10.jpg" alt="Festival of Arts 10th anniversary" />
+        <img src="../../../assets/images/home/fda_10.jpg" alt="Festival of Arts 10th anniversary" />
         <div class="text">
           <p class="first">The 10th edition of the Festival of Arts will take place from<br><span>April 10 to 12, 2026 !</span></p>
           <p>For three days, 70 artists will exhibit paintings, sculptures, and photographs at the Arpège Cultural Center in Merville.</p>
@@ -67,10 +67,10 @@
     flex-direction: column;
     align-items: center;
     font-family: 'Berlin Sans FB', Arial;
-    font-size:3rem;
+    font-size:2.5rem;
   }
   h2 {
-    font-size:4rem;
+    font-size:3.5rem;
     text-align: center;
     margin:25px 0;
     color:#0042A4;
@@ -131,10 +131,7 @@
   .bottom img {
     height:190px;
   }
-  @media screen and (min-width: 1020px) {   
-    h2 {
-      font-size:5rem;
-    }
+  @media screen and (min-width: 1020px) { 
     div.main {
       flex-direction: row;
       justify-content: center;
@@ -155,4 +152,12 @@
       z-index: 1000;
     }
   } 
+  @media screen and (min-width: 1200px) {   
+    h2 {
+      font-size:5rem;
+    }
+    section.top, section.middle {
+      font-size:3rem;
+    }
+    }
 </style>

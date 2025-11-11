@@ -11,7 +11,7 @@
   <ul>
     <li class="lh"><img src="../../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></li>
     <li v-for="(item, idx) in items" :key="idx">
-      <NavBarItem :url="item.url" :text="'comps.navbar.'+item.text" />
+      <NavBarItem :item="item"/>
     </li>
     <li class="rh">
       <p>©&nbsp;</p>2025<p></p><p class="q-pl-sm">ht&nbsp; consultant</p>

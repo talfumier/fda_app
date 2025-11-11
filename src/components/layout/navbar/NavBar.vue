@@ -1,14 +1,25 @@
 <script setup>
-  import { ref,inject,computed, onMounted, onUnmounted } from 'vue';
+  import { ref,watch,inject,computed, onMounted, onUnmounted } from 'vue'  
   import _ from 'lodash'
-  import Tooltip from '../../common/Tooltip.vue';
-  import items from "./nav-items.json"
-  import NavBarItem from './NavBarItem.vue';
-  import { getEntitiesBySql } from '@/services/httpEntities.js';
+  import Tooltip from '../../common/Tooltip.vue'
+  import public_items from './nav-items-public.json'
+  import member_items from "./nav-items-member.json"
+  import NavBarItem from './NavBarItem.vue'
+  import { getEntitiesBySql } from '@/services/httpEntities.js'
   
-  defineProps({
+  const props = defineProps({
+    type:{type:String},
     wrap:{type:Boolean,default:false}
   })
+  
+  const ctrl=new AbortController()  
+  watch(
+    () => props.type, //getter function
+    async() => {  
+      if(props.type==='member') await fetch(ctrl.signal)
+    }
+  )
+  
   const url=ref(null)
   const isRotated = ref(false)
   function rotateIcon() {
@@ -16,22 +27,27 @@
   }
   const {token,decoded} = inject('userCookie')
   const roleFilteredItems=computed(() => {
-    return _.filter(items,(item) => {
+    if(props.type==='public') return public_items
+    return _.filter(member_items,(item) => {
       return decoded.value.idRole?item.roles.includes(decoded.value.idRole):false
     })
   })
-  const ctrl=new AbortController()  
-  onMounted(async() => {
+  
+  async function fetch(signal){
     const {data:res}=await getEntitiesBySql(
       'avatar',
       token.value,
-      ctrl.signal,
+      signal,
       ':idUser', 
       decoded.value.idUser
     )
     if(res.statusCode===200) {
       url.value=res.data[0][0]?.url
     }
+  }
+  onMounted(async() => {
+    if(props.type==='public') return
+    await fetch(ctrl.signal)
   })
   onUnmounted(() => { // clean-up code after component has unmounted
     ctrl.abort()
@@ -39,32 +55,34 @@
 </script>
 
 <template>
-    <nav :class="[isRotated?'folded':'']">
+    <nav :class="[isRotated || $q.screen.width<850?'folded':'',type]">
       <ul>
-        <q-icon 
+        <q-icon v-if="$q.screen.width>850"
           class="btn-fold" 
           name="keyboard_double_arrow_left" 
           size="md"
           @click="rotateIcon">
-        </q-icon>
+        </q-icon>        
+        <hr v-if="type==='public'" ></hr>
         <li>
-          <RouterLink to="/member/user" tabindex="-1">
-            <img v-if="url" class="avatar" :src="url" alt="'avatar'">
+          <RouterLink v-if="type==='member'" to="/member/user" tabindex="-1">
+            <img v-if="url" class="avatar" :src="url" alt='avatar'>
             <div v-if="!url" class="avatar">
               <q-icon  class='avatar' name="account_circle" ></q-icon>
             </div>
             <Tooltip :tt_text="$t('comps.header.settings-ico.tip')"></Tooltip>
           </RouterLink>
         </li>
-        <hr></hr>
+        <hr v-if="type==='member'" ></hr>
         <li v-for="(item, idx) in roleFilteredItems" :key="idx">
           <NavBarItem 
-            :url="item.url" 
-            :icon="item.icon" 
+            :key="roleFilteredItems"
+            :item="item" 
             :isRotated="isRotated" 
-            :text="'comps.navbar.'+item.text" 
-            :wrap="item.wrap"/>
+            :screen="850"
+          />
         </li>
+
       </ul>
     </nav>
 </template>
@@ -77,8 +95,15 @@
     border: 1px solid #ddd;
     transition: width 0.6s ease;
   }
+  nav.public hr {
+    border-color: transparent;
+    border-width: 5px;
+  }
   nav.folded {
     width:95px;
+  }
+  nav.public.folded {
+    width: 60px;
   }
   .btn-fold {
     position:absolute;

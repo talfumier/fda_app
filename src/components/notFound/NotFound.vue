@@ -7,7 +7,7 @@
     <h2>
       {{ $t('comps.notfound.error') }}&nbsp;404&nbsp;:&nbsp;{{ $t('comps.notfound.text') }}&nbsp;!
     </h2>
-    <router-link to="/">{{ $t('comps.notfound.home') }}</router-link>
+    <router-link to="/public/home">{{ $t('comps.notfound.home') }}</router-link>
   </div>
 
 </template>

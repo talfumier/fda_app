@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div>
+  <div class='not-yet'>
     <a v-if="icon" href="/public/home">
       <q-icon  
         name="home"
@@ -22,7 +22,7 @@
 </template>
 
 <style scoped>
-  div {
+  div.not-yet {
     display:flex;
     justify-content: center;
     align-items:center;

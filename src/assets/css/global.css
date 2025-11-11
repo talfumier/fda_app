@@ -43,6 +43,7 @@
   --beige-opaque9: rgb(240, 234, 200, .9);
   --blue: #4472C4;
   --blue-navbar: #3c66af;
+  --blue-navbar-opaque8: rgb(60, 102, 175,.8);
 }
 html {
   font-size: 62.5%;

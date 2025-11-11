@@ -42,37 +42,21 @@
 </script>
 
 <template>
-  <a href="/public/home">
-    <q-icon  
-      name="home"
-      size="4rem"
-      color='primary'
-    >
-    </q-icon>
-  </a>  
   <div v-html="html" class='html'> </div>
 </template>
 
 <style scoped>
   .html {
-    position:relative;
     font-size: 2rem;
     counter-reset: h2counter;
-    padding:70px 5% 40px;
+    padding:0px 5% 40px;
     opacity: 0.8;
     font-weight: 500;
   } 
-  .q-icon {
-    position:absolute;
-    top:160px;
-    left:5%;
-    cursor: pointer;
-    z-index: 1000;
-  } 
   .html :deep(div.title) {
-    position:fixed; 
-    top:130px;     
-    width:90%;
+    position:sticky; 
+    top:0;
+    width:100%;
   }  
   .html :deep(:is(h1, h2, h3)) { 
     font-family: 'Montserrat', sans-serif; 
@@ -87,11 +71,12 @@
     background-color: var(--grey-light);
     margin:0;
     padding:10px 0;
+    /* background-color: blueviolet; */
   }
   .html :deep(:is(hr)) {
     margin:0;
     border-top:1px solid #0042A4;
-    background-color: var(--grey-light);
+    background-color: var(--grey-light);padding:0 5%;
   }
   .html :deep(h2)::before {
     counter-increment: h2counter;
@@ -143,15 +128,9 @@
   .html :deep(ul) {
     margin:0 25px 10px;
   }
-  @media screen and (min-width: 750px) {   
-    .q-icon {
-      left:10%;
-    }    
+  @media screen and (min-width: 750px) {        
     .html {
-      padding:90px 10% 40px;
-    }  
-    .html :deep(div.title) {
-      width:80%;
+      padding:0px 10% 40px;
     }  
   } 
 
