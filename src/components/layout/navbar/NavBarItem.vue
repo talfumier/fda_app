@@ -16,6 +16,7 @@
   const inFlight=new Set()
 
   async function fetch(signal){
+    if(!props.item) return
     const {data:res}=await getEntitiesBySql(
       props.item.sql,
       environment.public_token,
