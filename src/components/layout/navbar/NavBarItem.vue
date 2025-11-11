@@ -1,7 +1,6 @@
 <script setup>
   import { ref,onMounted,onUnmounted } from 'vue'
-  import { getEntitiesBySql } from '@/services/httpEntities.js'
-  import { environment } from '@/config/environment.js'
+  import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Tooltip from '../../common/Tooltip.vue'
 
@@ -16,11 +15,8 @@
   const inFlight=new Set()
 
   async function fetch(signal){
-    console.log('fetch',props.item)
-    if(!props.item) return
-    const {data:res}=await getEntitiesBySql(
+    const {data:res}=await getPublicEntitiesBySql(
       props.item.sql,
-      environment.public_token,
       signal,
       props.item.sql_param,
       props.item.param_value
