@@ -91,6 +91,9 @@
           })
           state.value[0][idx]={...state.value[0][idx],...obj,idExpo:val} 
         }
+        break
+      case 'Faq':
+        if(name==='idType') state.value[0][idx]={...state.value[0][idx],idType:val,type_en:option.text.en,type_fr:option.text.fr}
     }
   }
   function handleChange(name,valid,val,option){
@@ -267,7 +270,7 @@
     initialValues.splice(idx,1)
     actualChanges.value.splice(idx,1)    
   }
-  async function handleDelete(idx){  //applicable to tuser, toeuvre >>> idFile as a field in table, tbooking >>> no idFile
+  async function handleDelete(idx){  //applicable to tuser, toeuvre, tdoc, tfaq >>> idFile as a field in table, tbooking >>> no idFile
     const ctrl = newController(inFlight)
     const idFile=state.value[0][idx].idFile 
     if(selectedId.value>0) {
@@ -486,6 +489,7 @@
       }
       break
     case 'Partner':
+    case 'Doc':
       listItemsFilter=ref({search:''})  
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
@@ -502,33 +506,64 @@
       handleAction = async(cs)=>{    
         const idx=getIndex()
         switch(cs){     
-          case "deletion":
+          case "deletion":    
             handleDelete(idx)
         }
       }
-      break  
-    case 'Doc':
-      listItemsFilter=ref({search:'',doc_status:''})  
+      break     
+    case 'Faq':
+      listItemsFilter=ref({search:'',faq_status:''})       
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
           cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
-          // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
-          //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
+          cond.push(listItemsFilter.value.faq_status?item.idStatus===26:
+            (listItemsFilter.value.faq_status===false?item.idStatus===25:item.idStatus>=25)) 
           cond.map((cnd) => {
             result=result && cnd
           })
           return result
         })
-      })      
-      handleAction = async(cs)=>{    
-        const idx=getIndex()
-        switch(cs){     
-          case "deletion":
-            handleDelete(idx)
+      })  
+      toggleOn = ref({status:false})
+      getToggleLabel = (toggle)=>{
+        switch(listItemsFilter.value[`faq_${toggle}`]){
+          case true:
+            toggleOn.value[toggle]=true
+            return t(`comps.list_items.actions_menu.faq.published`) 
+          case false:
+            toggleOn.value[toggle]=false
+            return t(`comps.list_items.actions_menu.faq.draft`)
+          default:
+            return t(`comps.list_items.actions_menu.user.${toggle}.indeterminate`)
         }
-      }
-      break        
+      }    
+      handleAction = async(cs)=>{   
+        const ctrl=newController(inFlight)
+        let res=null,status=26
+        const idx=getIndex()
+        switch(cs){      
+          case "drafting":
+            status=25
+          case "publication":
+            //database update
+            try {
+              res=await postEntity('StatusTracking', {idStatus:status,idFaq:selectedId.value}, token.value, ctrl.signal)              
+            } catch (error) {
+                console.error(error)
+            }
+            finally {
+              doneController(ctrl,inFlight)
+            }  
+            // state update
+            if(res.data.statusCode!==200) return
+            state.value[1].unshift({idFaq:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})  //array.unshift >>> adds record at idx=0
+            state.value[0][idx].idStatus=status
+            break
+          case "deletion":
+            handleDelete(idx)          
+        }
+      }  
   }
   const initFlag=ref(0)
   const filteredDetails = computed(() => {
@@ -585,7 +620,12 @@
           })
         })
         obj={...obj,...statusText[7]}
+        break        
+      case 'Faq':
+        obj.idStatus=25     //draft status
+        obj.idFile=null
         break
+
     }
     return obj
   }
@@ -737,7 +777,7 @@
               })  
               if(obj[idModel]<0) { //new record creation
                 state.value[0][idx][idModel]=newId //update idModel value to newly created record id   
-                if(props.entity.status_at_creation)
+                if(props.entity.status_at_creation)   //actual record post request is run from the back-end API (entities.js)
                   state.value[1].unshift({[idModel]:newId,idStatus:props.entity.status_at_creation,createdAt:new Date(Date.now())})
                 handleOpenDetails(newId)
                 newRecId=0
@@ -869,7 +909,7 @@
     }
   }
   //BOTTOM BUTTONS ENABLE-DISABLE CONDITIONS
-  const bottomButtonDisabled = computed(() => {
+  const bottomButtonDisabled = computed(() => {  //applies to Booking model only
     const idx=getIndex()
     const out = { register: false, cancel: false }
     if(props.entity.model !== 'Booking') return out
@@ -930,7 +970,8 @@
     let obj={save:false,delete:false}
     switch(props.entity.model){
       case 'Booking':
-        if(state.value[0][idx].idStatus>8 || (state.value[0][idx].idStatus===8 && parse(state.value[0][idx].closureDateTime, 'dd/MM/yyyy HH:mm', new Date()) < new Date()))          
+        if(state.value[0][idx].idStatus>8 || 
+        (state.value[0][idx].idStatus===8 && parse(state.value[0][idx].closureDateTime, 'dd/MM/yyyy HH:mm', new Date()) < new Date()))          
           obj= {save:true,delete:true}
     }
     return obj
@@ -961,7 +1002,7 @@
         <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
         <div class="toggle"> 
           <q-toggle
-            v-if="entity.model==='User' || entity.model==='Expo'"
+            v-if="entity.model==='User' || entity.model==='Expo' || entity.model==='Faq'"
             v-model="listItemsFilter[`${entity.model.toLowerCase()}_status`]"
             toggle-indeterminate
             :label="getToggleLabel('status')"            
@@ -1005,7 +1046,7 @@
     </aside>
     <aside v-if="!entity.noList" :class="['list-container',isRotated?'folded':'']">
       <ListItems    
-        :key="selectedId"
+        :key="selectedId*getRandomInt(1e2,1e5)"
         :entity="entity"
         :master="field_master"
         :data="filteredList"
@@ -1015,6 +1056,7 @@
         @user-action="handleAction"
         @expo-action="handleAction"
         @oeuvre-action="handleAction"
+        @faq-action="handleAction"
       >
       </ListItems>
     </aside>
@@ -1034,6 +1076,10 @@
         }"
         @tab-unsaved="(val) => {
           tabUnsaved=val
+        }"
+        @parent-update="(file) => {     //update state with uploaded file data
+          const idx=getIndex()
+          state[0][idx]={...state[0][idx],idFile:file.idFile,fileName:file.fileName,fileLastModified:file.fileLastModified,url:file.url}
         }"
       >
         <template #toolbar> <!--named scoped slot -->
@@ -1090,7 +1136,7 @@
   .master-container {
     display: grid;
     grid-template-rows:100px auto auto;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 0.9fr;
     justify-content: left;
     height:100%;   
     position:relative;

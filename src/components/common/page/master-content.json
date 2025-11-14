@@ -1568,5 +1568,129 @@
         ]
       }
     ]
+  },
+  {
+    "entity": {
+      "idx": 9,
+      "url": "/member/faq",
+      "name": "member faq",
+      "roles": [5, 6, 7],
+      "model": "Faq",
+      "sql": "list_items_faq",
+      "newRecord": true,
+      "status_at_creation": 25,
+      "noList": false,
+      "listType": ["simple"],
+      "fileYes": ["msoffice", "image", "pdf"]
+    },
+    "fieldsets": [
+      {
+        "name": "short",
+        "type": "translate",
+        "legend_fr": "Nom court *",
+        "legend_en": "Short name *",
+        "info": false,
+        "fields": [
+          {
+            "name": "short_fr",
+            "rows": 1,
+            "max_length": 30,
+            "listMaster": true
+          },
+          {
+            "name": "short_en",
+            "rows": 1,
+            "max_length": 30,
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "type",
+        "type": "standard",
+        "legend_fr": "Rubrique *",
+        "legend_en": "Category *",
+        "info": false,
+        "fields": [
+          {
+            "name": "idType",
+            "field_type": "select",
+            "options": "options_faq",
+            "listMaster": true
+          }
+        ]
+      },
+      {
+        "name": "question",
+        "type": "translate",
+        "legend_fr": "Question *",
+        "legend_en": "Question *",
+        "info": false,
+        "fields": [
+          {
+            "name": "question_en",
+            "field_type": "textarea",
+            "rows": 2,
+            "max_length": 300
+          },
+          {
+            "name": "question_fr",
+            "field_type": "textarea",
+            "rows": 2,
+            "max_length": 300
+          }
+        ]
+      },
+      {
+        "name": "answer",
+        "type": "translate",
+        "legend_fr": "Réponse *",
+        "legend_en": "Answer *",
+        "info": false,
+        "fields": [
+          {
+            "name": "answer_en",
+            "field_type": "textarea",
+            "rows": 2,
+            "max_length": 300
+          },
+          {
+            "name": "answer_fr",
+            "field_type": "textarea",
+            "rows": 2,
+            "max_length": 300
+          }
+        ]
+      },
+      {
+        "name": "document",
+        "type": "single-upload",
+        "legend_fr": "Document",
+        "legend_en": "Document",
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
+          }
+        ]
+      }
+    ]
   }
 ]

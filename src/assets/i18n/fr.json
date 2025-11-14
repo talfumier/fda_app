@@ -191,6 +191,19 @@
           "confirm": {
             "deletion": "Merci de confirmer la suppression définitive de l'inscription."
           }
+        },
+        "faq": {
+          "created": "Créé",
+          "draft": "Brouillon",
+          "published": "Publié",
+          "drafting": "FAQ en mode draft.",
+          "publication": "FAQ en mode publication.",
+          "delete": "Suppression de la FAQ.",
+          "confirm": {
+            "drafting": "Merci de confirmer le passage en mode 'brouillon'.",
+            "publication": "Merci de confirmer le passage en mode 'publié'.",
+            "deletion": "Merci de confirmer la suppression définitive de la FAQ."
+          }
         }
       }
     },
