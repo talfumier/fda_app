@@ -282,6 +282,11 @@
           "photos": "Photo gallery",
           "attendance": "Attendance"
         }
+      },
+      "faq": {
+        "cat": {
+          "folder_tt": "Click to expand category."
+        }
       }
     }
   },

@@ -282,9 +282,13 @@
           "photos": "Galerie photos",
           "attendance": "Participation"
         }
+      },
+      "faq": {
+        "cat": {
+          "folder_tt": "Cliquer pour déployer la rubrique."
+        }
       }
-    },
-    "back_office": {}
+    }
   },
   "errors": {}
 }

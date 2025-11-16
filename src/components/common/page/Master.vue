@@ -625,7 +625,6 @@
         obj.idStatus=25     //draft status
         obj.idFile=null
         break
-
     }
     return obj
   }
@@ -955,14 +954,17 @@
     if(props.entity.model!=='Booking' || !selectedId.value) return null
     const idx=getIndex()
     let price=0,flg=false //showRoom flag
-    newValue.map((item) => {
+    newValue.map((item) => { 
       if(!flg && item[0].showRoom) {
         price+=state.value[0][idx].priceShowRoom
         flg=true
       }
       price+= item[0].screen*state.value[0][idx].priceScreen
     }) 
-    handleChange('price',true,price)
+    try {
+      handleChange('price',true,price)
+    } catch (error) {  //no selection case  
+    }    
   }, { deep: true, immediate: true })
   
   const toolbarDisableItem=computed(() => {    

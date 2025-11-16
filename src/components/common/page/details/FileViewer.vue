@@ -12,23 +12,25 @@
 </script>
 
 <template>
-  <div 
-    v-if="file.url && fileYes.includes('image') && supported.image.includes(file.ext)" class="image"
-    :class="[height?'full':'',size]"
-  >
-    <img :src="file.url" :alt="file.name">
-  </div>
-  <div v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(file.ext)"
-    :class="[height?'full':'']"
+  <div class='file-viewer'>
+    <div 
+      v-if="file.url && fileYes.includes('image') && supported.image.includes(file.ext)" class="image"
+      :class="[height?'full':'',size]"
     >
-    <iframe 
-      :src="`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file.url)}`"        
-    ></iframe>
-  </div>
-  <div v-if="file.url && fileYes.includes('pdf') && file.ext==='.pdf'"
-    :class="[height?'full':'']"
-  >
-    <vue-pdf-embed :source="file.url" />
+      <img :src="file.url" :alt="file.name">
+    </div>
+    <div v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(file.ext)"
+      :class="[height?'full':'']"
+      >
+      <iframe 
+        :src="`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file.url)}`"        
+      ></iframe>
+    </div>
+    <div v-if="file.url && fileYes.includes('pdf') && file.ext==='.pdf'"
+      :class="[height?'full':'']"
+    >
+      <vue-pdf-embed :source="file.url" />
+    </div>
   </div>
 </template>
 

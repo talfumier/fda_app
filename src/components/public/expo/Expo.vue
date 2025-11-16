@@ -43,24 +43,26 @@
   const rules=computed(() => {
     if(!state.value || state.value[2].length===0 ) return null
     const result= _.filter(state.value[2],(rec) => {
-      return rec.idType===10
+      return rec.idType===2
     })[0]
-    result.ext=getFileExtension(result.fileName)
+    if(!result) return null
+    if(result.fileName) result.ext=getFileExtension(result.fileName)
     return result
   })
   const catalog=computed(() => {
     if(!state.value || state.value[2].length===0 ) return null
     const result= _.filter(state.value[2],(rec) => {
-      return rec.idType===20
-    })
-    if(result.length===0) return null
-    result[0].ext=getFileExtension(result.fileName)
+      return rec.idType===4
+    })[0]
+    if(!result) return null
+    if(result.fileName) result.ext=getFileExtension(result.fileName)
     return result
   })
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
       state.value = await fetch('public_expo_details',ctrl.signal,':idExpo,:idStatus',`${props.idExpo},${idStatus.value}`) 
+      console.log(state.value[2])
     } catch (error) {
       console.error('onmounted failed in Expo.vue', error)
       return
