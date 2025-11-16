@@ -14,10 +14,15 @@
   const {locale}=useI18n()  
   const {formatDate}=useFormatDate()
   const filteredMaster=computed(() => {
-    return _.filter(props.master,(mstr) => {
+    const result= _.filter(props.master,(mstr) => {
       if(mstr.name.endsWith('_fr') || mstr.name.endsWith('_en')) return mstr.name.endsWith(locale.value)
       return true
     })
+    const idx=result.findIndex((it) => {
+      return it.name==='idType'
+    })
+    if(idx!==-1) result[idx]={name:`type_${locale.value}`}    //Faq model
+    return result
   })
   const len=computed(() => {
     return filteredMaster.value.length
@@ -29,10 +34,12 @@
         case 7:
         case 8:
         case 11:
+        case 25:
           return [1,'warning']
         case 2:
         case 10:
         case 12:
+        case 26:
           return [2,'positive']
         case 3:
         case 9:
@@ -73,7 +80,9 @@
         n=len.value-1
     }
     const field=filteredMaster.value[n]
-    if(len.value>=1 && props.item[field.name]) return field.format==='date-time'?formatDate(props.item[field.name]):props.item[field.name]
+    if(len.value>=1 && props.item[field.name]) {
+      return field.format==='date-time'?formatDate(props.item[field.name]):props.item[field.name]
+    }
     return ''
   }
 
@@ -90,7 +99,7 @@
         class="ccase">{{setRowText('1.2')}}
       </span>
       <q-icon 
-        v-if="status && (status[0]===1 || status[0]===2)" 
+        v-if="status && (status[0]===1 || status[0]===2 || status[0]>=25)" 
         name="done_all" :color="status[1]" size="2.5rem">
       </q-icon>
       <q-icon 

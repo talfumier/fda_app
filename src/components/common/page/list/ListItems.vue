@@ -9,6 +9,8 @@
   import ExpoActions from './actions/expo/ExpoActions.vue'
   import ExpoInfos from './actions/expo/ExpoInfos.vue'
   import BookingInfos from './actions/booking/BookingInfos.vue'
+  import FaqInfos from './actions/faq/FaqInfos.vue'
+  import FaqActions from './actions/faq/FaqActions.vue'
 
   const props=defineProps({
     entity:{type:Object},
@@ -19,7 +21,7 @@
     infos:{type:Array},
   })
   
-  const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction'])
+  const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction','faqAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.entity.model}`]]=false
@@ -58,6 +60,7 @@
         return ['1.1']
       case 'Expo':
       case 'Doc':
+      case 'Faq':
       case 'Booking':
         return ['1.1','2.1']
       default:
@@ -68,8 +71,8 @@
 </script>
 
 <template>
-  <div v-if="entity.listType[0]==='simple'" v-for="(item,idx) in data">      
-    <div :key="idx" class="list-item">
+  <div v-if="entity.listType[0]==='simple'" v-for="(item,idx) in data"> 
+    <div :key="item" class="list-item">
       <CheckBox>  
         <template #checkbox>  <!--named scoped slot -->
           <input
@@ -84,6 +87,7 @@
         <template #label>  <!--named scoped slot -->
           <Label3
             :id="idx" 
+            :key="item"
             :item="item" 
             :master="master"
             :rowSchema="getRowSchema()"
@@ -115,7 +119,14 @@
               return info.idBooking==item.idBooking
             })"
           >
-          </BookingInfos>
+          </BookingInfos>      
+          <FaqInfos
+            v-if="entity.model==='Faq'"
+            :data="_.filter(infos,(info) => {
+              return info.idFaq==item.idFaq
+            })"
+          >
+          </FaqInfos>
         </template>
         <template #actions> <!--named scoped slot -->
           <UserActions
@@ -132,6 +143,13 @@
               emit('expoAction',cs)
             }"
           ></ExpoActions>
+          <FaqActions
+            v-if="entity.model==='Faq'"
+            :data="item"
+            @faq-action="(cs) => {
+              emit('faqAction',cs)
+            }"
+          ></FaqActions>
         </template>
       </ActionMenu>
     </div>

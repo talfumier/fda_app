@@ -17,16 +17,13 @@
   import { confirm } from '../../dialog/dialog.js'
   import Tooltip from '../../Tooltip.vue'
 
-  defineOptions({
-    inheritAttrs: false
-  })
-
   const props = defineProps({
     fileYes:{type:Array},
     model:{type:String},
     fields:{type:Array},
     data:{type:Object}
   })
+
   const {t,locale}=useI18n()  
   const $q=useQuasar()
   const router = useRouter()
@@ -48,6 +45,8 @@
   const file_ext=computed(() => {
     return getFileExtension(file.value.fileName)
   })
+
+  const emit=defineEmits(['parentUpdate'])
 
   const ctrl=new AbortController()  
   onUnmounted(() => { // clean-up code after component has unmounted
@@ -107,13 +106,15 @@
           case 'Partner':
           case 'Oeuvre':
           case 'Doc':
+          case 'Faq':
             res3=(await patchEntity(props.model,props.data[`id${props.model}`],{idFile},token.value,ctrl.signal)).data  //update idFile in mariaDB tModel
         }
-        if(!res3 || res3.statusCode===200) 
+        if(!res3 || res3.statusCode===200) {
           file.value={    //update state
             ...body
           }   
-        }
+          emit('parentUpdate',file.value)
+        }}
     }
     if((props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser)) //avatar  update after upload
       router.go(0)  //page refresh without full reload
@@ -200,6 +201,7 @@
       case 'member expos':
       case 'member docs':
       case 'member partners':
+      case 'member faq':
         return true
       case 'member users':
       case 'member oeuvres_org':
@@ -230,7 +232,7 @@
         no-wrap
         icon="upload"
         :label="$t('comps.file_upload.upload')"
-        :disable="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0?true:false"
+        :disable="data.idOeuvre<0 || data.idExpo<0 || data.idPartner<0 || data.idDoc<0 || data.idFaq<0?true:false"
         @click="handleClick('upload')"
       >
         <input
@@ -241,7 +243,7 @@
           @change="handleSelectedFile"
         />
       </q-btn>
-      <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idDoc<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip> 
+      <Tooltip v-if="data.idOeuvre<0 || data.idExpo<0 || data.idPartner<0 || data.idDoc<0 || data.idFaq<0" :tt_text="$t('comps.file_upload.tooltip')"></Tooltip> 
       <div class="file-details">
         <InputField v-for="(item,idx) in fields"
           :key="getRandomInt(1,3e6)"

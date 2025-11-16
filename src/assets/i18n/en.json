@@ -191,6 +191,19 @@
           "confirm": {
             "deletion": "Please confirm booking permanent deletion."
           }
+        },
+        "faq": {
+          "created": "Created",
+          "draft": "Draft",
+          "published": "Published",
+          "drafting": "Set FAQ in draft mode.",
+          "publication": "Set FAQ in publication mode.",
+          "delete": "Delete FAQ.",
+          "confirm": {
+            "drafting": "Please confirm FAQ setting in draft mode.",
+            "publication": "Please confirm FAQ setting in publication mode.",
+            "deletion": "Please confirm FAQ permanent deletion."
+          }
         }
       }
     },
@@ -268,6 +281,11 @@
           "catalog": "Catalogue",
           "photos": "Photo gallery",
           "attendance": "Attendance"
+        }
+      },
+      "faq": {
+        "cat": {
+          "folder_tt": "Click to expand category."
         }
       }
     }

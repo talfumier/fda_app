@@ -65,5 +65,14 @@
     ["firstNameRep"],
     ["emailRep"],
     ["phoneRep"]
+  ],
+  "Faq": [
+    ["short_fr"],
+    ["short_en"],
+    ["question_fr"],
+    ["question_en"],
+    ["answer_fr"],
+    ["answer_en"],
+    ["idType", null]
   ]
 }

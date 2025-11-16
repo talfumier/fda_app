@@ -44,7 +44,7 @@
       else return item.roles?item.roles.includes(props.record.idRole):true
     })
   })
-  const emit=defineEmits(['hideToolbar','change','translate','buttonAction','deleteRow','tabUnsaved'])
+  const emit=defineEmits(['hideToolbar','change','translate','buttonAction','deleteRow','tabUnsaved','parentUpdate'])
   watch(    //watch tab value to hide main toolbar when active tab is no longer on default
     () => tab.value,              // <-- getter function required for primitive value
     (v) => { 
@@ -129,6 +129,9 @@
           :model="entity.model"
           :fields="item.fields"
           :data="record"
+          @parent-update="(file) => {
+            emit('parentUpdate',file)
+          }"
         >
         </FieldsetFile>
         <FieldsetFiles

@@ -112,10 +112,10 @@
   div.input-container {
     padding-top:0;
   }
-  .resume_fr, .title_fr, .desc_fr, .short_fr {
+  .resume_fr, .title_fr, .desc_fr, .short_fr, .question_fr, .answer_fr {
     grid-area: 2/1
   }
-  .reverse .resume_fr,.reverse .title_fr,.reverse .desc_fr,.reverse .short_fr {
+  .reverse .resume_fr,.reverse .title_fr,.reverse .desc_fr,.reverse .short_fr, .question_en, .answer_en {
     grid-area: 2/3;
   }
   .resume_en, .title_en, .desc_en, .short_en {
