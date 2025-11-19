@@ -24,9 +24,9 @@
     fieldsets:{type:Array},
     record:{type:Object}
   }) 
-    
+  
   const {t,locale}=useI18n()  
-  const $q=useQuasar()
+  const $q=useQuasar()  
 
   const tabUnsaved=ref(false)
   const _tab=ref('default')
@@ -41,7 +41,12 @@
   const filteredFieldsets=computed(() => {
     return _.filter(props.fieldsets,(item) => {
       if(item.type==='button-bottom' || !props.record) return false
-      else return item.roles?item.roles.includes(props.record.idRole):true
+      switch(props.entity.model){
+        case 'Booking':
+          if(item.name==='pricing' && props.record.guest==1) return false
+        default:
+          return item.roles?item.roles.includes(props.record.idRole):true
+      }
     })
   })
   const emit=defineEmits(['hideToolbar','change','translate','buttonAction','deleteRow','tabUnsaved','parentUpdate'])

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { postEntity, deleteEntity, patchEntity } from '@/services/httpEntities.js'
 import { newController, doneController, bodyCleanUp } from '@/utilityFunctions.js'
+import { getFileExtension } from '@/utilityFunctions.js'
 export function isEqual(arr1, arr2) {
   const arr = arr1.map((row) => {
     const { selected, ...obj } = row
@@ -138,4 +139,13 @@ export async function handleSaveAward(
   } finally {
     doneController(ctrl, inFlight)
   }
+}
+export function getExpoDoc(state, idType) {
+  if (!state || state[2].length === 0) return null
+  const result = _.filter(state[2], (rec) => {
+    return rec.idType === idType
+  })[0]
+  if (!result) return null
+  if (result.fileName) result.ext = getFileExtension(result.fileName)
+  return result
 }

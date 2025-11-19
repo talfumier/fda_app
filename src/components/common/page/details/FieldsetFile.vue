@@ -72,11 +72,12 @@
         if(res2.statusCode===200) {     //update state
           file.value=getEmptyFile()
         } 
-        if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) 
-          router.go(0)  //page refresh without full reload
         try {
           await deleteInCloud(id,token.value,ctrl.signal,getFileExtension(id).length>0?'?option=raw':'')  //delete asset on Cloudinary.com
         } catch (error) {}  //asset no longer present
+        if(props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser) setTimeout(() => {
+          router.go(0)  //page refresh without full reload
+        },1000)
     }  
     loading.value=false
   }
@@ -114,10 +115,13 @@
             ...body
           }   
           emit('parentUpdate',file.value)
-        }}
+        }
+      }
     }
     if((props.model==='User' && props.data[`id${props.model}`]===decoded.value.idUser)) //avatar  update after upload
-      router.go(0)  //page refresh without full reload
+      setTimeout(() => {
+        router.go(0)  //page refresh without full reload
+      },1000)      
     loading.value=false
   }
  

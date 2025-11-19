@@ -29,12 +29,17 @@
     <div v-if="file.url && fileYes.includes('pdf') && file.ext==='.pdf'"
       :class="[height?'full':'']"
     >
-      <vue-pdf-embed :source="file.url" />
+      <vue-pdf-embed 
+        :source="file.url" 
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
+div.file-viewer {
+  overflow-y:auto;
+}
   img {
     object-fit: cover;
     padding:5px;

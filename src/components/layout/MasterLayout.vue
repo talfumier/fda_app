@@ -55,7 +55,7 @@
         ></NavBar>
       </Transition>
     </aside>
-    <main>
+    <main class="master">
       <router-view 
         :key="$route.fullPath"
       >
@@ -137,10 +137,12 @@
     justify-content:flex-end;
     gap: 3px;
   }
-  main {
+  main.master {
+    position:relative;
     font-family: "Roboto", sans-serif;
     background-color: var(--grey-light);
     overflow-y:auto;
+    /* background-color: blue; */
   }
   footer {    
     grid-column: span 2;

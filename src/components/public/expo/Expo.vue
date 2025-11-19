@@ -10,7 +10,9 @@
   import FileViewer from '@/components/common/page/details/FileViewer.vue'
   import supported from '../../common/page/details/supported.json'
   import Carousel from './Carousel.vue'
+  import Guest from './Guest.vue'
   import NotYet from '@/components/general/NotYetDev.vue'
+  import { getExpoDoc } from '@/components/common/page/details/tabs/expo/expoFunctions.js'
 
   const props=defineProps({
     idExpo:{type:String}
@@ -41,28 +43,21 @@
 
   const state=ref([])  
   const rules=computed(() => {
-    if(!state.value || state.value[2].length===0 ) return null
-    const result= _.filter(state.value[2],(rec) => {
-      return rec.idType===2
-    })[0]
-    if(!result) return null
-    if(result.fileName) result.ext=getFileExtension(result.fileName)
-    return result
+    return getExpoDoc(state.value,2)
   })
-  const catalog=computed(() => {
-    if(!state.value || state.value[2].length===0 ) return null
-    const result= _.filter(state.value[2],(rec) => {
-      return rec.idType===4
-    })[0]
-    if(!result) return null
-    if(result.fileName) result.ext=getFileExtension(result.fileName)
-    return result
+  const catalogDoc=computed(() => {  //catching-up solution
+    return getExpoDoc(state.value,4)
+  })
+  const guestDoc=computed(() => { //catching-up solution
+    return getExpoDoc(state.value,11)
+  })  
+  const awardsDoc=computed(() => { //catching-up solution
+    return getExpoDoc(state.value,12)
   })
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
       state.value = await fetch('public_expo_details',ctrl.signal,':idExpo,:idStatus',`${props.idExpo},${idStatus.value}`) 
-      console.log(state.value[2])
     } catch (error) {
       console.error('onmounted failed in Expo.vue', error)
       return
@@ -105,7 +100,7 @@
     </q-tabs>
   </q-card>
   <q-tab-panels v-if="state.length>0" v-model="tab" animated>
-     <q-tab-panel name='default' >
+    <q-tab-panel name='default' >
       <fieldset v-for="(section) in tabs[0].sections" >
         <legend > 
             {{ section[`legend_${locale}`] }}
@@ -132,8 +127,8 @@
             </template>       
         </q-input>
       </fieldset>
-     </q-tab-panel>
-     <q-tab-panel class='doc' name='rules'>
+    </q-tab-panel>
+    <q-tab-panel class='doc' name='rules'>
       <FileViewer v-if="rules"
         :file="rules"
         :fileYes="['msoffice', 'image', 'pdf']"
@@ -141,49 +136,70 @@
         size='large'
         height='full'
       ></FileViewer>
-     </q-tab-panel>
-     <q-tab-panel class='doc' name='catalog'>
-      <FileViewer v-if="catalog"
-        :file="catalog"
+    </q-tab-panel>
+    <q-tab-panel class='doc' name='catalog'>
+      <!-- catching-up solution >>> catalog as a doc-->
+      <FileViewer v-if="catalogDoc"  
+        :file="catalogDoc"
         :fileYes="['msoffice', 'image', 'pdf']"
         :supported="supported"
         size='large'
         height='full'
       ></FileViewer>
-     </q-tab-panel>     
-     <q-tab-panel class='photos' name='photos'>
-        <Carousel :data="state[1]"></Carousel>
-     </q-tab-panel>
-     <q-tab-panel class='not-yet' name='guest' >
+    </q-tab-panel>     
+    <q-tab-panel class='photos' name='photos'>
+      <Carousel :data="state[1]"></Carousel>
+    </q-tab-panel>
+    <q-tab-panel class='guest' name='guest' >      
+      <!-- catching-up solution >>> guest as a doc-->
+      <FileViewer v-if="guestDoc"  
+        :file="guestDoc"
+        :fileYes="['msoffice', 'image', 'pdf']"
+        :supported="supported"
+        size='large'
+        height='full'
+      ></FileViewer>
+      <Guest v-if="!guestDoc"
+        :data="_.filter(state[5],(item) => {
+          return item.idRole=2
+        })"
+      >
+      </Guest>
+    </q-tab-panel>
+    <q-tab-panel class='not-yet' name='partner' >      
       <NotYet></NotYet>
-     </q-tab-panel>
-     <q-tab-panel class='not-yet' name='partner' >      
+    </q-tab-panel>
+    <q-tab-panel class='not-yet' name='awards'>   
+      <!-- catching-up solution >>> jury/awards as a doc-->
+      <FileViewer v-if="awardsDoc"  
+        :file="awardsDoc"
+        :fileYes="['msoffice', 'image', 'pdf']"
+        :supported="supported"
+        size='large'
+        height='full'
+      ></FileViewer>    
+      <NotYet v-if="!awardsDoc"></NotYet>
+    </q-tab-panel>
+    <q-tab-panel class='not-yet' name='attendance'>      
       <NotYet></NotYet>
-     </q-tab-panel>
-     <q-tab-panel class='not-yet' name='awards'>      
-      <NotYet></NotYet>
-     </q-tab-panel>
-     <q-tab-panel class='not-yet' name='attendance'>      
-      <NotYet></NotYet>
-     </q-tab-panel>
+    </q-tab-panel>
   </q-tab-panels>
 </template>
 
 <style scoped>
-  main {    
-    overflow-y:hidden;
-  }
   ::v-deep( div.q-tabs__content) {
     justify-content: left;
   }
-  .q-tabs {
-    position:sticky;
+  .q-card {
+    position:absolute;
     top:0;
+    z-index:1000;
+    width:100%;   
   }
   .q-tab-panels {
-    padding:0 10px 30px;
-    overflow-y:auto;
-    height:75vh;
+    padding:56px 10px 20px;
+    overflow-y:hidden;
+    height:100%;
   }
   .q-tab-panel {
     display:grid;
@@ -199,6 +215,13 @@
   }
   .q-tab-panel.photos {
     overflow: hidden;
+  }
+  .q-tab-panel.guest {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:space-evenly;
+    align-items:center;    
+    flex: 1 1 auto;
   }
   legend {
     font-size:1.9rem;
@@ -252,14 +275,14 @@
     color: var(--black-opaque9);
   }
   @media screen and (min-width: 1000px) {       
-    .q-tab-panel:not(.doc,.photos,.not-yet) {
-      display:grid;
+    .q-tab-panel:not(.doc,.photos,.guest,.not-yet) {
+      /* display:grid; */
       grid-template-columns: 1fr 1fr;
       column-gap: 20px;
     }
     .q-tab-panel.photos {
       grid-template-columns: 600px;
-    }
+    }  
   } 
 
 </style>
