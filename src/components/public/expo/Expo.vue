@@ -57,6 +57,7 @@
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
+      // state[] >>> 0: expo details, 1: expo images, 2: expo docs, 3: expo partners (info + images), 4:jury/awards, 5: user guest expo role (idRole:2)
       state.value = await fetch('public_expo_details',ctrl.signal,':idExpo,:idStatus',`${props.idExpo},${idStatus.value}`) 
     } catch (error) {
       console.error('onmounted failed in Expo.vue', error)
