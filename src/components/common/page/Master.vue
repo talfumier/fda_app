@@ -1085,7 +1085,7 @@
         }"
       >
         <template #toolbar> <!--named scoped slot -->
-          <Toolbar v-if="props.entity.newRecord && !hideToolbar" class="toolbar"
+          <Toolbar v-if="(props.entity.newRecord || props.entity.idx===1) && !hideToolbar" class="toolbar"
             @toolbar-actions="handleToolbarActions"
           >
             <template #save>    <!--named scoped slot -->          
