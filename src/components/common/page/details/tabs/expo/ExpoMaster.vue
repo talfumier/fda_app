@@ -97,7 +97,7 @@
     })
     const obj={}
     if(props.idRole) obj.idRole=props.idRole
-    if(props.entity==='ExpoDoc') obj.idType=cs==='left'?5:null
+    if(props.entity==='ExpoDoc') obj.idType=cs==='left'?1:null
     state.value[to].push({...state.value[from][idx],ID:null,idExpo:props.idExpo,...obj})
     state.value[from]=_.filter(state.value[from],(row,i) => {
       return !row.selected
