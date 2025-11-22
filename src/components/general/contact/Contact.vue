@@ -22,7 +22,7 @@
         <p class="mail">
           <a href="mailto:festivaldesarts@merville31.fr">festivaldesarts@merville31.fr</a>
         </p>
-        <p class="phone">0562134100</p>
+        <p class="phone">0562134116</p>
       </address>
     </div>
     <img src='../../../assets/images/logo-mairie-red.png' alt='Mairie de Merville' />

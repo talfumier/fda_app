@@ -16,7 +16,7 @@
       <div class="main">
         <img src="../../../assets/images/home/fda_10.jpg" alt="Festival des arts 10e anniversaire"/>
         <div class="text">
-          <p class="first">La 10e édition du Festival des Arts se tiendra du <span>10 au 12 avril 2026 !</span></p>
+          <p class="first">La 10e édition du Festival des Arts se tiendra du <span>10 au 12 avril 2026.</span></p>
           <p>Pendant 3 jours, 70 artistes exposeront peintures, sculptures et photographies au complexe culturel l'Arpège de Merville.</p>
           <p class="last">Gratuit et ouvert à toutes et à tous.</p>
         </div> 
@@ -27,7 +27,7 @@
       <div class="text">
         <p>Vous souhaitez exposer vos œuvres au Festival des Arts 2026 de Merville ?</p>
         <p>Inscrivez-vous dès maintenant, en créant votre compte dans l'espace membre en haut et à droite.</p>
-        <p >Clôture des inscriptions le <span style='color:red;'>?? février 2026.</span></p>
+        <p >Clôture des inscriptions le <span style='color:red;'>15 février 2026.</span></p>
       </div>
     </section>
     <section class="bottom">
@@ -40,7 +40,7 @@
       <div class="main">
         <img src="../../../assets/images/home/fda_10.jpg" alt="Festival of Arts 10th anniversary" />
         <div class="text">
-          <p class="first">The 10th edition of the Festival of Arts will take place from<br><span>April 10 to 12, 2026 !</span></p>
+          <p class="first">The 10th edition of the Festival of Arts will take place from<br><span>April 10 to 12, 2026.</span></p>
           <p>For three days, 70 artists will exhibit paintings, sculptures, and photographs at the Arpège Cultural Center in Merville.</p>
           <p class="last">Free and open to everyone.</p>
         </div>   
@@ -52,7 +52,7 @@
       <div class="text">
         <p>Would you like to exhibit your work at the 2026 Merville Festival of Arts ?</p>
         <p>Sign up now by creating your account in the member area at the top right.</p>
-        <p>Registration closes on <span>?? February 2026.</span></p>
+        <p>Registration closes on <span>February 15, 2026.</span></p>
       </div>
     </section>
     <section class="bottom">
@@ -127,6 +127,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap:30px;
+    padding-bottom: 20px;
   }
   .bottom img {
     height:190px;
@@ -158,6 +159,9 @@
     }
     section.top, section.middle {
       font-size:3rem;
+    }
+    section.bottom {
+      padding-bottom: 10px;
     }
     }
 </style>

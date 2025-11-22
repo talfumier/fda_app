@@ -1,14 +1,18 @@
 <script setup>
   import { ref,onMounted,onUnmounted } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
   import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Tooltip from '../../common/Tooltip.vue'
+  import { environment } from '@/config/environment.js'
 
   const props=defineProps({
     item:{type:Object},
     isRotated:{type:Boolean,default:false},
-    screen:{type:Number,default:-1}  //automatically hide navbar text below a given screen width, default -1 (does nothing)
-  })
+    // screen:{type:Number,default:-1}  //automatically hide navbar text below a given screen width, default -1 (does nothing)
+  })  
+  
+  const router=useRouter()
 
   const state=ref([])
   const expand=ref(props.item.expand)
@@ -47,19 +51,21 @@
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
     <div :class="[isRotated?'folded':'']">
       <q-icon v-if="item.icon" :name="item.icon" size="3rem"></q-icon>
-      <p v-if="screen>0?$q.screen.width>screen:true">{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
+      <p>{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
     </div>
   </RouterLink>
   <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap="item.wrap"></Tooltip>
-  <div v-if="item && item.type==='nested'"
+  <div v-if="item && item.type==='nested' && item.production.includes(environment.production)"
     :class="['folder',isRotated?'folded':'']"
     @click="() => {
-        expand=!expand
+        if(isRotated) //in case of nested folder when navbar is folded (small screen devices), navigate to first item in the list
+          router.push(`${item.url}/${state[0][0].idExpo}?idStatus=${state[0][0].idStatus}`)
+        else expand=!expand
       }"
   >
     <q-icon v-if="item.icon" :name="item.icon" size="3rem"></q-icon>
-    <p v-if="screen>0?$q.screen.width>screen:true">{{item.text?$t('comps.navbar.'+item.text):'' }}</p>      
-    <q-icon name="keyboard_arrow_down" size="3rem" :class="expand?'rotate':''"></q-icon>
+    <p>{{item.text?$t('comps.navbar.'+item.text):'' }}</p>      
+    <q-icon name="keyboard_arrow_down" size="3rem" :class="['arrow',expand?'rotate':'']"></q-icon>
   </div>
   <div v-if="item && expand"  class="sub">
     <li v-for="(link) in state[0]" :class="['dropdown',expand?'visible':'visible']">
@@ -124,7 +130,7 @@
     margin:0;
     transition: display 0.6s ease;
   }
-  div.folded p {
+  div.folded p,div.folded .q-icon.arrow  {
     display:none;
   }
   a,li {

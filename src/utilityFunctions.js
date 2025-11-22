@@ -66,3 +66,16 @@ export async function bodyCleanUp(model, body, token, signal) {
   })
   return obj
 }
+export function getSocialIcon(link) {
+  const socials = [
+    { link: 'x.com', icon: 'x-twitter' },
+    { link: 'instagram.com', icon: 'instagram' },
+    { link: 'facebook.com', icon: 'facebook' },
+    { link: 'linkedin.com', icon: 'linkedin' },
+  ]
+  const path = '../src/assets/icons'
+
+  const match = socials.find((item) => link?.toLowerCase().includes(item.link))
+  if (!match) return null
+  return new URL(`${path}/${match.icon}.svg`, import.meta.url).href
+}

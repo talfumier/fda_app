@@ -11,8 +11,8 @@
   import FieldsetFile from './FieldsetFile.vue'
   import FieldsetFiles from './FieldsetFiles.vue'
   import FieldsetBookingOeuvre from './FieldsetBookingOeuvre.vue'
-  import FieldsetDomainTechMedia from './FieldsetDomainTechMedia.vue'
-  import FieldsetPrize from './FieldsetPrize.vue'
+  import FieldsetDomainTechMedia from './admin/FieldsetDomainTechMedia.vue'
+  import FieldsetPrizeFaq from './admin/FieldsetPrizeFaq.vue'
   import ExpoMaster from './tabs/expo/ExpoMaster.vue'
   import ExpoAward from './tabs/expo/ExpoAward.vue'
   import ExpoSelection from './tabs/expo/ExpoSelection.vue'
@@ -158,14 +158,15 @@
           }"
         >
         </FieldsetDomainTechMedia>
-        <FieldsetPrize
-          v-if="item.type==='prize'"
-          :data="record.prize"
+        <FieldsetPrizeFaq
+          v-if="item.type==='prize' || item.type==='faq'"
+          :cs="`${item.type==='faq'?'type':item.type}`"
+          :data="record[`${item.type==='faq'?'type':item.type}`]"
           @change="handleChange"
           @delete-row="(model,id) => {
             emit('deleteRow',model,id)
           }"          
-        ></FieldsetPrize>
+        ></FieldsetPrizeFaq>        
         <FieldsetBookingOeuvre
           v-if="item.type==='booking-oeuvre'"  
           :data="record"

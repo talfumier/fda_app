@@ -219,8 +219,8 @@
           )
           break
         case 'Admin':
-          const domain=state.value[1],tech=state.value[2],media=state.value[3],prize=state.value[4]
-          state.value[0]=[{...state.value[0][0],domain,tech,media,prize}]
+          const domain=state.value[1],tech=state.value[2],media=state.value[3],prize=state.value[4],type=state.value[5]
+          state.value[0]=[{...state.value[0][0],domain,tech,media,prize,type}]
       }   
     } catch (error) {
       console.error('onmounted failed in Master.vue', error)
@@ -673,13 +673,14 @@
     )
     actualChanges.value[idx].bookingOeuvre=false
   }
-  async function processDTMP(body,signal) {  //body=bodyDTMP object >>> {domain:[{idDomain: ...},...{}]},tech:[{idTech:...},..{}],media:[{idMedia:...},prize:[{idPrize:...},..{}]}
+  async function processDTMPF(body,signal) {  
+    //body=bodyDTMPF object >>> {domain:[{idDomain: ...},...{}]},tech:[{idTech:...},..{}],media:[{idMedia:...},prize:[{idPrize:...},faq:[{idType:...},..{}]}
     function findIndex(arr,key,id){
       return arr.findIndex((item) => {
         return item[`id${_.capitalize(key)}`]===id
       }) 
     }  
-    const ids={domain:[],tech:[],media:[],prize:[]}  //id of records that have actually changed
+    const ids={domain:[],tech:[],media:[],prize:[],type:[]}  //id of records that have actually changed
     Object.keys(body).forEach((key) => { //key >>> domain, tech, media, prize
       const model=_.capitalize(key)
       body[key].forEach((item) => {
@@ -724,24 +725,28 @@
               }
               else obj[key]=item[key]
             })  
-            let body=null,bodyBookingOeuvre=null,bodyDTMP=null  //Domain, Technique, Media, Prize
+            let body=null,bodyBookingOeuvre=null,bodyDTMPF=null  //Domain, Technique, Media, Prize, Type (faq sections)
             if(obj[idModel]<0) body=state.value[0][idx]
             else body=_.cloneDeep(obj)  //cloneDeep necessary
             if(body.bookingOeuvre) {
               cs=1
               bodyBookingOeuvre=body.bookingOeuvre}
+            console.log(body,bodyDTMPF)
             if(body.domain) {
               cs=2
-              bodyDTMP={domain:body.domain}}
+              bodyDTMPF={domain:body.domain}}
             if(body.tech) {
               cs=2
-              bodyDTMP={...bodyDTMP,tech:body.tech}}
+              bodyDTMPF={...bodyDTMPF,tech:body.tech}}
             if(body.media) {
               cs=2
-              bodyDTMP={...bodyDTMP,media:body.media}}
+              bodyDTMPF={...bodyDTMPF,media:body.media}}
             if(body.prize) {
               cs=2
-              bodyDTMP={...bodyDTMP,prize:body.prize}}
+              bodyDTMPF={...bodyDTMPF,prize:body.prize}}
+            if(body.type) {
+              cs=2
+              bodyDTMPF={...bodyDTMPF,type:body.type}}  //FAQ sections
             const ctrl=newController(inFlight)
             try {
               body=await bodyCleanUp(props.entity.model,body,token.value,ctrl.signal)
@@ -782,7 +787,7 @@
                 newRecId=0
               }
             }
-            if(cs>0) {  //bodyBookingOeuvre || bodyDTMP             
+            if(cs>0) {  //bodyBookingOeuvre || bodyDTMPF             
               const ctrl2=newController(inFlight)
               try {
                 switch(cs){
@@ -795,8 +800,8 @@
                     }   
                     break
                   case 2:
-                    const {idAdmin,orgExcluded,...rest}=bodyDTMP
-                    processDTMP(rest,ctrl2.signal)
+                    const {idAdmin,orgExcluded,...rest}=bodyDTMPF
+                    processDTMPF(rest,ctrl2.signal)
 
                 }             
               } catch (error) {

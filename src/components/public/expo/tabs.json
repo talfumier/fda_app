@@ -1,7 +1,7 @@
 [
   {
     "name": "default",
-    "label": "comps.public_site.expos.tabs.infos",
+    "label": "comps.public_site.expos.tabs.infos.title",
     "idStatus": [12, 13],
     "order": [0, 0],
     "sections": [
@@ -37,9 +37,16 @@
         "legend_en": "Calendar",
         "fields": [
           {
+            "name": "closureDateTime",
+            "label_fr": "Clôture des inscriptions",
+            "label_en": "Deadline for registration",
+            "format": "date-time",
+            "icon": "schedule"
+          },
+          {
             "name": "start_date",
-            "label_fr": "Ouverture",
-            "label_en": "Opening",
+            "label_fr": "Ouverture de l'exposition",
+            "label_en": "Exhibition opening",
             "format": "date-time",
             "icon": "schedule"
           },
@@ -51,56 +58,9 @@
             "icon": "schedule"
           },
           {
-            "name": "lunchDateTime",
-            "label_fr": "Repas",
-            "label_en": "Lunch",
-            "format": "date-time",
-            "icon": "schedule"
-          },
-          {
             "name": "end_date",
-            "label_fr": "Fermeture",
-            "label_en": "Closing",
-            "format": "date-time",
-            "icon": "schedule"
-          }
-        ]
-      },
-      {
-        "legend_fr": "Dépôt des oeuvres",
-        "legend_en": "Art works deposit",
-        "fields": [
-          {
-            "name": "depotDateTime_open",
-            "label_fr": "Ouverture",
-            "label_en": "Opening",
-            "format": "date-time",
-            "icon": "schedule"
-          },
-          {
-            "name": "depotDateTime_close",
-            "label_fr": "Fermeture",
-            "label_en": "Closing",
-            "format": "date-time",
-            "icon": "schedule"
-          }
-        ]
-      },
-      {
-        "legend_fr": "Retrait des oeuvres",
-        "legend_en": "Art works collection",
-        "fields": [
-          {
-            "name": "collectionDateTime_open",
-            "label_fr": "Ouverture",
-            "label_en": "Opening",
-            "format": "date-time",
-            "icon": "schedule"
-          },
-          {
-            "name": "collectionDateTime_close",
-            "label_fr": "Fermeture",
-            "label_en": "Closing",
+            "label_fr": "Fermeture de l'exposition",
+            "label_en": "Exhibition closing",
             "format": "date-time",
             "icon": "schedule"
           }
@@ -142,67 +102,43 @@
             "label_en": "Longitude"
           }
         ]
-      },
-      {
-        "legend_fr": "Tarif de l'exposition",
-        "legend_en": "Exhibition fee",
-        "fields": [
-          {
-            "name": "priceShowRoom",
-            "label_fr": "En salle",
-            "label_en": "Show room",
-            "format": "integer"
-          },
-          {
-            "name": "priceScreen",
-            "label_fr": "A l'écran",
-            "label_en": "On screen",
-            "format": "integer"
-          }
-        ]
       }
     ]
   },
   {
     "name": "rules",
-    "label": "comps.public_site.expos.tabs.rules",
+    "label": "comps.public_site.expos.tabs.rules.title",
     "idStatus": [12, 13],
     "order": [1, 6]
   },
   {
     "name": "guest",
-    "label": "comps.public_site.expos.tabs.guest",
+    "label": "comps.public_site.expos.tabs.guest.title",
     "idStatus": [12, 13],
     "order": [2, 2]
   },
   {
     "name": "partner",
-    "label": "comps.public_site.expos.tabs.partner",
+    "label": "comps.public_site.expos.tabs.partner.title",
     "idStatus": [12, 13],
     "order": [3, 3]
   },
   {
     "name": "awards",
-    "label": "comps.public_site.expos.tabs.awards",
+    "label": "comps.public_site.expos.tabs.awards.title",
     "idStatus": [12, 13],
     "order": [4, 5]
   },
   {
     "name": "catalog",
-    "label": "comps.public_site.expos.tabs.catalog",
+    "label": "comps.public_site.expos.tabs.catalog.title",
     "idStatus": [13],
     "order": [-1, 0]
   },
   {
     "name": "photos",
-    "label": "comps.public_site.expos.tabs.photos",
+    "label": "comps.public_site.expos.tabs.photos.title",
     "idStatus": [13],
     "order": [-1, 1]
-  },
-  {
-    "name": "attendance",
-    "label": "comps.public_site.expos.tabs.attendance",
-    "idStatus": [13],
-    "order": [-1, 4]
   }
 ]

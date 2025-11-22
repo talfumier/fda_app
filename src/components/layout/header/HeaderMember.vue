@@ -1,11 +1,11 @@
 <script setup>
-  import { inject,ref} from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import { useI18n } from 'vue-i18n';
-  import Tooltip from '@/components/common/Tooltip.vue';
-  import FormLogin from '../../login/FormLogin.vue';
+  import { inject,ref} from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
+  import Tooltip from '@/components/common/Tooltip.vue'
+  import FormLogin from '../../login/FormLogin.vue'
   import { useQuasar } from 'quasar'
-  import { confirm } from '../../common/dialog/dialog.js';
+  import { confirm } from '../../common/dialog/dialog.js'
   
   const {token,decoded, remove} = inject('userCookie')
 

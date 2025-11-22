@@ -78,8 +78,7 @@
           <NavBarItem 
             :key="roleFilteredItems"
             :item="item" 
-            :isRotated="isRotated" 
-            :screen="850"
+            :isRotated="isRotated || $q.screen.width<850" 
           />
         </li>
 

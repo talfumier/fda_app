@@ -440,8 +440,8 @@
       {
         "name": "deadline",
         "type": "standard",
-        "legend_fr": "Date limite de dépôt des inscriptions *",
-        "legend_en": "Deadline for submitting registration *",
+        "legend_fr": "Clôture des inscriptions *",
+        "legend_en": "Deadline for registration *",
         "fields": [
           {
             "name": "closureDateTime",
@@ -1216,24 +1216,15 @@
         "fields": [
           {
             "name": "domain",
-            "label_fr": "Domaine",
-            "label_en": "Domain",
-            "field_type": "table",
-            "required": false
+            "field_type": "table"
           },
           {
             "name": "tech",
-            "label_fr": "Technique",
-            "label_en": "Technique",
-            "field_type": "table",
-            "required": false
+            "field_type": "table"
           },
           {
             "name": "media",
-            "label_fr": "Media",
-            "label_en": "Media",
-            "field_type": "table",
-            "required": false
+            "field_type": "table"
           }
         ]
       },
@@ -1248,10 +1239,22 @@
         "fields": [
           {
             "name": "prize",
-            "label_fr": "Liste des prix",
-            "label_en": "Awards list",
-            "field_type": "table",
-            "required": false
+            "field_type": "table"
+          }
+        ]
+      },
+      {
+        "name": "faq",
+        "type": "faq",
+        "legend_fr": "Rubriques FAQ",
+        "legend_en": "FAQ sections",
+        "info": true,
+        "info_path": "comps.infos.admin.faq",
+        "info_color": "negative",
+        "fields": [
+          {
+            "name": "type",
+            "field_type": "table"
           }
         ]
       }

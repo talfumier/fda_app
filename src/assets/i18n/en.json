@@ -120,7 +120,8 @@
       "admin": {
         "orgExcluded": "Admin setting defining the list of roles available at account creation.",
         "domain_tech_media": "Admin settings for definition of domain, technique and media. To be carefully managed, since any change will immediately affect ALL existing records ('art works'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables.",
-        "prize": "Admin settings for definition of awards. To be carefully managed, since any change will immediately affect ALL existing records ('exhibition awards'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables."
+        "prize": "Admin settings for definition of awards. To be carefully managed, since any change will immediately affect ALL existing records ('exhibition awards'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables.",
+        "faq": "Admin settings for definition of FAQ sections. To be carefully managed, since any change will immediately affect ALL existing records ('FAQ'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables."
       }
     },
     "file_upload": {
@@ -273,14 +274,30 @@
       "check": "enenen",
       "expos": {
         "tabs": {
-          "infos": "General info",
-          "rules": "Rules",
-          "partner": "Partnership",
-          "awards": "Awards",
-          "guest": "Guest",
-          "catalog": "Catalogue",
-          "photos": "Photo gallery",
-          "attendance": "Attendance"
+          "infos": {
+            "title": "General info"
+          },
+          "rules": {
+            "title": "Rules"
+          },
+          "partner": {
+            "title": "Partnership",
+            "labels": {
+              "web": "Web site(s)"
+            }
+          },
+          "awards": {
+            "title": "Jury/Awards"
+          },
+          "guest": {
+            "title": "Guest"
+          },
+          "catalog": {
+            "title": "Catalogue"
+          },
+          "photos": {
+            "title": "Photo gallery"
+          }
         }
       },
       "faq": {

@@ -6,6 +6,7 @@
   import HeaderMember from './header/HeaderMember.vue'
   import LangSwitcher from './header/LangSwitcher.vue'
   import NavBar from './navbar/NavBar.vue'
+  import { environment } from '@/config/environment.js'
   
   const route=useRoute()
   const router=useRouter()
@@ -31,7 +32,7 @@
         <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo"/>
       </RouterLink>
       <div class="container">
-        <h1 >
+        <h1 :class="[environment.production?'prod':'dev-test']">
           <span class="span-lh">Festival des Arts</span>
           <span class="span-rh">Merville</span>
         </h1>
@@ -113,12 +114,19 @@
   } 
   h1 {
     display:flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content: left;
     font-size: 4rem;
     padding: 0 20px;
     font-family: 'Berlin Sans FB', Arial;
+    margin:0;
+  }
+  h1.prod {    
+    flex-direction: column;    
+    align-items: flex-start;
+  }
+  h1.dev-test {    
+    flex-direction: row;
+    flex-wrap: wrap;
   }
   .span-lh {
     color:var(--orange);
@@ -126,7 +134,6 @@
     padding-right:20px;
   }
   .span-rh {
-    display:none;
     color:var(--white);
   }
   .container-public-member {
@@ -157,11 +164,6 @@
       left:0px;
     }
   }
-  @media screen and (min-width: 820px) {
-    .span-rh {
-      display:block;
-    }
-  } 
   @media screen and (min-width: 1100px) {
     h1 {    
       font-size: 4.5rem;   

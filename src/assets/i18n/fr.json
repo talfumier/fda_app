@@ -120,7 +120,8 @@
       "admin": {
         "orgExcluded": "Paramètre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
         "domain_tech_media": "Paramètres admininistrateur pour la définition des domaines, techniques et supports.A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('oeuvres'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
-        "prize": "Paramètres admininistrateur pour la définition des prix. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('remise des 'prix'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables."
+        "prize": "Paramètres admininistrateur pour la définition des prix. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('remise des 'prix'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
+        "faq": "Paramètres admininistrateur pour la définition des rubriques FAQ. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('FAQ'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables."
       }
     },
     "file_upload": {
@@ -273,14 +274,30 @@
       "check": "frfrfr",
       "expos": {
         "tabs": {
-          "infos": "Infos générales",
-          "rules": "Règlement",
-          "partner": "Partenariat",
-          "awards": "Prix",
-          "guest": "Invités d'honneur",
-          "catalog": "Catalogue",
-          "photos": "Galerie photos",
-          "attendance": "Participation"
+          "infos": {
+            "title": "Infos générales"
+          },
+          "rules": {
+            "title": "Règlement"
+          },
+          "partner": {
+            "title": "Partenariat",
+            "labels": {
+              "web": "Site(s) web"
+            }
+          },
+          "awards": {
+            "title": "Jury/Prix"
+          },
+          "guest": {
+            "title": "Invités d'honneur"
+          },
+          "catalog": {
+            "title": "Catalogue"
+          },
+          "photos": {
+            "title": "Galerie photos"
+          }
         }
       },
       "faq": {

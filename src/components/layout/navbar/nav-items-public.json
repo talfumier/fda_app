@@ -14,7 +14,8 @@
     "sql": "list_public_expo",
     "sql_param": ":idStatus",
     "param_value": 12,
-    "expand": true
+    "expand": true,
+    "production": [true, false]
   },
   {
     "type": "nested",
@@ -25,7 +26,8 @@
     "sql": "list_public_expo",
     "sql_param": ":idStatus",
     "param_value": 13,
-    "expand": false
+    "expand": false,
+    "production": [false]
   },
   {
     "url": "/public/faq",
