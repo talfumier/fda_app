@@ -97,7 +97,9 @@ import JuryAwards from './JuryAwards.vue';
       class='text-grey'
       active-color='primary'
       indicator-color='primary'
+      shrink
       narrow-indicator
+      mobile-arrows
     >
       <q-tab v-for="(item) in tabs" :name="item.name" :label="$t(item.label)" />
     </q-tabs>
@@ -230,7 +232,7 @@ import JuryAwards from './JuryAwards.vue';
   .q-tab-panel.jury-award {
     display:flex;
     flex-wrap: wrap;
-    justify-content:left;
+    justify-content:center;
     gap:40px;
   }
   legend {

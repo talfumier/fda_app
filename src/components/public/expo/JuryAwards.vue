@@ -5,7 +5,6 @@
   const props = defineProps({
     data: { type: Object }
   })
-  console.log(props.data)
 
   const { locale } = useI18n()
 
