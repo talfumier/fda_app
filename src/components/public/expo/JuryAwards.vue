@@ -126,7 +126,7 @@
               <p v-if="slotProps.row.lastName" class="name">
                 {{ `${slotProps.row.lastName} ${slotProps.row.firstName}` }}
               </p>
-              <p v-if="!slotProps.row.lastName" class="name">
+              <p v-if="!slotProps.row.lastName" >
                 {{$t('comps.public_site.expos.tabs.jury-award.not-awarded') }}
               </p>
             </div>
@@ -140,7 +140,6 @@
 <style scoped>
   section {
     padding: 10px 20px;
-    font-size: 1.5rem;
     overflow:hidden;
   }
   .table {
@@ -148,6 +147,11 @@
     margin-bottom: 5px;
     width:450px;
     height:100%;
+  }
+  ::v-deep(div.q-table__title) {
+    color:var(--blue);
+    font-weight: bolder;
+    font-style: italic;
   }
   div.no-data {
     display: flex;
@@ -174,6 +178,9 @@
   .personalia .q-img {
     grid-row: 1;
     grid-column: 1;
+  }
+  p {    
+    font-size: 1.5rem;  
   }
   .personalia p.name {
     grid-row: 1;
@@ -209,8 +216,9 @@
     grid-row: 1;
     grid-column: 2;
   }
-  .award p.name {      
+  .award p.name {    
     grid-row: 1;
     grid-column: 3;
+    font-weight: bolder;
   }
 </style>
