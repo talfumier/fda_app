@@ -53,7 +53,7 @@ import JuryAwards from './JuryAwards.vue';
   const guestDoc=computed(() => { //catching-up solution
     return getExpoDoc(state.value,11)
   })  
-  const awardsDoc=computed(() => { //catching-up solution
+  const awardDoc=computed(() => { //catching-up solution
     return getExpoDoc(state.value,12)
   })
   onMounted(async () => {  
@@ -177,15 +177,15 @@ import JuryAwards from './JuryAwards.vue';
     </q-tab-panel>
     <q-tab-panel class='jury-award' name='jury-award'>   
       <!-- catching-up solution >>> jury/awards as a doc-->
-      <FileViewer v-if="awardsDoc"  
-        :file="awardsDoc"
+      <FileViewer v-if="awardDoc"  
+        :file="awardDoc"
         :fileYes="['msoffice', 'image', 'pdf']"
         :supported="supported"
         size='large'
         height='full'
       ></FileViewer> 
-      <JuryAwards v-if="!awardsDoc"
-        :data="{jury:state[7],awards:state[8]}"
+      <JuryAwards v-if="!awardDoc"
+        :data="{jury:state[7],award:state[8]}"
       >
       </JuryAwards>  
     </q-tab-panel>

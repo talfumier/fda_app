@@ -99,7 +99,7 @@
     <q-table
       class="table"
       :title="$t('comps.public_site.expos.tabs.jury-award.award')"
-      :rows="data.awards"
+      :rows="data.award"
       :columns="columns.award"
       :visible-columns="visible.award"
       :row-key="columns.award[0].name"
