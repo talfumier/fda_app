@@ -62,7 +62,7 @@
     font-family: 'Montserrat', sans-serif; 
     font-style: italic;
     font-weight: 600;
-    color:#0042A4;
+    color:var(--blue);
   }
   .html :deep(h1){       
     text-align: center;
@@ -75,7 +75,7 @@
   }
   .html :deep(:is(hr)) {
     margin:0;
-    border-top:1px solid #0042A4;
+    border-top:1px solid var(--blue);
     background-color: var(--grey-light);padding:0 5%;
   }
   .html :deep(h2)::before {

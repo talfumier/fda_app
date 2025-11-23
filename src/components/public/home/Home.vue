@@ -73,7 +73,7 @@
     font-size:3.5rem;
     text-align: center;
     margin:25px 0;
-    color:#0042A4;
+    color:var(--blue);
     opacity: 0.8;
   }
   div.main {

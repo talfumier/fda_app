@@ -286,8 +286,15 @@
               "web": "Web site(s)"
             }
           },
-          "awards": {
-            "title": "Jury/Awards"
+          "jury-award": {
+            "title": "Jury/Awards",
+            "jury": "Jury composition",
+            "not-yet-jury": "Not yet nominated",
+            "president": "President",
+            "member": "Panel members",
+            "award": "Prize & awards",
+            "not-yet-award": "Not yet defined",
+            "not-awarded": "Not yet awarded"
           },
           "guest": {
             "title": "Guest"

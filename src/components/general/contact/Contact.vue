@@ -44,7 +44,7 @@
     font-family: 'Montserrat', sans-serif; 
     font-style: italic;
     font-weight: 500;
-    color:#0042A4;    
+    color:var(--blue);    
     text-align: center;
     text-wrap: nowrap;
     font-size: 4rem;
@@ -55,7 +55,7 @@
   }
   div.contact {
     padding-top: 40px;
-    border-top: 1px solid #0042A4;
+    border-top: 1px solid var(--blue);
   }
   p {    
     line-height: 2.2rem;

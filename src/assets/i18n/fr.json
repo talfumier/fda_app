@@ -286,8 +286,15 @@
               "web": "Site(s) web"
             }
           },
-          "awards": {
-            "title": "Jury/Prix"
+          "jury-award": {
+            "title": "Jury/Prix",
+            "jury": "Composition du jury",
+            "not-yet-jury": "Pas encore nommé",
+            "president": "Président",
+            "member": "Membres",
+            "award": "Attribution des prix",
+            "not-yet-award": "Non défini",
+            "not-awarded": "Non attribué"
           },
           "guest": {
             "title": "Invités d'honneur"

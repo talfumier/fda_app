@@ -2,7 +2,7 @@
   import {onMounted, ref} from 'vue'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
-  import { truncate,getSocialIcon } from '@/utilityFunctions.js'
+  import WebSocial from './WebSocial.vue'
   import Carousel from './Carousel.vue'
 
   const props=defineProps({
@@ -57,16 +57,10 @@
           <li class='phone' v-if="guest.public_phone && guest.phone">{{ guest.phone }}</li>
         </ul>
       </div>
-      <div class='web'>
-        <ul v-if="guest.web1 || guest.web2" class="guest web"> 
-          <li><a :href="guest.web1">{{ truncate(guest.web1,30) }}</a></li>
-          <li><a :href="guest.web2">{{ truncate(guest.web2,30)}}</a></li>
-        </ul>
-        <ul v-if="guest.social1 || guest.social2" class="social"> 
-          <li><a v-if="guest.social1" :href="guest.social1"><img :src="getSocialIcon(guest.social1)" alt="Social icon" ></a></li>
-          <li><a v-if="guest.social2" :href="guest.social2"><img :src="getSocialIcon(guest.social2)" alt="Social icon" ></a></li>
-        </ul>
-      </div>  
+      <WebSocial
+        :links="{web1:guest.web1,web2:guest.web2,social1:guest.social1,social2:guest.social2}"
+      >
+      </WebSocial>
       <div class="resume">{{ guest[`resume_${locale}`] }}
       </div>
     </aside>
@@ -83,7 +77,7 @@
     display:flex;
     flex-direction: column; 
     font-size: 1.5rem;
-    border:solid 2px #0042A4;
+    border:solid 2px var(--blue);
     border-radius: 5px;
     font-family: 'Roboto', sans-serif; 
     max-width: 700px;
@@ -106,15 +100,6 @@
     justify-content:flex-start;
     list-style-type: none;
     padding:0 15px 0 10px;
-    margin:0;
-  }
-  ul.guest.web {
-    border-right: 1px solid #0042A4;
-  }
-  ul.social {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    padding:5px;
     margin:0;
   }
   li {
@@ -153,14 +138,6 @@
     height:100px;
     padding:5px;
     border:1px solid lightgrey;
-  }
-  div.web {
-    display:flex;
-    flex-wrap: nowrap;  
-    border-top: 1px solid #0042A4;  
-  }
-  div.web:has(ul) {
-    border-bottom: 1px solid #0042A4;
   }
   div.resume {
     padding:10px 15px;

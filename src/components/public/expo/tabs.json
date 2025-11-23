@@ -124,8 +124,8 @@
     "order": [3, 3]
   },
   {
-    "name": "awards",
-    "label": "comps.public_site.expos.tabs.awards.title",
+    "name": "jury-award",
+    "label": "comps.public_site.expos.tabs.jury-award.title",
     "idStatus": [12, 13],
     "order": [4, 5]
   },

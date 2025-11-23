@@ -1,6 +1,6 @@
 <script setup>
   import { useI18n } from 'vue-i18n'
-  import { truncate,getSocialIcon } from '@/utilityFunctions.js'
+  import WebSocial from './WebSocial.vue'
 
   const props=defineProps({
     data:{type:Array}
@@ -24,16 +24,10 @@
           </li>
         </ul>
       </div>
-      <div class='web'>
-        <ul class="partner web"> 
-          <li><a :href="partner.web1">{{ truncate(partner.web1,30) }}</a></li>
-          <li><a :href="partner.web2">{{ truncate(partner.web2,30)}}</a></li>
-        </ul>
-        <ul class="social"> 
-          <li><a :href="partner.social1"><img :src="getSocialIcon(partner.social1)" alt="Social icon" ></a></li>
-          <li><a :href="partner.social2"><img :src="getSocialIcon(partner.social2)" alt="Social icon" ></a></li>
-        </ul>
-      </div>  
+      <WebSocial
+        :links="{web1:partner.web1,web2:partner.web2,social1:partner.social1,social2:partner.social2}"
+      >
+      </WebSocial>
       <div class="resume">{{partner[`resume_${locale}`] }}
       </div>
     </aside>
@@ -50,7 +44,7 @@
     display:flex;
     flex-direction: column; 
     font-size: 1.5rem;
-    border:solid 2px #0042A4;
+    border:solid 2px var(--blue);
     border-radius: 5px;
     font-family: 'Roboto', sans-serif; 
     max-width: 700px;
@@ -65,12 +59,6 @@
     display:flex;
     flex-direction: column;
     align-items: flex-start;
-  }
-  div.web {
-    display:flex;
-    flex-wrap: nowrap;    
-    border-top: 1px solid #0042A4;
-    border-bottom: 1px solid #0042A4;
   }
   p {
     margin:0;
@@ -103,14 +91,6 @@
     flex-direction: column;
     justify-content:flex-start;
   }
-  ul.partner.web {
-    border-right: 1px solid #0042A4;
-  }
-  ul.social {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    padding:5px;
-  }
   li {
     display:flex;
     flex-direction: column;
@@ -127,12 +107,6 @@
     font-size: 2.5rem;
     padding-right: 10px;
   }
-  .social img {
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-    cursor: pointer;
-  }
   main.photo {
     flex: 1;             /* take all remaining space */
     display: flex;       /* so we can center/stretch the image */
@@ -147,7 +121,7 @@
   hr {
     margin:0;
     padding:0;
-    color: #0042A4;
+    color: var(--blue);
     height:1px;
   }
   div.resume {
@@ -165,7 +139,7 @@
     aside {
       width: 350px;
       
-    border-right: 1px solid #0042A4;
+    border-right: 1px solid var(--blue);
     }
     div.resume {
       height:100%;

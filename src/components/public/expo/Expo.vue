@@ -14,6 +14,7 @@
   import Partner from './Partner.vue'
   import NotYet from '@/components/general/NotYetDev.vue'
   import { getExpoDoc } from '@/components/common/page/details/tabs/expo/expoFunctions.js'
+import JuryAwards from './JuryAwards.vue';
 
   const props=defineProps({
     idExpo:{type:String}
@@ -172,7 +173,7 @@
       >
       </Partner>
     </q-tab-panel>
-    <q-tab-panel class='not-yet' name='awards'>   
+    <q-tab-panel class='jury-award' name='jury-award'>   
       <!-- catching-up solution >>> jury/awards as a doc-->
       <FileViewer v-if="awardsDoc"  
         :file="awardsDoc"
@@ -180,8 +181,11 @@
         :supported="supported"
         size='large'
         height='full'
-      ></FileViewer>    
-      <NotYet v-if="!awardsDoc"></NotYet>
+      ></FileViewer> 
+      <JuryAwards v-if="!awardsDoc"
+        :data="{jury:state[7],awards:state[8]}"
+      >
+      </JuryAwards>  
     </q-tab-panel>
   </q-tab-panels>
 </template>
@@ -222,6 +226,12 @@
     justify-content:space-evenly;
     align-items:center;    
     flex: 1 1 auto;
+  }
+  .q-tab-panel.jury-award {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:left;
+    gap:40px;
   }
   legend {
     font-size:1.9rem;

@@ -82,7 +82,7 @@
   }
   main.photos .carousel-wrapper {    /* guest.vue */
       border-width:1px 0 0 0 ;
-      border-color:#0042A4;
+      border-color:var(--blue);
     }
   main.photos .q-carousel__slide {  /* guest.vue */
     padding:5px ;
