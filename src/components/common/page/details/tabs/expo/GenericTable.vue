@@ -18,7 +18,8 @@
       rows.value.map((row) => {
         if(row[props.rowKey]!==id) row.selected=false
       })
-    }emit('selected',val)
+    }
+    emit('selected',val)
   }
 
 </script>

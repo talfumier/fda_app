@@ -104,7 +104,7 @@
   }
   section {
     font-size: 2rem;
-    border:solid 2px #0042A4;
+    border:solid 2px var(--blue);
     border-radius: 5px;
     margin:20px;
     width:100%;
@@ -122,7 +122,7 @@
     justify-content: left;
     align-items: center;
     gap:10px;
-    color:#0042A4;
+    color:var(--blue);
     opacity: 0.8;
     cursor: pointer;
     background-color: rgb(226, 226, 67);
@@ -141,7 +141,7 @@
     font-size:15px;
     font-weight: bolder;    
     color:var(--white);
-    background-color: #0042A4;;
+    background-color: var(--blue);;
   }
   .q-icon {
     padding-left: 15px;
@@ -153,7 +153,7 @@
     font-weight: 600;
     line-break: auto;
     line-height: 2.5rem;
-    color:#0042A4;
+    color:var(--blue);
     margin:0;
     padding: 10px 15px 10px 0;
     opacity: 0.8;

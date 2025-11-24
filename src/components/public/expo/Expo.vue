@@ -11,8 +11,10 @@
   import supported from '../../common/page/details/supported.json'
   import Carousel from './Carousel.vue'
   import Guest from './Guest.vue'
+  import Partner from './Partner.vue'
   import NotYet from '@/components/general/NotYetDev.vue'
   import { getExpoDoc } from '@/components/common/page/details/tabs/expo/expoFunctions.js'
+import JuryAwards from './JuryAwards.vue';
 
   const props=defineProps({
     idExpo:{type:String}
@@ -51,13 +53,13 @@
   const guestDoc=computed(() => { //catching-up solution
     return getExpoDoc(state.value,11)
   })  
-  const awardsDoc=computed(() => { //catching-up solution
+  const awardDoc=computed(() => { //catching-up solution
     return getExpoDoc(state.value,12)
   })
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
-      // state[] >>> 0: expo details, 1: expo images, 2: expo docs, 3: expo partners (info + images), 4:jury/awards, 5: user guest expo role (idRole:2)
+      // state[] >>> 0: expo details, 1: expo images, 2: expo docs, 3: expo partners (info + images), 4:jury/awards, 5: user guest expo role (idRole:2), 6: expo partner
       state.value = await fetch('public_expo_details',ctrl.signal,':idExpo,:idStatus',`${props.idExpo},${idStatus.value}`) 
     } catch (error) {
       console.error('onmounted failed in Expo.vue', error)
@@ -95,13 +97,15 @@
       class='text-grey'
       active-color='primary'
       indicator-color='primary'
+      shrink
       narrow-indicator
+      mobile-arrows
     >
       <q-tab v-for="(item) in tabs" :name="item.name" :label="$t(item.label)" />
     </q-tabs>
   </q-card>
   <q-tab-panels v-if="state.length>0" v-model="tab" animated>
-    <q-tab-panel name='default' >
+    <q-tab-panel class='default' name='default' >
       <fieldset v-for="(section) in tabs[0].sections" >
         <legend > 
             {{ section[`legend_${locale}`] }}
@@ -161,28 +165,29 @@
         height='full'
       ></FileViewer>
       <Guest v-if="!guestDoc"
-        :data="_.filter(state[5],(item) => {
-          return item.idRole=2
-        })"
+        :data="state[5]"
       >
       </Guest>
     </q-tab-panel>
-    <q-tab-panel class='not-yet' name='partner' >      
-      <NotYet></NotYet>
+    <q-tab-panel class='partner' name='partner' >      
+      <Partner
+        :data="state[6]"
+      >
+      </Partner>
     </q-tab-panel>
-    <q-tab-panel class='not-yet' name='awards'>   
+    <q-tab-panel class='jury-award' name='jury-award'>   
       <!-- catching-up solution >>> jury/awards as a doc-->
-      <FileViewer v-if="awardsDoc"  
-        :file="awardsDoc"
+      <FileViewer v-if="awardDoc"  
+        :file="awardDoc"
         :fileYes="['msoffice', 'image', 'pdf']"
         :supported="supported"
         size='large'
         height='full'
-      ></FileViewer>    
-      <NotYet v-if="!awardsDoc"></NotYet>
-    </q-tab-panel>
-    <q-tab-panel class='not-yet' name='attendance'>      
-      <NotYet></NotYet>
+      ></FileViewer> 
+      <JuryAwards v-if="!awardDoc"
+        :data="{jury:state[7],award:state[8]}"
+      >
+      </JuryAwards>  
     </q-tab-panel>
   </q-tab-panels>
 </template>
@@ -217,12 +222,18 @@
   .q-tab-panel.photos {
     overflow: hidden;
   }
-  .q-tab-panel.guest {
+  .q-tab-panel.guest,.q-tab-panel.partner {
     display:flex;
     flex-wrap: wrap;
     justify-content:space-evenly;
     align-items:center;    
     flex: 1 1 auto;
+  }
+  .q-tab-panel.jury-award {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    gap:40px;
   }
   legend {
     font-size:1.9rem;
@@ -276,11 +287,14 @@
     color: var(--black-opaque9);
   }
   @media screen and (min-width: 1000px) {       
-    .q-tab-panel:not(.doc,.photos,.guest,.not-yet) {
+    .q-tab-panel:not(.default,.doc,.photos,.guest,.partner,.not-yet) {
       /* display:grid; */
       grid-template-columns: 1fr 1fr;
       column-gap: 20px;
     }
+    .q-tab-panel.default {
+      grid-template-columns: minmax(auto, 1000px);
+    }  
     .q-tab-panel.photos {
       grid-template-columns: 600px;
     }  

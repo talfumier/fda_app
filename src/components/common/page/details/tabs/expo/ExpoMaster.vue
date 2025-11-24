@@ -187,25 +187,25 @@
                 <Tooltip v-if="entity==='ExpoDoc' && slotProps.row.selected" :tt_text=" $t('comps.form_details.expos.tables.doc-tip')"></Tooltip>  
               </span>     
             </q-td> 
-            <q-td v-if="entity==='ExpoDoc'">
+            <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
+              {{ slotProps.row[visible[2]] }}
+            </q-td>
+            <q-td>
+              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
+            </q-td>
+            <q-td v-if="entity==='ExpoDoc' || (entity==='UserExpoRole' && idRole===4)">
               <q-select
                 filled
-                v-model="slotProps.row.idType"
+                v-model="slotProps.row[`${idRole===4?'idRole':'idType'}`]"
                 :options="state[2]"
-                option-value='idType'
-                :option-label="`type_${locale}`"
+                :option-value="`${idRole===4?'idRole':'idType'}`"
+                :option-label="`${idRole===4?'role':'type'}_${locale}`"
                 :disable="!slotProps.row.selected"
                 emit-value
                 map-options
                 dense
               >
               </q-select>
-            </q-td>
-            <q-td v-if="slotProps.row[visible[2]] && visible[2]!=='url'">
-              {{ slotProps.row[visible[2]] }}
-            </q-td>
-            <q-td>
-              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
             </q-td>
           </template>
         </GenericTable> 

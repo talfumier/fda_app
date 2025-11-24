@@ -10,6 +10,7 @@ const setEnv = () => {
   const configFile = `export const environment = {  
     api_url: '${process.env.API_URL_PROD}',
     max_file_size: '${process.env.MAX_FILE_SIZE}',
+    production:true,
   };`
   writeFile(targetPath, configFile, (err) => {
     if (err) console.error(err)

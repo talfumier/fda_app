@@ -2,6 +2,7 @@
   import {onMounted, ref} from 'vue'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
+  import WebSocial from './WebSocial.vue'
   import Carousel from './Carousel.vue'
 
   const props=defineProps({
@@ -56,7 +57,10 @@
           <li class='phone' v-if="guest.public_phone && guest.phone">{{ guest.phone }}</li>
         </ul>
       </div>
-      <hr>
+      <WebSocial
+        :links="{web1:guest.web1,web2:guest.web2,social1:guest.social1,social2:guest.social2}"
+      >
+      </WebSocial>
       <div class="resume">{{ guest[`resume_${locale}`] }}
       </div>
     </aside>
@@ -73,7 +77,7 @@
     display:flex;
     flex-direction: column; 
     font-size: 1.5rem;
-    border:solid 2px #0042A4;
+    border:solid 2px var(--blue);
     border-radius: 5px;
     font-family: 'Roboto', sans-serif; 
     max-width: 700px;
@@ -95,7 +99,7 @@
     flex-direction: column;
     justify-content:flex-start;
     list-style-type: none;
-    padding:5px 15px 0 10px;
+    padding:0 15px 0 10px;
     margin:0;
   }
   li {
@@ -134,12 +138,6 @@
     height:100px;
     padding:5px;
     border:1px solid lightgrey;
-  }
-  hr {
-    margin:0;
-    padding:0;
-    color: #0042A4;
-    height:1px;
   }
   div.resume {
     padding:10px 15px;
