@@ -1,0 +1,5 @@
+{
+  "image": [".jpg", ".jpeg", ".png", ".webp"],
+  "msoffice": [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"],
+  "pdf": [".pdf"]
+}

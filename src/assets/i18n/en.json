@@ -1,0 +1,318 @@
+{
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "welcome": "Welcome",
+    "logout": "Log out",
+    "select": "Please select an item ...",
+    "search": "Search ...",
+    "save": "Save changes",
+    "clearAll": "Clear all fields",
+    "clear": "Clear",
+    "close": "Close",
+    "delete": "Record deletion.",
+    "delete-row": "Delete selected row.",
+    "insert-row": "Insert one row above.",
+    "confirm": {
+      "deletion": "Please confirm record permanent deletion.",
+      "delete-row": "Please confirm row permament deletion."
+    },
+    "undo": "Undo all changes",
+    "unsaved": "You have unsaved changes. Proceed anyway ?"
+  },
+  "comps": {
+    "header": {
+      "member-btn": {
+        "text": "Member area",
+        "tip1": "Sign-in to your account",
+        "tip2": "Switch to member area"
+      },
+      "public-btn": { "text": "Public site", "tip": "Switch to public site" },
+      "account-type": "Account type:",
+      "settings-ico": { "tip": "Account settings" },
+      "power-ico": {
+        "tip": "Sign-out",
+        "dialog": "Your are about to be signed-out,<br/>please confirm."
+      }
+    },
+    "login": {
+      "lastName": "Last name",
+      "firstName": "First name",
+      "email": "User ID (email)",
+      "role": "Role",
+      "pwd": "Password",
+      "pwd_check": "Password check",
+      "sign_in": "Sign in",
+      "register": "Register",
+      "pwd_forgot": "forgot password ?",
+      "no_account": "don't have an account ?",
+      "cgu_cgv": "I have read and agree with the <a href=/public/legal?register=true target=blank tabindex=-1>terms & conditions</a>",
+      "execute": "Change password",
+      "token_expiry": {
+        "warning": "Your authentication token is going to expire at",
+        "error": "Your authentication token has expired. Please sign-in again."
+      }
+    },
+    "notfound": {
+      "error": "Error",
+      "text": "page cannot be found",
+      "home": "Go home"
+    },
+    "notYet": {
+      "text": "This page is not yet developed."
+    },
+    "navbar": {
+      "dashboard": "Dashboard",
+      "users": "User accounts",
+      "expos": "Exhibitions",
+      "archived": "Past events",
+      "oeuvres": "My art works",
+      "oeuvres_org": "Art works",
+      "bookings": "My bookings",
+      "partners": "Partner forms",
+      "docs": "Documents",
+      "admin_settings": "Administration",
+      "privacy": "Privacy policy",
+      "legal": "Legal notice",
+      "map": "Site map",
+      "contact": "Contact",
+      "home": "Home",
+      "rules": "Exhibition rules",
+      "faq": "FAQ"
+    },
+    "toolbar": {
+      "booking_delete": "Registration cannot be deleted. Please contact the organsisation if needed ...",
+      "booking_save": "Registration cannot be modified. Please contact the organsisation if needed ..."
+    },
+    "validation": {
+      "fields": {
+        "not_null": "<span>Mandatory input !</span>",
+        "pwd": "<span>Invalid password {'>>>'} at least 8 characters,</span><br/><span> 1 special character, 1 uppercase, 1 number !</span>",
+        "pwd_match": "<span>Passwords don't match !</span>",
+        "email": "<span>Invalid email !</span>",
+        "checked": "<span>Checkbox must be checked !</span>",
+        "unchecked": "<span>Checkbox must be un-checked !</span>",
+        "int": "<span>Invalid integer !</span>",
+        "date": "<span>Format <strong>dd/mm/yyyy</strong> required !</span>",
+        "date-time": "<span>Format <strong>dd/mm/yyyy hh:mm</strong> required !</span>"
+      }
+    },
+    "infos": {
+      "resume": "Provide a short description of yourself, your activities ... to be published on our web site.",
+      "resume-partner": "Provide a short description of company's activities ... to be published on our web site.",
+      "account": "Choose your preferred language and subscribe to the newsletter to keep in touch with the festival latest news.",
+      "hyperlinks": "Hyperlinks to your sites or social networks.Click on arrow to open the page.",
+      "hyperlinks-partner": "Hyperlinks to corporate sites or social networks.Click on arrow to open the page.",
+      "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
+      "short": "Short name used in the member area and public site menus.",
+      "title": "Longer and more selling name used in the public site.",
+      "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
+      "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
+      "picture": "Please make sure the record is actually saved before uploading any picture.",
+      "file": "Please make sure the record is actually saved before uploading any file.",
+      "booking": "Please select the exhition you wish to register to.",
+      "closure": "Be aware that after the closure date, your will not be able to register nor modify/delete any on-going registration.",
+      "events": "Please indicate the events you plan to attend.",
+      "deposit-collection": "Dates and opening hours for art works deposit and collection.",
+      "pricing": "Fixed price for works displayed in the show room and price per work on screen. Your financial contribution is based on your selection.",
+      "selection": "Please make the selection of your works that you wish to exhibit.",
+      "terms": "Please accept the exhibition terms & conditions, save the changes and then click on REGISTER when you are ready.",
+      "admin": {
+        "orgExcluded": "Admin setting defining the list of roles available at account creation.",
+        "domain_tech_media": "Admin settings for definition of domain, technique and media. To be carefully managed, since any change will immediately affect ALL existing records ('art works'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables.",
+        "prize": "Admin settings for definition of awards. To be carefully managed, since any change will immediately affect ALL existing records ('exhibition awards'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables.",
+        "faq": "Admin settings for definition of FAQ sections. To be carefully managed, since any change will immediately affect ALL existing records ('FAQ'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables."
+      }
+    },
+    "file_upload": {
+      "delete": "Delete",
+      "upload": "Upload",
+      "download": "Download",
+      "tooltip": "Save record before file upload.",
+      "max_exceeded": "File size is above the accepted limit (",
+      "file_delete": "Please confirm file deletion.",
+      "file_ext1": "File extension",
+      "file_ext2": "not supported."
+    },
+    "master": {
+      "add_btn": "Add a new record"
+    },
+    "list_items": {
+      "actions_menu": {
+        "last_change": "Updated",
+        "edit": "Edit",
+        "user": {
+          "created": "Created",
+          "validated": "Validated",
+          "deactivated": "Deactivated",
+          "validation": "User account validation",
+          "deactivation": "User account deactivation",
+          "delete": "User account deletion",
+          "confirm": {
+            "validation": "Please confirm account validation.",
+            "deactivation": "Please confirm account deactivation.",
+            "deletion": "Please confirm account permanent deletion."
+          },
+          "status": {
+            "indeterminate": "status ?",
+            "pending": "pending",
+            "validated": "validated"
+          },
+          "role": {
+            "indeterminate": "role ?",
+            "artist": "artist",
+            "org": "other"
+          }
+        },
+        "expo": {
+          "created": "Created",
+          "pending": "Pending",
+          "on-going": "On going",
+          "archived": "Archived",
+          "activation": "Exhibition activation.",
+          "archiving": "Exhibition archiving.",
+          "delete": "Exhibition deletion",
+          "confirm": {
+            "activation": "Please confirm exhibition activation.",
+            "archiving": "Please confirm exhibition archiving.",
+            "deletion": "Please confirm exhibition permanent deletion."
+          },
+          "status": {
+            "indeterminate": "status ?",
+            "archived": "archived",
+            "active": "pending or active"
+          }
+        },
+        "booking": {
+          "created": "Created",
+          "draft": "Draft",
+          "candidate": "Candidate",
+          "rejected": "Rejected",
+          "accepted": "Accepted",
+          "confirm": {
+            "deletion": "Please confirm booking permanent deletion."
+          }
+        },
+        "faq": {
+          "created": "Created",
+          "draft": "Draft",
+          "published": "Published",
+          "drafting": "Set FAQ in draft mode.",
+          "publication": "Set FAQ in publication mode.",
+          "delete": "Delete FAQ.",
+          "confirm": {
+            "drafting": "Please confirm FAQ setting in draft mode.",
+            "publication": "Please confirm FAQ setting in publication mode.",
+            "deletion": "Please confirm FAQ permanent deletion."
+          }
+        }
+      }
+    },
+    "form_details": {
+      "translate": "Translate",
+      "newRec": "Please save the record before creating linked data.",
+      "booking": {
+        "register": "Please confirm submission of your registration.",
+        "cancel": "Please confirm cancellation of your registration."
+      },
+      "booking_oeuvre": {
+        "showRoom": "Show room",
+        "screen": "On screen",
+        "status": "Status",
+        "tooltip": "To enable selection, you must choose one display mode at least (show room and/or screen)."
+      },
+      "expos": {
+        "tabs": {
+          "master-file": "Master file",
+          "guest": "Guest",
+          "jury": "Jury",
+          "partner": "Partnership",
+          "award": "Awards",
+          "doc": "Documents",
+          "selection": "Selection"
+        },
+        "tables": {
+          "partner-left": {
+            "title": "Referenced partners"
+          },
+          "partner-right": {
+            "title": "Engaged partners"
+          },
+          "doc-left": {
+            "title": "Referenced documents"
+          },
+          "doc-right": {
+            "title": "Linked documents"
+          },
+          "doc-tip": "Click to open file preview",
+          "guest-left": {
+            "title": "Referenced artists"
+          },
+          "guest-right": {
+            "title": "Special guests"
+          },
+          "jury-left": {
+            "title": "Referenced people"
+          },
+          "jury-right": {
+            "title": "Panel members"
+          },
+          "award": {
+            "toggle": {
+              "yes": "applicable",
+              "no": "not applicable"
+            },
+            "select": {
+              "winner": "Select award-winning artist"
+            }
+          }
+        }
+      }
+    },
+    "public_site": {
+      "home": {},
+      "check": "enenen",
+      "expos": {
+        "tabs": {
+          "infos": {
+            "title": "General info"
+          },
+          "rules": {
+            "title": "Rules"
+          },
+          "partner": {
+            "title": "Partnership",
+            "labels": {
+              "web": "Web site(s)"
+            }
+          },
+          "jury-award": {
+            "title": "Jury/Awards",
+            "jury": "Jury composition",
+            "not-yet-jury": "Not yet nominated",
+            "president": "President",
+            "member": "Panel members",
+            "award": "Prize & awards",
+            "not-yet-award": "Not yet defined",
+            "not-awarded": "Not yet awarded"
+          },
+          "guest": {
+            "title": "Guest"
+          },
+          "catalog": {
+            "title": "Catalogue"
+          },
+          "photos": {
+            "title": "Photo gallery"
+          }
+        }
+      },
+      "faq": {
+        "cat": {
+          "folder_tt": "Click to expand category."
+        }
+      }
+    }
+  },
+  "errors": {}
+}

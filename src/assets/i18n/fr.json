@@ -1,0 +1,318 @@
+{
+  "common": {
+    "yes": "Oui",
+    "no": "Non",
+    "welcome": "Bienvenue",
+    "logout": "Déconnexion",
+    "select": "Choisir un élément de la liste ...",
+    "search": "Rechercher ...",
+    "save": "Sauvegarder",
+    "clearAll": "Effacer tous les champs",
+    "clear": "Effacer",
+    "close": "Fermer",
+    "delete": "Suppression de l'enregistrement.",
+    "delete-row": "Supprimer la ligne.",
+    "insert-row": "Insérer une ligne au-dessus.",
+    "confirm": {
+      "deletion": "Merci de confirmer la suppression définitive de l'enregistrement.",
+      "delete-row": "Merci de confirmer la suppression définitive de la ligne."
+    },
+    "undo": "Annuler les changements",
+    "unsaved": "Vous avez modifié des données sans les enregitrer. Continuer ?"
+  },
+  "comps": {
+    "header": {
+      "member-btn": {
+        "text": "Espace membre",
+        "tip1": "Connexion à votre compte",
+        "tip2": "Basculer vers espace membre"
+      },
+      "public-btn": { "text": "Site public", "tip": "Basculer vers le site public" },
+      "account-type": "Type de compte:",
+      "settings-ico": { "tip": "Paramètres du compte" },
+      "power-ico": {
+        "tip": "Déconnexion",
+        "dialog": "Vous êtes sur le point d'être déconnecté,<br/>merci de confirmer."
+      }
+    },
+    "login": {
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "email": "Identifiant (courriel)",
+      "role": "Rôle",
+      "pwd": "Mot de passe",
+      "pwd_check": "Vérification mot de passe",
+      "sign_in": "Connexion",
+      "register": "Créer le compte",
+      "pwd_forgot": "mot de passe oublié ?",
+      "no_account": "pas encore de compte ?",
+      "cgu_cgv": "J'ai lu et accepte les <a href=/public/legal?register=true target=blank tabindex=-1>termes et conditions</a>",
+      "execute": "Changer le mot de passe",
+      "token_expiry": {
+        "warning": "Votre jeton d'authentification va expirer à",
+        "error": "Votre jeton d'authentification a expiré. Merci de vous authentifier à nouveau."
+      }
+    },
+    "notfound": {
+      "error": "Erreur",
+      "text": "la page demandée est introuvable",
+      "home": "Page d'accueil"
+    },
+    "notYet": {
+      "text": "Cette page n'est pas encore développée."
+    },
+    "navbar": {
+      "dashboard": "Tableau de bord",
+      "users": "Comptes utilisateur",
+      "expos": "Expositions",
+      "archived": "Expos passées",
+      "oeuvres": "Mes oeuvres",
+      "oeuvres_org": "Oeuvres",
+      "bookings": "Mes inscriptions",
+      "partners": "Fiches partenaires",
+      "docs": "Documents",
+      "admin_settings": "Administration",
+      "privacy": "Confidentialité",
+      "legal": "Mentions légales",
+      "map": "Plan du site",
+      "contact": "Contact",
+      "home": "Accueil",
+      "rules": "Règlement",
+      "faq": "FAQ"
+    },
+    "toolbar": {
+      "booking_delete": "L'inscription ne peut pas être supprimée. Merci de contacter les organisateurs si besoin ...",
+      "booking_save": "L'inscription ne peut pas être modifiée. Merci de contacter les organisateurs si besoin ..."
+    },
+    "validation": {
+      "fields": {
+        "not_null": "<span>Champs obligatoire !</span>",
+        "pwd": "<span>Mot de passe non valide {'>>>'} 8 caractères minimum,</span><br/><span>1 caractère spécial, 1 majuscule, 1 chiffre !</span>",
+        "pwd_match": "<span>Les mots de passe saisis sont différents !</span>",
+        "email": "<span>Email non valide !</span>",
+        "checked": "<span>La case à cocher doit être cochée !</span>",
+        "unchecked": "<span>La case à cocher doit être décochée !</span>",
+        "int": "<span>Nombre entier non valide !</span>",
+        "date": "<span>Format <strong>jj/mm/aaaa</strong> non respecté !</span>",
+        "date_time": "<span>Format <strong>jj/mm/aaaa hh:mm</strong> non respecté !</span>"
+      }
+    },
+    "infos": {
+      "resume": "Description de vous-même, de vos activités ... afin de le publier sur notre site.",
+      "resume-partner": "Description des activités de l'entreprise ... afin de les publier sur le site.",
+      "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et rester informé de l'activité du festival.",
+      "hyperlinks": "Liens hypertexte vers vos sites ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
+      "hyperlinks-partner": "Liens hypertexte vers les sites web de l'entreprise ou réseaux sociaux. Cliquer sur la flêche pour ouvrir la page.",
+      "personal_data": "Faites vos choix pour la publication des données de l'entreprise sur notre site, sachant que le nom de l'entrepr.",
+      "short": "Nom court principalement utilisé dans l'espace membre et les menus du site public.",
+      "title": "Nom long et commercial utilisé sur le site public.",
+      "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ...",
+      "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. ",
+      "picture": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger une image.",
+      "file": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger un fichier.",
+      "booking": "Veuillez sélectionner l'exposition pour laquelle vous souhaitez vous inscrire.",
+      "closure": "Après la date de clôture, il ne sera pas possible de s'enregistrer ou de mofifier votre inscription",
+      "events": "Veuillez indiquer les évènements auxquels vous pensez participer.",
+      "deposit-collection": "Dates et horaires durant lesquels les oeuvres devront être déposées et retirées.",
+      "pricing": "Prix forfaitaire pour les oeuvres exposées en salle et prix par oeuvre diffusée sur écran. Votre participation financière est calculée sur la base de votre sélection.",
+      "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
+      "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changements, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
+      "admin": {
+        "orgExcluded": "Paramètre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
+        "domain_tech_media": "Paramètres admininistrateur pour la définition des domaines, techniques et supports.A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('oeuvres'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
+        "prize": "Paramètres admininistrateur pour la définition des prix. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('remise des 'prix'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
+        "faq": "Paramètres admininistrateur pour la définition des rubriques FAQ. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('FAQ'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables."
+      }
+    },
+    "file_upload": {
+      "delete": "Supprimer",
+      "upload": "Télécharger",
+      "download": "Télécharger",
+      "tooltip": "Sauvegarder l'enregistrement avant le téléchargement du fichier.",
+      "max_exceeded": "La taille du fichier est supérieure à la valeur max autorisée (",
+      "file_delete": "Merci de confirmer la suppression du fichier.",
+      "file_ext1": "Extension de fichier",
+      "file_ext2": "non supportée."
+    },
+    "master": {
+      "add_btn": "Ajouter un nouvel enregistrement"
+    },
+    "list_items": {
+      "actions_menu": {
+        "last_change": "Mis à jour",
+        "edit": "Modifier",
+        "user": {
+          "created": "Créé",
+          "validated": "Validé",
+          "deactivated": "Désactivé",
+          "validation": "Validation compte utilisateur",
+          "deactivation": "Désactivation compte utilisateur",
+          "delete": "Suppresion compte utilisateur",
+          "confirm": {
+            "validation": "Merci de confirmer la validation du compte.",
+            "deactivation": "Merci de confirmer la désactivation du compte.",
+            "deletion": "Merci de confirmer la suppression définitive du compte."
+          },
+          "status": {
+            "indeterminate": "statut ?",
+            "pending": "en attente",
+            "validated": "validé"
+          },
+          "role": {
+            "indeterminate": "role ?",
+            "artist": "artiste",
+            "org": "autres"
+          }
+        },
+        "expo": {
+          "created": "Créé",
+          "pending": "En attente",
+          "on-going": "En cours",
+          "archived": "Archivé",
+          "activation": "Activation de l'exposition.",
+          "archiving": "Archivage de l'exposition.",
+          "delete": "Suppression de l'exposition",
+          "confirm": {
+            "activation": "Merci de confirmer l'activation de l'exposition.",
+            "archiving": "Merci de confirmer l'archivage de l'exposition.",
+            "deletion": "Merci de confirmer la suppression définitive de l'exposition."
+          },
+          "status": {
+            "indeterminate": "statut ?",
+            "archived": "archivé",
+            "active": "en attente ou actif"
+          }
+        },
+        "booking": {
+          "created": "Créé",
+          "draft": "Brouillon",
+          "candidate": "Candidat",
+          "rejected": "Rejeté",
+          "accepted": "Accepté",
+          "confirm": {
+            "deletion": "Merci de confirmer la suppression définitive de l'inscription."
+          }
+        },
+        "faq": {
+          "created": "Créé",
+          "draft": "Brouillon",
+          "published": "Publié",
+          "drafting": "FAQ en mode draft.",
+          "publication": "FAQ en mode publication.",
+          "delete": "Suppression de la FAQ.",
+          "confirm": {
+            "drafting": "Merci de confirmer le passage en mode 'brouillon'.",
+            "publication": "Merci de confirmer le passage en mode 'publié'.",
+            "deletion": "Merci de confirmer la suppression définitive de la FAQ."
+          }
+        }
+      }
+    },
+    "form_details": {
+      "translate": "Traduire",
+      "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées.",
+      "booking": {
+        "register": "Merci de confirmer votre demande d'inscription.",
+        "cancel": "Merci de confirmer l'annulation de votre inscription."
+      },
+      "booking_oeuvre": {
+        "showRoom": "En salle",
+        "screen": "A l'écran",
+        "status": "Statut",
+        "tooltip": "Pour permettre la sélection, vous devez choisir au moins un moyen d'exposition (salle et/ou écran)."
+      },
+      "expos": {
+        "tabs": {
+          "master-file": "Fiche expo",
+          "guest": "Invité d'honneur",
+          "jury": "Jury",
+          "partner": "Partenariat",
+          "award": "Remise des prix",
+          "doc": "Documents",
+          "selection": "Sélection"
+        },
+        "tables": {
+          "partner-left": {
+            "title": "Partenaires référencés"
+          },
+          "partner-right": {
+            "title": "Partenaires engagés"
+          },
+          "doc-left": {
+            "title": "Documents référencés"
+          },
+          "doc-right": {
+            "title": "Documents associés"
+          },
+          "doc-tip": "Cliquer pour visualiser le fichier",
+          "guest-left": {
+            "title": "Artistes référencés"
+          },
+          "guest-right": {
+            "title": "Invités d'honneur"
+          },
+          "jury-left": {
+            "title": "Personnes référencées"
+          },
+          "jury-right": {
+            "title": "Membres du jury"
+          },
+          "award": {
+            "toggle": {
+              "yes": "applicable",
+              "no": "non applicable"
+            },
+            "select": {
+              "winner": "Sélectionner l'artiste primé(e)"
+            }
+          }
+        }
+      }
+    },
+    "public_site": {
+      "home": {},
+      "check": "frfrfr",
+      "expos": {
+        "tabs": {
+          "infos": {
+            "title": "Infos générales"
+          },
+          "rules": {
+            "title": "Règlement"
+          },
+          "partner": {
+            "title": "Partenariat",
+            "labels": {
+              "web": "Site(s) web"
+            }
+          },
+          "jury-award": {
+            "title": "Jury/Prix",
+            "jury": "Composition du jury",
+            "not-yet-jury": "Pas encore nommé",
+            "president": "Président",
+            "member": "Membres",
+            "award": "Attribution des prix",
+            "not-yet-award": "Non défini",
+            "not-awarded": "Non attribué"
+          },
+          "guest": {
+            "title": "Invités d'honneur"
+          },
+          "catalog": {
+            "title": "Catalogue"
+          },
+          "photos": {
+            "title": "Galerie photos"
+          }
+        }
+      },
+      "faq": {
+        "cat": {
+          "folder_tt": "Cliquer pour déployer la rubrique."
+        }
+      }
+    }
+  },
+  "errors": {}
+}

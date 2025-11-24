@@ -1,0 +1,72 @@
+[
+  {
+    "url": "/member/home",
+    "icon": "home",
+    "text": "dashboard",
+    "wrap": false,
+    "roles": [1, 3, 5, 6, 7]
+  },
+  {
+    "url": "/member/expos",
+    "icon": "photo_frame",
+    "text": "expos",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
+    "url": "/member/users",
+    "icon": "account_circle",
+    "text": "users",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
+    "url": "/member/oeuvres",
+    "icon": "palette",
+    "text": "oeuvres",
+    "wrap": false,
+    "roles": [1, 7]
+  },
+  {
+    "url": "/member/oeuvres_org",
+    "icon": "palette",
+    "text": "oeuvres_org",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
+    "url": "/member/bookings",
+    "icon": "event",
+    "text": "bookings",
+    "wrap": false,
+    "roles": [1, 7]
+  },
+  {
+    "url": "/member/partners",
+    "icon": "handshake",
+    "text": "partners",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
+    "url": "/member/docs",
+    "icon": "folder_open",
+    "text": "docs",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
+    "url": "/member/faq",
+    "icon": "help",
+    "text": "faq",
+    "wrap": false,
+    "roles": [5, 6, 7]
+  },
+  {
+    "url": "/member/admin",
+    "icon": "settings",
+    "text": "admin_settings",
+    "wrap": false,
+    "roles": [6, 7]
+  }
+]

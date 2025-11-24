@@ -1,0 +1,144 @@
+[
+  {
+    "name": "default",
+    "label": "comps.public_site.expos.tabs.infos.title",
+    "idStatus": [12, 13],
+    "order": [0, 0],
+    "sections": [
+      {
+        "legend_fr": "Exposition",
+        "legend_en": "Exhibition",
+        "icon": "photo_frame",
+        "fields": [
+          {
+            "name": "title_fr",
+            "width": "300px",
+            "icon": "photo_frame"
+          },
+          {
+            "name": "title_en",
+            "width": "300px",
+            "icon": "photo_frame"
+          },
+          {
+            "name": "desc_fr",
+            "width": "100%",
+            "icon": "photo_frame"
+          },
+          {
+            "name": "desc_en",
+            "width": "600px",
+            "icon": "photo_frame"
+          }
+        ]
+      },
+      {
+        "legend_fr": "Calendrier",
+        "legend_en": "Calendar",
+        "fields": [
+          {
+            "name": "closureDateTime",
+            "label_fr": "Clôture des inscriptions",
+            "label_en": "Deadline for registration",
+            "format": "date-time",
+            "icon": "schedule"
+          },
+          {
+            "name": "start_date",
+            "label_fr": "Ouverture de l'exposition",
+            "label_en": "Exhibition opening",
+            "format": "date-time",
+            "icon": "schedule"
+          },
+          {
+            "name": "vernissageDateTime",
+            "label_fr": "Vernissage",
+            "label_en": "Opening celebration",
+            "format": "date-time",
+            "icon": "schedule"
+          },
+          {
+            "name": "end_date",
+            "label_fr": "Fermeture de l'exposition",
+            "label_en": "Exhibition closing",
+            "format": "date-time",
+            "icon": "schedule"
+          }
+        ]
+      },
+      {
+        "type": "address",
+        "legend_fr": "Localisation",
+        "legend_en": "Location",
+        "fields": [
+          {
+            "name": "address",
+            "label_fr": "Adresse",
+            "label_en": "Address"
+          },
+          {
+            "name": "zipCode",
+            "label_fr": "Code postal",
+            "label_en": "Zip code"
+          },
+          {
+            "name": "city",
+            "label_fr": "Ville",
+            "label_en": "City"
+          },
+          {
+            "name": "country",
+            "label_fr": "Pays",
+            "label_en": "Country"
+          },
+          {
+            "name": "gpsLat",
+            "label_fr": "Latitude",
+            "label_en": "Latitude"
+          },
+          {
+            "name": "gpsLong",
+            "label_fr": "Longitude",
+            "label_en": "Longitude"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "rules",
+    "label": "comps.public_site.expos.tabs.rules.title",
+    "idStatus": [12, 13],
+    "order": [1, 6]
+  },
+  {
+    "name": "guest",
+    "label": "comps.public_site.expos.tabs.guest.title",
+    "idStatus": [12, 13],
+    "order": [2, 2]
+  },
+  {
+    "name": "partner",
+    "label": "comps.public_site.expos.tabs.partner.title",
+    "idStatus": [12, 13],
+    "order": [3, 3]
+  },
+  {
+    "name": "jury-award",
+    "label": "comps.public_site.expos.tabs.jury-award.title",
+    "idStatus": [12, 13],
+    "order": [4, 5]
+  },
+  {
+    "name": "catalog",
+    "label": "comps.public_site.expos.tabs.catalog.title",
+    "idStatus": [13],
+    "order": [-1, 0]
+  },
+  {
+    "name": "photos",
+    "label": "comps.public_site.expos.tabs.photos.title",
+    "idStatus": [13],
+    "order": [-1, 1]
+  }
+]
