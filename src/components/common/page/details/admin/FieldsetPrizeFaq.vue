@@ -149,7 +149,8 @@
           <q-td v-for="(field,i) in slotProps.cols" :key="field">
             <q-input 
               v-model="slotProps.row[field.name]"
-              type="text"
+              type="textarea"
+              :rows="2"
               :borderless="!slotProps.row.selected"
               dense
               :readonly="!slotProps.row.selected || i===0"

@@ -413,10 +413,6 @@
   div.input-container.completionDate .q-icon.date {
     top:23px;
   }
-  div.input-container.closureDateTime .q-icon.date,
-  div.input-container.closureDateTime .q-icon.time {
-    top:8px;
-  }
   .q-icon.time {
     top:30px;
     right:10px;

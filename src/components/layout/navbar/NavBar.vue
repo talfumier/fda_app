@@ -1,6 +1,7 @@
 <script setup>
   import { ref,watch,inject,computed, onMounted, onUnmounted } from 'vue'  
   import _ from 'lodash'
+  import { environment } from '@/config/environment.js'
   import Tooltip from '../../common/Tooltip.vue'
   import public_items from './nav-items-public.json'
   import member_items from "./nav-items-member.json"
@@ -19,7 +20,6 @@
       if(props.type==='member') await fetch(ctrl.signal)
     }
   )
-  
   const url=ref(null)
   const isRotated = ref(false)
   function rotateIcon() {
@@ -29,6 +29,7 @@
   const roleFilteredItems=computed(() => {
     if(props.type==='public') return public_items
     return _.filter(member_items,(item) => {
+      if(decoded.value.idRole===7 && item['dev-test']) return !environment.production
       return decoded.value.idRole?item.roles.includes(decoded.value.idRole):false
     })
   })

@@ -25,7 +25,8 @@
     "icon": "palette",
     "text": "oeuvres",
     "wrap": false,
-    "roles": [1, 7]
+    "roles": [1, 7],
+    "dev-test": true
   },
   {
     "url": "/member/oeuvres_org",
@@ -39,7 +40,8 @@
     "icon": "event",
     "text": "bookings",
     "wrap": false,
-    "roles": [1, 7]
+    "roles": [1, 7],
+    "dev-test": true
   },
   {
     "url": "/member/partners",

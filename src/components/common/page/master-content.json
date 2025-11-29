@@ -440,11 +440,20 @@
       {
         "name": "deadline",
         "type": "standard",
-        "legend_fr": "Clôture des inscriptions *",
-        "legend_en": "Deadline for registration *",
+        "legend_fr": "Inscriptions",
+        "legend_en": "Registrations",
         "fields": [
           {
+            "name": "openingDateTime",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "format": "date-time"
+          },
+          {
             "name": "closureDateTime",
+            "label_fr": "Clôture",
+            "label_en": "Closing",
             "field_type": "input",
             "format": "date-time"
           }

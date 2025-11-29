@@ -265,6 +265,41 @@
             "select": {
               "winner": "Select award-winning artist"
             }
+          },
+          "selection": {
+            "title": "Artists & art-works selection",
+            "synthesis": {
+              "booking_row_header": "Registrations",
+              "domain": "Domain"
+            },
+            "tt_oeuvre": "Display photo in a separate window",
+            "classic": "classic",
+            "modern": "modern",
+            "dim": {
+              "h": "H",
+              "w": "W",
+              "d": "D",
+              "wt": "Wt"
+            },
+            "show-price": {
+              "room": "show room",
+              "screen": "on screen",
+              "price": "price"
+            },
+            "actions": {
+              "accept": {
+                "tt": "Accept registration.",
+                "confirm": "Please confirm your acceptance of the registration, confirmation email will be sent out to the artist that will provide the recap of the registration; the amount to be paid and the details for art works deposit & collection."
+              },
+              "reject": {
+                "tt": "Reject registration.",
+                "confirm": "Please confirm your rejection of the registration, confirmation email will be sent out to the artist."
+              },
+              "payment": {
+                "tt": "Acknowledge payment received",
+                "confirm": "Please confirm receipt of the registration payment, confirmation email will be sent out to the artist."
+              }
+            }
           }
         }
       }

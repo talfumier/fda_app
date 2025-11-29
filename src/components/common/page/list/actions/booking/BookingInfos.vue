@@ -30,6 +30,12 @@
 </template>
 
 <style scoped>
+  div {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width:fit-content;
+  }
   .green {
     color:var(--green)
   }
