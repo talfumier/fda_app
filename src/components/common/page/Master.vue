@@ -109,7 +109,8 @@
   }
   async function handleTranslate(params){
     const idx=getIndex()  
-    const {from,to,rootName}=params  
+    const {from,to,rootName}=params 
+    console.log(params,state.value[0][idx]) 
     const translated = (
       await translate({
         text:state.value[0][idx][`${rootName}_${from}`],
