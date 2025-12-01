@@ -1640,13 +1640,13 @@
         "info": false,
         "fields": [
           {
-            "name": "question_en",
+            "name": "question_fr",
             "field_type": "textarea",
             "rows": 2,
             "max_length": 300
           },
           {
-            "name": "question_fr",
+            "name": "question_en",
             "field_type": "textarea",
             "rows": 2,
             "max_length": 300
@@ -1661,13 +1661,13 @@
         "info": false,
         "fields": [
           {
-            "name": "answer_en",
+            "name": "answer_fr",
             "field_type": "textarea",
             "rows": 2,
             "max_length": 300
           },
           {
-            "name": "answer_fr",
+            "name": "answer_en",
             "field_type": "textarea",
             "rows": 2,
             "max_length": 300
