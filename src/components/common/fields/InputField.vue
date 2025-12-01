@@ -41,7 +41,7 @@
     { immediate: false }
   )
   
-  const dirty=ref(false), type=ref(props.data_type), options=ref([])
+  const dirty=ref(false), type=computed(() => props.data_type), options=ref([])
   const fieldValid=ref({valid: true, msg: null})
   //OPTION GROUP OPTIONS PROCESSING 
   const group_options=computed(() => {

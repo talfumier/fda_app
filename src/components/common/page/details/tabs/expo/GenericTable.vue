@@ -1,5 +1,5 @@
 <script setup>
-  import {ref,useAttrs} from 'vue';
+  import {computed,useAttrs} from 'vue';
 
   const props=defineProps({
     title:{type:String},
@@ -11,7 +11,7 @@
   const attrs = useAttrs() // allow passing any extra QTable props from parent
   const emit=defineEmits(['selected'])
 
-  const rows=ref(props.data)
+  const rows = computed(() => props.data)
 
   function handleSelection(val,id){
     if(val){

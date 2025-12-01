@@ -189,6 +189,7 @@
           "candidate": "Candidate",
           "rejected": "Rejected",
           "accepted": "Accepted",
+          "payment": "Payment received.",
           "confirm": {
             "deletion": "Please confirm booking permanent deletion."
           }
@@ -298,6 +299,18 @@
               "payment": {
                 "tt": "Acknowledge payment received",
                 "confirm": "Please confirm receipt of the registration payment, confirmation email will be sent out to the artist."
+              }
+            },
+            "filters": {
+              "status1": {
+                "on": "accepted or rejected",
+                "indeterminate": "status ?",
+                "off": "candidate"
+              },
+              "status2": {
+                "on": "payment received",
+                "indeterminate": "payment ?",
+                "off": "payment not received"
               }
             }
           }

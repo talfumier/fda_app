@@ -189,6 +189,7 @@
           "candidate": "Candidat",
           "rejected": "Rejeté",
           "accepted": "Accepté",
+          "payment": "Paiement reçu.",
           "confirm": {
             "deletion": "Merci de confirmer la suppression définitive de l'inscription."
           }
@@ -298,6 +299,18 @@
               "payment": {
                 "tt": "Accuser réception du paiement",
                 "confirm": "Merci de confirmer la réception du paiement, l'artiste va recevoir un courriel de confirmation."
+              }
+            },
+            "filters": {
+              "status1": {
+                "on": "accepté ou rejeté",
+                "indeterminate": "statut ?",
+                "off": "candidat"
+              },
+              "status2": {
+                "on": "paiement reçu",
+                "indeterminate": "paiement ?",
+                "off": "paiement non reçu"
               }
             }
           }

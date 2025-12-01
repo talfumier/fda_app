@@ -6,17 +6,15 @@
 
   const props=defineProps({
     data:{type:Object}
-  })  
-
-  console.log(props.data)
+  }) 
+  
   const $q=useQuasar()
   const {t}=useI18n()
-  const emit=defineEmits(['expoAction'])
+  const emit=defineEmits(['selectionAction'])
 
   async function handleActions(cs){
     if (!(await confirm($q,t(`comps.form_details.expos.tables.selection.actions.${cs}.confirm`),'cancel'))) return
-    emit('expoAction',cs,props.data.idUser)
-
+    emit('selectionAction',cs)
   }
 
 </script>
@@ -30,6 +28,7 @@
       icon="done_all"
       color="green"
       size="1.4rem"
+      :disable="data.idStatus_b===10"
       @click="handleActions('accept')"
     >
       <Tooltip :tt_text="$t('comps.form_details.expos.tables.selection.actions.accept.tt')"></Tooltip>
@@ -39,6 +38,7 @@
       icon="euro_symbol"
       color="green"
       size="1.3rem"
+      :disable="data.idStatus_b===8 || data.idStatus_b===27 || data.idRole===2"
       @click="handleActions('payment')"
     >
       <Tooltip :tt_text="$t('comps.form_details.expos.tables.selection.actions.payment.tt')"></Tooltip>

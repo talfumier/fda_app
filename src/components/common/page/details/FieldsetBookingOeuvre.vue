@@ -8,8 +8,8 @@
     data:{type:Object}
   })
   const {locale,t}=useI18n()  
-  const bookingOeuvre=ref(props.data.bookingOeuvre)
-
+  computed(() => props.data.bookingOeuvre)
+  const bookingOeuvre=computed(() => props.data.bookingOeuvre)
   const columns=computed(() => {
     if(!props.data || !props.data.bookingOeuvre) return []
     let keys=[]

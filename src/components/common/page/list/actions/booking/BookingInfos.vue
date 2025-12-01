@@ -3,7 +3,7 @@
     data:{type:Array}
   })
   
-  const text={70:'created',71:'draft',8:'candidate',9:'rejected',10:'accepted'}
+  const text={70:'created',71:'draft',8:'candidate',9:'rejected',10:'accepted',27:'payment'}
   const status={...text,7:'draft'}
   function getTextIndex(statusID,idx){
     switch(statusID){
@@ -18,7 +18,7 @@
 
 <template>
   <div v-if="data.length>=1">
-    <p :class="['booking',data[0].idStatus===7 || data[0].idStatus===8?'warning':(data[0].idStatus===10?'green':'red')]" >
+    <p :class="['booking',data[0].idStatus===7 || data[0].idStatus===8?'warning':(data[0].idStatus===10 || data[0].idStatus===27?'green':'red')]" >
       <span>{{ $t(`comps.list_items.actions_menu.booking.${status[data[0].idStatus]}`)}}</span> 
     </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
