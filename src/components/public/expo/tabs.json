@@ -37,6 +37,13 @@
         "legend_en": "Calendar",
         "fields": [
           {
+            "name": "openingDateTime",
+            "label_fr": "Ouverture des inscriptions",
+            "label_en": "Opening for registration",
+            "format": "date-time",
+            "icon": "schedule"
+          },
+          {
             "name": "closureDateTime",
             "label_fr": "Clôture des inscriptions",
             "label_en": "Deadline for registration",
@@ -44,7 +51,7 @@
             "icon": "schedule"
           },
           {
-            "name": "start_date",
+            "name": "startDate",
             "label_fr": "Ouverture de l'exposition",
             "label_en": "Exhibition opening",
             "format": "date-time",
@@ -58,7 +65,7 @@
             "icon": "schedule"
           },
           {
-            "name": "end_date",
+            "name": "endDate",
             "label_fr": "Fermeture de l'exposition",
             "label_en": "Exhibition closing",
             "format": "date-time",
@@ -106,39 +113,39 @@
     ]
   },
   {
+    "name": "photos",
+    "label": "comps.public_site.expos.tabs.photos.title",
+    "idStatus": [12, 13],
+    "order": [1, 1]
+  },
+  {
     "name": "rules",
     "label": "comps.public_site.expos.tabs.rules.title",
     "idStatus": [12, 13],
-    "order": [1, 6]
+    "order": [2, 6]
   },
   {
     "name": "guest",
     "label": "comps.public_site.expos.tabs.guest.title",
     "idStatus": [12, 13],
-    "order": [2, 2]
+    "order": [3, 2]
   },
   {
     "name": "partner",
     "label": "comps.public_site.expos.tabs.partner.title",
     "idStatus": [12, 13],
-    "order": [3, 3]
+    "order": [4, 3]
   },
   {
     "name": "jury-award",
     "label": "comps.public_site.expos.tabs.jury-award.title",
     "idStatus": [12, 13],
-    "order": [4, 5]
+    "order": [5, 5]
   },
   {
     "name": "catalog",
     "label": "comps.public_site.expos.tabs.catalog.title",
     "idStatus": [13],
     "order": [-1, 0]
-  },
-  {
-    "name": "photos",
-    "label": "comps.public_site.expos.tabs.photos.title",
-    "idStatus": [13],
-    "order": [-1, 1]
   }
 ]

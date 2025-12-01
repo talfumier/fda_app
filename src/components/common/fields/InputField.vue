@@ -41,7 +41,7 @@
     { immediate: false }
   )
   
-  const dirty=ref(false), type=ref(props.data_type), options=ref([])
+  const dirty=ref(false), type=computed(() => props.data_type), options=ref([])
   const fieldValid=ref({valid: true, msg: null})
   //OPTION GROUP OPTIONS PROCESSING 
   const group_options=computed(() => {
@@ -412,10 +412,6 @@
   }
   div.input-container.completionDate .q-icon.date {
     top:23px;
-  }
-  div.input-container.closureDateTime .q-icon.date,
-  div.input-container.closureDateTime .q-icon.time {
-    top:8px;
   }
   .q-icon.time {
     top:30px;

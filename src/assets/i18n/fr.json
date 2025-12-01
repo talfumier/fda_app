@@ -189,6 +189,7 @@
           "candidate": "Candidat",
           "rejected": "Rejeté",
           "accepted": "Accepté",
+          "payment": "Paiement reçu.",
           "confirm": {
             "deletion": "Merci de confirmer la suppression définitive de l'inscription."
           }
@@ -264,6 +265,53 @@
             },
             "select": {
               "winner": "Sélectionner l'artiste primé(e)"
+            }
+          },
+          "selection": {
+            "title": "Sélection des artistes et des oeuvres",
+            "synthesis": {
+              "booking_row_header": "Inscriptions",
+              "domain": "Domaine"
+            },
+            "tt_oeuvre": "Afficher la photo dans une fenêtre",
+            "classic": "classique",
+            "modern": "contemporain",
+            "dim": {
+              "h": "H",
+              "w": "L",
+              "d": "Pr",
+              "wt": "P"
+            },
+            "show-price": {
+              "room": "en salle",
+              "screen": "à l'écran",
+              "price": "prix"
+            },
+            "actions": {
+              "accept": {
+                "tt": "Valider l'inscription.",
+                "confirm": "Merci de confirmer l'acceptation de l'inscription; l'artiste va recevoir un courriel de confirmation qui fera le récap de son inscription, du paiement à effectuer ainsi que les détails de dépôt/retrait des oeuvres."
+              },
+              "reject": {
+                "tt": "Rejeter l'inscription.",
+                "confirm": "Merci de confirmer le rejet de l'inscription, l'artiste va recevoir un courriel de confirmation."
+              },
+              "payment": {
+                "tt": "Accuser réception du paiement",
+                "confirm": "Merci de confirmer la réception du paiement, l'artiste va recevoir un courriel de confirmation."
+              }
+            },
+            "filters": {
+              "status1": {
+                "on": "accepté ou rejeté",
+                "indeterminate": "statut ?",
+                "off": "candidat"
+              },
+              "status2": {
+                "on": "paiement reçu",
+                "indeterminate": "paiement ?",
+                "off": "paiement non reçu"
+              }
             }
           }
         }
