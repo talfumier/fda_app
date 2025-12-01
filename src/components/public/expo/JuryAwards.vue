@@ -210,6 +210,8 @@
   .award p.prize {    
     grid-row: 1;
     grid-column: 1;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
   .award .q-img {      
     grid-row: 1;

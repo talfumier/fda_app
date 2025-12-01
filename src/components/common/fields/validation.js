@@ -58,14 +58,14 @@ export function validate(value, format, equal) {
         }
       break
     case 'date':
-      if (!isValidDate(value))
+      if (!value)
         result = {
           valid: false,
           msg: 'comps.validation.fields.date',
         }
       break
     case 'date-time':
-      if (!isValidDateTime(value))
+      if (!value)
         result = {
           valid: false,
           msg: 'comps.validation.fields.date-time',

@@ -1148,7 +1148,7 @@
     height:100%;   
     position:relative;
     overflow:hidden;
-  }  
+  } 
   .master-container.no-list {
     grid-template-columns: 80%;
   }

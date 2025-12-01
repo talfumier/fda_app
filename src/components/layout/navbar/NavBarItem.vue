@@ -1,6 +1,6 @@
 <script setup>
-  import { ref,onMounted,onUnmounted } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { ref,computed,onMounted,onUnmounted } from 'vue'
+  import { useRouter } from 'vue-router'
   import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Tooltip from '../../common/Tooltip.vue'
@@ -15,7 +15,7 @@
   const router=useRouter()
 
   const state=ref([])
-  const expand=ref(props.item.expand)
+  const expand=computed(() => props.item.expand)
   const inFlight=new Set()
 
   async function fetch(signal){

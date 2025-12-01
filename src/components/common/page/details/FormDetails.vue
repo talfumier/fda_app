@@ -15,7 +15,7 @@
   import FieldsetPrizeFaq from './admin/FieldsetPrizeFaq.vue'
   import ExpoMaster from './tabs/expo/ExpoMaster.vue'
   import ExpoAward from './tabs/expo/ExpoAward.vue'
-  import ExpoSelection from './tabs/expo/ExpoSelection.vue'
+  import ExpoSelection from './tabs/expo/selection/ExpoSelection.vue'
   import { getRandomInt } from '@/utilityFunctions.js'
   import { confirm } from '../../dialog/dialog.js'
 
@@ -299,7 +299,9 @@
       </ExpoMaster>
     </q-tab-panel >
     <q-tab-panel v-if="entity.model==='Expo'" name='selection'>
-      <ExpoSelection></ExpoSelection>
+      <ExpoSelection      
+        :idExpo="record.idExpo"
+      ></ExpoSelection>
     </q-tab-panel>
   </q-tab-panels>
 </template>
