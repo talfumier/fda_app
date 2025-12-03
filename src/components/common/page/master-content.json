@@ -1664,13 +1664,13 @@
             "name": "answer_fr",
             "field_type": "textarea",
             "rows": 2,
-            "max_length": 300
+            "max_length": 500
           },
           {
             "name": "answer_en",
             "field_type": "textarea",
             "rows": 2,
-            "max_length": 300
+            "max_length": 500
           }
         ]
       },
