@@ -358,7 +358,8 @@
       "faq": {
         "cat": {
           "folder_tt": "Click to expand category."
-        }
+        },
+        "viewer_tt": "Cliquer pour ouvrir le fichier dans une fenêtre séparée."
       }
     }
   },
