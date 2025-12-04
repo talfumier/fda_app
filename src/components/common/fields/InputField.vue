@@ -300,7 +300,7 @@
       :class="['text',disabled?'disabled':'',dirty?'dirty':'',fieldValid.valid?'valid':'not-valid']"
       :value="data?.toString().length>0?data:'-1'"
       :disabled="lock?value>0:disabled"
-      @change="handleChange(parseInt($event.target.value))"     
+      @change="handleChange($event.target.value)"     
     >
       <option key="-1" value="-1" disabled hidden>{{ t('common.select') }}</option>
       <option 
