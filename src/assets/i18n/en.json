@@ -78,7 +78,8 @@
       "contact": "Contact",
       "home": "Home",
       "rules": "Exhibition rules",
-      "faq": "FAQ"
+      "faq": "FAQ",
+      "faq-admin": "FAQ-admin"
     },
     "toolbar": {
       "booking_delete": "Registration cannot be deleted. Please contact the organsisation if needed ...",

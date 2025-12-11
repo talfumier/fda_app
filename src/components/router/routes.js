@@ -6,6 +6,7 @@ import content from '../common/page/master-content.json'
 import Home from '../public/home/Home.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
+import Faq from '../public/faq/Faq.vue'
 import NotFound from '../notFound/NotFound.vue'
 
 function getUserRole() {
@@ -58,14 +59,14 @@ const router = createRouter({
     {
       path: '/public/faq',
       name: 'public faq',
-      component: () => import('../public/faq/Faq.vue'),
+      component: Faq,
       meta: { roles: [-1] },
     },
     {
       path: '/member/faq',
       name: 'member faq',
-      component: () => import('../general/faq/Faq.vue'),
-      meta: { roles: [5, 6, 7] },
+      component: Faq,
+      meta: { roles: [1, 3, 5, 6, 7] },
     },
     {
       path: '/member/home',

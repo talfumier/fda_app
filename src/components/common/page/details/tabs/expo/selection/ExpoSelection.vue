@@ -514,7 +514,7 @@
   }
   div.synthesis.oeuvre {
     grid-template-rows: auto;
-    grid-template-columns: 80px repeat(3,auto);  
+    grid-template-columns: 90px repeat(3,auto);  
     border: 1px solid var(--blue);
   }
   div.row-header {
