@@ -970,15 +970,25 @@
         ]
       },
       {
-        "name": "closure",
+        "name": "deadline",
         "type": "standard",
-        "legend_fr": "Date limite d'inscription",
-        "legend_en": "Deadline for registration",
+        "legend_fr": "Inscriptions",
+        "legend_en": "Registrations",
         "info": true,
         "info_path": "comps.infos.closure",
         "fields": [
           {
+            "name": "openingDateTime",
+            "label_fr": "Ouverture",
+            "label_en": "Opening",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
             "name": "closureDateTime",
+            "label_fr": "Clôture",
+            "label_en": "Closing",
             "field_type": "input",
             "required": false,
             "readOnly": true
@@ -1584,8 +1594,8 @@
   {
     "entity": {
       "idx": 9,
-      "url": "/member/faq",
-      "name": "member faq",
+      "url": "/member/faq-admin",
+      "name": "member faq-admin",
       "roles": [5, 6, 7],
       "model": "Faq",
       "sql": "list_items_faq",

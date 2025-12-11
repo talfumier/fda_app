@@ -918,7 +918,7 @@
     const idx=getIndex()
     const out = { register: false, cancel: false }
     if(props.entity.model !== 'Booking') return out
-    if(state.value[0][idx].terms==0 || !selection.value || JSON.stringify(actualChanges.value[idx]).includes(true)) {
+    if(state.value[0][idx].terms==0 || selection.value.length===0 || JSON.stringify(actualChanges.value[idx]).includes(true)) {
       out.register = true
       out.cancel = true
       return out
