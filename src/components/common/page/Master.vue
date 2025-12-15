@@ -732,7 +732,6 @@
             if(body.bookingOeuvre) {
               cs=1
               bodyBookingOeuvre=body.bookingOeuvre}
-            console.log(body,bodyDTMPF)
             if(body.domain) {
               cs=2
               bodyDTMPF={domain:body.domain}}
