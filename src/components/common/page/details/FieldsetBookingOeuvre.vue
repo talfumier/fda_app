@@ -9,7 +9,7 @@
   })
   const {locale,t}=useI18n()  
   computed(() => props.data.bookingOeuvre)
-  const bookingOeuvre=computed(() => props.data.bookingOeuvre)
+  const bookingOeuvre=computed(() => props.data.bookingOeuvre)  
   const columns=computed(() => {
     if(!props.data || !props.data.bookingOeuvre) return []
     let keys=[]
@@ -64,6 +64,7 @@
     row-key="idBookingOeuvre"
     :visible-columns="visible"
     grid
+    :pagination="{ rowsPerPage: 0 }"
     hide-header
     hide-bottom
   >  
@@ -84,11 +85,6 @@
             >
               <span>{{ truncate(slotProps.row[`title_${locale}`],24) }}</span>              
             </q-checkbox>
-            <!-- <Tooltip 
-              v-if="!slotProps.row.showRoom && !slotProps.row.screen" 
-              :wrap="true"
-              :tt_text="$t('comps.form_details.booking_oeuvre.tooltip')">
-            </Tooltip>    -->
           </q-card-section>          
           <div v-if="slotProps.row.selected" class="status-container">
             <label>
