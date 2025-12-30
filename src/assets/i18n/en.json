@@ -291,7 +291,7 @@
             "actions": {
               "accept": {
                 "tt": "Accept registration.",
-                "confirm": "Please confirm your acceptance of the registration, confirmation email will be sent out to the artist that will provide the recap of the registration; the amount to be paid and the details for art works deposit & collection."
+                "confirm": "Please confirm your acceptance of the registration, confirmation email will be sent out to the artist that will provide the recap of the registration, the amount to be paid and the details for art works deposit & collection."
               },
               "reject": {
                 "tt": "Reject registration.",
