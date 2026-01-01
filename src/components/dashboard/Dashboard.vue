@@ -63,12 +63,11 @@
       :t="t"
     >
     </Registrations>
-    <!-- <OeuvresByExpoBar
+    <OeuvresByExpoBar
       :data="state[3]"
       :locale="locale"
-      :t="t"
     >
-    </OeuvresByExpoBar> -->
+    </OeuvresByExpoBar>
   </div>
   <NotYet v-if="decoded.idRole<5" :icon="false"></NotYet>
 </template>
@@ -77,7 +76,7 @@
   div.container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
   }
 

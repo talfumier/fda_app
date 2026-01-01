@@ -1,5 +1,6 @@
 <script setup>
   import { Pie } from "vue-chartjs"
+  import PieSingle from "./PieSingle.vue"
 
   const props = defineProps({
     title: { type: String, required: true },
@@ -28,9 +29,12 @@
             class="total-status" :color="p.badge.color" :label="p.badge.label"
           />
         </div>
-        <div class="pie-wrapper" :style="{ width: `${pieSize}px`, height: `${pieSize}px` }">
-          <Pie :data="p.chartData" :options="options" :width="pieSize" :height="pieSize" />
-        </div>
+        <PieSingle
+          :data="p.chartData"
+          :size="pieSize"
+          :options="options"
+        >
+        </PieSingle>
       </div>
       <!-- Legend -->
       <div v-if="legendItems.length" class="card legend-card">
@@ -78,11 +82,6 @@
   }
   .pie-card {
     margin:0 auto;
-  }
-  .pie-wrapper {
-    display:flex;
-    justify-content: center;
-    padding-bottom: 10px;
   }
   .pie-header {
     display:grid;
