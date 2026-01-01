@@ -1,5 +1,5 @@
 <script setup>
-  import {computed,useAttrs} from 'vue';
+  import {computed,useAttrs} from 'vue'
 
   const props=defineProps({
     title:{type:String},

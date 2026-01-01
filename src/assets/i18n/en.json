@@ -318,6 +318,21 @@
         }
       }
     },
+    "dashboard": {
+      "accounts": {
+        "title": "User accounts"
+      },
+      "oeuvres": {
+        "title": "Art works",
+        "classic": "classic",
+        "modern": "modern",
+        "classic_modern": "Classic vs modern",
+        "domain_title": "Categories"
+      },
+      "registrations": {
+        "title": "Registrations"
+      }
+    },
     "public_site": {
       "home": {},
       "check": "enenen",

@@ -318,6 +318,21 @@
         }
       }
     },
+    "dashboard": {
+      "accounts": {
+        "title": "Comptes utilisateur"
+      },
+      "oeuvres": {
+        "title": "Oeuvres",
+        "classic": "classique",
+        "modern": "moderne",
+        "classic_modern": "Classique vs moderne",
+        "domain_title": "Catégories"
+      },
+      "registrations": {
+        "title": "Inscriptions"
+      }
+    },
     "public_site": {
       "home": {},
       "check": "frfrfr",
