@@ -1,5 +1,4 @@
 <script setup>
-  import { Pie } from "vue-chartjs"
   import PieSingle from "./PieSingle.vue"
 
   const props = defineProps({
@@ -19,7 +18,7 @@
       <div class="card title-card">
         <h2 class="main-title">{{ title }}</h2>
         <q-badge v-if="total !== null" 
-          class="total" color="positive" :label="total" />
+          class="total" color="dark-blue" :label="total" />
       </div>
       <!-- Pies -->
       <div v-for="p in pies" :key="p.id" class="card pie-card">
@@ -37,7 +36,7 @@
         </PieSingle>
       </div>
       <!-- Legend -->
-      <div v-if="legendItems.length" class="card legend-card">
+      <div v-if="legendItems?.length" class="card legend-card">
         <div class="legend-items">
           <div v-for="it in legendItems" :key="it.id" class="legend-item">
             <span class="swatch" :style="{ backgroundColor: it.color }"></span>
@@ -132,6 +131,7 @@
     }
     .legend-card { 
       height: fit-content; 
+      padding:5px 0;
     }
     .legend-items { 
       justify-content: center; 

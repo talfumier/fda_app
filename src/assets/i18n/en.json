@@ -190,7 +190,7 @@
           "candidate": "Candidate",
           "rejected": "Rejected",
           "accepted": "Accepted",
-          "payment": "Payment received.",
+          "payment": "Payment received",
           "confirm": {
             "deletion": "Please confirm booking permanent deletion."
           }

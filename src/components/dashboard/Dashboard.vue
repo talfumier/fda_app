@@ -5,8 +5,7 @@
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Accounts from './elements/Accounts.vue'
   import Oeuvres from './elements/Oeuvres.vue'
-  import Registrations from './elements/Registrations.vue'
-  import OeuvresByExpoBar from './elements/OeuvresByExpoBar.vue'
+  import Pie2BarPie from './elements/registrations/Pie2BarPie.vue'
   import NotYet from '../general/NotYetDev.vue'
 
   defineProps({
@@ -57,17 +56,12 @@
       :t="t"
     >
     </Oeuvres>
-    <Registrations
-      :data="state[2]"
+    <Pie2BarPie
+      :data="[state[2],state[3]]"
       :locale="locale"
       :t="t"
     >
-    </Registrations>
-    <OeuvresByExpoBar
-      :data="state[3]"
-      :locale="locale"
-    >
-    </OeuvresByExpoBar>
+    </Pie2BarPie>
   </div>
   <NotYet v-if="decoded.idRole<5" :icon="false"></NotYet>
 </template>

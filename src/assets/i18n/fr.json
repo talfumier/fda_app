@@ -190,7 +190,7 @@
           "candidate": "Candidat",
           "rejected": "Rejeté",
           "accepted": "Accepté",
-          "payment": "Paiement reçu.",
+          "payment": "Paiement reçu",
           "confirm": {
             "deletion": "Merci de confirmer la suppression définitive de l'inscription."
           }

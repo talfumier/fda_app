@@ -13,7 +13,6 @@
   <div class="pie-wrapper" :style="{ width: `${size}px`, height: `${size}px` }">
     <Pie :data="data" :options="options" :width="size" :height="size" />
   </div>
-
 </template>
 
 <style scoped>
