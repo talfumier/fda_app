@@ -114,3 +114,35 @@ export function oeuvresShowRoomScreenData(rows, locale, t, barThickness) {
   })
   return expos
 }
+export function paymentData(PAYMENT_COLORS, rows, t, locale) {
+  const FALLBACK_COLOR = '#9CA3AF'
+  const expoTitle = (r) => r[`short_${locale}`] ?? `Expo ${r.idExpo}`
+  const labelDue = t('comps.dashboard.payments.payment_due')
+  const labelReceived = t('comps.dashboard.payments.payment_received')
+  const pies = rows
+    .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+    .map((r) => {
+      const payment_due = Number(r.payment_due)
+      const payment_received = Number(r.payment_received)
+      const expoTotal = payment_due + payment_received
+      return {
+        id: `expo_${r.idExpo}`,
+        title: expoTitle(r),
+        badge: { color: 'positive', label: `${expoTotal} €` },
+        chartData: {
+          labels: [labelDue, labelReceived],
+          datasets: [
+            {
+              data: [payment_due, payment_received],
+              backgroundColor: [
+                PAYMENT_COLORS.due ?? FALLBACK_COLOR,
+                PAYMENT_COLORS.received ?? FALLBACK_COLOR,
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+      }
+    })
+  return pies
+}

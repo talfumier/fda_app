@@ -12,7 +12,7 @@ export function usePieOptions() {
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      tooltip: { enabled: true, labelSpacing: 8, boxPadding: 4, caretPadding: 8 },
+      tooltip: { enabled: true, labelSpacing: 8, boxPadding: 4, caretPadding: 10 },
       datalabels: {
         color: '#fff',
         font: { weight: 'bold', size: 12 },

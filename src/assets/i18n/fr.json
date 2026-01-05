@@ -331,6 +331,11 @@
       },
       "registrations": {
         "title": "Inscriptions"
+      },
+      "payments": {
+        "title": "Contributions financières",
+        "payment_due": "A payer €",
+        "payment_received": "Reçu €"
       }
     },
     "public_site": {

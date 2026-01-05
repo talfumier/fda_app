@@ -127,7 +127,7 @@
 
   @media (min-width: 1000px) {
     .layout {
-      grid-template-columns: repeat(2, minmax(200px, 300px)) !important;
+      grid-template-columns: repeat(2, minmax(200px, 293px)) !important;
     }
     .legend-card { 
       height: fit-content; 

@@ -57,7 +57,7 @@
     >
     </Oeuvres>
     <Pie2BarPie
-      :data="[state[2],state[3]]"
+      :data="[state[2],state[3],state[4]]"
       :locale="locale"
       :t="t"
     >
