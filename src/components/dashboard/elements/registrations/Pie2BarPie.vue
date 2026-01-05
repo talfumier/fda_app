@@ -116,8 +116,8 @@
         <div class="expo-legend1">
           <div class="legend-items">
             <div v-for="it in legendItems1" :key="it.id" class="legend-item">
-              <span v-if="it.id!==27" class="swatch" :style="{ backgroundColor: it.color }"></span>
-              <span v-if="it.id!==27" class="label">{{ it.label }}</span>
+              <span v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0?true:it.id!==27" class="swatch" :style="{ backgroundColor: it.color }"></span>
+              <span v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0?true:it.id!==27" class="label">{{ it.label }}</span>
             </div>
           </div>
         </div>

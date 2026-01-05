@@ -13,7 +13,7 @@
 
 <template>
   <div class="outer">
-    <div class="layout" :style="{ gridTemplateColumns: `repeat(1, ${pieSize}px)` }">
+    <div class="layout">
       <!-- Title -->
       <div class="card title-card">
         <h2 class="main-title">{{ title }}</h2>
@@ -110,6 +110,7 @@
     flex-wrap: wrap;
     justify-content: left;
     gap: 10px;
+    padding:0 10px;
   }
   .legend-item { 
     display: inline-flex; 
@@ -128,13 +129,14 @@
   @media (min-width: 1000px) {
     .layout {
       grid-template-columns: repeat(2, minmax(200px, 293px)) !important;
-    }
+    }    
     .legend-card { 
       height: fit-content; 
       padding:5px 0;
     }
     .legend-items { 
       justify-content: center; 
+      padding:0;
     }
   }
 </style>
