@@ -41,7 +41,8 @@
   --beige: rgb(240, 234, 200);
   --beige-opaque8: rgb(240, 234, 200, .8);
   --beige-opaque9: rgb(240, 234, 200, .9);
-  --blue: #4472C4;
+  --blue: rgb(68, 114, 196);
+  --blue-opaque35: rgb(68, 114, 196,.35);
   --blue-navbar: #3c66af;
   --blue-navbar-opaque8: rgb(60, 102, 175,.8);
 }

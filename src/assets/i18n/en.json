@@ -190,7 +190,7 @@
           "candidate": "Candidate",
           "rejected": "Rejected",
           "accepted": "Accepted",
-          "payment": "Payment received.",
+          "payment": "Payment received",
           "confirm": {
             "deletion": "Please confirm booking permanent deletion."
           }
@@ -316,6 +316,26 @@
             }
           }
         }
+      }
+    },
+    "dashboard": {
+      "accounts": {
+        "title": "User accounts"
+      },
+      "oeuvres": {
+        "title": "Art works",
+        "classic": "classic",
+        "modern": "modern",
+        "classic_modern": "Classic vs modern",
+        "domain_title": "Categories"
+      },
+      "registrations": {
+        "title": "Registrations"
+      },
+      "payments": {
+        "title": "Financial contributions",
+        "payment_due": "Due €",
+        "payment_received": "Received €"
       }
     },
     "public_site": {
