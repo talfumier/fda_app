@@ -190,7 +190,7 @@
           "candidate": "Candidat",
           "rejected": "Rejeté",
           "accepted": "Accepté",
-          "payment": "Paiement reçu.",
+          "payment": "Paiement reçu",
           "confirm": {
             "deletion": "Merci de confirmer la suppression définitive de l'inscription."
           }
@@ -316,6 +316,26 @@
             }
           }
         }
+      }
+    },
+    "dashboard": {
+      "accounts": {
+        "title": "Comptes utilisateur"
+      },
+      "oeuvres": {
+        "title": "Oeuvres",
+        "classic": "classique",
+        "modern": "moderne",
+        "classic_modern": "Classique vs moderne",
+        "domain_title": "Catégories"
+      },
+      "registrations": {
+        "title": "Inscriptions"
+      },
+      "payments": {
+        "title": "Contributions financières",
+        "payment_due": "A payer €",
+        "payment_received": "Reçu €"
       }
     },
     "public_site": {
