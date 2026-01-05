@@ -99,7 +99,6 @@
         </div>  
         <div class="v-sep"></div>      
         <div v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0" class="chart-block pie2">
-          <div>{{ pies2[idx] }}</div>
           <div class="pie-header">
             <h3>{{ idRole>=5?$t('comps.dashboard.payments.title'):$t('comps.dashboard.payments.title').replaceAll('s','') }}</h3>
             <q-badge v-if="pies2[idx].badge"
