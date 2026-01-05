@@ -60,7 +60,7 @@
         <div class="expo-title-card">
           <h2 class="expo-main-title">{{ expo.title }}</h2>
         </div>
-        <div class="chart-block">
+        <div class="chart-block pie1">
           <div class="pie-header">
             <h3>{{ $t('comps.dashboard.registrations.title') }}</h3>
             <q-badge v-if="pies1[idx].badge"
@@ -75,7 +75,7 @@
           </PieSingle>
         </div>
         <div class="v-sep"></div>
-        <div class="chart-block">
+        <div class="chart-block bar1">
           <!-- “Vertical header” row (no top/bottom padding) -->
           <div class="chart-head">
             <div class="chart-subtitle">{{ $t("comps.form_details.booking_oeuvre.showRoom") }}</div>
@@ -86,7 +86,7 @@
           </div>
         </div>
         <div class="v-sep"></div>
-        <div class="chart-block">
+        <div class="chart-block bar2">
           <div class="chart-head">
             <div class="chart-subtitle">{{ $t("comps.form_details.booking_oeuvre.screen") }}</div>
             <q-badge color="dark-blue" :label="expo.totals.screen" />
@@ -96,7 +96,7 @@
           </div>
         </div>  
         <div class="v-sep"></div>      
-        <div v-if="pies2[idx]" class="chart-block">
+        <div v-if="pies2[idx]" class="chart-block pie2">
           <div class="pie-header">
             <h3>{{ $t('comps.dashboard.payments.title') }}</h3>
             <q-badge v-if="pies2[idx].badge"
@@ -163,20 +163,12 @@
   /* 1Pie|2Bar|1Pie charts area */
   .charts-container {
     display: grid;
-    grid-template-columns: 0.5fr 1px 1fr 1px 1fr;
-    grid-template-rows: auto;
+    grid-template-columns: 1fr;   
+    grid-template-rows: repeat(2,auto) 1px auto 1px auto ;
   }
-  .charts-container:has(.expo-legend2) {
-    grid-template-columns: 0.5fr 1px 1fr 1px 1fr 1px 0.5fr;
-    /* gap: 10px; */
-    /* padding: 10px; */
-    align-items: stretch;
-  }
-  .v-sep {
-    width: 1px;
-    justify-self: center;
-    background: var(--blue);
-    opacity: 0.35;
+  
+  .charts-container:not(:has(.expo-legend2)) .expo-legend1  {
+    border-bottom:none;
   }
   .chart-block {
     margin:auto;
@@ -204,7 +196,6 @@
     width:40px;
 
   }
-  /* Chart header row: remove upper/bottom padding */
   .chart-head {
     display: flex;
     align-items: center;
@@ -221,24 +212,24 @@
     font-style: italic;
   }
   .chart-wrap {
-    height: 360px;
+    height: 340px;
   }
-  /* Legend */
+  .v-sep{
+    border-top: 1px solid var(--blue-opaque35);
+    height:1px;
+  }
+  /* Legend */  
   .expo-legend1 {
-    grid-row:3;
-    grid-column: 1/span 5;
+    grid-row: 7;
     padding: 5px;
     border-top: 1px solid var(--blue);
-  }
-  .expo-legend1 .v-sep {    
-    grid-row:3;
-    grid-column: 6;
+    border-bottom: 1px solid var(--blue);
   }
   .expo-legend2 {
-    grid-row:3;
-    grid-column: 7/-1;    
+    grid-row: 10;
     padding: 5px;
     border-top: 1px solid var(--blue);
+    border-right: 1px solid var(--blue-opaque35);
   }
   .legend-items {
     display: flex;
@@ -259,16 +250,52 @@
   .label {
     font-size: 15px;
   }
-
-  @media (max-width: 900px) {
+  @media (min-width: 1200px){
+    .charts-container { 
+      grid-template-columns: 0.5fr 1px 1fr 1px 1fr;
+      grid-template-rows: auto;
+    }
+    div.chart-block.pie2 {
+      grid-column: 1/-1;
+    }
+    .expo-legend1 {
+      grid-row: 3;
+      grid-column: 1/-1;
+    }
+    .expo-legend2 {
+      grid-column: 1/-1;
+      grid-row: 6;
+    } 
+  }
+  @media (min-width: 1460px){    
     .charts-container {
-      grid-template-columns: 1fr;
+      grid-template-columns: 0.5fr 1px 1fr 1px 1fr 1px 0.5fr;
+    }
+    div.chart-block.pie2 {
+      grid-column: 7;
+    }
+    .expo-legend1 {
+      grid-column: 1/span 6;
+      grid-row: 3;
+      border-bottom:none;
+      border-right: 1px solid var(--blue-opaque35);
+    }
+    .expo-legend2 {
+      grid-row: 3;
+      grid-column: 7;
     }
     .v-sep {
-      display: none;
+      height:100%;
+      width:1px;
+      background-color: var(--blue-opaque35);
     }
-    .chart-wrap {
-      height: 340px;
+    .charts-container:not(:has(.expo-legend2)) {
+      grid-template-columns: 0.5fr 1px 1fr 1px 1fr;
     }
+    .charts-container:not(:has(.expo-legend2)) .expo-legend1 {
+      grid-column: 1/-1;
+    }
+
   }
+ 
 </style>

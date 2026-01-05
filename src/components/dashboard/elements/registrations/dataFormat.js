@@ -125,19 +125,20 @@ export function paymentData(PAYMENT_COLORS, rows, t, locale) {
       const payment_due = Number(r.payment_due)
       const payment_received = Number(r.payment_received)
       const expoTotal = payment_due + payment_received
+      const slices = [
+        { label: labelDue, value: payment_due, color: PAYMENT_COLORS.due },
+        { label: labelReceived, value: payment_received, color: PAYMENT_COLORS.received },
+      ].filter((s) => s.value > 0) // <-- hide zero values
       return {
         id: `expo_${r.idExpo}`,
         title: expoTitle(r),
         badge: { color: 'positive', label: `${expoTotal} €` },
         chartData: {
-          labels: [labelDue, labelReceived],
+          labels: slices.map((s) => s.label),
           datasets: [
             {
-              data: [payment_due, payment_received],
-              backgroundColor: [
-                PAYMENT_COLORS.due ?? FALLBACK_COLOR,
-                PAYMENT_COLORS.received ?? FALLBACK_COLOR,
-              ],
+              data: slices.map((s) => s.value),
+              backgroundColor: slices.map((s) => s.color ?? FALLBACK_COLOR),
               borderWidth: 1,
             },
           ],
