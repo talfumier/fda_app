@@ -114,7 +114,7 @@ export function oeuvresShowRoomScreenData(rows, locale, t, barThickness) {
   })
   return expos
 }
-export function paymentData(PAYMENT_COLORS, rows, t, locale) {
+export function paymentData(PAYMENT_COLORS, rows, t, locale, guest) {
   const FALLBACK_COLOR = '#9CA3AF'
   const expoTitle = (r) => r[`short_${locale}`] ?? `Expo ${r.idExpo}`
   const labelDue = t('comps.dashboard.payments.payment_due')
@@ -122,9 +122,12 @@ export function paymentData(PAYMENT_COLORS, rows, t, locale) {
   const pies = rows
     .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
     .map((r) => {
-      const payment_due = Number(r.payment_due)
-      const payment_received = Number(r.payment_received)
-      const expoTotal = payment_due + payment_received
+      const idx = guest.findIndex((item) => {
+        return (r.idExpo = item.idExpo)
+      })
+      const payment_due = idx === -1 ? Number(r.payment_due) : 0
+      const payment_received = idx === -1 ? Number(r.payment_received) : 0
+      const expoTotal = idx === -1 ? payment_due + payment_received : 0
       const slices = [
         { label: labelDue, value: payment_due, color: PAYMENT_COLORS.due },
         { label: labelReceived, value: payment_received, color: PAYMENT_COLORS.received },

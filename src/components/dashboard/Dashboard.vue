@@ -6,11 +6,7 @@
   import Accounts from './elements/Accounts.vue'
   import Oeuvres from './elements/Oeuvres.vue'
   import Pie2BarPie from './elements/registrations/Pie2BarPie.vue'
-  import NotYet from '../general/NotYetDev.vue'
 
-  defineProps({
-  })
-  
   const {token,decoded}=inject('userCookie')
   const {t,locale}=useI18n()
   const inFlight=new Set()
@@ -20,7 +16,9 @@
     const {data:res}=await getEntitiesBySql(
       'dashboard',
       token.value,
-      signal
+      signal,
+      ':idUser',
+      decoded.value.idRole>=5?-1:decoded.value.idUser
     )
     if(res.statusCode===200) return res.data
     return []
@@ -44,8 +42,8 @@
 </script>
 
 <template>
-  <div v-if="state.length>0 && decoded.idRole>=5" class="container">
-    <Accounts 
+  <div v-if="state.length>0" class="container">
+    <Accounts v-if="decoded.idRole>=5"
         :data="state[0]"
         :locale="locale"
     >
@@ -60,10 +58,11 @@
       :data="[state[2],state[3],state[4]]"
       :locale="locale"
       :t="t"
+      :idRole="decoded.idRole"
+      :guest="state[5]"
     >
     </Pie2BarPie>
   </div>
-  <NotYet v-if="decoded.idRole<5" :icon="false"></NotYet>
 </template>
 
 <style scoped>

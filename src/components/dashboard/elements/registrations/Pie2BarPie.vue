@@ -10,6 +10,8 @@
     data: { type: Array, default: () => [] },
     locale: { type: String, default: "en" },
     t:{ type: Function},
+    idRole:{type: Number},
+    guest:{type: Array},
     barThickness: { type: Number, default: 30 },
   })
   const { options:pieOptions } = usePieOptions()
@@ -42,7 +44,7 @@
     received: "#22C55E",
   }
   const pies2=computed(() => {
-    return paymentData(PAYMENT_COLORS,props.data[2], props.t, props.locale)
+    return paymentData(PAYMENT_COLORS,props.data[2], props.t, props.locale,props.guest)
   })
   const legendItems2 = computed(() => [
     { id: 'due',  label:props.t("comps.dashboard.payments.payment_due"),color: PAYMENT_COLORS.due},
@@ -62,7 +64,7 @@
         </div>
         <div class="chart-block pie1">
           <div class="pie-header">
-            <h3>{{ $t('comps.dashboard.registrations.title') }}</h3>
+            <h3>{{ idRole>=5?$t('comps.dashboard.registrations.title'):$t('comps.dashboard.registrations.title').replaceAll('s','') }}</h3>
             <q-badge v-if="pies1[idx].badge"
               class="total-status" color="dark-blue" :label="pies1[idx].badge.label"
             />
@@ -96,9 +98,10 @@
           </div>
         </div>  
         <div class="v-sep"></div>      
-        <div v-if="pies2[idx]" class="chart-block pie2">
+        <div v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0" class="chart-block pie2">
+          <div>{{ pies2[idx] }}</div>
           <div class="pie-header">
-            <h3>{{ $t('comps.dashboard.payments.title') }}</h3>
+            <h3>{{ idRole>=5?$t('comps.dashboard.payments.title'):$t('comps.dashboard.payments.title').replaceAll('s','') }}</h3>
             <q-badge v-if="pies2[idx].badge"
               class="total-status-eur" color="dark-blue" :label="pies2[idx].badge.label"
             />
@@ -114,13 +117,13 @@
         <div class="expo-legend1">
           <div class="legend-items">
             <div v-for="it in legendItems1" :key="it.id" class="legend-item">
-              <span class="swatch" :style="{ backgroundColor: it.color }"></span>
-              <span class="label">{{ it.label }}</span>
+              <span v-if="it.id!==27" class="swatch" :style="{ backgroundColor: it.color }"></span>
+              <span v-if="it.id!==27" class="label">{{ it.label }}</span>
             </div>
           </div>
         </div>
         <div v-if="pies2[idx]" class="v-sep"></div>  
-        <div v-if="pies2[idx]" class="expo-legend2">
+        <div v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0" class="expo-legend2">
           <div class="legend-items">
             <div v-for="it in legendItems2" :key="it.id" class="legend-item">
               <span class="swatch" :style="{ backgroundColor: it.color }"></span>

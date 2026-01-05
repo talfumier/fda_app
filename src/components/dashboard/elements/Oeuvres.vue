@@ -60,16 +60,32 @@
       color: domainColorMap.value[d.idDomain],
     })),
   ])
-  const typeChartData = computed(() => ({
-    labels: [typeLabel("classic"), typeLabel("modern")],
+
+  const typeChartData = computed(() => {
+  const items = [
+    {
+      label: typeLabel("classic"),
+      value: Number(totalsByType.value.classic),
+      color: TYPE_COLORS.classic,
+    },
+    {
+      label: typeLabel("modern"),
+      value: Number(totalsByType.value.modern),
+      color: TYPE_COLORS.modern,
+    },
+  ].filter(i => i.value > 0) // 👈 remove null / 0
+  return {
+    labels: items.map(i => i.label),
     datasets: [
       {
-        data: [totalsByType.value.classic, totalsByType.value.modern],
-        backgroundColor: [TYPE_COLORS.classic,TYPE_COLORS.modern],
+        data: items.map(i => i.value),
+        backgroundColor: items.map(i => i.color),
         borderWidth: 1,
       },
     ],
-  }))
+  }
+})
+
   const domainChartData = computed(() => ({
     labels: totalsByDomain.value.map((d) => d.label),
     datasets: [
