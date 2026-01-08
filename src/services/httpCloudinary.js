@@ -22,3 +22,10 @@ export function deleteInCloud(publicId, token, signal, option = null) {
     },
   )
 }
+export function downloadCatalogueZip(stored_proc, token, signal, params, paramsValues) {
+  return http.get(`${api}/files/cloudinary-download-zip/${stored_proc}/${params}/${paramsValues}`, {
+    headers: { 'x-auth-token': token },
+    signal,
+    responseType: 'blob',
+  })
+}

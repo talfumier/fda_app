@@ -69,6 +69,12 @@ const router = createRouter({
       meta: { roles: [1, 3, 5, 6, 7] },
     },
     {
+      path: '/member/export',
+      name: 'member export',
+      component: () => import('../export/DataExport.vue'), //lazy loading
+      meta: { roles: [5, 6, 7] },
+    },
+    {
       path: '/member/home',
       name: 'member home',
       component: Dashboard,

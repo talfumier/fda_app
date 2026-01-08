@@ -73,7 +73,7 @@
 <style scoped>
   .modal {
     position:fixed;    
-    z-index: 1000;
+    z-index: 10000;
     border:1px solid lightgray;
   }
   div.q-card__section {
