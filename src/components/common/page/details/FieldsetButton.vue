@@ -3,7 +3,8 @@
 
   const props = defineProps({
     buttons: {type: Array},
-    disabled:{type:Object}
+    disabled:{type:Object},
+    pulse:{type:Boolean,default:false}
   })
 
   const { locale } = useI18n()
@@ -15,7 +16,7 @@
   <q-btn
     v-for="(button, idx) in buttons"
     :key="button.name"
-    :class="['button'] "
+    :class="['button',pulse?'pulse':''] "
     color="primary"
     rounded standout pulse
     no-wrap
@@ -31,5 +32,11 @@
     max-height: 3.6rem;
     margin:0 20px;
   }
+  @keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,0,0,.0) }
+  40%  { box-shadow: 0 0 0 8px rgba(25,118,210,.25)  } /* adjust color */
+  100% { box-shadow: 0 0 0 0 rgba(0,0,0,.0) }
+  }
+  .pulse { animation: pulse 1.2s ease-out infinite }
 
 </style>

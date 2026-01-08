@@ -25,7 +25,8 @@
       props.item.sql_param,
       props.item.param_value
     )
-    if(res.statusCode===200) return res.data
+    if(!res || res.statusCode!==200) return
+    return res.data
   }
   onMounted(async () => {  
     if(!props.item.sql) return

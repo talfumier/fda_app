@@ -1,5 +1,5 @@
 <script setup>
-  import {inject,ref,computed,onMounted,onUnmounted} from 'vue'
+  import {inject,ref,computed,onMounted,onBeforeUnmount, onUnmounted} from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import _ from 'lodash'
@@ -104,13 +104,51 @@
       roleOptions.push({value:item.idRole,text:{fr:item.role_fr,en:item.role_en}})
     })
   })
+  console.log(window.innerWidth,window.innerHeight)
   onUnmounted(() => { ctrl?.abort() })    // clean-up code after component has unmounted
+  //Drag and drop
+  const position = ref({ x: window.innerWidth/2, y: window.innerHeight>760?150:10 })
+  const isDragging = ref(false)
+  let start = { x: 0, y: 0 }
+
+  function startDrag(e) {
+    isDragging.value = true
+    start = {
+      x: e.clientX - position.value.x,
+      y: e.clientY - position.value.y
+    }
+    document.addEventListener('mousemove', onDrag)
+    document.addEventListener('mouseup', stopDrag)
+  }
+  function onDrag(e) {
+    if (!isDragging.value) return
+    position.value = {
+      x: e.clientX - start.x,
+      y: e.clientY - start.y
+    }
+  }
+  function stopDrag() {
+    isDragging.value = false
+    document.removeEventListener('mousemove', onDrag)
+    document.removeEventListener('mouseup', stopDrag)
+  }
+  onBeforeUnmount(stopDrag)
 </script>
 
 <template>
-  <div :class="['modal']" >
+  <div 
+    :class="['modal']" 
+    :style="{
+      top: position.y + 'px',
+      left: position.x + 'px'
+    }" 
+  >
     <div :class="['modal-content','login']">
-      <div class="icon-close">
+      <div 
+        class="icon-close" 
+        @mousedown.stop.prevent="startDrag"
+        :style="{ cursor: isDragging ? 'grabbing' : 'grab'}"
+      >
         <q-icon name="cancel" size="3.5rem" color='blue-grey-9' @click="handleClose" tabindex="-1">
         </q-icon>
       </div>
@@ -163,7 +201,7 @@
 <style scoped>
   div.modal {
     position:fixed;
-    top:25%;
+    top:20%;
     left:50%;
     z-index:2000;
   }
@@ -174,7 +212,7 @@
     position:relative;
     background-color: #fefefe;
     margin: auto;
-    padding: 20px;
+    padding: 0 20px 20px;
     border: 1px solid #888;
     border-radius: 10px;
     min-width:350px;
@@ -182,9 +220,14 @@
   div.icon-close {
     display:flex;
     justify-content: right;
+    background-color: #fefefe;
+    height:30px;
+    border-radius: 10px;
+    padding-top:20px;
+    margin:0 -20px;
   }
   div.icon-close .q-icon {
-    margin:-15px;
+    margin:-15px 10px;
     cursor: pointer;
     z-index: 5000;
   }
@@ -196,7 +239,7 @@
   }
   .q-btn.disabled {
     cursor:not-allowed;
-  }
+  }  
   div.bottom-actions {
     display:flex;
     flex-direction: column;

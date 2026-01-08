@@ -71,6 +71,7 @@
       "bookings": "Mes inscriptions",
       "partners": "Fiches partenaires",
       "docs": "Documents",
+      "data_export": "Export",
       "admin_settings": "Administration",
       "privacy": "Confidentialité",
       "legal": "Mentions légales",
@@ -118,6 +119,10 @@
       "pricing": "Prix forfaitaire pour les oeuvres exposées en salle et prix par oeuvre diffusée sur écran. Votre participation financière est calculée sur la base de votre sélection.",
       "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
       "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changements, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
+      "export": {
+        "title": "Export des données artiste",
+        "info": "Export des données artistes dans un fichier .zip, incluant les photos des oeuvres pour une exposition donnée en fonction des statuts d'inscription et des média utilisés (oeuvres exposées en salle ou diffusées sur écran)."
+      },
       "admin": {
         "orgExcluded": "Paramètre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
         "domain_tech_media": "Paramètres admininistrateur pour la définition des domaines, techniques et supports.A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('oeuvres'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
@@ -337,6 +342,13 @@
         "payment_due": "A payer €",
         "payment_received": "Reçu €"
       }
+    },
+    "export": {
+      "select_expo": "Sélectionner l'expo",
+      "select_status": "Cocher le(s) statut(s) d'inscription",
+      "select_mode": "Cocher le(s) support(s)",
+      "success_catalogue": "Données artistes exportées avec succès.",
+      "error_catalogue": "Echec de l'export des données artistes. Essayez à nouveau."
     },
     "public_site": {
       "home": {},
