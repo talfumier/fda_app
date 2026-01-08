@@ -71,6 +71,7 @@
       "bookings": "My bookings",
       "partners": "Partner forms",
       "docs": "Documents",
+      "data_export": "Export",
       "admin_settings": "Administration",
       "privacy": "Privacy policy",
       "legal": "Legal notice",
@@ -118,6 +119,10 @@
       "pricing": "Fixed price for works displayed in the show room and price per work on screen. Your financial contribution is based on your selection.",
       "selection": "Please make the selection of your works that you wish to exhibit.",
       "terms": "Please accept the exhibition terms & conditions, save the changes and then click on REGISTER when you are ready.",
+      "export": {
+        "title": "Artist data export",
+        "info": "Artist data export in a .zip file, including art works pictures for a given exhibition; export criteria include registration status as well as media supporting artworks exhibition (show room or on screen)."
+      },
       "admin": {
         "orgExcluded": "Admin setting defining the list of roles available at account creation.",
         "domain_tech_media": "Admin settings for definition of domain, technique and media. To be carefully managed, since any change will immediately affect ALL existing records ('art works'). The 'order' field defines the sort order in which items are listed in drop down boxes or tables.",
@@ -337,6 +342,13 @@
         "payment_due": "Due €",
         "payment_received": "Received €"
       }
+    },
+    "export": {
+      "select_expo": "Select exhibition",
+      "select_status": "Tick registration status",
+      "select_mode": "Tick exhibition media",
+      "success_catalogue": "Artists data exported successfully!",
+      "error_catalogue": "Failed to export artists data. Please try again."
     },
     "public_site": {
       "home": {},

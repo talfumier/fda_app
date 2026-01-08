@@ -4,6 +4,11 @@ import { toastError, toastSuccess } from '@/composable/toast.js'
 
 axios.interceptors.response.use(
   async (res) => {
+    // CHECK IF RESPONSE IS BLOB (binary data like zip files)
+    if (res.config.responseType === 'blob') {
+      // For blob responses, just return the response as-is
+      return Promise.resolve(res)
+    }
     const { statusCode, general, message, msgType, display } = res.data
     let text = ''
     //catching successful response from API (200 status) returning BadRequest, Unauthorized... custom expected 'errors'
