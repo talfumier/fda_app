@@ -112,7 +112,7 @@
         const item=getItem(row)
         groupsById[id].bookingOeuvres.push(item)        
       })
-      state.value[0]=Object.values(groupsById)
+      state.value[0]=_.orderBy(Object.values(groupsById), ['artist'], ['asc']);
       updateTotals() 
           //Initialize synthesis
       let obj={0:0,8:0,9:0,10:0,27:0}  //0:>>> total, other properties are booking idStatus

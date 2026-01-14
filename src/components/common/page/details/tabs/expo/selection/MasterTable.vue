@@ -35,6 +35,8 @@
         :visible-columns="visible"
         :row-key="rowKey"
         virtual-scroll      
+        :rows-per-page-options="[0]"
+        :pagination="{ rowsPerPage: 0 }"
         dense
         v-bind="attrs"
       >

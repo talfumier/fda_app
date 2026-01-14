@@ -46,9 +46,11 @@
             break
           case 'showRoom':
             if(val===0 && bo.screen===0 && bo.selected===1) bo.selected=0
+            if(val===1 && bo.selected===0) bo.selected=1
             break
           case 'screen':
             if(val===0 && bo.showRoom===0 && bo.selected===1) bo.selected=0
+            if(val===1 && bo.selected===0) bo.selected=1
         }
       }
     })
