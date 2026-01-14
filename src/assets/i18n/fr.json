@@ -317,6 +317,16 @@
                 "on": "paiement reçu",
                 "indeterminate": "paiement ?",
                 "off": "paiement non reçu"
+              },
+              "synthesis": {
+                "tt": {
+                  "show": "Afficher le tableau de synthèse ",
+                  "hide": "Cacher le tableau de synthèse"
+                },
+                "text": {
+                  "show": "Afficher",
+                  "hide": "Cacher"
+                }
               }
             }
           }

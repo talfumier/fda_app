@@ -262,6 +262,11 @@
         return t(`comps.form_details.expos.tables.selection.filters.${toggle}.indeterminate`)
     }
   }
+  
+  const show_hide=ref(true)
+  function handleButtonClick(){
+    show_hide.value=!show_hide.value
+  }
 
 </script>
 
@@ -281,7 +286,7 @@
       rowKey="idBooking"
     >
       <template v-slot:top>
-        <div class="header">
+        <div :class="['header',show_hide?'':'hidden']">
           <div class="synthesis booking">
             <div class="col-header booking-title">{{ $t('comps.form_details.expos.tables.selection.synthesis.booking_row_header') }}</div>
             <div class="col-header">Total</div>
@@ -350,6 +355,16 @@
             />  
           </div>        
           <q-badge class='nbr-filtered':label="`${filtered.length}/${state[0].length}`"></q-badge>
+          <q-btn 
+            class='synthesis-button'
+            icon="north"
+            icon-right="north"
+            color="primary"
+            @click="handleButtonClick"
+          >
+            &nbsp;{{ $t(`comps.form_details.expos.tables.selection.filters.synthesis.text.${show_hide?'hide':'show'}`)}}&nbsp;
+            <Tooltip :tt_text="$t(`comps.form_details.expos.tables.selection.filters.synthesis.tt.${show_hide?'hide':'show'}`)"></Tooltip>
+          </q-btn>
         </div> 
       </template> 
       <template #artist="slotProps">
@@ -400,7 +415,7 @@
             </p>
           </div>
         </q-td>
-        <q-td :class="[slotProps.rowIndex===0?'first':'']">
+        <q-td :class="['bo-container',slotProps.rowIndex===0?'first':'']">
           <div v-for="(bo,idx) in slotProps.row.bookingOeuvres" 
             :key="bo.idBookingOeuvre"
             class="booking-oeuvre"
@@ -477,6 +492,9 @@
     align-items: center;
     margin:5px auto;
     width:100%;
+  }
+  div.header.hidden {
+    display:none;
   }
   div.synthesis {
     display:grid;
@@ -580,7 +598,19 @@
     padding:10px 15px;
     margin-left: 25px;
   }
+  .q-btn.synthesis-button {
+    font-size: 1.2rem;;
+    padding: 0;
+    margin-left:10%;
+
+  }
   /* TABLE BODY */
+  .q-td.bo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 5px;
+  }
   .q-td.first {
     border-top: none;
   }
