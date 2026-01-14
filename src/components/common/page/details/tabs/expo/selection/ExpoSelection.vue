@@ -605,12 +605,12 @@
 
   }
   /* TABLE BODY */
-  .q-td.bo-container {
+  /* .q-td.bo-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 5px;
-  }
+  } */
   .q-td.first {
     border-top: none;
   }
