@@ -317,6 +317,16 @@
                 "on": "payment received",
                 "indeterminate": "payment ?",
                 "off": "payment not received"
+              },
+              "synthesis": {
+                "tt": {
+                  "show": "Display registrations synthesis table",
+                  "hide": "Hide registrations synthesis table"
+                },
+                "text": {
+                  "show": "Display",
+                  "hide": "Hide"
+                }
               }
             }
           }
