@@ -17,6 +17,7 @@
   import { translate } from '@/services/httpGoogleServices.js'
   import { newController,doneController,cancelAllInFlight,getRandomInt, getFileExtension,bodyCleanUp } from '@/utilityFunctions.js'
   import { orgExcluded, setGlobals, statusText } from '@/globals/globals.js'
+import { clone } from 'lodash'
 
   const props=defineProps({
     entity:{type:Object},
@@ -89,7 +90,7 @@
             if(option.data[key] && key!=='idStatus' && !key.includes('status_'))  //do not change booking idStatus data to expo idStatus data
               obj[key]=option.data[key]
           })
-          state.value[0][idx]={...state.value[0][idx],...obj,idExpo:val} 
+          state.value[0][idx]={...state.value[0][idx],...obj,idExpo:parseInt(val)} 
         }
         break
       case 'Faq':
@@ -110,7 +111,6 @@
   async function handleTranslate(params){
     const idx=getIndex()  
     const {from,to,rootName}=params 
-    console.log(params,state.value[0][idx]) 
     const translated = (
       await translate({
         text:state.value[0][idx][`${rootName}_${from}`],
@@ -787,7 +787,7 @@
                 newRecId=0
               }
             }
-            if(cs>0) {  //bodyBookingOeuvre || bodyDTMPF             
+            if(cs>0) {  //bodyBookingOeuvre || bodyDTMPF      
               const ctrl2=newController(inFlight)
               try {
                 switch(cs){
@@ -887,7 +887,7 @@
               try {
                 const{data:res}=await postEntity('StatusTracking',{idStatus:newStatus.bookingOeuvre,idBookingOeuvre:bo[0].idBookingOeuvre},token.value,ctrl.signal)  
                 if(res.statusCode===200) {
-                  state.value[0][idx].bookingOeuvre[bo[i]]={...state.value[0][idx].bookingOeuvre[bo[i]],...statusText[newStatus.bookingOeuvre]}
+                  state.value[0][idx].bookingOeuvre[bo[1]]={...state.value[0][idx].bookingOeuvre[bo[1]],...statusText[newStatus.bookingOeuvre]}
                 }                     
               } catch (error) {
                   console.error(error)     
@@ -967,7 +967,7 @@
       price+= item[0].screen*state.value[0][idx].priceScreen
     }) 
     try {
-      handleChange('price',true,price)
+      if(price!==state.value[0][idx].price) handleChange('price',true,price)
     } catch (error) {  //no selection case  
     }    
   }, { deep: true, immediate: true })

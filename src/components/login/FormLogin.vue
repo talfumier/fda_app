@@ -104,7 +104,6 @@
       roleOptions.push({value:item.idRole,text:{fr:item.role_fr,en:item.role_en}})
     })
   })
-  console.log(window.innerWidth,window.innerHeight)
   onUnmounted(() => { ctrl?.abort() })    // clean-up code after component has unmounted
   //Drag and drop
   const position = ref({ x: window.innerWidth/2, y: window.innerHeight>760?150:10 })

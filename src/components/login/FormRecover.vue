@@ -1,15 +1,12 @@
 <script setup>
   import {reactive,computed} from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute,useRouter } from 'vue-router'
   import items from "./items.json"
   import {zipToObject} from "../../utilityFunctions.js"
   import InputField from '../common/fields/InputField.vue'
   import { resetPassword } from '@/services/httpUsers.js'
 
-  const {id,random}=defineProps({
-    id:{type:String,required:true},
-    random:{type:String,required:true}  
-  })
+  const route = useRoute()
   const router = useRouter()
 
   let obj={}
@@ -31,7 +28,7 @@
     formValid[name]=valid 
   }
   async function handleSubmit(){
-    await resetPassword(id,random,state.data.pwd)
+    await resetPassword(route.query.id,route.query.random,state.data.pwd)
     handleClose()
   }
   function handleClose(){
