@@ -663,16 +663,17 @@ import { clone } from 'lodash'
             if(state.value[0][idx].bookingOeuvre[i].idStatus!==14)
               state.value[0][idx].bookingOeuvre[i]={...state.value[0][idx].bookingOeuvre[i],...statusText[14]}
           } 
-          else  { 
+          else if(!isEqual(initialValues[idx].bookingOeuvre[i],bo)) { 
             obj=await bodyCleanUp('BookingOeuvre',bo,token.value,signal)
             res=await patchEntity('BookingOeuvre',bo.idBookingOeuvre,obj,token.value, signal)
             if(res.data.statusCode!==200) return        
           }          
         }  
-        initialValues[idx].bookingOeuvre[i]= _.cloneDeep(state.value[0][idx].bookingOeuvre[i]) //update initial values with saved data 
+        // initialValues[idx].bookingOeuvre[i]= _.cloneDeep(state.value[0][idx].bookingOeuvre[i]) //update initial values with saved data 
       })
     )
     actualChanges.value[idx].bookingOeuvre=false
+    initialValues[idx].bookingOeuvre= _.cloneDeep(state.value[0][idx].bookingOeuvre) //update initial values with saved data 
   }
   async function processDTMPF(body,signal) {  
     //body=bodyDTMPF object >>> {domain:[{idDomain: ...},...{}]},tech:[{idTech:...},..{}],media:[{idMedia:...},prize:[{idPrize:...},faq:[{idType:...},..{}]}
@@ -769,7 +770,7 @@ import { clone } from 'lodash'
               }             
               if(res.data.statusCode!==200) return
               keys.map((key) => { 
-                if(key!==idModel && item[key]){
+                if(key!==idModel && item[key] && key!=='bookingOeuvre'){  //bookingOeuvre changes covered in processBookingOeuvre()
                   initialValues[idx][key]=state.value[0][idx][key] //update initial values with saved data 
                   item[key]=false  //reset actualChanges item to false
                 }

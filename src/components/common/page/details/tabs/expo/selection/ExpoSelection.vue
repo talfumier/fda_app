@@ -415,7 +415,7 @@
             </p>
           </div>
         </q-td>
-        <q-td :class="['bo-container',slotProps.rowIndex===0?'first':'']">
+        <q-td :class="slotProps.rowIndex===0?'first':''">
           <div v-for="(bo,idx) in slotProps.row.bookingOeuvres" 
             :key="bo.idBookingOeuvre"
             class="booking-oeuvre"
@@ -605,12 +605,6 @@
 
   }
   /* TABLE BODY */
-  /* .q-td.bo-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 5px;
-  } */
   .q-td.first {
     border-top: none;
   }
