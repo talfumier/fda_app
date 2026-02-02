@@ -1,5 +1,5 @@
 <script setup>
-  import {ref, computed} from 'vue'
+  import {ref, nextTick, computed} from 'vue'
   import _ from 'lodash'
   import CheckBox from '../../fields/CheckBox.vue'
   import Label3 from './labels/Label3.vue'
@@ -27,13 +27,22 @@
     selected.value[item[`id${props.entity.model}`]]=false
     if(props.selectedId) selected.value[props.selectedId]=true  //initial value coming from Master.vue (new record)
   })
+  const listContainer = ref(null)
+  const scrollPosition = ref(0)
   function handleSelectionChange(val,id){
+    if (listContainer.value) scrollPosition.value = listContainer.value.scrollTop
     const keys=Object.keys(selected.value)
     keys.map((key) => {      
       if(key==id) selected.value[key]=val
       else selected.value[key]=false
     })
     emit('openDetails',val?id:null)  //if id not null populate FormDetails, if id null empty FormDetails
+    // DOM is NOW updated! Restore scroll after parent processes the emit and DOM updates
+    nextTick(() => {
+      if (listContainer.value) {
+        listContainer.value.scrollTop = scrollPosition
+      }
+    })
   }
   const dataGroupBy=computed(() => {
     if(props.entity.listType[0]!=='groupby') return null
@@ -71,103 +80,19 @@
 </script>
 
 <template>
-  <div v-if="entity.listType[0]==='simple'" v-for="(item,idx) in data"> 
-    <div :key="item" class="list-item">
-      <CheckBox>  
-        <template #checkbox>  <!--named scoped slot -->
-          <input
-            :id="idx"
-            type="checkbox"
-            :checked="selected[item[`id${entity.model}`]]"
-            @change="(e) => {
-              handleSelectionChange(e.target.checked,item[`id${entity.model}`])
-            }"
-          />
-        </template>
-        <template #label>  <!--named scoped slot -->
-          <Label3
-            :id="idx" 
-            :key="item"
-            :item="item" 
-            :master="master"
-            :rowSchema="getRowSchema()"
-          />
-        </template>
-      </CheckBox>
-      <ActionMenu
-        v-if="selected[item[`id${entity.model}`]]"
-      > 
-        <template #infos> <!--named scoped slot -->
-          <UserInfos
-            v-if="entity.model==='User'"
-            :role="{idRole:item.idRole,role_fr:item.role_fr,role_en:item.role_en}"
-            :data="_.filter(infos,(info) => {
-              return info.idUser===item.idUser
-            })"
-          >
-          </UserInfos>
-          <ExpoInfos
-            v-if="entity.model==='Expo'"
-            :data="_.filter(infos,(info) => {
-              return info.idExpo===item.idExpo
-            })"
-          >
-          </ExpoInfos>          
-          <BookingInfos
-            v-if="entity.model==='Booking'"
-            :data="_.filter(infos,(info) => {
-              return info.idBooking==item.idBooking
-            })"
-          >
-          </BookingInfos>      
-          <FaqInfos
-            v-if="entity.model==='Faq'"
-            :data="_.filter(infos,(info) => {
-              return info.idFaq==item.idFaq
-            })"
-          >
-          </FaqInfos>
-        </template>
-        <template #actions> <!--named scoped slot -->
-          <UserActions
-            v-if="entity.model==='User'"
-            :data="item"
-            @user-action="(cs) => {
-              emit('userAction',cs)
-            }"
-          ></UserActions>
-          <ExpoActions
-            v-if="entity.model==='Expo'"
-            :data="item"
-            @expo-action="(cs) => {
-              emit('expoAction',cs)
-            }"
-          ></ExpoActions>
-          <FaqActions
-            v-if="entity.model==='Faq'"
-            :data="item"
-            @faq-action="(cs) => {
-              emit('faqAction',cs)
-            }"
-          ></FaqActions>
-        </template>
-      </ActionMenu>
-    </div>
-  </div>
-  <div v-if="dataGroupBy">   
-    <div v-for="(group,idx) in dataGroupBy" class="group">
-      <div :key="idx" class="list-item">
-        <Label3
-          :id="idx" 
-          :item="group" 
-          :master="master"
-          :rowSchema="['1.1','1.2']"
-        >
-        </Label3>        
-        <CheckBox v-for="(item,i) in group.items">  
+  <div 
+    ref="listContainer"
+    class="scrollable-list"
+  >
+    <div 
+      v-if="entity.listType[0]==='simple'" 
+      v-for="(item,idx) in data"
+    > 
+      <div :key="item" class="list-item">
+        <CheckBox>  
           <template #checkbox>  <!--named scoped slot -->
             <input
-              :id="i"
+              :id="idx"
               type="checkbox"
               :checked="selected[item[`id${entity.model}`]]"
               @change="(e) => {
@@ -177,13 +102,105 @@
           </template>
           <template #label>  <!--named scoped slot -->
             <Label3
-              :id="i" 
+              :id="idx" 
+              :key="item"
               :item="item" 
               :master="master"
-              :rowSchema="['2.1']"
+              :rowSchema="getRowSchema()"
             />
           </template>
         </CheckBox>
+        <ActionMenu
+          v-if="selected[item[`id${entity.model}`]]"
+        > 
+          <template #infos> <!--named scoped slot -->
+            <UserInfos
+              v-if="entity.model==='User'"
+              :role="{idRole:item.idRole,role_fr:item.role_fr,role_en:item.role_en}"
+              :data="_.filter(infos,(info) => {
+                return info.idUser===item.idUser
+              })"
+            >
+            </UserInfos>
+            <ExpoInfos
+              v-if="entity.model==='Expo'"
+              :data="_.filter(infos,(info) => {
+                return info.idExpo===item.idExpo
+              })"
+            >
+            </ExpoInfos>          
+            <BookingInfos
+              v-if="entity.model==='Booking'"
+              :data="_.filter(infos,(info) => {
+                return info.idBooking==item.idBooking
+              })"
+            >
+            </BookingInfos>      
+            <FaqInfos
+              v-if="entity.model==='Faq'"
+              :data="_.filter(infos,(info) => {
+                return info.idFaq==item.idFaq
+              })"
+            >
+            </FaqInfos>
+          </template>
+          <template #actions> <!--named scoped slot -->
+            <UserActions
+              v-if="entity.model==='User'"
+              :data="item"
+              @user-action="(cs) => {
+                emit('userAction',cs)
+              }"
+            ></UserActions>
+            <ExpoActions
+              v-if="entity.model==='Expo'"
+              :data="item"
+              @expo-action="(cs) => {
+                emit('expoAction',cs)
+              }"
+            ></ExpoActions>
+            <FaqActions
+              v-if="entity.model==='Faq'"
+              :data="item"
+              @faq-action="(cs) => {
+                emit('faqAction',cs)
+              }"
+            ></FaqActions>
+          </template>
+        </ActionMenu>
+      </div>
+    </div>
+    <div v-if="dataGroupBy">   
+      <div v-for="(group,idx) in dataGroupBy" class="group">
+        <div :key="idx" class="list-item">
+          <Label3
+            :id="idx" 
+            :item="group" 
+            :master="master"
+            :rowSchema="['1.1','1.2']"
+          >
+          </Label3>        
+          <CheckBox v-for="(item,i) in group.items">  
+            <template #checkbox>  <!--named scoped slot -->
+              <input
+                :id="`${idx}-${i}`"
+                type="checkbox"
+                :checked="selected[item[`id${entity.model}`]]"
+                @change="(e) => {
+                  handleSelectionChange(e.target.checked,item[`id${entity.model}`])
+                }"
+              />
+            </template>
+            <template #label>  <!--named scoped slot -->
+              <Label3
+                :id="`${idx}-${i}`" 
+                :item="item" 
+                :master="master"
+                :rowSchema="['2.1']"
+              />
+            </template>
+          </CheckBox>
+        </div>
       </div>
     </div>
   </div>
