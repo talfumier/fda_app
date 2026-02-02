@@ -5,7 +5,7 @@
   import { useFormatDate } from '@/composable/useFormatDate.js'
 
   const props=defineProps({
-    id:{type:Number},
+    id:{type:[Number,String]},
     item:{type:Object},
     master:{type:Array},
     rowSchema:{type:Array}
