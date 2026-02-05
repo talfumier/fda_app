@@ -340,8 +340,8 @@
       "oeuvres": {
         "title": "Oeuvres",
         "classic": "classique",
-        "modern": "moderne",
-        "classic_modern": "Classique vs moderne",
+        "modern": "contemporain",
+        "classic_modern": "Classique vs contemporain",
         "domain_title": "Catégories"
       },
       "registrations": {

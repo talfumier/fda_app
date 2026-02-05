@@ -427,7 +427,7 @@
               <Tooltip :tt_text=" $t('comps.form_details.expos.tables.selection.tt_oeuvre')"></Tooltip>  
             </q-img> 
             <div class="style-dtm">
-              <p>{{ $t(`comps.form_details.expos.tables.selection.${bo.classic_modern===1?'classic':'modern'}`) }}</p>
+              <p>{{ $t(`comps.form_details.expos.tables.selection.${bo.classic_modern===1?'modern':'classic'}`) }}</p>
               <p>{{ bo[`domain_${locale}`] }}</p>
               <p>{{ bo[`tech_${locale}`] }}</p>
               <p>{{ bo[`media_${locale}`] }}</p>

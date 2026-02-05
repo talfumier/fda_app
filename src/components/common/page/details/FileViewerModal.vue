@@ -9,7 +9,7 @@
 
   const emit=defineEmits(['closeModal'])  
 
-  const position = ref({ x: 500, y: 500 })
+  const position = ref({ x: 500, y: 300 })
   const isDragging = ref(false)
   let start = { x: 0, y: 0 }
 
