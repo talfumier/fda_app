@@ -1,7 +1,7 @@
 <script setup>  
   import { onUnmounted, ref, inject } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { downloadCatalogueZip } from '@/services/httpCloudinary'
+  import { downloadCatalogueZip, downloadCsv } from '@/services/httpExport.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import DialogInfo from '../common/DialogInfo.vue'
   import InputField from '../common/fields/InputField.vue'
@@ -15,10 +15,10 @@
   const inFlight=new Set()
 
   const paramsValues=ref('')
-  const disable=ref(true)
-  const isLoading=ref(false)
-  const errorMessage = ref('')
-  const successMessage = ref('')
+  const disable=ref({artist_data:true,user_data:false})
+  const isLoading=ref({artist_data:false,user_data:false})
+  const errorMessage = ref({artist_data:'',user_data:''})
+  const successMessage = ref({artist_data:'',user_data:''})
 
   const obj={idExpo:0,idStatus:[0,0,0],showRoom:0,screen:0}
   function handleChange(name,valid,val){
@@ -36,39 +36,46 @@
       default:
         obj[name]=val
     }
-    disable.value=false
-    if(obj.idExpo===0) disable.value=true
-    if(obj.idStatus.reduce((a, b) => parseInt(a) + parseInt(b), 0)===0) disable.value=true
-    if((obj.showRoom+obj.screen)===0) disable.value=true
+    disable.value.artist_data=false
+    if(obj.idExpo===0) disable.value.artist_data=true
+    if(obj.idStatus.reduce((a, b) => parseInt(a) + parseInt(b), 0)===0) disable.value.artist_data=true
+    if((obj.showRoom+obj.screen)===0) disable.value.artist_data=true
     paramsValues.value=`${obj.idExpo};[${obj.idStatus}];${obj.showRoom};${obj.screen}`
   }
-  async function handleButtonAction(){
-    isLoading.value=true
+  async function handleButtonAction(cs){
+    isLoading.value[`${cs}`]=true
     const ctrl = newController(inFlight)
     try {
-      const zipResponse=await downloadCatalogueZip('export_catalogue',token.value,ctrl.signal,':idExpo,:idStatus,:showRoom,:screen',paramsValues.value)
+      let res=null
+      switch(cs){
+        case 'artist_data':
+          res=await downloadCatalogueZip('export_catalogue',token.value,ctrl.signal,':idExpo,:idStatus,:showRoom,:screen',paramsValues.value)
+          break
+        case 'user_data':
+          res=await downloadCsv('export_users','user_data',token.value,ctrl.signal)
+      }
       // Trigger download in browser
-      const blob = new Blob([zipResponse.data], { type: 'application/zip' })
+      const blob = new Blob([res.data], { type: `${cs==='artist_data'?"application/zip":"text/csv"}` })
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = 'artists_export.zip'
+      a.download = `${cs}_export.${cs==='artist_data'?"zip":"csv"}`
       document.body.appendChild(a)
       a.click()
       // Cleanup
       window.URL.revokeObjectURL(url)
       document.body.removeChild(a)
-      successMessage.value = t('comps.export.success_catalogue')
+      successMessage.value[`${cs}`] = t(`comps.export.${cs}.success`)
       setTimeout(() => {
-        successMessage.value=''
+        successMessage.value[`${cs}`]=''
       },3000)
     } catch (err) {
       console.error('Error in DataExport.vue:', err)
-      errorMessage.value = t('comps.export.error_catalogue')
+      errorMessage.value[`${cs}`] = t(`comps.export.${cs}.error`)
     } 
     finally {
       doneController(ctrl, inFlight)
-      isLoading.value=false
+      isLoading.value[`${cs}`]=false
     }
   }
 
@@ -79,18 +86,18 @@
 <template>
   <fieldset>
     <legend > 
-        {{ $t('comps.infos.export.title')}}<DialogInfo :path="$t('comps.infos.export.info')"></DialogInfo>
+        {{ $t('comps.infos.export.artist_data.title')}}<DialogInfo :path="$t('comps.infos.export.artist_data.info')"></DialogInfo>
     </legend>
     <InputField 
       name="idExpo" 
-      :label="$t('comps.export.select_expo')" 
+      :label="$t('comps.export.artist_data.select_expo')" 
       field_type="select" 
       options="options_expo_export" 
       :required="false"
       @change="handleChange"
     ></InputField>    
     <div class="cb-container status">
-      <label >{{$t('comps.export.select_status')}}</label>
+      <label >{{$t('comps.export.artist_data.select_status')}}</label>
       <InputField 
         name="idStatus8" 
         :label="$t('comps.list_items.actions_menu.booking.candidate')" 
@@ -117,7 +124,7 @@
       ></InputField>
     </div>
     <div class="cb-container media">
-      <label >{{$t('comps.export.select_mode')}}</label>
+      <label >{{$t('comps.export.artist_data.select_mode')}}</label>
       <InputField 
         name="showRoom" 
         :label="$t('comps.form_details.booking_oeuvre.showRoom')" 
@@ -141,19 +148,40 @@
           {
             name: 'export',
             icon: 'outbox',
-            label_fr: isLoading?'Téléchargment en cours ...':'Générer l\'archive .zip',
-            label_en: isLoading?'Download in progress ...':'Generate .zip archive'
+            label_fr: isLoading.artist_data?'Téléchargment en cours ...':'Générer l\'archive .zip',
+            label_en: isLoading.artist_data?'Download in progress ...':'Generate .zip archive'
           }
         ]" 
-        :disabled="{export:disable}"
-        :pulse="isLoading"
-        @button-action="handleButtonAction"
+        :disabled="{export:disable.artist_data}"
+        :pulse="isLoading.artist_data"
+        @button-action="handleButtonAction('artist_data')"
       ></FieldsetButton> 
-      <div v-if="errorMessage" class="message error">{{ errorMessage }}</div>
-      <div v-if="successMessage" class="message success">{{ successMessage }}</div>
+      <div v-if="errorMessage.artist_data" class="message error">{{ errorMessage.artist_data }}</div>
+      <div v-if="successMessage.artist_data" class="message success">{{ successMessage.artist_data }}</div>
     </div>  
   </fieldset>
-  
+  <fieldset>
+    <legend > 
+        {{ $t('comps.infos.export.user_data.title')}}<DialogInfo :path="$t('comps.infos.export.user_data.info')"></DialogInfo>
+    </legend>
+    <div class="bottom-container">
+      <FieldsetButton 
+        :buttons="[
+          {
+            name: 'export',
+            icon: 'outbox',
+            label_fr: isLoading.user_data?'Téléchargment en cours ...':'Générer le fichier .csv',
+            label_en: isLoading.user_data?'Download in progress ...':'Generate .csv file'
+          }
+        ]" 
+        :disabled="{export:disable.user_data}"
+        :pulse="isLoading.user_data"
+        @button-action="handleButtonAction('user_data')"
+      ></FieldsetButton> 
+      <div v-if="errorMessage.user_data" class="message error">{{ errorMessage.user_data }}</div>
+      <div v-if="successMessage.user_data" class="message success">{{ successMessage.user_data }}</div>
+    </div>  
+  </fieldset>  
 </template>
 
 <style scoped>  
