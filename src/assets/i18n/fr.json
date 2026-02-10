@@ -120,8 +120,14 @@
       "selection": "Veuillez sélectionner les oeuvres que vous souhaitez exposer.",
       "terms": "Veuillez accepter le règlement général de l'exposition, enregistrer les changements, puis cliquer sur M'INSCRIRE lorsque vous êtes prêt.",
       "export": {
-        "title": "Export des données artiste",
-        "info": "Export des données artistes dans un fichier .zip, incluant les photos des oeuvres pour une exposition donnée en fonction des statuts d'inscription et des média utilisés (oeuvres exposées en salle ou diffusées sur écran)."
+        "artist_data": {
+          "title": "Export des données artiste",
+          "info": "Export des données artistes dans un fichier .zip incluant les photos des oeuvres pour une exposition donnée en fonction des statuts d'inscription et des média utilisés (oeuvres exposées en salle ou diffusées sur écran)."
+        },
+        "user_data": {
+          "title": "Export des données comptes utilisateur",
+          "info": "Export des comptes utilisateurs dans un fichier .csv incluant nom, rôle, email, téléphone et les expos associées."
+        }
       },
       "admin": {
         "orgExcluded": "Paramètre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
@@ -354,11 +360,17 @@
       }
     },
     "export": {
-      "select_expo": "Sélectionner l'expo",
-      "select_status": "Cocher le(s) statut(s) d'inscription",
-      "select_mode": "Cocher le(s) support(s)",
-      "success_catalogue": "Données artistes exportées avec succès.",
-      "error_catalogue": "Echec de l'export des données artistes. Essayez à nouveau."
+      "artist_data": {
+        "select_expo": "Sélectionner l'expo",
+        "select_status": "Cocher le(s) statut(s) d'inscription",
+        "select_mode": "Cocher le(s) support(s)",
+        "success": "Données artistes exportées avec succès!",
+        "error": "Echec de l'export des données artistes. Essayez à nouveau."
+      },
+      "user_data": {
+        "success": "Données comptes utilisateur exportées avec succès!",
+        "error": "Echec de l'export des données comptes utilisateur. Essayez à nouveau."
+      }
     },
     "public_site": {
       "home": {},

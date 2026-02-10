@@ -120,8 +120,14 @@
       "selection": "Please make the selection of your works that you wish to exhibit.",
       "terms": "Please accept the exhibition terms & conditions, save the changes and then click on REGISTER when you are ready.",
       "export": {
-        "title": "Artist data export",
-        "info": "Artist data export in a .zip file, including art works pictures for a given exhibition; export criteria include registration status as well as media supporting artworks exhibition (show room or on screen)."
+        "artist_data": {
+          "title": "Artist data export",
+          "info": "Artist data export in a .zip file including art works pictures for a given exhibition; export criteria include registration status as well as media supporting artworks exhibition (show room or on screen)."
+        },
+        "user_data": {
+          "title": "User accounts data export",
+          "info": "User accounts data export in a .csv file including name, role, email address, phone number and associated exhibitions."
+        }
       },
       "admin": {
         "orgExcluded": "Admin setting defining the list of roles available at account creation.",
@@ -354,11 +360,17 @@
       }
     },
     "export": {
-      "select_expo": "Select exhibition",
-      "select_status": "Tick registration status",
-      "select_mode": "Tick exhibition media",
-      "success_catalogue": "Artists data exported successfully!",
-      "error_catalogue": "Failed to export artists data. Please try again."
+      "artist_data": {
+        "select_expo": "Select exhibition",
+        "select_status": "Tick registration status",
+        "select_mode": "Tick exhibition media",
+        "success": "Artists data exported successfully!",
+        "error": "Failed to export artists data. Please try again."
+      },
+      "user_data": {
+        "success": "User accounts data exported successfully!",
+        "error": "Failed to export user accounts data. Please try again."
+      }
     },
     "public_site": {
       "home": {},
