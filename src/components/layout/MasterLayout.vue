@@ -5,7 +5,8 @@
   import { setUpTokenExpiry } from '../login/tokenExpiry.js'
   import HeaderMember from './header/HeaderMember.vue'
   import LangSwitcher from './header/LangSwitcher.vue'
-  import NavBar from './navbar/NavBar.vue'
+  import NavBarPublic from './navbar/NavBarPublic.vue'
+  import NavBarMember from './navbar/NavBarMember.vue'
   import { environment } from '@/config/environment.js'
   
   const route=useRoute()
@@ -26,13 +27,13 @@
 </script>
 
 <template>
-  <div class="layout">
+  <div :class="`layout ${route.name?.includes('member')?'member':'public'}`">
     <header>
       <RouterLink to="/public/home" tabindex="-1">
         <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo"/>
       </RouterLink>
       <div class="container">
-        <h1 :class="[environment.production?'prod':'dev-test']">
+        <h1>
           <span class="span-lh">Festival des Arts</span>
           <span class="span-rh">Merville</span>
         </h1>
@@ -49,13 +50,17 @@
         </div>
       </div>
     </header>
-    <aside>
+    <aside v-if="route.name?.includes('member')">
       <Transition name="fade">
-        <NavBar 
-          :type="route.name?.includes('member')?'member':'public'" 
-        ></NavBar>
+        <NavBarMember 
+          type='member'
+        ></NavBarMember>
       </Transition>
     </aside>
+    <NavBarPublic v-if="route.name?.includes('public')"
+      type='public'
+    >
+    </NavBarPublic>
     <main class="master">
       <router-view 
         :key="$route.fullPath"
@@ -77,10 +82,18 @@
   }
   div.layout {
     display: grid;
-    grid-template-rows: 130px calc(100vh - 180px) 50px;
     grid-template-columns: auto 1fr;
     height:100%;
     min-width:525px;
+  }
+  div.layout.member {
+    grid-template-rows: 130px calc(100vh - 180px) 50px;
+  }
+  div.layout.public {
+    grid-template-rows: 130px 40px calc(100vh - 220px) 50px;
+  }  
+  div.layout:has(.page-not-found) {
+    grid-template-rows: 130px auto calc(100vh - 180px) 50px;
   }
   header { 
     grid-column: span 2;
@@ -114,20 +127,13 @@
   } 
   h1 {
     display:flex;
+    flex-wrap: wrap;
     justify-content: left;
     font-size: 4rem;
     padding: 0 20px;
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
-  }
-  h1.prod {    
-    flex-direction: column;    
-    align-items: flex-start;
-  }
-  h1.dev-test {    
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
+  } 
   .span-lh {
     color:var(--orange);
     text-wrap: nowrap;
@@ -151,10 +157,17 @@
     overflow-y:auto;
     /* background-color: blue; */
   }
-  footer {    
+  div.layout.public main.master {
+    grid-row: 3;
+    grid-column: 1/span 2;
+  }
+  footer {  
     grid-column: span 2;
     min-width:525px;
     height:50px;
+  }
+  div.layout.public footer {
+    grid-row:4;
   }
   @media screen and (min-width: 600px) {
     .container {

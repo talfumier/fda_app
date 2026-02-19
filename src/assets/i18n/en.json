@@ -78,6 +78,9 @@
       "map": "Site map",
       "contact": "Contact",
       "home": "Home",
+      "artists": "Exhibiting artists",
+      "jury_awards": "Jury & awards",
+      "past_events": "Former exhibitions",
       "rules": "Exhibition rules",
       "faq": "FAQ",
       "faq-admin": "FAQ-admin"
@@ -108,6 +111,7 @@
       "personal_data": "Make your choices for the publication of your personal data on our web site, knowing that last and first name are required.",
       "short": "Short name used in the member area and public site menus.",
       "title": "Longer and more selling name used in the public site.",
+      "openingTimes": "Exhibition opening hours that will be displayed in the public site home page.",
       "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
       "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
       "picture": "Please make sure the record is actually saved before uploading any picture.",

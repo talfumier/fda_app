@@ -11,7 +11,11 @@
   <ul>
     <li class="lh"><img src="../../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></li>
     <li v-for="(item, idx) in items" :key="idx">
-      <NavBarItem :item="item"/>
+      <NavBarItem 
+        :key="item"
+        :item="item"
+        source='footer'
+      />
     </li>
     <li class="rh">
       <p>©&nbsp;</p>2025<p></p><p class="q-pl-sm">ht&nbsp; consultant</p>
@@ -25,7 +29,7 @@
     justify-content:center;
     align-items: center;
     background-color: var(--black);
-    color: var(--orange);    
+    /* color: var(--orange);     */
     font-family: 'Berlin Sans FB', Arial;
     font-size: 2rem;
     list-style: none; /* removes bullets */
@@ -54,9 +58,9 @@
     line-height: 25px;
     margin:0;
   }
-   a {
+   /* a {
     color: var(--orange);
-  }
+  } */
   @media screen and (min-width: 600px) {
     ul {
       gap:60px;
