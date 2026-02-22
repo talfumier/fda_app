@@ -52,11 +52,11 @@
   <RouterLink v-if="item && !item.type" :to="item.url" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
     <div :class="[isRotated?'folded':'',source]">
-      <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'"></q-icon>
-      <p>{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
+      <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" :style="`padding-top:${item.padding_top}px`"></q-icon>
+      <p :style="`padding-top:${item.padding_top-2}px`">{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
     </div>
   </RouterLink>
-  <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap="item.wrap"></Tooltip>
+  <!-- <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap="item.wrap"></Tooltip> -->
   <div v-if="item && item.type==='nested' && item.production.includes(environment.production)"
     :class="['folder',isRotated?'folded':'']"
     @click="() => {
@@ -132,6 +132,7 @@
     padding:0;
   }
   p {
+    font-size: 1.6rem;
     margin:0;
     transition: display 0.6s ease;
   }
@@ -143,11 +144,14 @@
     text-decoration: none;
     display: block;
     white-space: nowrap;
-    padding:0 5px;
+    padding:0;
   }
   div.public  {    
     color: grey;
     padding-right: 5px;
+  }
+  div.folded.public {
+    padding-right: 0;
   }
   div.footer {
     color: var(--white);
@@ -186,5 +190,13 @@
   a.router-link-active div.footer  {
     color:var(--white);
     font-weight: bolder;
+  }
+  @media screen and (min-width: 1100px) {   
+    p {
+      font-size: 1.8rem;
+    }
+    li {      
+      padding:0 5px;
+    }
   }
 </style>

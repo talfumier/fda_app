@@ -15,6 +15,7 @@
     "url": "/public/jury&awards",
     "icon": "fa-solid fa-trophy",
     "size": "2.3rem",
+    "padding_top": "4",
     "text": "jury_awards",
     "wrap": false
   },

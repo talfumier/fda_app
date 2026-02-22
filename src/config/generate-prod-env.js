@@ -10,6 +10,7 @@ const setEnv = () => {
   const configFile = `export const environment = {  
     api_url: '${process.env.API_URL_PROD}',
     max_file_size: '${process.env.MAX_FILE_SIZE}',
+    google_api_key:'${process.env.GOOGLE_API_KEY}',
     production:true,
   };`
   writeFile(targetPath, configFile, (err) => {

@@ -22,7 +22,7 @@
             :key="item"
             source='public'
             :item="item" 
-            :isRotated="$q.screen.width<850" 
+            :isRotated="$q.screen.width<730" 
           />
         </li>
 
@@ -54,7 +54,6 @@
     font-size: 1.8rem;
   }
   li {
-    padding: 3px 10px;
-    width:100%;
+    padding: 3px 5px;
   }
 </style>

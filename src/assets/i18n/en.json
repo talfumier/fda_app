@@ -377,7 +377,29 @@
       }
     },
     "public_site": {
-      "home": {},
+      "home": {
+        "opening": {
+          "title": "Opening hours"
+        },
+        "vernissage": {
+          "title": "Opening and awards ceremony"
+        },
+        "registration": {
+          "title": "Artist registration",
+          "text": "To register, each artist must create an account in the member area. For more information, please consult the FAQ.",
+          "opening": "Opening of registrations",
+          "closure": "Closing of registrations",
+          "response": "Response to applicants",
+          "rules": "Display the rules by clicking here."
+        },
+        "visit": {
+          "title": "Visit us",
+          "info": "Information"
+        },
+        "partner": {
+          "label": "Thanks to our partners"
+        }
+      },
       "check": "enenen",
       "expos": {
         "tabs": {
@@ -415,6 +437,7 @@
         }
       },
       "faq": {
+        "title": "Frequently Asked Questions",
         "cat": {
           "folder_tt": "Click to expand category."
         },

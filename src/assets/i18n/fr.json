@@ -377,7 +377,29 @@
       }
     },
     "public_site": {
-      "home": {},
+      "home": {
+        "opening": {
+          "title": "Horaires d'ouverture au public"
+        },
+        "vernissage": {
+          "title": "Vernissage et remise des prix"
+        },
+        "registration": {
+          "title": "Inscription des artistes",
+          "text": "Pour s'inscrire, chaque artiste doit créer un compte dans l'espace membre. Pour plus d'informations, merci de consulter la FAQ.",
+          "opening": "Ouverture des inscriptions",
+          "closure": "Fermeture des inscriptions",
+          "response": "Réponse aux candidats",
+          "rules": "Consulter le règlement en cliquant ici."
+        },
+        "visit": {
+          "title": "Venir au Festival",
+          "info": "Informations"
+        },
+        "partner": {
+          "label": "Merci à nos partenaires"
+        }
+      },
       "check": "frfrfr",
       "expos": {
         "tabs": {
@@ -415,6 +437,7 @@
         }
       },
       "faq": {
+        "title": "Foire Aux Questions",
         "cat": {
           "folder_tt": "Cliquer pour déployer la rubrique."
         },
