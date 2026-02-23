@@ -18,7 +18,9 @@
         <strong>Mairie de Merville</strong>.
       </p>
       <address>
-        <p class="house">Place du 11 Novembre 1918 - 31330 Merville</p>
+        <p class="house">Place du 11 Novembre 1918</p>
+        <p class="city">31330 Merville</p>
+        <p class="country">France</p>
         <p class="mail">
           <a href="mailto:festivaldesarts@merville31.fr">festivaldesarts@merville31.fr</a>
         </p>
@@ -72,6 +74,9 @@
     font-weight: 900;   /*free plan solid icons require font-weight:900, regular icons require font-weight:400*/
     padding-right: 10px;
     opacity:0.8;
+  }
+  p.city, p.country {
+    padding-left: 30px;
   }
   p.mail::before { 
     content: "\f0e0 ";
