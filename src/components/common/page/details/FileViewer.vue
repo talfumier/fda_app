@@ -1,22 +1,14 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import VuePdfEmbed from 'vue-pdf-embed'
+  import VuePdfEmbed from 'vue-pdf-embed'
+  import { openPdf } from '@/components/public/functions'
 
-const props = defineProps({
-  file: { type: Object },
-  fileYes: { type: Array },
-  supported: { type: Object },
-  size: { type: String },
-  height: { type: String, default: null },
-})
-
-async function openPdf() {
-  const res = await fetch(props.file.url)
-  const buffer = await res.arrayBuffer()
-  const blob = new Blob([buffer], { type: 'application/pdf' })
-  const url = URL.createObjectURL(blob)
-  window.open(url, '_blank')
-}
+  const props = defineProps({
+    file: { type: Object },
+    fileYes: { type: Array },
+    supported: { type: Object },
+    size: { type: String },
+    height: { type: String, default: null },
+  })
 </script>
 
 <template>
@@ -41,7 +33,7 @@ async function openPdf() {
       :class="['pdf', height ? 'full' : '']"
       @click="
         async () => {
-          await openPdf()
+          await openPdf(file.url)
         }
       "
     >
@@ -52,46 +44,46 @@ async function openPdf() {
 </template>
 
 <style scoped>
-div.file-viewer {
-  overflow-y: auto;
-}
-img {
-  object-fit: cover;
-  padding: 5px;
-  border: 1px solid lightgrey;
-  margin-left: 0;
-}
-div.large img {
-  height: 265px;
-}
-div.medium img {
-  height: 223px;
-}
-div.small img {
-  height: 190px;
-}
-div.pdf {
-  cursor: pointer;
-}
-div.vue-pdf-embed {
-  padding: 5px;
-  border: 1px solid lightgrey;
-  margin-left: 0;
-  height: 270px;
-  overflow-y: auto;
-}
-iframe {
-  padding: 5px;
-  border: 1px solid lightgrey;
-  margin-left: 0;
-  height: 270px;
-  overflow-y: auto;
-}
-div.full {
-  overflow-x: hidden;
-}
-div.full div.vue-pdf-embed {
-  overflow-x: hidden;
-  height: 100%;
-}
+  div.file-viewer {
+    overflow-y: auto;
+  }
+  img {
+    object-fit: cover;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    margin-left: 0;
+  }
+  div.large img {
+    height: 265px;
+  }
+  div.medium img {
+    height: 223px;
+  }
+  div.small img {
+    height: 190px;
+  }
+  div.pdf {
+    cursor: pointer;
+  }
+  div.vue-pdf-embed {
+    padding: 5px;
+    border: 1px solid lightgrey;
+    margin-left: 0;
+    height: 270px;
+    overflow-y: auto;
+  }
+  iframe {
+    padding: 5px;
+    border: 1px solid lightgrey;
+    margin-left: 0;
+    height: 270px;
+    overflow-y: auto;
+  }
+  div.full {
+    overflow-x: hidden;
+  }
+  div.full div.vue-pdf-embed {
+    overflow-x: hidden;
+    height: 100%;
+  } 
 </style>

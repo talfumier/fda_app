@@ -4,6 +4,9 @@ import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
 import content from '../common/page/master-content.json'
 import Home from '../public/home/Home.vue'
+import Catalogue from '../public/home/Catalogue.vue'
+import JuryAwards from '../public/home/JuryAwards.vue'
+import PastEvents from '../public/home/PastEvents.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
 import Faq from '../public/faq/Faq.vue'
@@ -48,14 +51,32 @@ const router = createRouter({
     },
     { path: '/public/home', name: 'public home', component: Home, meta: { roles: [-1] } }, //no specific role requirement, nor authentication
     {
-      path: '/public/expos/:idExpo',
-      name: 'public expos',
-      component: () => import('../public/expo/Expo.vue'), //lazy loading
-      props: (route) => ({
-        idExpo: route.params.idExpo,
-      }),
+      path: '/public/catalogue',
+      name: 'public catalogue',
+      component: Catalogue,
       meta: { roles: [-1] },
     },
+    {
+      path: '/public/jury_awards',
+      name: 'public jury_awards',
+      component: JuryAwards,
+      meta: { roles: [-1] },
+    },
+    {
+      path: '/public/past_events',
+      name: 'public past_events',
+      component: PastEvents,
+      meta: { roles: [-1] },
+    },
+    // {
+    //   path: '/public/expos/:idExpo',
+    //   name: 'public expos',
+    //   component: () => import('../public/expo/Expo.vue'), //lazy loading
+    //   props: (route) => ({
+    //     idExpo: route.params.idExpo,
+    //   }),
+    //   meta: { roles: [-1] },
+    // },
     {
       path: '/public/faq',
       name: 'public faq',

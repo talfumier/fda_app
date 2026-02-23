@@ -1,6 +1,7 @@
 /*GLOBAL CSS styles*/
 
 @import '@quasar/extras/material-icons/material-icons.css';
+@import '@quasar/extras/fontawesome-v6/fontawesome-v6.css';
 
 @import './normalize.css';
 
@@ -37,6 +38,7 @@
   --white-opaque8: rgb(255, 255, 255, .8);
   --white-light: #ECEFF3;
   --green: #28761d; /* fda logo */
+  --grey:rgb(224, 221, 221);
   --grey-light: #ebedf0;
   --beige: rgb(240, 234, 200);
   --beige-opaque8: rgb(240, 234, 200, .8);

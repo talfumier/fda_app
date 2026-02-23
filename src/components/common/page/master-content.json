@@ -440,8 +440,8 @@
       {
         "name": "deadline",
         "type": "standard",
-        "legend_fr": "Inscriptions",
-        "legend_en": "Registrations",
+        "legend_fr": "Inscriptions/Réponse aux candidats",
+        "legend_en": "Registrations/Response to candidates",
         "fields": [
           {
             "name": "openingDateTime",
@@ -456,6 +456,13 @@
             "label_en": "Closing",
             "field_type": "input",
             "format": "date-time"
+          },
+          {
+            "name": "responseDate",
+            "label_fr": "Réponse",
+            "label_en": "Response",
+            "field_type": "input",
+            "format": "date"
           }
         ]
       },
@@ -493,6 +500,28 @@
             "label_en": "Closing",
             "field_type": "input",
             "format": "date-time"
+          }
+        ]
+      },
+      {
+        "name": "openingTimes",
+        "type": "translate",
+        "legend_fr": "Horaires d'ouverture au public *",
+        "legend_en": "Opening hours to the public *",
+        "info": true,
+        "info_path": "comps.infos.openingTimes",
+        "fields": [
+          {
+            "name": "openingTimes_fr",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 255
+          },
+          {
+            "name": "openingTimes_en",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 255
           }
         ]
       },
@@ -568,6 +597,13 @@
         "legend_fr": "Localisation",
         "legend_en": "Location",
         "fields": [
+          {
+            "name": "building",
+            "label_fr": "Bâtiment",
+            "label_en": "Building",
+            "field_type": "textarea",
+            "rows": 1
+          },
           {
             "name": "address",
             "label_fr": "Adresse",
@@ -972,8 +1008,8 @@
       {
         "name": "deadline",
         "type": "standard",
-        "legend_fr": "Inscriptions",
-        "legend_en": "Registrations",
+        "legend_fr": "Echéancier pour inscriptions/réponse aux candidats",
+        "legend_en": "Timeframe for registrations/response to candidates",
         "info": true,
         "info_path": "comps.infos.closure",
         "fields": [
@@ -989,6 +1025,14 @@
             "name": "closureDateTime",
             "label_fr": "Clôture",
             "label_en": "Closing",
+            "field_type": "input",
+            "required": false,
+            "readOnly": true
+          },
+          {
+            "name": "responseDate",
+            "label_fr": "Réponse",
+            "label_en": "Response",
             "field_type": "input",
             "required": false,
             "readOnly": true

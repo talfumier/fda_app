@@ -6,28 +6,24 @@
     "wrap": false
   },
   {
-    "type": "nested",
-    "url": "/public/expos",
-    "icon": "photo_frame",
-    "text": "expos",
-    "wrap": false,
-    "sql": "list_public_expo",
-    "sql_param": ":idStatus",
-    "param_value": 12,
-    "expand": true,
-    "production": [true, false]
+    "url": "/public/catalogue",
+    "icon": "palette",
+    "text": "artists",
+    "wrap": false
   },
   {
-    "type": "nested",
-    "url": "/public/expos",
-    "icon": "work_history",
-    "text": "archived",
-    "wrap": false,
-    "sql": "list_public_expo",
-    "sql_param": ":idStatus",
-    "param_value": 13,
-    "expand": false,
-    "production": [false]
+    "url": "/public/jury_awards",
+    "icon": "fa-solid fa-trophy",
+    "size": "2.3rem",
+    "padding_top": "4",
+    "text": "jury_awards",
+    "wrap": false
+  },
+  {
+    "url": "/public/past_events",
+    "icon": "history",
+    "text": "past_events",
+    "wrap": false
   },
   {
     "url": "/public/faq",

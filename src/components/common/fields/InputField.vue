@@ -79,7 +79,7 @@
         if(idx>=1) obj.data[key]=item[key]
       })
       options.value.push(obj)
-    })
+    })  
     handleChange(data.value,'init')   //necessary because async operation completes after standard handleChange init
   }
   onMounted(() => {  
