@@ -78,6 +78,7 @@
         <li v-for="(item, idx) in roleFilteredItems" :key="idx">
           <NavBarItem 
             :key="roleFilteredItems"
+            source='member'
             :item="item" 
             :isRotated="isRotated || $q.screen.width<850" 
           />

@@ -1,6 +1,5 @@
 <script setup>
-  import NotYet from './NotYetDev.vue'
-
+  import NotYet from '@/components/general/NotYetDev.vue'
 </script>
 
 <template>

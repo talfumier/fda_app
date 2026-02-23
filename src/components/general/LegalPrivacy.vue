@@ -108,22 +108,31 @@
     padding-left: 50px;
   }
   .html :deep(p.house)::before { 
-    content: "\1F3E0 ";
+    content: "\f015 ";
+    font-family: "Font Awesome 6 Free";
     font-style: normal; 
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: 900;  /*free plan solid icons require font-weight:900, regular icons require font-weight:400*/
     padding-right: 10px;
+    opacity:0.8;
   }
   .html :deep(p.mail)::before { 
-    content: "\2709 ";
+    content: "\f0e0 ";
+    font-family: "Font Awesome 6 Free";
     font-style: normal; 
-    font-size: 2.5rem;
+    font-size: 2rem;
+    font-weight: 900;
     padding-right: 10px;
+    opacity:0.8;
   }
   .html :deep(p.phone)::before {
-    content: "\2706 ";
+    content: "\f095";
+    font-family: "Font Awesome 6 Free";
     font-style: normal; 
-    font-size: 2.5rem;
+    font-size: 2rem;
+    font-weight: 900;
     padding-right: 10px;
+    opacity:0.8;
   }
   .html :deep(ul) {
     margin:0 25px 10px;

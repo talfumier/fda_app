@@ -6,7 +6,8 @@
   import Tooltip from '../../common/Tooltip.vue'
   import { environment } from '@/config/environment.js'
 
-  const props=defineProps({
+  const props=defineProps({ 
+    source:{type:String},
     item:{type:Object},
     isRotated:{type:Boolean,default:false},
     // screen:{type:Number,default:-1}  //automatically hide navbar text below a given screen width, default -1 (does nothing)
@@ -50,12 +51,12 @@
 <template>
   <RouterLink v-if="item && !item.type" :to="item.url" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
-    <div :class="[isRotated?'folded':'']">
-      <q-icon v-if="item.icon" :name="item.icon" size="3rem"></q-icon>
-      <p>{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
+    <div :class="[isRotated?'folded':'',source]">
+      <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" :style="`padding-top:${item.padding_top}px`"></q-icon>
+      <p :style="`padding-top:${item.padding_top-2}px`">{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
     </div>
   </RouterLink>
-  <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap="item.wrap"></Tooltip>
+  <!-- <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap="item.wrap"></Tooltip> -->
   <div v-if="item && item.type==='nested' && item.production.includes(environment.production)"
     :class="['folder',isRotated?'folded':'']"
     @click="() => {
@@ -124,10 +125,14 @@
     transform: rotate(-180deg);
 
   }
+  div.public .q-icon {
+    padding-left:0;
+  }
   div.folded .q-icon {
     padding:0;
   }
   p {
+    font-size: 1.6rem;
     margin:0;
     transition: display 0.6s ease;
   }
@@ -138,26 +143,60 @@
     color: var(--white);
     text-decoration: none;
     display: block;
-    border-radius: 4px;
+    white-space: nowrap;
+    padding:0;
+  }
+  div.public  {    
+    color: grey;
+    padding-right: 5px;
+  }
+  div.folded.public {
+    padding-right: 0;
+  }
+  div.footer {
+    color: var(--white);
   }
   li {
     cursor: pointer;
   }
-  a:not(.router-link-active):hover {
+  a:not(.router-link-active) div.member:hover {
     color: var(--red);
     font-weight:bolder;
     background-color: var(--beige-opaque8);
-    padding: 0 10px;
+    border-radius: 4px;
   }
-  a.router-link-active {
+  a.router-link-active div.member {
     color:var(--orange);
     font-weight: bolder;
+  }   
+  a:not(.router-link-active) div.public:hover {
+    color: var(--orange);
+    font-weight:bolder;
   }
-  footer  a:not(.router-link-active):hover {
+  a.router-link-active div.public {
+    color:var(--green);
+    font-weight: bolder;
+    border-bottom: solid var(--green);
+    border-width: 5px;
+    border-radius: 0;
+    transition: border-width 0.3s ease;
+  }
+  a:not(.router-link-active) div.footer:hover {
     color: var(--white);
+    font-weight: bolder;
     background-color: transparent;
+    transition: width 0.3s ease;
   }
-  footer a.router-link-active {
+  a.router-link-active div.footer  {
     color:var(--white);
+    font-weight: bolder;
+  }
+  @media screen and (min-width: 1100px) {   
+    p {
+      font-size: 1.8rem;
+    }
+    li {      
+      padding:0 5px;
+    }
   }
 </style>
