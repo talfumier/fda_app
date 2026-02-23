@@ -60,7 +60,7 @@
     <div class="middle">
       <div class="text">
         <h2>{{ $t('comps.public_site.home.registration.title') }}</h2>
-        <p class="register">{{ $t('comps.public_site.home.registration.text') }}</p>
+        <p class="register" v-html="$t('comps.public_site.home.registration.text')"></p>
       </div>
       <div class="register-schedule">
         <h3>{{ $t('comps.public_site.home.registration.opening') }}</h3>
@@ -172,7 +172,7 @@
     grid-column: 1/span 2;
     display:flex;
     flex-wrap: wrap;
-    gap:10px;
+    gap:20px;
     margin:5px 0;
     justify-content: left;
   }

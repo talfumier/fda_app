@@ -29,11 +29,13 @@
 </script>
 
 <template>
-  <section class="partner">
+  <section class="partner">    
     <h2>{{ $t('comps.public_site.home.partner.label') }}</h2>
     <div class="logos">
       <div v-for="item in state" class="logo">
-        <img :src="item.url" :alt="item.name">
+        <a :href="item.web1" target="blank">
+          <img :src="item.url" :alt="item.name">
+        </a>
       </div>
     </div>
   </section>
@@ -65,6 +67,7 @@
   img {
     object-fit: cover;
     height:100px;
+    cursor: pointer;
   }
 
 </style>
