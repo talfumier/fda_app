@@ -57,6 +57,7 @@
     position:sticky; 
     top:0;
     width:100%;
+    z-index: 10000;
   }  
   .html :deep(:is(h1, h2, h3)) { 
     font-family: 'Montserrat', sans-serif; 
@@ -71,7 +72,6 @@
     background-color: var(--grey-light);
     margin:0;
     padding:10px 0;
-    /* background-color: blueviolet; */
   }
   .html :deep(:is(hr)) {
     margin:0;
@@ -115,6 +115,9 @@
     font-weight: 900;  /*free plan solid icons require font-weight:900, regular icons require font-weight:400*/
     padding-right: 10px;
     opacity:0.8;
+  }
+  .html :deep(p.city), .html :deep(p.country) {
+    padding-left: 30px;
   }
   .html :deep(p.mail)::before { 
     content: "\f0e0 ";

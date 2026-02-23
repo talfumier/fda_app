@@ -46,7 +46,7 @@
       "register": "Register",
       "pwd_forgot": "forgot password ?",
       "no_account": "don't have an account ?",
-      "cgu_cgv": "I have read and agree with the <a href=/public/legal?register=true target=blank tabindex=-1>terms & conditions</a>",
+      "cgu_cgv": "I have read and agree with the <a href=/public/legal?register=true target=blank>terms & conditions</a>",
       "execute": "Change password",
       "token_expiry": {
         "warning": "Your authentication token is going to expire at",
@@ -386,7 +386,7 @@
         },
         "registration": {
           "title": "Artist registration",
-          "text": "To register, each artist must create an account in the member area. For more information, please consult the FAQ.",
+          "text": "To register, each artist must create an account in the member area. For more information, please consult the <a href=/public/faq>FAQ</a>.",
           "opening": "Opening of registrations",
           "closure": "Closing of registrations",
           "response": "Response to applicants",
