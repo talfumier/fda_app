@@ -9,7 +9,7 @@
   } from '@/utilityFunctions.js'  
   import { useI18n } from 'vue-i18n'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
-  import Map from '../google/Map.vue'
+  import MapOsm from '../maps/MapOsm.vue'
   import Partners from '../common/Partners.vue'
 
   const {locale}=useI18n()
@@ -99,17 +99,18 @@
         <p>0562134116</p>
       </address>
     </div>
-    <Map
+    <MapOsm 
       :lat="Number(state[0][0].gpsLat)"
       :lng="Number(state[0][0].gpsLong)"
       :markers="[{
+        id:1,
         lat:Number(state[0][0].gpsLat),
         lng:Number(state[0][0].gpsLong),
-        title:state[0][0].building
+        label:state[0][0].building
       }]"
     >
-    </Map>
-  </section>
+    </MapOsm>
+  </section>  
   <Partners></Partners>
 </template>
 
