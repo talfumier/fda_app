@@ -29,13 +29,13 @@
     justify-content:center;
     align-items: center;
     background-color: var(--black);
-    /* color: var(--orange);     */
     font-family: 'Berlin Sans FB', Arial;
     font-size: 2rem;
     list-style: none; /* removes bullets */
     padding: 10px 20px;
     margin:0;
     gap:30px;
+    height:100%;
   }  
   li {
     display: inline-block;
@@ -71,19 +71,11 @@
       display:block;
       left:20px;
     }
-    
-    ul {
-      gap:60px;
-    }
   }
   @media screen and (min-width: 1000px) {
     li.rh {
       display:block;
       right:25px;
-    }
-    
-    ul {
-      gap:60px;
     }
   }
 </style>
