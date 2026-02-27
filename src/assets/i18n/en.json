@@ -400,6 +400,12 @@
           "label": "Thanks to our partners"
         }
       },
+      "catalogue": {
+        "toc": "Table of Content",
+        "price": "Price",
+        "reserved": "Reserved"
+      },
+
       "check": "enenen",
       "expos": {
         "tabs": {

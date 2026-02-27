@@ -18,7 +18,7 @@
       class="image"
       :class="[height ? 'full' : '', size]"
     >
-      <img :src="file.url" :alt="file.name" />
+      <img :src="file.url" :alt="file.name" loading="lazy" />
     </div>
     <div
       v-if="file.url && fileYes.includes('msoffice') && supported.msoffice.includes(file.ext)"

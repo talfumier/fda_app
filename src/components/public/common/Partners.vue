@@ -34,7 +34,7 @@
     <div class="logos">
       <div v-for="item in state" class="logo">
         <a :href="item.web1" target="blank">
-          <img :src="item.url" :alt="item.name">
+          <img :src="item.url" :alt="item.name" loading="lazy">
         </a>
       </div>
     </div>

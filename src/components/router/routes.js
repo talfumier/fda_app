@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import cookies from 'js-cookie'
 import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
+import CataloguePrint from '../public/home/catalogue/CataloguePrint.vue'
 import content from '../common/page/master-content.json'
 import Home from '../public/home/Home.vue'
-import Catalogue from '../public/home/Catalogue.vue'
+import Catalogue from '../public/home/catalogue/Catalogue.vue'
 import JuryAwards from '../public/home/JuryAwards.vue'
 import PastEvents from '../public/home/PastEvents.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
@@ -143,6 +144,12 @@ const router = createRouter({
       name: 'NotFound',
       component: NotFound,
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
+    },
+    {
+      path: '/public/catalogue_print', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
+      name: 'public catalogue_print', //that reflects the content of catalogue_print page
+      component: CataloguePrint,
+      meta: { roles: [-1] },
     },
   ],
 })
