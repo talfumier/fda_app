@@ -34,7 +34,7 @@
     booking:['idBooking','idUser','idRole','artist','u_url','u_fileName','idStatus_b','priceShowRoom','priceScreen'],
     bookingOeuvres:['idBookingOeuvre','idOeuvre','selected','showRoom','screen','idStatus_bo',
       'classic_modern','idDomain','domain_fr','domain_en','tech_fr','tech_en','media_fr','media_en',
-      'width','height','depth','weight','title_fr','title_en','o_url','o_fileName','showRoom','screen']
+      'width','height','depth','weight','title_fr','title_en','o_url','o_fileName']
   }
   function getGroup(row){
     const group={}
@@ -369,7 +369,7 @@
       </template> 
       <template #artist="slotProps">
         <div :key="slotProps.row.idBooking" class="artist"> 
-          <q-img :src="slotProps.row.u_url" @click="openModal('u',slotProps.row)"
+          <q-img :src="slotProps.row.u_url"  loading="lazy" @click="openModal('u',slotProps.row)"
           >
             <Tooltip :tt_text="$t('comps.form_details.expos.tables.selection.tt_oeuvre')"></Tooltip>  
           </q-img> 
@@ -421,7 +421,7 @@
             class="booking-oeuvre"
           >
             <p class="title">{{ bo[`title_${locale}`]}}</p>
-            <q-img class="oeuvre" :src="bo.o_url"
+            <q-img class="oeuvre" :src="bo.o_url" loading="lazy"
               @click="openModal('o',bo)"
             >
               <Tooltip :tt_text=" $t('comps.form_details.expos.tables.selection.tt_oeuvre')"></Tooltip>  

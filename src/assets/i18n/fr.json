@@ -400,6 +400,11 @@
           "label": "Merci à nos partenaires"
         }
       },
+      "catalogue": {
+        "toc": "Sommaire",
+        "price": "Prix",
+        "reserved": "Réservé"
+      },
       "check": "frfrfr",
       "expos": {
         "tabs": {

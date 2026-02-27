@@ -157,7 +157,7 @@
               {{ slotProps.row[visible[2]] }}
             </q-td>
             <q-td>
-              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
+              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]" loading="lazy">
             </q-td>
           </template>
         </GenericTable>      
@@ -191,7 +191,7 @@
               {{ slotProps.row[visible[2]] }}
             </q-td>
             <q-td>
-              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]">
+              <img v-if="slotProps.row.url && visible.includes('url')" :src="slotProps.row.url" :alt="slotProps.row[visible[1]]" loading="lazy">
             </q-td>
             <q-td v-if="entity==='ExpoDoc' || (entity==='UserExpoRole' && idRole===4)">
               <q-select

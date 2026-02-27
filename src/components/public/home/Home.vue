@@ -120,7 +120,8 @@
     flex-wrap: wrap;
     justify-content: center;
     font-family: 'Roboto', Arial;
-    font-size:1.5rem;  }
+    font-size:1.5rem;  
+  }
   h2,h3 {    
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
