@@ -6,11 +6,16 @@
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Toc from './Toc.vue'
   import ArtistBlock from './ArtistBlock.vue'
+  import { getCoverPage } from './functions'  
+  import { useFormatDate } from '@/composable/useFormatDate.js'
+  import { environment } from '@/config/environment'
 
-  const {locale}=useI18n()
+  const {t,locale}=useI18n()   
+  const {formatLocalDate}=useFormatDate()  
   const inFlight=new Set()
   
   const state=ref([])
+  const catalogue=ref(false)    //indicates whether catalogue is visible or not
   
   const fields={
     booking:['idBooking','idUser','idRole','artist','resume_fr','resume_en','public_name','pseudo','public_pseudo','email','public_email','phone','public_phone',
@@ -38,19 +43,20 @@
   }  
   const domain_artists=ref({})
   watch(
-    () => state.value?.[1],
-    (newVal) => {
-      if (!newVal) return
-      let domains=''
+    [() => state.value?.[1], () => locale.value],
+    ([newVal,newLocale]) => {
+      if (!newVal || !catalogue.value) return
+      let domains=`${t('comps.public_site.catalogue.guest')},`
       state.value[1].map((a) => {
-        domains=domains+(a.domain[locale.value]).join(',')+','
+        domains=domains+(a.domain[newLocale]).join(',')+','
       })
       domains= new Set((domains.split(',')).filter(d => d !== ''))
+      domain_artists.value={}
       Array.from(domains).map((d) => {
         domain_artists.value[d]={
           expand:false,
           artists:state.value[1].filter((a) => {
-            return a.domain[locale.value].includes(d)
+            return a.domain[newLocale].includes(d)
           })
         }
       })
@@ -60,7 +66,11 @@
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
-      state.value = await fetch('public_expo_catalogue', ctrl.signal) 
+      state.value = await fetch('public_expo_catalogue', ctrl.signal)       
+      if(!environment.production) catalogue.value=true    //in dev or test environment, catalogue is always visible (whatever is the current date vs response date)
+      else if (state.value[0][0].catalogueReleased)     //in production environment, catalogue is visible when current date exceeds response date by one day
+        catalogue.value=true 
+      if(!catalogue.value) return
       const groupsById = {}   
       state.value[1].forEach(row => {
         const id = row.idBooking
@@ -93,8 +103,8 @@
 </script>
 
 <template>
-  <main v-if="state.length>0" class="catalogue">
-    <Toc
+  <main v-if="state.length>0" :class="['catalogue',catalogue?'col2':'']">
+    <Toc v-if="catalogue"
       :domain_artists="domain_artists"
       @expand="(domain) => {
         domain_artists[domain].expand=!domain_artists[domain].expand
@@ -103,10 +113,12 @@
     </Toc>
     <section class="wrapper" id="top-catalogue">
       <section class="cover-page">
-        <div>COVER PAGE 1 < {{ state[0][0].responseDate }}</div>
-        <div>COVER PAGE 2 > {{ state[0][0].responseDate }}</div>        
+        <img :src="getCoverPage(state[2],locale==='en'?4:5)" :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'" loading="lazy">
+        <div v-if="!catalogue" class="banner">
+          {{ locale==='en'?'Available from ':'Disponible à partir du '}}{{ formatLocalDate(state[0][0].catalogueReleaseDate,locale,'df') }}
+        </div>
       </section>
-      <ArtistBlock v-for="artist in state[1]"
+      <ArtistBlock v-if="catalogue" v-for="artist in state[1]"
         :data="artist"
       >
       </ArtistBlock>
@@ -130,17 +142,23 @@
     padding:15px;
   }
   section.cover-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  section.cover-page div.banner {   
+    background: red;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  section.cover-page img {
+    object-fit: cover;
     width:80%;
-    text-align: center;
-    font-size: large;
-    font-weight: 600;
-    background-color: var(--green);
-    color:var(--orange);
-    min-height: 150px;
-    margin:15px 0;
   }
   @media screen and (min-width: 768px) {  
-    main.catalogue {
+    main.catalogue.col2 {
       grid-template-columns: 250px auto;
     }      
     nav.toc {
@@ -153,5 +171,12 @@
       grid-column: 2;
     }
   }
+  @media screen and (min-width: 1200px){
+    section.cover-page div.banner {      
+      padding: 10px 60px;
+      font-size: 2.2rem;
+    }
+  }
+  
 
 </style>

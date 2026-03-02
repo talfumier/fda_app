@@ -403,7 +403,8 @@
       "catalogue": {
         "toc": "Table of Content",
         "price": "Price",
-        "reserved": "Reserved"
+        "reserved": "Reserved",
+        "guest": "Special guest(s)"
       },
 
       "check": "enenen",

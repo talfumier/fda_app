@@ -49,3 +49,8 @@ export function getSocialBrand(url) {
   if (url.includes('x.com') || url.includes('twitter')) result.push('x')
   return result
 }
+export function getCoverPage(data, idType) {
+  return data.filter((item) => {
+    return item.idType === idType
+  })[0].url
+}

@@ -58,14 +58,13 @@
     </div>
     <div class="works">
       <div v-for="bo in data.bookingOeuvres" class="work">
-        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(bo,'title')" loading="lazy">
+        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" loading="lazy">
         <div class="details">
           <p class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}</p>
           <p class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>
-          <p class="technique">{{getText(1,bo,'tech',locale)}}</p>
-          <p class="media">{{getText(1,bo,'media',locale)}}</p>
+          <p class="technique-media">Technique: {{getText(1,bo,'tech',locale)}} | Support: {{getText(1,bo,'media',locale)}}</p>
           <p class="dim">{{ getDim(bo,locale) }}</p>
-          <p class="dim">{{ getPrice(bo,t) }}</p>
+          <p class="price">{{ getPrice(bo,t) }}</p>
         </div>
       </div>
     </div>
@@ -192,7 +191,7 @@
     max-width:650px;
   }
   hr {
-    border-color: black;
+    border-color: var(--grey);
     border-width: 1px;
     width:100%;
   }
@@ -206,5 +205,8 @@
   }
   div.work {
     max-width: 300px;
+  }
+  p.technique-media, p.dim, p.price {
+    padding-top:5px;
   }
 </style>
