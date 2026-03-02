@@ -403,7 +403,8 @@
       "catalogue": {
         "toc": "Sommaire",
         "price": "Prix",
-        "reserved": "Réservé"
+        "reserved": "Réservé",
+        "guest": "Invité(s) d'honneur"
       },
       "check": "frfrfr",
       "expos": {

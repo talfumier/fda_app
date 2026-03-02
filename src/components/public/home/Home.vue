@@ -33,8 +33,12 @@
     cancelAllInFlight(inFlight)
   })
   async function openRulesDoc(){
-    if(state.value[2].length===0) return
-    await openPdf(state.value[2][0].url)
+    await openPdf(getExpoDoc(2).url)
+  }
+  function getExpoDoc(idType){
+    return _.filter(state.value[2],(item) => {
+      return item.idType===idType
+    })[0]
   }
 </script>
 
@@ -42,7 +46,7 @@
   <section v-if="state.length>0" class="expo"> 
     <div class='top' >
       <div class="text">
-        <img :src="state[1][0].url" :alt="state[1][0].fileName"/>
+        <img :src="getExpoDoc(8).url" :alt="getExpoDoc(8).fileName"/>
         <h2>{{ state[0][0][`title_${locale}`] }}</h2>
         <p>{{ state[0][0][`desc_${locale}`] }}</p>
       </div> 
@@ -69,14 +73,14 @@
         <p>{{formatLocalDate(state[0][0].closureDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
         <p>{{formatLocalDate(state[0][0].responseDate,locale,'df')}}</p>  
-        <div v-if="state[2].length>0" class="rules" @click="openRulesDoc ">
+        <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc ">
           <q-icon name="article" size="2.7rem" color="green"></q-icon>
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
         </div>  
       </div>
     </div>
     <div class="bottom">
-      <img v-for="(item,idx) in state[1].slice(1,4)" :key="item.fileName" :src="item.url" :alt="item.fileName">
+      <img v-for="(item,idx) in state[1]" :key="item.fileName" :src="item.url" :alt="item.fileName">
     </div>
   </section>
   <section v-if="state.length>0" class="visit">

@@ -32,7 +32,7 @@
   
   const fields={
     booking:['idBooking','idUser','idRole','artist','u_url','u_fileName','idStatus_b','priceShowRoom','priceScreen'],
-    bookingOeuvres:['idBookingOeuvre','idOeuvre','selected','showRoom','screen','idStatus_bo',
+    bookingOeuvres:['idBookingOeuvre','idOeuvre','selected','showRoom','screen','catalogue','idStatus_bo',
       'classic_modern','idDomain','domain_fr','domain_en','tech_fr','tech_en','media_fr','media_en',
       'width','height','depth','weight','title_fr','title_en','o_url','o_fileName']
   }
@@ -198,6 +198,19 @@
       const {data:res2}=await patchEntity('Booking',bookingID,{price},token.value,ctrl.signal)
       if(res2.statusCode!==200) return   
       state[7]=updateSynthesis()             
+    } catch (error) {
+        console.error(error)
+    }
+    finally {
+      doneController(ctrl,inFlight)
+    } 
+  }
+  //BOOKING-OEUVRE catalogue boolean handling
+  async function updateBoCatalogue(catalogue,boID){
+    const ctrl=newController(inFlight)
+    try {      
+      const {data:res}=await patchEntity('BookingOeuvre',boID,{catalogue},token.value,ctrl.signal)
+      if(res.statusCode!==200) return       
     } catch (error) {
         console.error(error)
     }
@@ -448,7 +461,7 @@
                 disable
               />    
             </div>
-            <div class="status">
+            <div class="status_catalogue">
               <q-toggle
                 v-model="bo.idStatus_bo"
                 toggle-indeterminate
@@ -461,9 +474,38 @@
                 checked-icon="check"
                 unchecked-icon="clear"
                 size="md"
-                :disable="!slotProps.row.selected"
+                :disable="!slotProps.row.selected || slotProps.row.idStatus_b!==8"
                 @update:model-value="(val) => {
                   updateBoStatus(val,slotProps.row.idBooking,bo.idBookingOeuvre)
+                }"
+              />  
+              <q-toggle
+                v-model="bo.catalogue"
+                label="Catalogue"    
+                :true-value="1"
+                :false-value="0"  
+                :color="bo.catalogue===1?'positive':'deep-orange-9'"
+                keep-color
+                checked-icon="check"
+                unchecked-icon="clear"
+                size="md"
+                :disable="!slotProps.row.selected"
+                @update:model-value="async(val) => {
+                  switch(parseInt(val)){
+                    case 0:
+                      await updateBoCatalogue(0,bo.idBookingOeuvre)
+                      break
+                    case 1:
+                      const idx=[]  //find indexes of bookingOeuvres already set at 1 and reset them to 0
+                      slotProps.row.bookingOeuvres.map((item,i) => {
+                        if(item.idBookingOeuvre!==bo.idBookingOeuvre && item.catalogue===1) idx.push(i)
+                      })
+                      for (const i of idx) {
+                        slotProps.row.bookingOeuvres[i].catalogue = 0
+                        await updateBoCatalogue(0,slotProps.row.bookingOeuvres[i].idBookingOeuvre)
+                      }
+                      await updateBoCatalogue(1,bo.idBookingOeuvre)  //set last modified toggle to 1
+                  }                  
                 }"
               />   
             </div>
@@ -720,6 +762,13 @@
     margin:0;
     border: none;
     border-top:1px solid var(--blue);
+  }
+  div.status_catalogue {
+    display:flex;
+    flex-direction: column;
+  }
+  div.status_catalogue .q-toggle {
+    height:27px;
   }
 
 </style>
