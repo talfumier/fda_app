@@ -1,21 +1,23 @@
 <script setup> 
+  import { computed } from 'vue'
   import { useRoute} from 'vue-router'
   import MasterLayout from "./MasterLayout.vue"
   import PrintLayout from "./PrintLayout.vue"
   import Footer from './footer/Footer.vue' 
 
   const route=useRoute()
-  
+  const isPrint = computed(() =>
+    String(route.name ?? '').includes('catalogue_print')
+  )
 </script>
 
 <template>
-  <MasterLayout v-if="!route.name.includes('catalogue_print')">
+  <PrintLayout v-if="isPrint" />
+  <MasterLayout v-else :route="route">
     <template #footer>
-      <Footer></Footer> 
+      <Footer></Footer>
     </template>
   </MasterLayout>
-  <PrintLayout v-if="route.name.includes('catalogue_print')">    
-  </PrintLayout>
 </template>
 
 <style scoped>

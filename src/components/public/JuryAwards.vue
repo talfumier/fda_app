@@ -51,12 +51,10 @@
               :to="{ path:`/public/catalogue/${p.idUser}`}"
               class="win"
             >
-              <img v-if="p.url" :src="p.url" :alt="p.artist">{{ ` ${p.idUser?p.artist:t('comps.public_site.jury_awards.awards.not')}` }}
+              <img v-if="p.url" :src="p.url" :alt="p.artist">{{ p.artist }}
             </router-link>
-            <!-- <a :href="p.idUser?`/public/catalogue#artist${p.idUser}`:''" :class="p.idUser?'win':'nowin'">
-              <img v-if="p.url" :src="p.url" :alt="p.artist">{{ ` ${p.idUser?p.artist:t('comps.public_site.jury_awards.awards.not')}` }}
-            </a> -->
           </span>
+          <span v-if="!p.idUser" class="not-awarded">{{ $t(('comps.public_site.jury_awards.awards.not')) }}</span>
         </p>
       </div>
     </section>
@@ -103,21 +101,22 @@
     padding-left: 15px;;
   }
   div.prizes p {
-    margin-bottom: 10px;
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 5px;
     margin-left: -3px;;
   }
   span.prize {
     font-weight: bolder;
   }
-  span.winner a {
-    display:flex;
-    align-items: center;
+  span.winner a  {
     padding-left: 15px;
     text-decoration: none;
     color: inherit;
   }
-  a.nowin {
-    cursor: none;
+  a.win {
+    display:flex;
+    align-items: center;
   }
   span.winner a.win:hover{ 
     text-decoration: underline; 
@@ -128,6 +127,9 @@
     width:40px;
     height:40px;
     padding:0 5px;
+  }
+  span.not-awarded {
+    padding-left: 15px;
   }
 
 </style>

@@ -1,11 +1,7 @@
 <script setup>
-  import { ref,watch,inject,computed, onMounted, onUnmounted } from 'vue'  
   import _ from 'lodash'
-  import { environment } from '@/config/environment.js'
-  import Tooltip from '../../common/Tooltip.vue'
   import public_items from './nav-items-public.json'
   import NavBarItem from './NavBarItem.vue'
-  import { getEntitiesBySql } from '@/services/httpEntities.js'
   
   const props = defineProps({
     type:{type:String},

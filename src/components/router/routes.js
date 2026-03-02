@@ -144,7 +144,7 @@ const router = createRouter({
     {
       path: '/public/catalogue_print', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
       name: 'public catalogue_print', //that reflects the content of catalogue_print page
-      component: CataloguePrint,
+      component: () => import('../public/catalogue/CataloguePrint.vue'), //lazy loading
       meta: { roles: [-1] },
     },
   ],
