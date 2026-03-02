@@ -400,6 +400,13 @@
           "label": "Thanks to our partners"
         }
       },
+      "catalogue": {
+        "toc": "Table of Content",
+        "price": "Price",
+        "reserved": "Reserved",
+        "guest": "Special guest(s)"
+      },
+
       "check": "enenen",
       "expos": {
         "tabs": {
