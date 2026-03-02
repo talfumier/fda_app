@@ -58,7 +58,7 @@
     </div>
     <div class="works">
       <div v-for="bo in data.bookingOeuvres" class="work">
-        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" loading="lazy">
+        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" >
         <div class="details">
           <p class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}</p>
           <p class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>
@@ -144,6 +144,7 @@
   div.social,div.web {
     display:flex;
     flex-wrap: wrap;
+    justify-content: center;
     max-width: 650px;
   }
   div.social a,div.web a {

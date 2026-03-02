@@ -406,6 +406,12 @@
         "reserved": "Reserved",
         "guest": "Special guest(s)"
       },
+      "jury_awards": {
+        "awards": {
+          "title": "Awarding of prizes",
+          "not": "Not yet awarded."
+        }
+      },
 
       "check": "enenen",
       "expos": {

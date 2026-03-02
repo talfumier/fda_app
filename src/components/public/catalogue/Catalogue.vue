@@ -1,14 +1,20 @@
 <script setup>
-  import {ref,watch,onMounted,onUnmounted} from 'vue'
+  import {ref,watch,onMounted,onUnmounted, nextTick} from 'vue'
   import _ from 'lodash'
   import { useI18n } from 'vue-i18n'
-  import { fetch } from '../../functions'
+  import { fetch } from '../functions'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Toc from './Toc.vue'
   import ArtistBlock from './ArtistBlock.vue'
+  import Partners from '../common/Partners.vue'
   import { getCoverPage } from './functions'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
+  import { scrollToSection } from './functions'
   import { environment } from '@/config/environment'
+
+  const props=defineProps({
+    idUser:{type:String,default:null}   //idUser coming from jury_awards page as a route parameter (ref. to routes.js)
+  })
 
   const {t,locale}=useI18n()   
   const {formatLocalDate}=useFormatDate()  
@@ -94,6 +100,12 @@
     }
     finally {
       doneController(ctrl,inFlight)
+      if(!props.idUser) return
+      await nextTick()
+      setTimeout(() => {
+        scrollToSection(`artist${props.idUser}`)
+      },500)
+      
     }
   })
   onUnmounted(() => { // clean-up code after component has unmounted  
@@ -106,6 +118,7 @@
   <main v-if="state.length>0" :class="['catalogue',catalogue?'col2':'']">
     <Toc v-if="catalogue"
       :domain_artists="domain_artists"
+      :idUser="idUser"
       @expand="(domain) => {
         domain_artists[domain].expand=!domain_artists[domain].expand
       }"
@@ -123,7 +136,8 @@
       >
       </ArtistBlock>
     </section>
-  </main>
+  </main>  
+  <Partners></Partners>
 </template>
 
 <style scoped>

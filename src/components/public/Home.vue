@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, onUnmounted } from 'vue'
   import _ from 'lodash'
-  import { fetch,openPdf } from '../functions'
+  import { fetch,openPdf } from './functions'
   import {
     newController,
     doneController,
@@ -9,8 +9,8 @@
   } from '@/utilityFunctions.js'  
   import { useI18n } from 'vue-i18n'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
-  import MapOsm from '../maps/MapOsm.vue'
-  import Partners from '../common/Partners.vue'
+  import MapOsm from './maps/MapOsm.vue'
+  import Partners from './common/Partners.vue'
 
   const {locale}=useI18n()
   const inFlight = new Set()     

@@ -1,19 +1,15 @@
-<script setup>
-  import {ref} from 'vue';
+<script setup>  
+  import { scrollToSection } from './functions'
 
   const props=defineProps({
     domain_artists:{type:Object}
   })
+
   const emit = defineEmits(['expand'])
 
   function toggle(domain){
     emit('expand',domain)
   } 
-
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
 
 </script>
 

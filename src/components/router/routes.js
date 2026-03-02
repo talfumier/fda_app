@@ -2,15 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import cookies from 'js-cookie'
 import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
-import CataloguePrint from '../public/home/catalogue/CataloguePrint.vue'
+import CataloguePrint from '../public/catalogue/CataloguePrint.vue'
 import content from '../common/page/master-content.json'
-import Home from '../public/home/Home.vue'
-import Catalogue from '../public/home/catalogue/Catalogue.vue'
-import JuryAwards from '../public/home/JuryAwards.vue'
-import PastEvents from '../public/home/PastEvents.vue'
+import Home from '../public/Home.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
 import Master from '../common/page/Master.vue'
-import Faq from '../public/faq/Faq.vue'
 import NotFound from '../notFound/NotFound.vue'
 
 function getUserRole() {
@@ -54,40 +50,40 @@ const router = createRouter({
     {
       path: '/public/catalogue',
       name: 'public catalogue',
-      component: Catalogue,
+      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading,
+      meta: { roles: [-1] },
+    },
+    {
+      path: '/public/catalogue/:idUser',
+      name: 'public catalogue idUser',
+      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading,
+      props: (route) => ({
+        idUser: route.params.idUser,
+      }),
       meta: { roles: [-1] },
     },
     {
       path: '/public/jury_awards',
       name: 'public jury_awards',
-      component: JuryAwards,
+      component: () => import('../public/JuryAwards.vue'), //lazy loading,
       meta: { roles: [-1] },
     },
     {
       path: '/public/past_events',
       name: 'public past_events',
-      component: PastEvents,
+      component: () => import('../public/PastEvents.vue'), //lazy loading,
       meta: { roles: [-1] },
     },
-    // {
-    //   path: '/public/expos/:idExpo',
-    //   name: 'public expos',
-    //   component: () => import('../public/expo/Expo.vue'), //lazy loading
-    //   props: (route) => ({
-    //     idExpo: route.params.idExpo,
-    //   }),
-    //   meta: { roles: [-1] },
-    // },
     {
       path: '/public/faq',
       name: 'public faq',
-      component: Faq,
+      component: () => import('../public/faq/Faq.vue'), //lazy loading,
       meta: { roles: [-1] },
     },
     {
       path: '/member/faq',
       name: 'member faq',
-      component: Faq,
+      component: () => import('../public/faq/Faq.vue'), //lazy loading,
       meta: { roles: [1, 3, 5, 6, 7] },
     },
     {
