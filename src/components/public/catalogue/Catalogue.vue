@@ -24,7 +24,7 @@
   const catalogue=ref(false)    //indicates whether catalogue is visible or not
   
   const fields={
-    booking:['idBooking','idUser','idRole','artist','resume_fr','resume_en','public_name','pseudo','public_pseudo','email','public_email','phone','public_phone',
+    booking:['idBooking','idUser','idRole','role_fr','role_en','artist','resume_fr','resume_en','public_name','pseudo','public_pseudo','email','public_email','phone','public_phone',
     'u_url','u_fileName','public_image','idStatus_b','web1','web2','social1','social2'],
     bookingOeuvres:['idBookingOeuvre','idOeuvre','selected','showRoom','screen','idStatus_bo','title_fr','title_en','desc_en','desc_fr',
       'classic_modern','price','reserved','idDomain','domain_fr','domain_en','tech_fr','tech_en','media_fr','media_en',
@@ -59,12 +59,20 @@
       domains= new Set((domains.split(',')).filter(d => d !== ''))
       domain_artists.value={}
       Array.from(domains).map((d) => {
-        domain_artists.value[d]={
-          expand:false,
-          artists:state.value[1].filter((a) => {
-            return a.domain[newLocale].includes(d)
-          })
-        }
+        if(d===t('comps.public_site.catalogue.guest')) 
+          domain_artists.value[d]={
+            expand:false,
+            artists:state.value[1].filter((a) => {
+              return a.idRole===2
+            })
+          } 
+        else
+          domain_artists.value[d]={
+            expand:false,
+            artists:state.value[1].filter((a) => {
+              return a.domain[newLocale].includes(d)
+            })
+          }
       })
     },
     { deep: true }

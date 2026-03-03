@@ -407,6 +407,10 @@
         "guest": "Special guest(s)"
       },
       "jury_awards": {
+        "jury": {
+          "title": "Jury panel",
+          "not": "To be defined."
+        },
         "awards": {
           "title": "Awarding of prizes",
           "not": "Not yet awarded."

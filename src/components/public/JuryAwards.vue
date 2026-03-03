@@ -36,10 +36,23 @@
 
 <template>
   <main v-if="state.length>0" class="jury-awards">
+    <h2>{{state[0][0][`title_${locale}`]}}</h2>
+    <section class="jury">
+      <h3>{{ $t('comps.public_site.jury_awards.jury.title') }}</h3>
+      <div v-if="state[2].length>0" class="jury-members">
+        <div v-for="j in state[2]" class="jury-member">
+          <img v-if="j.url" :src="j.url" :alt="j.jury">
+          <q-icon v-else size="7rem" class="fa-solid fa-user-tie"></q-icon>
+          <p>{{ j.jury }}</p>
+          <p class="role" >{{ _.capitalize(j[`role_${locale}`] )}}</p>
+        </div>
+      </div>
+      <div v-else class="jury-members">{{ $t('comps.public_site.jury_awards.jury.not') }}</div>
+    </section>
     <section class="awards">
-      <h2>{{ $t('comps.public_site.jury_awards.awards.title') }}</h2>
+      <h3>{{ $t('comps.public_site.jury_awards.awards.title') }}</h3>
       <div class="vernissage">
-        <h3>{{ `${t('comps.public_site.home.vernissage.title')}&nbsp:` }}</h3>
+        <h4>{{ `${t('comps.public_site.home.vernissage.title')}&nbsp:` }}</h4>
         <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
       </div>
       <div v-for="p in state[1]"class="prizes">
@@ -66,16 +79,63 @@
   main.jury-awards {
     padding:25px;
   }
-  h2,h3 {    
+  section {
+    margin:20px;
+  }
+  section.jury {
+    width:fit-content;
+    min-width:200px;
+    margin-left:5px;
+    padding:5px 15px;
+    border:2px solid var(--green);
+    border-radius: 5px;
+  }
+  div.jury-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: flex-start;
+    gap:20px;
+    font-size: 1.8rem;
+    padding:10px;
+  }
+  div.jury-member {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: smaller;
+    font-weight: bolder;
+  }
+  div.jury-member img,div.jury-member .q-icon {
+    object-fit: cover;
+    width:70px;
+    height:70px;
+    margin-bottom: 5px;
+  }
+  div.jury-member .q-icon {
+    opacity: .7;
+  }
+  div.jury-member p {
+    margin:0;
+  }
+  div.jury-member p.role {
+    font-weight: lighter;
+  }
+  h2,h3,h4 {    
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
   }
   h2 {
-    font-size: 2.3rem;
+    font-size: 2.5rem;
     line-height: 1.9rem;
     margin-bottom: 10px;
   }
   h3 {
+    font-size: 2.2rem;
+    line-height: 1.9rem;
+    margin-bottom: 10px;
+  }
+  h4 {
     font-size: 2rem;
     line-height: 2rem;
     padding: 5px 0;
@@ -131,5 +191,10 @@
   span.not-awarded {
     padding-left: 15px;
   }
+  @media screen and (min-width: 550px) {   
+    section.jury {
+      min-width:500px;
+    }
+  } 
 
 </style>

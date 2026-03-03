@@ -16,8 +16,8 @@
 <template>
   <nav class="toc">
     <h2 @click="scrollToSection('top-catalogue')">{{ $t('comps.public_site.catalogue.toc') }}</h2>
-    <ul v-for="domain in Object.keys(domain_artists)" :key="domain">
-      <li class="domain"
+    <ul v-for="(domain,idx) in Object.keys(domain_artists)" :key="domain">
+      <li :class="['domain',idx===0?'guest':'']"
         @click="toggle(domain)"
       >
         <q-icon
@@ -91,6 +91,16 @@
     font-weight: bolder;
     font-size: larger;
    
+  }
+  li.domain.guest::after { 
+    content: "\f0a3 ";
+    font-family: "Font Awesome 6 Free";
+    font-style: normal; 
+    font-size: 1.5rem;
+    font-weight: 900;
+    color:red;
+    padding-left:5px;
+    opacity:0.9;
   }
   li.domain p {
     margin:0;
