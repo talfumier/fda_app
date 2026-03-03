@@ -32,7 +32,9 @@
     :columns="columns"
     :visible-columns="visible"
     :row-key="rowKey"
-    virtual-scroll      
+    virtual-scroll          
+    :rows-per-page-options="[0]"
+    :pagination="{ rowsPerPage: 0 }"
     dense
     v-bind="attrs"
   >
@@ -72,7 +74,7 @@
     font-size: 1.5rem;
   }
   div.q-table__container {
-    width: 400px;
+    width: 500px;
     height:250px;
   }
   div.q-table__container.award {

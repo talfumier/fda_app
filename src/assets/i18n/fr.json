@@ -406,6 +406,16 @@
         "reserved": "Réservé",
         "guest": "Invité(s) d'honneur"
       },
+      "jury_awards": {
+        "jury": {
+          "title": "Composition du jury",
+          "not": "Non définie."
+        },
+        "awards": {
+          "title": "Attribution des prix",
+          "not": "Non attribué."
+        }
+      },
       "check": "frfrfr",
       "expos": {
         "tabs": {

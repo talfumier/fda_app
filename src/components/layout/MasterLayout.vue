@@ -1,16 +1,17 @@
 <script setup>
   import {ref,inject,useSlots} from 'vue'
-  import { useRouter,useRoute,RouterLink} from 'vue-router'
+  import { useRouter,RouterLink} from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { setUpTokenExpiry } from '../login/tokenExpiry.js'
   import HeaderMember from './header/HeaderMember.vue'
   import LangSwitcher from './header/LangSwitcher.vue'
   import NavBarPublic from './navbar/NavBarPublic.vue'
   import NavBarMember from './navbar/NavBarMember.vue'
-  import { environment } from '@/config/environment.js'
-  
-  const route=useRoute()
   const router=useRouter()
+
+  const props = defineProps({
+    route:{type:Object}
+  }) 
 
   const {t}=useI18n()
   const {decoded} = inject('userCookie')

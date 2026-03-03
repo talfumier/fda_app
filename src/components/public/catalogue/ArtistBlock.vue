@@ -16,7 +16,7 @@
     <hr>
     <div class="bio">
       <h3 class="technique">{{getText(2,data.domain,null,locale)}}</h3>
-      <h4 class="avatar">
+      <h4 :class="['avatar',data.idRole===2?'guest':'']">
         <img v-if="data.public_image && data.u_url":src="adjustImage(70,70,data.u_url)" alt="data.artistname" loading="lazy">
         <p>{{ data.artist }}&nbsp &nbsp{{ data.public_pseudo && data.pseudo!==data.artist && data.pseudo?"'"+data.pseudo+"'":'' }}</p>
       </h4>
@@ -58,7 +58,7 @@
     </div>
     <div class="works">
       <div v-for="bo in data.bookingOeuvres" class="work">
-        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" loading="lazy">
+        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" >
         <div class="details">
           <p class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}</p>
           <p class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>
@@ -102,6 +102,15 @@
     gap:20px;
     margin:10px 0;
   }  
+   h4.guest::before { 
+    content: "\f0a3 ";
+    font-family: "Font Awesome 6 Free";
+    font-style: normal; 
+    font-size: 3rem;
+    font-weight: 900;
+    color:red;
+    opacity:0.9;
+  }
   h4.avatar img {
     width:70px;
     height:70px;
@@ -144,6 +153,7 @@
   div.social,div.web {
     display:flex;
     flex-wrap: wrap;
+    justify-content: center;
     max-width: 650px;
   }
   div.social a,div.web a {

@@ -12,9 +12,9 @@ export function getText(cs = 1, bo, item, locale) {
 }
 export function getDim(bo, locale) {
   let dim = ''
-  if (bo.width) dim = (locale === 'en' ? 'L: ' : 'W: ') + bo.width.toString() + ' cm'
+  if (bo.width) dim = (locale === 'en' ? 'W: ' : 'L: ') + bo.width.toString() + ' cm'
   if (bo.height) dim = dim + ' | H: ' + bo.height.toString() + ' cm'
-  if (bo.depth) dim = dim + (locale === 'en' ? ' | P: ' : ' | D: ') + bo.depth.toString() + ' cm'
+  if (bo.depth) dim = dim + (locale === 'en' ? ' | D: ' : ' | P: ') + bo.depth.toString() + ' cm'
   if (bo.weight)
     dim = dim + ', ' + (locale === 'en' ? ' Wt: ' : ' Pds: ') + bo.weight.toString() + ' Kg'
   return dim
@@ -53,4 +53,8 @@ export function getCoverPage(data, idType) {
   return data.filter((item) => {
     return item.idType === idType
   })[0].url
+}
+export function scrollToSection(id) {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
