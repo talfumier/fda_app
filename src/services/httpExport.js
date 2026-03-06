@@ -16,3 +16,14 @@ export function downloadCsv(stored_proc, filename, token, signal) {
     responseType: 'blob',
   })
 }
+export async function downloadCataloguePDF(token, signal, source, params, paramsValues) {
+  return http.post(
+    `${api}/catalogue`,
+    { source, params, paramsValues },
+    {
+      headers: { 'x-auth-token': token },
+      signal,
+      responseType: 'blob',
+    },
+  )
+}

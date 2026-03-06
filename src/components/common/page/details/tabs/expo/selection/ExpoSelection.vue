@@ -287,6 +287,8 @@
   <FileViewerModal 
     v-if="isOpen"
     :file="file"
+    :x="100"
+    :y="0"
     @close-modal="closeModal"
   >
   </FileViewerModal> 

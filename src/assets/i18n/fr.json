@@ -131,6 +131,10 @@
         "user_data": {
           "title": "Export des données comptes utilisateur",
           "info": "Export des comptes utilisateurs dans un fichier .csv incluant nom, rôle, email, téléphone et les expos associées."
+        },
+        "catalogue": {
+          "title": "Export du catalogue",
+          "info": "Génération du catalogue pour l'exposition sélectionner dans un fichier .pdf."
         }
       },
       "admin": {
@@ -374,6 +378,10 @@
       "user_data": {
         "success": "Données comptes utilisateur exportées avec succès!",
         "error": "Echec de l'export des données comptes utilisateur. Essayez à nouveau."
+      },
+      "catalogue": {
+        "success": "PDF catalogue créé avec succès!",
+        "error": "Echec de la création du PDF catalogue. Essayez à nouveau."
       }
     },
     "public_site": {

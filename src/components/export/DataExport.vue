@@ -1,46 +1,48 @@
 <script setup>  
   import { onUnmounted, ref, inject } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { downloadCatalogueZip, downloadCsv } from '@/services/httpExport.js'
+  import { downloadCatalogueZip, downloadCsv,downloadCataloguePDF } from '@/services/httpExport.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import DialogInfo from '../common/DialogInfo.vue'
   import InputField from '../common/fields/InputField.vue'
   import FieldsetButton from '../common/page/details/FieldsetButton.vue'
-
-  defineProps({
-  })
 
   const {token}=inject('userCookie')
   const {t}=useI18n()  
   const inFlight=new Set()
 
   const paramsValues=ref('')
-  const disable=ref({artist_data:true,user_data:false})
-  const isLoading=ref({artist_data:false,user_data:false})
-  const errorMessage = ref({artist_data:'',user_data:''})
-  const successMessage = ref({artist_data:'',user_data:''})
+  const disable=ref({artist_data:true,user_data:false,catalogue:true})
+  const isLoading=ref({artist_data:false,user_data:false,catalogue:false})
+  const errorMessage = ref({artist_data:'',user_data:'',catalogue:''})
+  const successMessage = ref({artist_data:'',user_data:'',catalogue:''})
 
-  const obj={idExpo:0,idStatus:[0,0,0],showRoom:0,screen:0}
-  function handleChange(name,valid,val){
+  const obj={
+    artist_data:{idExpo:0,idStatus:[0,0,0],showRoom:0,screen:0},
+    catalogue:{idExpo:0,idStatus:[0,0,0]}
+  }
+  
+  function handleChange(name,valid,val,cs){
     val=parseInt(val===false?0:val===true?1:val)
     switch(name){
-      case 'idStatus8':
-        obj.idStatus[0]=val===1?8:0
+      case 'idStatus8':     //candidate
+        obj[cs].idStatus[0]=val===1?8:0
         break
-      case 'idStatus10':
-        obj.idStatus[1]=val===1?10:0
+      case 'idStatus10':    //accepted
+        obj[cs].idStatus[1]=val===1?10:0
         break
-      case 'idStatus27':
-        obj.idStatus[2]=val===1?27:0
+      case 'idStatus27':    //payment received
+        obj[cs].idStatus[2]=val===1?27:0
         break
       default:
-        obj[name]=val
+        obj[cs][name]=val
     }
-    disable.value.artist_data=false
-    if(obj.idExpo===0) disable.value.artist_data=true
-    if(obj.idStatus.reduce((a, b) => parseInt(a) + parseInt(b), 0)===0) disable.value.artist_data=true
-    if((obj.showRoom+obj.screen)===0) disable.value.artist_data=true
-    paramsValues.value=`${obj.idExpo};[${obj.idStatus}];${obj.showRoom};${obj.screen}`
+    disable.value[cs]=false
+    if(obj[cs].idExpo===0) disable.value[cs]=true
+    if(obj[cs].idStatus.reduce((a, b) => parseInt(a) + parseInt(b), 0)===0) disable.value[cs]=true
+    if((obj.artist_data.showRoom+obj.artist_data.screen)===0) disable.value.artist_data=true
+    paramsValues.value=`${obj[cs].idExpo};[${obj[cs].idStatus}]`
+    if(cs==='artist_data') paramsValues.value=`${paramsValues.value};${obj[cs].showRoom};${obj[cs].screen}`
   }
   async function handleButtonAction(cs){
     isLoading.value[`${cs}`]=true
@@ -53,13 +55,16 @@
           break
         case 'user_data':
           res=await downloadCsv('export_users','user_data',token.value,ctrl.signal)
+          break
+        case 'catalogue':
+          res=await downloadCataloguePDF(token.value,ctrl.signal,window.location.origin,':idExpo,:idStatus',paramsValues.value)
       }
       // Trigger download in browser
-      const blob = new Blob([res.data], { type: `${cs==='artist_data'?"application/zip":"text/csv"}` })
+      const blob = new Blob([res.data], { type: `${cs==='artist_data'?"application/zip":(cs==='user_data'?"text/csv":"application/pdf")}` })
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${cs}_export.${cs==='artist_data'?"zip":"csv"}`
+      a.download = `${cs}_export.${cs==='artist_data'?"zip":(cs==='user_data'?'csv':'pdf')}`
       document.body.appendChild(a)
       a.click()
       // Cleanup
@@ -94,7 +99,9 @@
       field_type="select" 
       options="options_expo_export" 
       :required="false"
-      @change="handleChange"
+      @change="(name,valid,val) => {
+          handleChange(name,valid,val,'artist_data')
+        }"
     ></InputField>    
     <div class="cb-container status">
       <label >{{$t('comps.export.artist_data.select_status')}}</label>
@@ -104,7 +111,9 @@
         field_type="checkbox" 
         data_type="checkbox" 
         format="integer"
-        @change="handleChange"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'artist_data')
+        }"
       >
       </InputField><InputField 
         name="idStatus10" 
@@ -112,7 +121,9 @@
         field_type="checkbox" 
         data_type="checkbox" 
         format="integer"
-        @change="handleChange"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'artist_data')
+        }"
       ></InputField>
       <InputField 
         name="idStatus27" 
@@ -120,7 +131,9 @@
         field_type="checkbox" 
         data_type="checkbox" 
         format="integer"
-        @change="handleChange"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'artist_data')
+        }"
       ></InputField>
     </div>
     <div class="cb-container media">
@@ -131,7 +144,9 @@
         field_type="checkbox" 
         data_type="checkbox" 
         format="integer"
-        @change="handleChange"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'artist_data')
+        }"
       >
       </InputField><InputField 
         name="screen" 
@@ -139,7 +154,9 @@
         field_type="checkbox" 
         data_type="checkbox" 
         format="integer"
-        @change="handleChange"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'artist_data')
+        }"
       ></InputField>
     </div>
     <div class="bottom-container">
@@ -148,7 +165,7 @@
           {
             name: 'export',
             icon: 'outbox',
-            label_fr: isLoading.artist_data?'Téléchargment en cours ...':'Générer l\'archive .zip',
+            label_fr: isLoading.artist_data?'Téléchargement en cours ...':'Générer l\'archive .zip',
             label_en: isLoading.artist_data?'Download in progress ...':'Generate .zip archive'
           }
         ]" 
@@ -170,7 +187,7 @@
           {
             name: 'export',
             icon: 'outbox',
-            label_fr: isLoading.user_data?'Téléchargment en cours ...':'Générer le fichier .csv',
+            label_fr: isLoading.user_data?'Téléchargement en cours ...':'Générer le fichier .csv',
             label_en: isLoading.user_data?'Download in progress ...':'Generate .csv file'
           }
         ]" 
@@ -182,6 +199,71 @@
       <div v-if="successMessage.user_data" class="message success">{{ successMessage.user_data }}</div>
     </div>  
   </fieldset>  
+  <fieldset>
+    <legend > 
+        {{ $t('comps.infos.export.catalogue.title')}}<DialogInfo :path="$t('comps.infos.export.catalogue.info')"></DialogInfo>
+    </legend>
+    <InputField 
+      name="idExpo" 
+      :label="$t('comps.export.artist_data.select_expo')" 
+      field_type="select" 
+      options="options_expo_export" 
+      :required="false"
+      @change="(name,valid,val) => {
+          handleChange(name,valid,val,'catalogue')
+        }"
+    ></InputField>    
+    <div class="cb-container status">
+      <label >{{$t('comps.export.artist_data.select_status')}}</label>
+      <InputField 
+        name="idStatus8" 
+        :label="$t('comps.list_items.actions_menu.booking.candidate')" 
+        field_type="checkbox" 
+        data_type="checkbox" 
+        format="integer"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'catalogue')
+        }"
+      >
+      </InputField><InputField 
+        name="idStatus10" 
+        :label="$t('comps.list_items.actions_menu.booking.accepted')" 
+        field_type="checkbox" 
+        data_type="checkbox" 
+        format="integer"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'catalogue')
+        }"
+      ></InputField>
+      <InputField 
+        name="idStatus27" 
+        :label="$t('comps.list_items.actions_menu.booking.payment')" 
+        field_type="checkbox" 
+        data_type="checkbox" 
+        format="integer"
+        @change="(name,valid,val) => {
+          handleChange(name,valid,val,'catalogue')
+        }"
+      ></InputField>
+    </div>
+    <div class="bottom-container">
+      <FieldsetButton 
+        :buttons="[
+          {
+            name: 'export',
+            icon: 'outbox',
+            label_fr: isLoading.catalogue?'Téléchargement en cours ...':'Générer le document .pdf',
+            label_en: isLoading.catalogue?'Download in progress ...':'Generate .pdf document'
+          }
+        ]" 
+        :disabled="{export:disable.catalogue}"
+        :pulse="isLoading.catalogue"
+        @button-action="handleButtonAction('catalogue')"
+      ></FieldsetButton> 
+      <div v-if="errorMessage.catalogue" class="message error">{{ errorMessage.catalogue }}</div>
+      <div v-if="successMessage.catalogue" class="message success">{{ successMessage.catalogue }}</div>
+    </div>  
+  </fieldset>
 </template>
 
 <style scoped>  

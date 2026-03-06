@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import cookies from 'js-cookie'
 import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
-import CataloguePrint from '../public/catalogue/CataloguePrint.vue'
 import content from '../common/page/master-content.json'
 import Home from '../public/Home.vue'
 import Dashboard from '../dashboard/Dashboard.vue'
@@ -50,40 +49,49 @@ const router = createRouter({
     {
       path: '/public/catalogue',
       name: 'public catalogue',
-      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading,
+      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
       path: '/public/catalogue/:idUser',
       name: 'public catalogue idUser',
-      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading,
+      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading
       props: (route) => ({
         idUser: route.params.idUser,
       }),
       meta: { roles: [-1] },
     },
     {
+      path: '/public/catalogue_print', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
+      name: 'public catalogue_print', //that reflects the content of catalogue_print page
+      component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading
+      props: () => ({
+        print: true,
+      }),
+      meta: { roles: [-1] },
+    },
+    {
       path: '/public/jury_awards',
       name: 'public jury_awards',
-      component: () => import('../public/JuryAwards.vue'), //lazy loading,
+      component: () => import('../public/JuryAwards.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
       path: '/public/past_events',
       name: 'public past_events',
-      component: () => import('../public/PastEvents.vue'), //lazy loading,
+      component: () => import('../public/PastEvents.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
       path: '/public/faq',
       name: 'public faq',
-      component: () => import('../public/faq/Faq.vue'), //lazy loading,
+      component: () => import('../public/faq/Faq.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
       path: '/member/faq',
       name: 'member faq',
-      component: () => import('../public/faq/Faq.vue'), //lazy loading,
+      component: () => import('../public/faq/Faq.vue'), //lazy loading
       meta: { roles: [1, 3, 5, 6, 7] },
     },
     {
@@ -140,12 +148,6 @@ const router = createRouter({
       name: 'NotFound',
       component: NotFound,
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
-    },
-    {
-      path: '/public/catalogue_print', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
-      name: 'public catalogue_print', //that reflects the content of catalogue_print page
-      component: () => import('../public/catalogue/CataloguePrint.vue'), //lazy loading
-      meta: { roles: [-1] },
     },
   ],
 })

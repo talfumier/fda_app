@@ -16,7 +16,8 @@ export function getDim(bo, locale) {
   if (bo.height) dim = dim + ' | H: ' + bo.height.toString() + ' cm'
   if (bo.depth) dim = dim + (locale === 'en' ? ' | D: ' : ' | P: ') + bo.depth.toString() + ' cm'
   if (bo.weight)
-    dim = dim + ', ' + (locale === 'en' ? ' Wt: ' : ' Pds: ') + bo.weight.toString() + ' Kg'
+    dim = dim + (locale === 'en' ? ' | Wt: ' : ' | Pds: ') + bo.weight.toString() + ' Kg'
+  if (dim.startsWith(' |')) dim = dim.slice(2)
   return dim
 }
 export function getPrice(bo, t) {

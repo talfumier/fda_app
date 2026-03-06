@@ -131,6 +131,10 @@
         "user_data": {
           "title": "User accounts data export",
           "info": "User accounts data export in a .csv file including name, role, email address, phone number and associated exhibitions."
+        },
+        "catalogue": {
+          "title": "Exhibition catalogue",
+          "info": "Creation of the catalogue .pdf document for the selected exhibition."
         }
       },
       "admin": {
@@ -374,6 +378,10 @@
       "user_data": {
         "success": "User accounts data exported successfully!",
         "error": "Failed to export user accounts data. Please try again."
+      },
+      "catalogue": {
+        "success": "Catalogue PDF document created successfully!",
+        "error": "Failed to create catalogue PDF document. Please try again."
       }
     },
     "public_site": {
