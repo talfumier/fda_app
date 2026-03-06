@@ -381,7 +381,7 @@
       },
       "catalogue": {
         "success": "PDF catalogue créé avec succès!",
-        "error": "Echec de la création du PDF catalogue. Essayez à nouveau."
+        "error": "Echec de la création du catalogue PDF . Essayez à nouveau."
       }
     },
     "public_site": {
