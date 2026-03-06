@@ -73,7 +73,6 @@
 </template>
 
 <style scoped>
-  
   div.scroll-table {
     max-height: 600px;       
     overflow-y: auto;
@@ -90,6 +89,9 @@
   div.q-table__container {
     width:100%;
     height: fit-content;
+  }
+  ::v-deep(.q-table__middle) {
+    overflow-y: hidden;
   }
   ::v-deep(.q-table__title) {
     font-size: 1.5rem;
