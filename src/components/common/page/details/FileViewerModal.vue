@@ -3,13 +3,15 @@
   import FileViewer from './FileViewer.vue'
   import supported from './supported.json'
 
-  defineProps({
-    file:{type:Object}
+  const props=defineProps({
+    file:{type:Object},
+    x:{type:Number,default:500},
+    y:{type:Number,default:300}
   })
 
   const emit=defineEmits(['closeModal'])  
 
-  const position = ref({ x: 500, y: 300 })
+  const position = ref({ x: props.x, y: props.y })
   const isDragging = ref(false)
   let start = { x: 0, y: 0 }
 

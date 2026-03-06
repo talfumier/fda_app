@@ -1,4 +1,5 @@
 <script setup>
+  import { ref } from 'vue'
   import _ from 'lodash'
   import public_items from './nav-items-public.json'
   import NavBarItem from './NavBarItem.vue'
@@ -7,6 +8,15 @@
     type:{type:String},
     wrap:{type:Boolean,default:false}
   })  
+
+  const isRotated=ref(false)
+
+  const mediaQuery = window.matchMedia("(max-width: 730px)")
+  function handleScreenChange(e) {
+    isRotated.value=e.matches
+  }
+  mediaQuery.addEventListener("change", handleScreenChange)
+  handleScreenChange(mediaQuery) // run initially
  
 </script>
 
@@ -18,7 +28,7 @@
             :key="item"
             source='public'
             :item="item" 
-            :isRotated="$q.screen.width<730" 
+            :isRotated="isRotated" 
           />
         </li>
 
@@ -50,6 +60,11 @@
     font-size: 1.8rem;
   }
   li {
-    padding: 3px 5px;
+    padding: 0px 5px;
+  }
+  @media screen and (min-width: 730px) {
+    li {
+      padding: 3px 5px;
+    }
   }
 </style>

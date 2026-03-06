@@ -4,20 +4,22 @@
   import { getText,getDim,getPrice,adjustImage,toSentenceCase,getSocialBrand } from './functions'
 
   const props=defineProps({
-    data:{type:Object}
+    data:{type:Object},
+    print:{type:Boolean,default:false}
   })
 
   const {t,locale}=useI18n() 
+  if(props.print) locale.value='fr'
   
 </script>
 
 <template>
-  <section class="artist" :id="`artist${data.idUser}`">
-    <hr>
+  <section v-if="locale" class="artist" :id="`artist${data.idUser}`">
+    <hr v-if="!print">
     <div class="bio">
       <h3 class="technique">{{getText(2,data.domain,null,locale)}}</h3>
       <h4 :class="['avatar',data.idRole===2?'guest':'']">
-        <img v-if="data.public_image && data.u_url":src="adjustImage(70,70,data.u_url)" alt="data.artistname" loading="lazy">
+        <img v-if="!print && data.public_image && data.u_url":src="adjustImage(70,70,data.u_url)" alt="data.artistname" loading="lazy">
         <p>{{ data.artist }}&nbsp &nbsp{{ data.public_pseudo && data.pseudo!==data.artist && data.pseudo?"'"+data.pseudo+"'":'' }}</p>
       </h4>
       <div class="contact">
@@ -26,7 +28,7 @@
         </p>
         <p v-if="data.public_phone" class="phone">{{ data.phone }}</p>
       </div>
-      <div class="social">
+      <div v-if="!print" class="social">
         <p v-if="data.social1 && data.social1.startsWith('https')"
           :class="getSocialBrand(data.social1)"
         >
@@ -42,7 +44,7 @@
           </a>
         </p>
       </div>
-      <div class="web">
+      <div v-if="!print" class="web">
         <p v-if="data.web1 && data.web1.startsWith('https')">
           <a :href="data.web1" target="_blank" rel="noopener">
             {{ data.web1 }}
@@ -54,17 +56,22 @@
           </a>
         </p>
       </div>
-      <div class="resume" v-if="data[`resume_${locale}`]">{{ toSentenceCase(2,data[`resume_${locale}`] )}}</div>
+      <div class="resume" v-if="!print && data[`resume_${locale}`]">{{ toSentenceCase(2,data[`resume_${locale}`] )}}</div>
     </div>
-    <div class="works">
-      <div v-for="bo in data.bookingOeuvres" class="work">
-        <img :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" >
-        <div class="details">
+    <div :class="['works',print?'print':'']">
+      <div v-for="(bo,idx) in _.orderBy(data.bookingOeuvres,['catalogue','artist'],['desc','asc'])" class="work">
+        <img v-if="print && idx===0 || !print" :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" >
+        <div v-if="!print" class="details">
           <p class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}</p>
-          <p class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>
+          <p v-if="!print" class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>
           <p class="technique-media">Technique: {{getText(1,bo,'tech',locale)}} | Support: {{getText(1,bo,'media',locale)}}</p>
           <p class="dim">{{ getDim(bo,locale) }}</p>
           <p class="price">{{ getPrice(bo,t) }}</p>
+        </div>
+        <div v-if="print" class="details">
+          <span class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}&nbsp|&nbsp</span>
+          <span class="technique-media">{{_.capitalize(getText(1,bo,'tech',locale))}}&nbsp{{`${bo.price||bo.reserved?'|':''}`}}&nbsp</span>
+          <span class="price">{{ getPrice(bo,t) }}</span>
         </div>
       </div>
     </div>
@@ -80,6 +87,9 @@
     width:100%;    
     font-family: "Roboto", sans-serif;
     font-size: 1.5rem;
+    margin-top:15px;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
   div.bio {
     display:flex;
@@ -156,6 +166,9 @@
     justify-content: center;
     max-width: 650px;
   }
+  div.works.print div.social,div.web {
+    max-width: 500px;
+  }
   div.social a,div.web a {
     padding:2px 5px;
   }
@@ -175,7 +188,6 @@
     font-weight: 400; 
     font-size: 2.2rem;
     padding: 2px 5px 0 5px;
-    /* opacity: 0.5; */
   }
   div.social p.fb::before {
     content: "\f09a";
@@ -193,7 +205,6 @@
     font-weight: 400; 
     font-size: 1.8rem;
     padding: 2px 3px 0 8px;
-    /* opacity:0.5; */
   }
   div.resume {   
     text-align: justify;
@@ -213,10 +224,58 @@
     gap:20px;
     padding:15px;
   }
+  div.works.print {
+    flex-direction: column;
+    align-items: center;
+    gap:5px;
+  }
   div.work {
     max-width: 300px;
   }
-  p.technique-media, p.dim, p.price {
+  div.works.print div.work {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+  }
+  div.works.print div.work img {
+    padding-bottom: 10px;;
+  }
+  div.works div.details {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: left;
+  } 
+  div.works.print div.details {
+    flex-wrap: nowrap;
+    justify-content: center;
+    width:100%;
+  }
+  span.title {
+    font-weight: bolder;
+    max-width: 250px;   
+    white-space: nowrap; 
+    overflow: hidden;        
+    text-overflow: ellipsis; 
+  }
+  div.works.print p {
+    padding:0 5px;
+  }
+  div.work p.title {
+    justify-content: left;
+    font-weight: bolder;
+    width:100%;
+  }
+  p.title,p.technique-media, p.dim, p.price {
+    justify-content: left;
     padding-top:5px;
+
+  }
+  p.price {
+    width:100%;
+  }
+  div.works.print p.title, div.works.print p.technique-media, div.works.print p.dim, div.works.print p.price {
+    justify-content: center;
+    width:100%;
   }
 </style>

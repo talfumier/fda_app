@@ -1,5 +1,6 @@
 <script setup>
   import {ref,watch,onMounted,onUnmounted, nextTick} from 'vue'
+  import { useRoute } from "vue-router"
   import _ from 'lodash'
   import { useI18n } from 'vue-i18n'
   import { fetch } from '../functions'
@@ -13,12 +14,15 @@
   import { environment } from '@/config/environment'
 
   const props=defineProps({
-    idUser:{type:String,default:null}   //idUser coming from jury_awards page as a route parameter (ref. to routes.js)
+    idUser:{type:String,default:null},   //idUser parameter coming from jury_awards page as a route parameter (ref. to routes.js) >>> vertical scroll to an awarded artist
+    print:{type:Boolean,default:false}   //print parameter coming from routes.js /public/catalogue_print route
   })
 
   const {t,locale}=useI18n()   
   const {formatLocalDate}=useFormatDate()  
   const inFlight=new Set()
+
+  const route = useRoute();
   
   const state=ref([])
   const catalogue=ref(false)    //indicates whether catalogue is visible or not
@@ -77,13 +81,29 @@
     },
     { deep: true }
   )
+  function filterBookingOeuvres() {
+    _.cloneDeep(state.value[1]).map((b,idx) => {
+      state.value[1][idx].bookingOeuvres=_.filter(state.value[1][idx].bookingOeuvres,(bo) => {
+        return bo.idStatus_bo===17    //accepted bookingOeuvres only
+      })
+    })
+  }
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
-      state.value = await fetch('public_expo_catalogue', ctrl.signal)       
+      // ':idExpo,:idStatus','-1;[8,10,27]')  >> retrieve all data from the last on-going expo, status=candidateaccepted|payment received   
+      // route query coming from API back-end during catalogue export in PDF (selection criteria for export,idExpo, idStatus)
+      state.value = await fetch('public_expo_catalogue', ctrl.signal,':idExpo,:idStatus',
+        `${route.query && route.query.paramsValues?route.query.paramsValues:'-1;[8,10,27]'}`)  
       if(!environment.production) catalogue.value=true    //in dev or test environment, catalogue is always visible (whatever is the current date vs response date)
-      else if (state.value[0][0].catalogueReleased)     //in production environment, catalogue is visible when current date exceeds response date by one day
+      else if (state.value[0][0].catalogueReleased) {   //in production environment, catalogue is visible when current date exceeds response date by one day
         catalogue.value=true 
+        state.value[1]=_.filter(state.value[1],(b) => {
+          return b.idStatus_b>=10  //accepted bookings only
+        })
+        filterBookingOeuvres() //accepted bookingOeuvres only
+      }
+      if(route?.query?.paramsValues && !route.query.paramsValues.split(";")[1].includes('8')) filterBookingOeuvres() //accepted bookingOeuvres only
       if(!catalogue.value) return
       const groupsById = {}   
       state.value[1].forEach(row => {
@@ -101,7 +121,7 @@
           groupsById[id].domain.fr.push(_.capitalize(item.domain_fr))  
         } 
       })
-      state.value[1]=_.orderBy(Object.values(groupsById), ['artist'], ['asc']);  
+      state.value[1]=_.orderBy(Object.values(groupsById), ['artist'], ['asc'])
     } catch (error) {
       console.error('onmounted failed in Catalogue.vue', error)
       return
@@ -123,8 +143,8 @@
 </script>
 
 <template>
-  <main v-if="state.length>0" :class="['catalogue',catalogue?'col2':'']">
-    <Toc v-if="catalogue"
+  <main v-if="state.length>0" :class="['catalogue',catalogue && !print?'col2':'']">
+    <Toc v-if="catalogue && !print"
       :domain_artists="domain_artists"
       :idUser="idUser"
       @expand="(domain) => {
@@ -132,20 +152,24 @@
       }"
     >
     </Toc>
-    <section class="wrapper" id="top-catalogue">
-      <section class="cover-page">
-        <img :src="getCoverPage(state[2],locale==='en'?4:5)" :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'" loading="lazy">
-        <div v-if="!catalogue" class="banner">
+    <section :class="['wrapper',print?'print':'']" id="top-catalogue">
+      <section class="cover-page ">
+        <img 
+          :src="getCoverPage(state[2],!print?(locale==='en'?4:5):6)" 
+          :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'" 
+          loading="lazy">
+        <div v-if="!catalogue && !print" class="banner">
           {{ locale==='en'?'Available from ':'Disponible à partir du '}}{{ formatLocalDate(state[0][0].catalogueReleaseDate,locale,'df') }}
         </div>
       </section>
       <ArtistBlock v-if="catalogue" v-for="artist in state[1]"
         :data="artist"
+        :print="print"
       >
       </ArtistBlock>
     </section>
   </main>  
-  <Partners></Partners>
+  <Partners :print="print" class="break-before"></Partners>
 </template>
 
 <style scoped>
@@ -163,7 +187,20 @@
     align-items: center;
     padding:15px;
   }
+  section.wrapper.print {
+    display:grid;
+    grid-template-columns: repeat(2,50%);
+    grid-template-rows: auto;
+    justify-content:center;
+    align-items: flex-start;
+    gap:5px;
+  }
+  section.wrapper.print section.artist {
+    outline: 1px solid #ccc;
+    height:100%;
+  }
   section.cover-page {
+    grid-column: 1/-1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -179,6 +216,14 @@
     object-fit: cover;
     width:80%;
   }
+  section.wrapper.print section.cover-page img {
+    width:100%;
+    height:100%;
+  }
+  section.partner.print {
+    justify-self: center;
+    max-width:50%;
+  }
   @media screen and (min-width: 768px) {  
     main.catalogue.col2 {
       grid-template-columns: 250px auto;
@@ -192,6 +237,12 @@
     section.wrapper {
       grid-column: 2;
     }
+  }
+  .break-before {
+    break-before: page;
+  }
+  .break-after {
+    break-after: page;
   }
   @media screen and (min-width: 1200px){
     section.cover-page div.banner {      

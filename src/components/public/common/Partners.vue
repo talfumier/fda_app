@@ -6,6 +6,10 @@
     doneController,
     cancelAllInFlight
   } from '@/utilityFunctions.js'  
+
+  const props=defineProps({
+    print:{type:Boolean,default:false}
+  })
   
   const inFlight = new Set()
 
@@ -29,8 +33,10 @@
 </script>
 
 <template>
-  <section class="partner">    
+  <section :class="['partner',print?'print':'']"> 
+    <br v-if="print"><br v-if="print"><br v-if="print"> 
     <h2>{{ $t('comps.public_site.home.partner.label') }}</h2>
+    <br v-if="print"><br v-if="print"><br v-if="print"> 
     <div class="logos">
       <div v-for="item in state" class="logo">
         <a :href="item.web1" target="blank">
@@ -56,6 +62,10 @@
     font-size: 1.8rem;
     font-weight: 550;
   }
+  section.print h2 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
   div.logos {
     display:flex;
     flex-wrap: wrap;
@@ -64,10 +74,21 @@
     gap:40px;
     padding-bottom: 15px;
   }
+  section.print div.logos {
+    justify-content: space-evenly;
+    width:100%;
+  }
+  section.print div.logo {  
+    padding:20px 30px;  
+    margin:0 auto;
+  }
   img {
     object-fit: cover;
     height:100px;
     cursor: pointer;
+  }
+  section.print img {
+    height:150px;
   }
 
 </style>

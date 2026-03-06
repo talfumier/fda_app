@@ -54,7 +54,9 @@
     margin-left: 0;
   }
   div.large img {
-    height: 265px;
+    /* height: 265px; */
+    height: 90vh;
+    z-index: 10000;
   }
   div.medium img {
     height: 223px;
