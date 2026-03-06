@@ -96,7 +96,7 @@
       state.value = await fetch('public_expo_catalogue', ctrl.signal,':idExpo,:idStatus',
         `${route.query && route.query.paramsValues?route.query.paramsValues:'-1;[8,10,27]'}`)  
       if(!environment.production) catalogue.value=true    //in dev or test environment, catalogue is always visible (whatever is the current date vs response date)
-      else if (state.value[0][0].catalogueReleased || print) {   //in production environment, on line catalogue is visible when current date exceeds response date by one day
+      else if (state.value[0][0].catalogueReleased===1 || print) {   //in production environment, on line catalogue is visible when current date exceeds response date by one day
         catalogue.value=true 
         state.value[1]=_.filter(state.value[1],(b) => {
           return b.idStatus_b>=10  //accepted bookings only

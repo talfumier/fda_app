@@ -7,7 +7,6 @@
     data:{type:Object},
     print:{type:Boolean,default:false}
   })
-  console.log(props.data)
 
   const {t,locale}=useI18n() 
   if(props.print) locale.value='fr'
