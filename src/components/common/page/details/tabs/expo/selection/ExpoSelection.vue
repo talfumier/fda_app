@@ -1,5 +1,6 @@
 <script setup>
   import {ref,computed,inject,onMounted,onUnmounted} from 'vue'
+  import { useQuasar } from 'quasar'
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
   import { getEntitiesBySql } from '@/services/httpEntities.js'
@@ -9,6 +10,8 @@
   import FileViewerModal from '../../../FileViewerModal.vue'
   import { getFileExtension } from '@/utilityFunctions.js'
   import Tooltip from '@/components/common/Tooltip.vue'
+  import { toastError } from '@/composable/toast.js'
+  import { confirm } from '@/components/common/dialog/dialog.js'
   import SelectionActions from './SelectionActions.vue'
   import BookingInfos from '@/components/common/page/list/actions/booking/BookingInfos.vue'
 
@@ -17,6 +20,7 @@
   })
 
   const {t,locale}=useI18n()
+  const $q=useQuasar()
   const {token}=inject('userCookie')  
   const inFlight=new Set()
   
@@ -160,7 +164,7 @@
     isOpen.value = false
   }
   // TOOLBAR ACTIONS HANDLING
-  async function handleActions(cs,bookingID){
+  async function handleActions(cs,rowData){
     let status=10 //accept
     switch(cs){
       case 'reject':
@@ -168,17 +172,37 @@
         break
       case 'payment':
         status=27
+    }   
+    const cond1=_.filter(rowData.bookingOeuvres,(bo) => {
+      if([10,27].includes(status)) return bo.idStatus_bo===15 //no candidate bookingOeuvre when action to 'accept' or 'payment received' the overall booking
+      else return bo.idStatus_bo!==16  //no bookingOeuvre different from rejected when action to 'reject' the overall booking
+    }).length===0 
+    const cond2=_.filter(rowData.bookingOeuvres,(bo) => {
+      if([10,27].includes(status)) return bo.idStatus_bo===17 //at least 1 candidate bookingOeuvre when action to 'accept' or 'payment received' the overall booking
+    }).length>0 
+    const cond3=_.filter(rowData.bookingOeuvres,(bo) => {
+      return bo.catalogue===1  //one bookingOeuvre set to catalogue=1
+    }).length===1
+    let msg=null
+    if([10,27].includes(status) && !cond1) msg='comps.form_details.expos.tables.selection.actions.warnings.accepted_rejected'
+    else if(status===9 && !cond1) msg='comps.form_details.expos.tables.selection.actions.warnings.rejected' 
+    else if([10,27].includes(status) && !cond2) msg='comps.form_details.expos.tables.selection.actions.warnings.accepted'   
+    else if([10,27].includes(status) && !cond3) msg='comps.form_details.expos.tables.selection.actions.warnings.catalogue'
+    if(msg){
+      toastError(t(msg))
+      return
     }
+    if (!(await confirm($q,t(`comps.form_details.expos.tables.selection.actions.${cs}.confirm`),'cancel'))) return
     const ctrl=newController(inFlight)
     try {
-      const res=await postEntity('StatusTracking', {idStatus:status,idBooking:bookingID}, token.value, ctrl.signal) 
+      const res=await postEntity('StatusTracking', {idStatus:status,idBooking:rowData.idBooking}, token.value, ctrl.signal) 
       if(res.data.statusCode!==200) return   
       const idx=state.value[0].findIndex((row) => {   //update state
-        return row.idBooking===bookingID
+        return row.idBooking===rowData.idBooking
       })
       const oldStatus=state.value[0][idx].idStatus_b    
       state.value[0][idx].idStatus_b=status
-      state.value[1].unshift({idBooking:bookingID,idStatus:status,createdAt:new Date()})
+      state.value[1].unshift({idBooking:rowData.idBooking,idStatus:status,createdAt:new Date()})
       state.value[3][oldStatus]+=-1   //update top level synthesis
       state.value[3][status]+=1             
     } catch (error) {
@@ -413,7 +437,7 @@
           <SelectionActions v-if="slotProps.row.selected"
             :data="slotProps.row"
             @selection-action="(cs) => {
-              handleActions(cs,slotProps.row.idBooking)
+              handleActions(cs,slotProps.row)
             }"
           >
           </SelectionActions>
