@@ -319,6 +319,12 @@
               "payment": {
                 "tt": "Acknowledge payment received",
                 "confirm": "Please confirm receipt of the registration payment, confirmation email will be sent out to the artist."
+              },
+              "warnings": {
+                "catalogue": "Art work selection for the catalogue is missing.",
+                "accepted_rejected": "Each individual art work has to be either accepted or rejected.",
+                "accepted": "At least one art work has to be accepted.",
+                "rejected": "Each individual art work has to be rejected."
               }
             },
             "filters": {
