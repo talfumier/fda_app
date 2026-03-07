@@ -1,19 +1,13 @@
 <script setup>
-  import { useQuasar } from 'quasar';
-  import { useI18n } from 'vue-i18n';
-  import Tooltip from '@/components/common/Tooltip.vue';
-  import { confirm } from '@/components/common/dialog/dialog.js';
+  import Tooltip from '@/components/common/Tooltip.vue'
 
   const props=defineProps({
     data:{type:Object}
   }) 
   
-  const $q=useQuasar()
-  const {t}=useI18n()
   const emit=defineEmits(['selectionAction'])
 
   async function handleActions(cs){
-    if (!(await confirm($q,t(`comps.form_details.expos.tables.selection.actions.${cs}.confirm`),'cancel'))) return
     emit('selectionAction',cs)
   }
 
