@@ -150,6 +150,7 @@
     opacity: 0;
   }
   .btn {
+    display:none;
     font-size: 1.5rem;
     color: blue;
     font-weight: bolder;
@@ -184,6 +185,12 @@
   }
   .hidden {
     visibility: hidden;
+  }
+  
+  @media screen and (min-width: 470px) {
+    .btn {
+      display:block;
+    }
   }
   @media screen and (min-width: 930px) {   
     .btn {

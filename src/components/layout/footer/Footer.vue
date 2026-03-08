@@ -10,7 +10,7 @@
 <template>
   <ul>
     <li class="lh"><img src="../../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></li>
-    <li v-for="(item, idx) in items" :key="idx">
+    <li v-for="(item, idx) in items" :key="idx" :class="item.text">
       <NavBarItem 
         :key="item"
         :item="item"
@@ -41,6 +41,9 @@
     display: inline-block;
     cursor: pointer;
   }  
+  li.map {
+    display:none;
+  }
   li.lh,li.rh {
     position:absolute;
     font-family: "Roboto", sans-serif;
@@ -58,9 +61,11 @@
     line-height: 25px;
     margin:0;
   }
-   /* a {
-    color: var(--orange);
-  } */
+  @media screen and (min-width: 400px){
+    li.map {
+      display:block;
+    }
+  }
   @media screen and (min-width: 600px) {
     ul {
       gap:60px;
