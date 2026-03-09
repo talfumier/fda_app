@@ -47,7 +47,7 @@
 
 <style scoped>
   .html {
-    font-size: 2rem;
+    font-size: 1.8rem;
     counter-reset: h2counter;
     padding:0px 5% 40px;
     opacity: 0.8;
@@ -68,7 +68,8 @@
   .html :deep(h1){       
     text-align: center;
     text-wrap: nowrap;
-    font-size: 4rem;
+    font-size: 2.2rem;
+    line-height:normal;
     background-color: var(--grey-light);
     margin:0;
     padding:10px 0;
@@ -83,7 +84,7 @@
     content: counter(h2counter) ". ";
   }
   .html :deep(h2){   
-    font-size: 3rem;
+    font-size: 2rem;
     counter-reset: h3counter;
     margin: 20px 0 10px 0 ;
   }  
@@ -93,16 +94,16 @@
     margin-left: 0.5em;
   }
   .html :deep(h3){   
-    font-size: 2.5rem;    
+    font-size: 2rem;    
     margin: 20px 0 10px 0 ;
   }
   .html :deep(p) {
     text-align: justify;
-    line-height: 2.2rem;
+    line-height: 2rem;
     margin-bottom:10px;
   }
   .html :deep(:is(.p2,.a2)){
-    padding-left: 30px;
+    padding-left: 0px;
   }
   .html :deep(:is(.p3,.a3)) {
     padding-left: 50px;
@@ -111,7 +112,7 @@
     content: "\f015 ";
     font-family: "Font Awesome 6 Free";
     font-style: normal; 
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 900;  /*free plan solid icons require font-weight:900, regular icons require font-weight:400*/
     padding-right: 10px;
     opacity:0.8;
@@ -123,7 +124,7 @@
     content: "\f0e0 ";
     font-family: "Font Awesome 6 Free";
     font-style: normal; 
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 900;
     padding-right: 10px;
     opacity:0.8;
@@ -132,18 +133,41 @@
     content: "\f095";
     font-family: "Font Awesome 6 Free";
     font-style: normal; 
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 900;
     padding-right: 10px;
     opacity:0.8;
   }
   .html :deep(ul) {
-    margin:0 25px 10px;
+    margin:0;
   }
   @media screen and (min-width: 750px) {        
     .html {
       padding:0px 10% 40px;
     }  
+  } 
+  @media screen and (min-width: 1200px) {   
+    .html {
+      font-size: 2rem;
+    } 
+    .html :deep(h1){  
+      font-size: 4rem;
+    }
+    .html :deep(h2){   
+      font-size: 3rem;
+    }  
+    .html :deep(h3){   
+      font-size: 2.5rem;  
+    }
+    .html :deep(p.house)::before,.html :deep(p.mail)::before,.html :deep(p.phone)::before { 
+      font-size: 2rem;
+    }
+    .html :deep(:is(.p2,.a2)){
+      padding-left: 30px;
+    }
+    .html :deep(ul) {
+      margin:0 25px 10px;
+    }
   } 
 
 </style>
