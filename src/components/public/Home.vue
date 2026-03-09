@@ -58,7 +58,7 @@
         </div>
         <div class="vernissage">
           <h3>{{ $t('comps.public_site.home.vernissage.title') }}</h3>
-          <p>{{state[0][0].vernissageDateTime}}</p>
+          <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
         </div>
       </div>
     </div>
@@ -69,11 +69,11 @@
       </div>
       <div class="register-schedule">
         <h3>{{ $t('comps.public_site.home.registration.opening') }}</h3>
-        <p>{{openingDateTime}}</p>
+        <p>{{formatLocalDate(state[0][0].openingDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.closure') }}</h3>
-        <p>{{state[0][0].closureDateTime}}</p>
+        <p>{{formatLocalDate(state[0][0].closureDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
-        <p>{{state[0][0].responseDate,locale}}</p>  
+        <p>{{formatLocalDate(state[0][0].responseDate,locale,'df')}}</p>  
         <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc">
           <q-icon name="article" size="2.7rem" color="green"></q-icon>
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
@@ -154,8 +154,8 @@
   }
   div.top {
     display:grid;
-    grid-template-rows: 3;
-    grid-template-columns: 2;
+    grid-template-rows: repeat(3,auto);
+    grid-template-columns: repeat(2,auto);
     gap:10px;
     margin:20px;
     border:none;
