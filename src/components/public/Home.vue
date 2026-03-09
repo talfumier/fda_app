@@ -46,7 +46,7 @@
 
 <template> 
   <div v-if="errorMessage">{{ errorMessage }}</div>
-  <div>XXXXXXXX</div>
+  <div>{{`XXXXXXXX${state.length}`}}</div>
   <section v-if="state.length>0" class="expo"> 
     <div class='top' >
       <div class="text">
