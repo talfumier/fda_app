@@ -51,7 +51,6 @@
     counter-reset: h2counter;
     padding:0px 5% 40px;
     opacity: 0.8;
-    font-weight: 500;
   } 
   .html :deep(div.title) {
     position:sticky; 
@@ -86,16 +85,16 @@
   .html :deep(h2){   
     font-size: 2rem;
     counter-reset: h3counter;
-    margin: 20px 0 10px 0 ;
+    line-height: normal;
+    margin: 5px 0 10px 0 ;
   }  
   .html :deep(h3)::before {
     counter-increment: h3counter;
     content: counter(h2counter) "." counter(h3counter) " ";
-    margin-left: 0.5em;
   }
   .html :deep(h3){   
     font-size: 2rem;    
-    margin: 20px 0 10px 0 ;
+    margin: 5px 0 5px 0 ;
   }
   .html :deep(p) {
     text-align: justify;
@@ -104,9 +103,6 @@
   }
   .html :deep(:is(.p2,.a2)){
     padding-left: 0px;
-  }
-  .html :deep(:is(.p3,.a3)) {
-    padding-left: 50px;
   }
   .html :deep(p.house)::before { 
     content: "\f015 ";
@@ -148,7 +144,8 @@
   } 
   @media screen and (min-width: 1200px) {   
     .html {
-      font-size: 2rem;
+      font-size: 2rem;      
+      font-weight: 450;
     } 
     .html :deep(h1){  
       font-size: 4rem;
@@ -162,11 +159,8 @@
     .html :deep(p.house)::before,.html :deep(p.mail)::before,.html :deep(p.phone)::before { 
       font-size: 2rem;
     }
-    .html :deep(:is(.p2,.a2)){
-      padding-left: 30px;
-    }
     .html :deep(ul) {
-      margin:0 25px 10px;
+      margin:0 25px 10px 0;
     }
   } 
 

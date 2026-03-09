@@ -57,7 +57,7 @@
     padding:10px 0;
   }
   div.contact {
-    padding-top: 40px;
+    padding: 40px 15px 0;
     border-top: 1px solid var(--blue);
   }
   p {    
