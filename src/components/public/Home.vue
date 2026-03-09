@@ -17,12 +17,14 @@
   const {formatLocalDate}=useFormatDate()  
 
   const state = ref([])
+  const errorMessage = ref('')
   onMounted(async () => {
     const ctrl = newController(inFlight)
     try {
       state.value = await fetch('public_home_details', ctrl.signal)
     } catch (error) {
       console.error('onmounted failed in Home.vue', error)
+      errorMessage.value='onmounted failed in Home.vue'+ error
       return
     } finally {
       doneController(ctrl, inFlight)
@@ -43,6 +45,7 @@
 </script>
 
 <template> 
+  <div>{{ state.length }}</div>
   <section v-if="state.length>0" class="expo"> 
     <div class='top' >
       <div class="text">
@@ -153,8 +156,8 @@
   }
   div.top {
     display:grid;
-    grid-template-rows: 3;
-    grid-template-columns: 2;
+    grid-template-rows: repeat(3,auto);
+    grid-template-columns: repeat(2,auto);
     gap:10px;
     margin:20px;
     border:none;
