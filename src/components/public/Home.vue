@@ -22,6 +22,7 @@
     const ctrl = newController(inFlight)
     try {
       const data = await fetch('public_home_details', ctrl.signal)
+      console.log(data)
       state.value = Array.isArray(data) ? data : []
     } catch (error) {
       console.error('onmounted failed in Home.vue', error)
@@ -47,8 +48,8 @@
 
 <template> 
   <div v-if="errorMessage">{{ errorMessage }}</div>
-  <div>{{`XXXXXXXX${state.length}`}}</div>
-  <section v-if="state.length>0" class="expo"> 
+  <div>{{`XXXXXXXX${state?.length}`}}</div>
+  <section v-if="state?.length>0" class="expo"> 
     <div class='top' >
       <div class="text">
         <img :src="getExpoDoc(8).url" :alt="getExpoDoc(8).fileName"/>
@@ -88,7 +89,7 @@
       <img v-for="(item,idx) in state[1]" :key="item.fileName" :src="item.url" :alt="item.fileName">
     </div>
   </section>
-  <section v-if="state.length>0" class="visit">
+  <section v-if="state?.length>0" class="visit">
     <div class="text">
       <h2>{{ $t('comps.public_site.home.visit.title') }}</h2>
       <address>
