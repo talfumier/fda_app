@@ -1,6 +1,7 @@
+
 <script setup>
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
-  // import _ from 'lodash'
+  import { ref, onMounted, onUnmounted } from 'vue'
+  import _ from 'lodash'
   import { fetch,openPdf } from './functions'
   import {
     newController,
@@ -9,27 +10,21 @@
   } from '@/utilityFunctions.js'  
   import { useI18n } from 'vue-i18n'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
-  // import MapOsm from './maps/MapOsm.vue'
-  // import Partners from './common/Partners.vue'
+  import MapOsm from './maps/MapOsm.vue'
+  import Partners from './common/Partners.vue'
 
   const {locale}=useI18n()
   const inFlight = new Set()     
   const {formatLocalDate}=useFormatDate()  
 
   const state = ref([])
-  const details = computed(() => state.value?.[0]?.[0] ?? null)
-  const gallery = computed(() => Array.isArray(state.value?.[1]) ? state.value[1] : [])
-  const docs = computed(() => Array.isArray(state.value?.[2]) ? state.value[2] : [])
-  const expoImage = computed(() => docs.value.find(item => item.idType === 8) ?? null)
-  const rulesDoc = computed(() => docs.value.find(item => item.idType === 2) ?? null)
   onMounted(async () => {
     const ctrl = newController(inFlight)
     try {
-      const data = await fetch('public_home_details', ctrl.signal)
-      state.value = Array.isArray(data) ? data : []
+      state.value = await fetch('public_home_details', ctrl.signal)
     } catch (error) {
       console.error('onmounted failed in Home.vue', error)
-      state.value = []
+      return
     } finally {
       doneController(ctrl, inFlight)
     }
@@ -39,33 +34,31 @@
     cancelAllInFlight(inFlight)
   })
   async function openRulesDoc(){
-    if (!rulesDoc.value?.url) return
-    await openPdf(rulesDoc.value.url)
+    await openPdf(getExpoDoc(2).url)
   }
-  // function getExpoDoc(idType){
-  //   return _.filter(docs.value,(item) => {
-  //     return item.idType===idType
-  //   })[0]
-  // }
+  function getExpoDoc(idType){
+    return _.filter(state.value[2],(item) => {
+      return item.idType===idType
+    })[0]
+  }
 </script>
 
 <template> 
-  <div>{{`XXXXXXXX ${state?.length ?? 0}`}}</div>
-  <section v-if="details" class="expo"> 
+  <section v-if="state.length>0" class="expo"> 
     <div class='top' >
       <div class="text">
-        <!-- <img v-if="expoImage" :src="expoImage.url" :alt="expoImage.fileName"/> -->
-        <h2>{{ details[`title_${locale}`] }}</h2>
-        <p>{{ details[`desc_${locale}`] }}</p>
+        <img :src="getExpoDoc(8).url" :alt="getExpoDoc(8).fileName"/>
+        <h2>{{ state[0][0][`title_${locale}`] }}</h2>
+        <p>{{ state[0][0][`desc_${locale}`] }}</p>
       </div> 
       <div class="schedule">
         <div class="opening">
           <h3>{{ $t('comps.public_site.home.opening.title') }}</h3>
-          <p>{{ details[`openingTimes_${locale}`] }}</p>
+          <p>{{ state[0][0][`openingTimes_${locale}`] }}</p>
         </div>
         <div class="vernissage">
           <h3>{{ $t('comps.public_site.home.vernissage.title') }}</h3>
-          <p>{{details.vernissageDateTime}}</p>
+          <p>{{state[0][0].vernissageDateTime}}</p>
         </div>
       </div>
     </div>
@@ -76,54 +69,54 @@
       </div>
       <div class="register-schedule">
         <h3>{{ $t('comps.public_site.home.registration.opening') }}</h3>
-        <p>{{details.openingDateTime}}</p>
+        <p>{{openingDateTime}}</p>
         <h3>{{ $t('comps.public_site.home.registration.closure') }}</h3>
-        <p>{{details.closureDateTime}}</p>
+        <p>{{state[0][0].closureDateTime}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
-        <p>{{details.responseDate}}</p>  
-        <div v-if="rulesDoc" class="rules" @click="openRulesDoc">
-          <!-- <q-icon name="article" size="2.7rem" color="green"></q-icon> -->
+        <p>{{state[0][0].responseDate,locale}}</p>  
+        <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc">
+          <q-icon name="article" size="2.7rem" color="green"></q-icon>
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
         </div>  
       </div>
     </div>
     <div class="bottom">
-      <!-- <img v-for="(item,idx) in gallery" :key="item.fileName" :src="item.url" :alt="item.fileName"> -->
+      <img v-for="(item,idx) in state[1]" :key="item.fileName" :src="item.url" :alt="item.fileName">
     </div>
   </section>
-  <section v-if="details" class="visit">
+  <section v-if="state.length>0" class="visit">
     <div class="text">
       <h2>{{ $t('comps.public_site.home.visit.title') }}</h2>
       <address>
-        <h3 class="building">{{ details.building }}</h3>
-        <!-- <q-icon name="fa fa-home" size="2rem"></q-icon> -->
+        <h3 class="building">{{ state[0][0].building }}</h3>
+        <q-icon name="fa fa-home" size="2rem"></q-icon>
         <div class="address">
-          <p >{{ details.address }}</p>
-          <p>{{ `${details.zipCode} ${details.city}` }}</p>
-          <p>{{ details.country }}</p>
+          <p >{{ state[0][0].address }}</p>
+          <p>{{ `${state[0][0].zipCode} ${state[0][0].city}` }}</p>
+          <p>{{ state[0][0].country }}</p>
         </div>
-        <!-- <q-icon name="fa fa-globe" size="2rem"></q-icon>         -->
-        <p>{{ `Latitude : ${details.gpsLat}° | Longitude : ${details.gpsLong}°` }}</p>
+        <q-icon name="fa fa-globe" size="2rem"></q-icon>        
+        <p>{{ `Latitude : ${state[0][0].gpsLat}° | Longitude : ${state[0][0].gpsLong}°` }}</p>
         <h3>{{ $t('comps.public_site.home.visit.info') }}</h3>
-        <!-- <q-icon name="fa fa-envelope" size="2rem"></q-icon>   -->
+        <q-icon name="fa fa-envelope" size="2rem"></q-icon>  
         <a href="mailto:festivaldesarts@merville31.fr">festivaldesarts@merville31.fr</a>
-        <!-- <q-icon name="fa fa-phone" size="2rem"></q-icon>   -->
+        <q-icon name="fa fa-phone" size="2rem"></q-icon>  
         <p>0562134116</p>
       </address>
     </div>
-    <!-- <MapOsm 
-      :lat="Number(details.gpsLat)"
-      :lng="Number(details.gpsLong)"
+    <MapOsm 
+      :lat="Number(state[0][0].gpsLat)"
+      :lng="Number(state[0][0].gpsLong)"
       :markers="[{
         id:1,
-        lat:Number(details.gpsLat),
-        lng:Number(details.gpsLong),
-        label:details.building
+        lat:Number(state[0][0].gpsLat),
+        lng:Number(state[0][0].gpsLong),
+        label:state[0][0].building
       }]"
     >
-    </MapOsm> -->
+    </MapOsm>
   </section>  
-  <!-- <Partners></Partners> -->
+  <Partners></Partners>
 </template>
 
 <style scoped>
@@ -161,8 +154,8 @@
   }
   div.top {
     display:grid;
-    grid-template-rows: repeat(3,auto);
-    grid-template-columns: repeat(2,auto);
+    grid-template-rows: 3;
+    grid-template-columns: 2;
     gap:10px;
     margin:20px;
     border:none;
