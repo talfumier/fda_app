@@ -21,7 +21,8 @@
   onMounted(async () => {
     const ctrl = newController(inFlight)
     try {
-      state.value = await fetch('public_home_details', ctrl.signal)
+      data = await fetch('public_home_details', ctrl.signal)
+      state.value = Array.isArray(data) ? data : []
     } catch (error) {
       console.error('onmounted failed in Home.vue', error)
       errorMessage.value='onmounted failed in Home.vue'+ error
