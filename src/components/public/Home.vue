@@ -45,8 +45,9 @@
 </script>
 
 <template> 
-  <div>{{ state.length }}</div>
-  <section v-if="state.length>0" class="expo"> 
+  <div v-if="errorMessage">{{ errorMessage }}</div>
+  <div v-if="state.length===0">{{ xxxxxx}}</div>
+  <section v-else class="expo"> 
     <div class='top' >
       <div class="text">
         <img :src="getExpoDoc(8).url" :alt="getExpoDoc(8).fileName"/>
