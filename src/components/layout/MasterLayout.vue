@@ -85,7 +85,6 @@
     display: grid;
     grid-template-columns: auto 1fr;
     height:100vh;
-    /* min-width:525px; */
   }
   div.layout.member {
     grid-template-rows: 70px 1fr 50px;
@@ -110,7 +109,6 @@
     height:70px;
     font: Berlin Sans FB;
     text-align: center; 
-    /* min-width:525px; */
   }
   header .logo {
     position: absolute;
@@ -165,7 +163,6 @@
   }
   footer {  
     grid-column: span 2;
-    /* min-width:525px; */
     height:50px;
   }
   div.layout.public footer {

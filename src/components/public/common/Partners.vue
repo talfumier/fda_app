@@ -69,7 +69,7 @@
   div.logos {
     display:flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     gap:40px;
     padding-bottom: 15px;
@@ -84,11 +84,19 @@
   }
   img {
     object-fit: cover;
-    height:100px;
+    height:60px;
     cursor: pointer;
   }
   section.print img {
     height:150px;
   }
+  @media screen and (min-width: 1200px) {  
+    section.print div.logos {
+      justify-content: space-around;
+    }
+    img {
+      height:100px;
+    } 
+  } 
 
 </style>
