@@ -20,6 +20,8 @@
   const details = computed(() => state.value?.[0]?.[0] ?? null)
   const gallery = computed(() => Array.isArray(state.value?.[1]) ? state.value[1] : [])
   const docs = computed(() => Array.isArray(state.value?.[2]) ? state.value[2] : [])
+  const expoImage = computed(() => docs.value.find(item => item.idType === 8) ?? null)
+  const rulesDoc = computed(() => docs.value.find(item => item.idType === 2) ?? null)
   onMounted(async () => {
     const ctrl = newController(inFlight)
     try {
@@ -37,7 +39,8 @@
     cancelAllInFlight(inFlight)
   })
   async function openRulesDoc(){
-    await openPdf(getExpoDoc(2).url)
+    if (!rulesDoc.value?.url) return
+    await openPdf(rulesDoc.value.url)
   }
   function getExpoDoc(idType){
     return _.filter(docs.value,(item) => {
@@ -51,7 +54,7 @@
   <section v-if="details" class="expo"> 
     <div class='top' >
       <div class="text">
-        <img :src="getExpoDoc(8).url" :alt="getExpoDoc(8).fileName"/>
+        <img v-if="expoImage" :src="expoImage.url" :alt="expoImage.fileName"/>
         <h2>{{ details[`title_${locale}`] }}</h2>
         <p>{{ details[`desc_${locale}`] }}</p>
       </div> 
@@ -78,7 +81,7 @@
         <p>{{formatLocalDate(details.closureDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
         <p>{{formatLocalDate(details.responseDate,locale,'df')}}</p>  
-        <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc ">
+        <div v-if="rulesDoc" class="rules" @click="openRulesDoc">
           <q-icon name="article" size="2.7rem" color="green"></q-icon>
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
         </div>  
@@ -92,7 +95,7 @@
     <div class="text">
       <h2>{{ $t('comps.public_site.home.visit.title') }}</h2>
       <address>
-        <h3 class="building">{{ state[0][0].building }}</h3>
+        <h3 class="building">{{ details.building }}</h3>
         <q-icon name="fa fa-home" size="2rem"></q-icon>
         <div class="address">
           <p >{{ details.address }}</p>
