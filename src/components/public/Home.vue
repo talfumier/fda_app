@@ -1,6 +1,6 @@
 <script setup>
   import { ref, computed, onMounted, onUnmounted } from 'vue'
-  import _ from 'lodash'
+  // import _ from 'lodash'
   import { fetch,openPdf } from './functions'
   import {
     newController,
@@ -42,11 +42,11 @@
     if (!rulesDoc.value?.url) return
     await openPdf(rulesDoc.value.url)
   }
-  function getExpoDoc(idType){
-    return _.filter(docs.value,(item) => {
-      return item.idType===idType
-    })[0]
-  }
+  // function getExpoDoc(idType){
+  //   return _.filter(docs.value,(item) => {
+  //     return item.idType===idType
+  //   })[0]
+  // }
 </script>
 
 <template> 
@@ -111,7 +111,7 @@
         <p>0562134116</p>
       </address>
     </div>
-    <MapOsm 
+    <!-- <MapOsm 
       :lat="Number(details.gpsLat)"
       :lng="Number(details.gpsLong)"
       :markers="[{
@@ -121,9 +121,9 @@
         label:details.building
       }]"
     >
-    </MapOsm>
+    </MapOsm> -->
   </section>  
-  <Partners></Partners>
+  <!-- <Partners></Partners> -->
 </template>
 
 <style scoped>
