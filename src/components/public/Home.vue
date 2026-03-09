@@ -1,3 +1,4 @@
+
 <script setup>
   import { ref, onMounted, onUnmounted } from 'vue'
   import _ from 'lodash'
@@ -73,7 +74,7 @@
         <p>{{formatLocalDate(state[0][0].closureDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
         <p>{{formatLocalDate(state[0][0].responseDate,locale,'df')}}</p>  
-        <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc ">
+        <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc">
           <q-icon name="article" size="2.7rem" color="green"></q-icon>
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
         </div>  
@@ -153,8 +154,8 @@
   }
   div.top {
     display:grid;
-    grid-template-rows: 3;
-    grid-template-columns: 2;
+    grid-template-rows: repeat(3,auto);
+    grid-template-columns: repeat(2,auto);
     gap:10px;
     margin:20px;
     border:none;

@@ -49,8 +49,9 @@
     color:var(--blue);    
     text-align: center;
     text-wrap: nowrap;
-    font-size: 4rem;
+    font-size: 2.2rem;
     font-weight: 600;
+    line-height: normal;
     background-color: var(--grey-light);
     margin:0;
     padding:10px 0;
@@ -60,7 +61,7 @@
     border-top: 1px solid var(--blue);
   }
   p {    
-    line-height: 2.2rem;
+    line-height: 2rem;
     margin-bottom:10px;
   }
   address {
@@ -100,5 +101,24 @@
     width:180px;
     margin-top:20px;
   }
-
+  @media screen and (min-width: 1200px) {   
+    .html {
+      font-size: 2rem;
+    } 
+    h1 {  
+      font-size: 4rem;
+    }
+    p {
+      font-size: 2.2rem;
+    }
+    p.house::before,p.mail::before,p.phone::before { 
+      font-size: 2.2rem;
+    }
+    .html :deep(:is(.p2,.a2)){
+      padding-left: 30px;
+    }
+    .html :deep(ul) {
+      margin:0 25px 10px;
+    }
+  } 
 </style>

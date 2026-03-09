@@ -84,17 +84,17 @@
   div.layout {
     display: grid;
     grid-template-columns: auto 1fr;
-    height:100%;
-    min-width:525px;
+    height:100vh;
+    /* min-width:525px; */
   }
   div.layout.member {
-    grid-template-rows: 70px calc(100vh - 120px) 50px;
+    grid-template-rows: 70px 1fr 50px;
   }
   div.layout.public {
-    grid-template-rows: 70px 30px calc(100vh - 150px) 50px;
+    grid-template-rows: 70px 30px 1fr 50px;
   }  
   div.layout:has(.page-not-found) {
-    grid-template-rows: 70px auto calc(100vh - 120px) 50px;
+    grid-template-rows: 70px auto 1fr 50px;
   }
   header { 
     grid-column: span 2;
@@ -110,7 +110,7 @@
     height:70px;
     font: Berlin Sans FB;
     text-align: center; 
-    min-width:525px;
+    /* min-width:525px; */
   }
   header .logo {
     position: absolute;
@@ -130,15 +130,14 @@
     display:flex;
     flex-wrap: wrap;
     justify-content: left;
-    font-size: 4rem;
-    padding: 0 20px;
+    font-size: 3rem;
+    padding: 0;
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
   } 
   .span-lh {
     color:var(--orange);
     text-wrap: nowrap;
-    padding-right:20px;
   }
   .span-rh {
     color:var(--white);
@@ -156,6 +155,7 @@
     position:relative;
     font-family: "Roboto", sans-serif;
     background-color: var(--grey-light);
+    height:100%;
     overflow-y:auto;
     /* background-color: red; */
   }
@@ -165,12 +165,20 @@
   }
   footer {  
     grid-column: span 2;
-    min-width:525px;
+    /* min-width:525px; */
     height:50px;
   }
   div.layout.public footer {
     grid-row:4;
   }
+  @media screen and (min-width: 470px) {
+    h1 {      
+      font-size: 4rem;
+      padding:0 20px;
+    }
+    .span-lh {
+      padding-right:20px;}
+    }
   @media screen and (min-width: 600px) {
     .container {
       width:calc(100% - 132px);
@@ -178,13 +186,13 @@
   }  
   @media screen and (min-width: 730px) {
     div.layout.member {
-      grid-template-rows: 130px calc(100vh - 180px) 50px;
+      grid-template-rows: 130px 1fr 50px;
     }
     div.layout.public {
-      grid-template-rows: 130px 40px calc(100vh - 220px) 50px;
+      grid-template-rows: 130px 40px 1fr 50px;
     }   
     div.layout:has(.page-not-found) {
-      grid-template-rows: 130px auto calc(100vh - 180px) 50px;
+      grid-template-rows: 130px auto 1fr 50px;
     }
     header {
       height:130px;

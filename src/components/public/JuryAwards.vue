@@ -78,9 +78,7 @@
 <style scoped>
   main.jury-awards {
     padding:25px;
-  }
-  section {
-    margin:20px;
+    margin:0 30px;
   }
   section.jury {
     width:fit-content;
@@ -128,7 +126,7 @@
   h2 {
     font-size: 2.5rem;
     line-height: 1.9rem;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   h3 {
     font-size: 2.2rem;
@@ -139,6 +137,9 @@
     font-size: 2rem;
     line-height: 2rem;
     padding: 5px 0;
+  }
+  section.awards {
+    margin-top:20px;
   }
   div.vernissage {    
     display:flex;
