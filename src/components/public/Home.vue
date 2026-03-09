@@ -9,8 +9,8 @@
   } from '@/utilityFunctions.js'  
   import { useI18n } from 'vue-i18n'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
-  import MapOsm from './maps/MapOsm.vue'
-  import Partners from './common/Partners.vue'
+  // import MapOsm from './maps/MapOsm.vue'
+  // import Partners from './common/Partners.vue'
 
   const {locale}=useI18n()
   const inFlight = new Set()     
@@ -54,7 +54,7 @@
   <section v-if="details" class="expo"> 
     <div class='top' >
       <div class="text">
-        <img v-if="expoImage" :src="expoImage.url" :alt="expoImage.fileName"/>
+        <!-- <img v-if="expoImage" :src="expoImage.url" :alt="expoImage.fileName"/> -->
         <h2>{{ details[`title_${locale}`] }}</h2>
         <p>{{ details[`desc_${locale}`] }}</p>
       </div> 
@@ -82,13 +82,13 @@
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
         <p>{{formatLocalDate(details.responseDate,locale,'df')}}</p>  
         <div v-if="rulesDoc" class="rules" @click="openRulesDoc">
-          <q-icon name="article" size="2.7rem" color="green"></q-icon>
+          <!-- <q-icon name="article" size="2.7rem" color="green"></q-icon> -->
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
         </div>  
       </div>
     </div>
     <div class="bottom">
-      <img v-for="(item,idx) in gallery" :key="item.fileName" :src="item.url" :alt="item.fileName">
+      <!-- <img v-for="(item,idx) in gallery" :key="item.fileName" :src="item.url" :alt="item.fileName"> -->
     </div>
   </section>
   <section v-if="details" class="visit">
@@ -96,18 +96,18 @@
       <h2>{{ $t('comps.public_site.home.visit.title') }}</h2>
       <address>
         <h3 class="building">{{ details.building }}</h3>
-        <q-icon name="fa fa-home" size="2rem"></q-icon>
+        <!-- <q-icon name="fa fa-home" size="2rem"></q-icon> -->
         <div class="address">
           <p >{{ details.address }}</p>
           <p>{{ `${details.zipCode} ${details.city}` }}</p>
           <p>{{ details.country }}</p>
         </div>
-        <q-icon name="fa fa-globe" size="2rem"></q-icon>        
+        <!-- <q-icon name="fa fa-globe" size="2rem"></q-icon>         -->
         <p>{{ `Latitude : ${details.gpsLat}° | Longitude : ${details.gpsLong}°` }}</p>
         <h3>{{ $t('comps.public_site.home.visit.info') }}</h3>
-        <q-icon name="fa fa-envelope" size="2rem"></q-icon>  
+        <!-- <q-icon name="fa fa-envelope" size="2rem"></q-icon>   -->
         <a href="mailto:festivaldesarts@merville31.fr">festivaldesarts@merville31.fr</a>
-        <q-icon name="fa fa-phone" size="2rem"></q-icon>  
+        <!-- <q-icon name="fa fa-phone" size="2rem"></q-icon>   -->
         <p>0562134116</p>
       </address>
     </div>
