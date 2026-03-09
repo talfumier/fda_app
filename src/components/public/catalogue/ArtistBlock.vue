@@ -79,7 +79,7 @@
 </template>
 
 <style scoped>
-  section {
+  section.artist {
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -92,7 +92,7 @@
     page-break-inside: avoid;
   }
   div.bio {
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
   }
@@ -107,7 +107,7 @@
     font-family: Berlin Sans FB Bold;
     font-size: 2.2rem;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     gap:20px;
     margin:10px 0;
@@ -128,7 +128,7 @@
   }
   div.contact {
     display:flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap:10px;
     padding:5px;
   }
@@ -166,7 +166,7 @@
     justify-content: center;
     max-width: 650px;
   }
-  div.works.print div.social,div.web {
+  div.works.print div.social,div.works.print div.web {
     max-width: 500px;
   }
   div.social a,div.web a {
@@ -269,7 +269,6 @@
   p.title,p.technique-media, p.dim, p.price {
     justify-content: left;
     padding-top:5px;
-
   }
   p.price {
     width:100%;
