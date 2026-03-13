@@ -316,7 +316,7 @@
   ::v-deep( div.q-tabs__content) {
     justify-content: left;
   }
-  .q-tab-panels {
+  .q-tab-panels {   
     padding:0 10px 20px;
   }
   .q-tab-panel {
@@ -354,10 +354,10 @@
   fieldset.price {
     gap:60px;
   }
-  fieldset.events {
+  /* fieldset.events {
     flex-direction: column;
     gap:0px;
-  }
+  } */
   fieldset:has(.button) {
     justify-content:center;
     align-items: top;
@@ -369,16 +369,23 @@
   }
   legend {
     font-size:1.7rem;
-    line-height: 2.2rem;
-    text-wrap: nowrap;
+    line-height: 1.7rem;
+    text-wrap: wrap;
     font-style: italic;
     font-weight:400;
     color:var(--blue);
     padding:0 5px;
+    display:flex;
+    align-items:center;
   }
-  @media screen and (min-width: 1546px) {
+  /* @media screen and (min-width: 1546px) {
     fieldset.events {
       flex-direction: row;      
     }
-  } 
+  }  */
+  /* @media screen and (min-width: 1200px) {    
+    .q-tab-panels {   
+      padding:0 10px 20px;
+    }    
+  } */
 </style>

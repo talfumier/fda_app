@@ -33,6 +33,7 @@
   .menu {
     display: flex;
     justify-content:center;
+    align-items:center;
   }
   .menu div {    
     cursor: pointer;

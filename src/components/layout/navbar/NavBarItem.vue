@@ -52,7 +52,8 @@
   <RouterLink v-if="item && !item.type" :to="item.url" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
     <div :class="[isRotated?'folded':'',source]">
-      <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" :style="`padding-top:${item.padding_top}px`"></q-icon>
+      <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" 
+        :style="`padding-top:${item.padding_top}px;padding-right:${item.padding_right}px;padding-left:${item.padding_left}px;`"></q-icon>
       <p :style="`padding-top:${item.padding_top-2}px`">{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
     </div>
   </RouterLink>

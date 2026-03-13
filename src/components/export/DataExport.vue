@@ -102,63 +102,65 @@
       @change="(name,valid,val) => {
           handleChange(name,valid,val,'artist_data')
         }"
-    ></InputField>    
-    <div class="cb-container status">
+    ></InputField>  
+    <div class="cb-container">
       <label >{{$t('comps.export.artist_data.select_status')}}</label>
-      <InputField 
-        name="idStatus8" 
-        :label="$t('comps.list_items.actions_menu.booking.candidate')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'artist_data')
-        }"
-      >
-      </InputField><InputField 
-        name="idStatus10" 
-        :label="$t('comps.list_items.actions_menu.booking.accepted')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'artist_data')
-        }"
-      ></InputField>
-      <InputField 
-        name="idStatus27" 
-        :label="$t('comps.list_items.actions_menu.booking.payment')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'artist_data')
-        }"
-      ></InputField>
-    </div>
-    <div class="cb-container media">
+      <div class="status">
+        <InputField 
+          name="idStatus8" 
+          :label="$t('comps.list_items.actions_menu.booking.candidate')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'artist_data')
+          }"
+        >
+        </InputField><InputField 
+          name="idStatus10" 
+          :label="$t('comps.list_items.actions_menu.booking.accepted')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'artist_data')
+          }"
+        ></InputField>
+        <InputField 
+          name="idStatus27" 
+          :label="$t('comps.list_items.actions_menu.booking.payment')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'artist_data')
+          }"
+        ></InputField>
+      </div>
       <label >{{$t('comps.export.artist_data.select_mode')}}</label>
-      <InputField 
-        name="showRoom" 
-        :label="$t('comps.form_details.booking_oeuvre.showRoom')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'artist_data')
-        }"
-      >
-      </InputField><InputField 
-        name="screen" 
-        :label="$t('comps.form_details.booking_oeuvre.screen')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'artist_data')
-        }"
-      ></InputField>
-    </div>
+      <div class="media">
+        <InputField 
+          name="showRoom" 
+          :label="$t('comps.form_details.booking_oeuvre.showRoom')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'artist_data')
+          }"
+        >
+        </InputField><InputField 
+          name="screen" 
+          :label="$t('comps.form_details.booking_oeuvre.screen')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'artist_data')
+          }"
+        ></InputField>
+      </div>
+    </div>  
     <div class="bottom-container">
       <FieldsetButton 
         :buttons="[
@@ -212,40 +214,42 @@
       @change="(name,valid,val) => {
           handleChange(name,valid,val,'catalogue')
         }"
-    ></InputField>    
-    <div class="cb-container status">
+    ></InputField>  
+    <div class="cb-container"> 
       <label >{{$t('comps.export.artist_data.select_status')}}</label>
-      <InputField 
-        name="idStatus8" 
-        :label="$t('comps.list_items.actions_menu.booking.candidate')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'catalogue')
-        }"
-      >
-      </InputField><InputField 
-        name="idStatus10" 
-        :label="$t('comps.list_items.actions_menu.booking.accepted')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'catalogue')
-        }"
-      ></InputField>
-      <InputField 
-        name="idStatus27" 
-        :label="$t('comps.list_items.actions_menu.booking.payment')" 
-        field_type="checkbox" 
-        data_type="checkbox" 
-        format="integer"
-        @change="(name,valid,val) => {
-          handleChange(name,valid,val,'catalogue')
-        }"
-      ></InputField>
-    </div>
+      <div class="status">
+        <InputField 
+          name="idStatus8" 
+          :label="$t('comps.list_items.actions_menu.booking.candidate')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'catalogue')
+          }"
+        >
+        </InputField><InputField 
+          name="idStatus10" 
+          :label="$t('comps.list_items.actions_menu.booking.accepted')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'catalogue')
+          }"
+        ></InputField>
+        <InputField 
+          name="idStatus27" 
+          :label="$t('comps.list_items.actions_menu.booking.payment')" 
+          field_type="checkbox" 
+          data_type="checkbox" 
+          format="integer"
+          @change="(name,valid,val) => {
+            handleChange(name,valid,val,'catalogue')
+          }"
+        ></InputField>
+      </div>
+    </div> 
     <div class="bottom-container">
       <FieldsetButton 
         :buttons="[
@@ -272,13 +276,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap:10px;
-    margin-top:5px;
-    padding:0 10px 5px;
     border-radius: 5px;    
     border-color:rgb(154, 154, 238);
     border-width: 1px;
-    width:500px;
-    margin:10px 20px;
+    max-width:500px;
+    margin:10px 10px;
   }
   legend {
     font-size:1.7rem;
@@ -290,14 +292,18 @@
     padding:0 5px;
   }
   div.cb-container {
-    display:grid;
-    grid-template-rows: 15px auto;
-    grid-template-columns: repeat(3,auto);
-    column-gap: 10px;
-  }
-  label {
-    grid-row: 1;
-    grid-column: 1/-1;
+    display:flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+
+  }  
+  .status,.media {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    padding:0 10px;
+    column-gap:10px;
   }
   .bottom-container {
     display:flex;

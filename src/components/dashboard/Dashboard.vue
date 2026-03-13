@@ -71,6 +71,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start;
+    margin:0 auto;
   }
 
 </style>

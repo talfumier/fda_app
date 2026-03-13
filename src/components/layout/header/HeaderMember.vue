@@ -9,7 +9,7 @@
   
   const {token,decoded, remove} = inject('userCookie')
 
-  const {t}=useI18n()
+  const {t,locale}=useI18n()
   const router=useRouter()
   const route=useRoute()
   const $q=useQuasar()
@@ -59,20 +59,50 @@
   function forceClose () {
     showPopup.value = false
   }
-  function getLabel(){
-    if($q.screen.width<965) return ''
+  function getLabel(w=null){
+    if(w && $q.screen.width<w) return ''
     return t(`comps.header.${route.name?.includes('member')?'public-btn':'member-btn'}.text`)
   }
 
 </script>
 
 <template>
+  <div class="hamburger-menu">
+    <q-btn flat round icon="menu" size="2rem">
+      <q-menu>
+        <q-list dense :style="`min-width: ${locale==='fr'?'155px':'120px'}`">
+          <q-item  
+            clickable v-close-popup
+            @click="handleClick"
+          >
+            <q-item-section>{{getLabel()}}</q-item-section>
+          </q-item>
+          <q-separator />
+          <q-item v-if="token" 
+            clickable v-close-popup 
+            @click="() => {
+                router.push({ name: 'member user' })
+              }"
+          >
+            <q-item-section>{{t('comps.header.settings-ico.tip')}}</q-item-section>
+          </q-item>
+          <q-separator /> 
+          <q-item v-if="token" 
+            clickable v-close-popup
+            @click="handleLogOut"
+          >
+            <q-item-section>{{t('comps.header.power-ico.tip')}}</q-item-section>
+          </q-item>        
+        </q-list>
+      </q-menu>
+    </q-btn>
+  </div>
   <q-btn 
     :class="['btn', 'bg-grey-3']" 
     rounded standout
     icon="login" 
     no-wrap
-    :label="getLabel()"
+    :label="getLabel(965)"
     @click="handleClick"
     tabindex="-1"
     >
@@ -149,6 +179,13 @@
   .fade-enter-from, .fade-leave-to {
     opacity: 0;
   }
+  div.hamburger-menu {
+    display:block;
+    color:var(--orange);
+  }
+  ::v-deep(div.q-item){
+    padding:0;
+  }
   .btn {
     display:none;
     font-size: 1.5rem;
@@ -156,13 +193,13 @@
     font-weight: bolder;
     text-transform: capitalize;
     padding:0 15px;
-    width:60px;
+    width:100%;
   }
   .no-cap {
     text-transform:lowercase;
   }
   .icons {
-    display:flex;
+    display:none;
     color:var(--orange);
     font-size:4rem;
     z-index: 5000;
@@ -186,15 +223,15 @@
   .hidden {
     visibility: hidden;
   }
-  
-  @media screen and (min-width: 470px) {
+  @media screen and (min-width: 515px){
+    div.hamburger-menu {
+      display:none;
+    }
     .btn {
       display:block;
     }
-  }
-  @media screen and (min-width: 930px) {   
-    .btn {
-      width:100%;
+    .icons {
+      display:flex;
     }
-  } 
+  }
 </style>

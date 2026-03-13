@@ -5,7 +5,6 @@
   import NavBarItem from './NavBarItem.vue'
   
   const props = defineProps({
-    type:{type:String},
     wrap:{type:Boolean,default:false}
   })  
 
