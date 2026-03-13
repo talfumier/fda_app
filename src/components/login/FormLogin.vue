@@ -106,7 +106,7 @@
   })
   onUnmounted(() => { ctrl?.abort() })    // clean-up code after component has unmounted
   //Drag and drop
-  const position = ref({ x: window.innerWidth/2, y: window.innerHeight>760?150:10 })
+  const position = ref({ x: window.innerWidth<=900?5:window.innerWidth/2, y: window.innerHeight>760?150:10 })
   const isDragging = ref(false)
   let start = { x: 0, y: 0 }
 
@@ -199,9 +199,7 @@
 
 <style scoped>
   div.modal {
-    position:fixed;
-    top:20%;
-    left:50%;
+    position: fixed;
     z-index:2000;
   }
   div.modal-content {
@@ -214,7 +212,7 @@
     padding: 0 20px 20px;
     border: 1px solid #888;
     border-radius: 10px;
-    min-width:350px;
+    min-width:300px;
   }
   div.icon-close {
     display:flex;
@@ -262,4 +260,9 @@
   button.connect {
     margin-top:20px;
   }
+  @media screen and (min-width: 700px) {   
+    div.modal-content {
+      min-width: 350px;
+    }
+  } 
 </style>

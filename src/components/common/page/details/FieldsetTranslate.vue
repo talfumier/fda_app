@@ -160,16 +160,16 @@
     .reverse div.en {
       grid-area: 1/1;
     }
-    .resume_fr, .title_fr, .desc_fr {
+    .resume_fr, .short_fr, .title_fr, .desc_fr, .openingTimes_fr, .question_fr, .answer_fr {
       grid-area: 2/1
     }
-    .reverse .resume_fr, .reverse .title_fr, .reverse .desc_fr {
+    .reverse .resume_fr, .reverse .short_fr,.reverse .title_fr, .reverse .desc_fr, .reverse .openingTimes_fr, .reverse .question_fr, .reverse .answer_fr {
       grid-area: 5/1;
     }
-    .resume_en, .title_en, .desc_en {
+    .resume_en, .short_en, .title_en, .desc_en, .openingTimes_en, .question_en, .answer_en  {
       grid-area: 5/1;
     }
-    .reverse .resume_en, .reverse .title_en, .reverse .desc_en {
+    .reverse .resume_en, .reverse .short_en, .reverse .title_en, .reverse .desc_en, .reverse .openingTimes_en, .reverse .question_en, .reverse .answer_en {
       grid-area: 2/1
     }
     div.controls {

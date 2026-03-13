@@ -372,9 +372,9 @@
     resize: vertical;
     width:100%;
   }
-  fieldset.events input {
+  /* fieldset.events input {
     width:210px
-  }
+  } */
   div.modal input:not(:has(+ .q-icon)), div.modal select {
     padding:10px;
   }
@@ -466,7 +466,7 @@
     align-items: center;
   }
   div.input-container.email textarea {
-    min-width:350px;
+    width: 250px;
   }
   div.input-container.lang select {
     width:170px;
@@ -495,15 +495,20 @@
     color:red;
   }
   fieldset.standard.company-name div.input-container.name {
-    width:400px;
+    width:100%;
+    max-width: 500px;
   }
-  fieldset.links input {
-    width:300px;
+  fieldset.links input, fieldset.links textarea {
+    min-width: 200px;
+    padding-right: 35px;
   }
 
   @media screen and (min-width: 1272px) {
     div.input-container.price {
       margin-left:80px;
+    }
+    div.input-container.email textarea {
+      width: 350px;
     }
   } 
 </style>

@@ -44,7 +44,7 @@
             :preferred="preferred"
           >
           </LangSwitcher>
-          <HeaderMember 
+          <HeaderMember
             @lang="handlePreferred"
           >
           </HeaderMember>
@@ -53,15 +53,10 @@
     </header>
     <aside v-if="route.name?.includes('member')">
       <Transition name="fade">
-        <NavBarMember 
-          type='member'
-        ></NavBarMember>
+        <NavBarMember ></NavBarMember>
       </Transition>
     </aside>
-    <NavBarPublic v-if="route.name?.includes('public')"
-      type='public'
-    >
-    </NavBarPublic>
+    <NavBarPublic v-if="route.name?.includes('public')"></NavBarPublic>
     <main class="master">
       <router-view 
         :key="$route.fullPath"

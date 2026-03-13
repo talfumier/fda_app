@@ -1008,9 +1008,10 @@ import { clone } from 'lodash'
           </template>
         </q-input> 
         <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
-        <div class="toggle"> 
+        <div class="toggle"
+          v-if="entity.model==='User' || entity.model==='Expo' || entity.model==='Faq'"
+        > 
           <q-toggle
-            v-if="entity.model==='User' || entity.model==='Expo' || entity.model==='Faq'"
             v-model="listItemsFilter[`${entity.model.toLowerCase()}_status`]"
             toggle-indeterminate
             :label="getToggleLabel('status')"            
@@ -1034,8 +1035,8 @@ import { clone } from 'lodash'
         </div> 
       </div>  
       <div class="btn-add-fold">     
-        <div v-if="entity.newRecord">    
-          <q-btn 
+        <div v-if="entity.newRecord"> 
+          <q-btn v-if="!isRotated"
             class="glossy" 
             round push color="primary" 
             icon="add" size="md" 
@@ -1091,7 +1092,8 @@ import { clone } from 'lodash'
         }"
       >
         <template #toolbar> <!--named scoped slot -->
-          <Toolbar v-if="(props.entity.newRecord || props.entity.idx===1) && !hideToolbar" class="toolbar"
+          <Toolbar v-if="(props.entity.newRecord || props.entity.idx===1) && !hideToolbar" 
+            :class="['toolbar',entity.idx===2?'expo':'']"
             @toolbar-actions="handleToolbarActions"
           >
             <template #save>    <!--named scoped slot -->          
@@ -1143,27 +1145,31 @@ import { clone } from 'lodash'
 <style scoped>
   .master-container {
     display: grid;
-    grid-template-rows:100px auto auto;
-    grid-template-columns: auto 0.9fr;
+    grid-template-rows:70px auto auto;
+    grid-template-columns: auto 1fr;
     justify-content: left;
     height:100%;   
     position:relative;
     overflow:hidden;
   } 
+  .master-container:has(.toggle,.glossy) {    
+    grid-template-rows:100px auto auto;
+  }
   .master-container.no-list {
-    grid-template-columns: 80%;
+    grid-template-columns: 100%;
   }
   .master-container.no-list:has(.admin) {
     grid-template-columns: 100%;
   }
   .master-container.folded {
-    grid-template-columns: 40px auto;
+    grid-template-columns: 0px auto;
   }
   .top-container {    
     grid-area: 1/1;
     display:flex;
-    justify-content:right;
+    justify-content:evenly;
     align-items:flex-start;
+    overflow: hidden;
   }
   .top-container .q-input {
     margin: 0 ;
@@ -1175,19 +1181,22 @@ import { clone } from 'lodash'
     align-items: center;
     height:100%;
   }
-  .btn-add-fold .q-btn {
+  .btn-add-fold .q-btn.glossy {
     width:40px;
     height:30px;
   }
   
-  .q-icon.btn-fold {
+  .q-icon.btn-fold {    
+    position:fixed;
+    top:75px;
+    left:5px;
     width:40px;
     height:30px;    
     border-radius: 5px;    
     color:var(--orange);
     background-color: red;
     cursor: pointer;
-    margin:5px 0;
+    /* margin:5px 0; */
   }
   .filter {
     display:flex;
@@ -1195,7 +1204,7 @@ import { clone } from 'lodash'
     justify-content:top;
     align-items: left;    
     border-right: 1px solid lightgrey;
-    height:100%;
+    /* height:100%; */
   }
   .filter span {
     font-size:1.3rem;
@@ -1210,12 +1219,12 @@ import { clone } from 'lodash'
     border-top: 1px solid lightgrey;
   }
   .master-container .btn-fold { 
-    margin: 0 10px 5px;
+    /* margin: 0 10px 5px; */
     transform: rotate(0deg);
     transition: rotate 0.6s ease;
   }
   .master-container.folded .btn-fold {
-    margin: 10px 0;
+    /* margin: 10px 0; */
     transform: rotate(-180deg);
   }
   .list-container {
@@ -1239,7 +1248,6 @@ import { clone } from 'lodash'
     flex-direction: column;
     justify-content: top;
     width:100%; 
-    padding-right:50px;
     margin-bottom: 28px;
     /* height:fit-content; */
     overflow-y: hidden;
@@ -1249,10 +1257,12 @@ import { clone } from 'lodash'
   }
   .bottom-container {
     display:flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    gap:10px;
     padding-bottom:20px;
-    padding-right: 50px;
+    /* padding-right: 50px; */
     
     grid-row: 3;
     align-self: center;
@@ -1268,11 +1278,19 @@ import { clone } from 'lodash'
     margin:0;
   }
   .toolbar {
-    position:absolute;
+    /* position:absolute;
     top:10px;
-    right:20px;
+    right:20px; */
+    position: sticky;
+    top:0;
+    width:fit-content;
+    min-height: 50px;
+    margin:0 15px;
     z-index: 5000;
   }  
+  .toolbar.expo {
+    top: 40px;
+  }
   .toolbar .save {    
     position:relative;
     color:var(--green);
@@ -1295,6 +1313,31 @@ import { clone } from 'lodash'
   }
   div.folded .details-container {
     border-width: 0;
+  }
+  @media screen and (min-width: 500px) {
+    .master-container.folded {
+      grid-template-columns: 45px auto;
+    }
+    .q-icon.btn-fold {
+      position:static;
+      margin:0 5px;
+    }
+     .top-container {  
+      justify-content:right;
+    }
+
+  }
+  @media screen and (min-width: 1500px) {
+    .master-container {
+      grid-template-columns: auto 0.8fr;
+    } 
+    .master-container.no-list {
+      grid-template-columns: 80%;
+    }
+    .details-container {
+      padding-right:50px;
+    }
+   
   }
 
 </style>

@@ -41,4 +41,5 @@
   .q-card-section.hidden {
     display:none;
   }
+  
 </style>
