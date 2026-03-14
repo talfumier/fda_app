@@ -1167,12 +1167,12 @@ import { clone } from 'lodash'
   .top-container {    
     grid-area: 1/1;
     display:flex;
-    justify-content:evenly;
+    justify-content:space-evenly;
     align-items:flex-start;
     overflow: hidden;
   }
   .top-container .q-input {
-    margin: 0 ;
+    margin: 0;
   }
   .btn-add-fold {
     display:flex;

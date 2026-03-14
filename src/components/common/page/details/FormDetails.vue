@@ -354,10 +354,6 @@
   fieldset.price {
     gap:60px;
   }
-  /* fieldset.events {
-    flex-direction: column;
-    gap:0px;
-  } */
   fieldset:has(.button) {
     justify-content:center;
     align-items: top;
@@ -378,14 +374,4 @@
     display:flex;
     align-items:center;
   }
-  /* @media screen and (min-width: 1546px) {
-    fieldset.events {
-      flex-direction: row;      
-    }
-  }  */
-  /* @media screen and (min-width: 1200px) {    
-    .q-tab-panels {   
-      padding:0 10px 20px;
-    }    
-  } */
 </style>
