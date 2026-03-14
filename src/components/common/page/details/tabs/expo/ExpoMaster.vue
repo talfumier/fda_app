@@ -242,7 +242,7 @@
   div.tables-container {
     display:flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: left;
     align-items: center;
     gap:20px;
     width:100%;
@@ -280,6 +280,11 @@
     display: flex;
     justify-content: center;
     padding-top:20px;
+  }
+  @media screen and (min-width: 500px) {
+    div.tables-container {
+      justify-content: space-evenly;
+    }
   }
 
 </style>

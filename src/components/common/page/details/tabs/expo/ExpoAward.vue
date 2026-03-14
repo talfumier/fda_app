@@ -165,7 +165,7 @@
     display:flex;
     justify-content:center;
     margin-top:50px;
-    padding: 0 80px 10px 80px;
+    /* padding: 0 20px 10px 20px; */
   }
   td.line-through {
     text-decoration: line-through;
