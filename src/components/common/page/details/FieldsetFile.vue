@@ -262,7 +262,7 @@
           <q-spinner size='8rem' color="green" :thickness="4"/>
         </q-inner-loading>
       </div>
-      <a :href="file.url">
+      <a :href="file.url" target="_blank">
         <q-btn v-if="file.url && roleRouteCondition() && route.name==='member docs'"
           color='primary'
           rounded standout pulse
@@ -278,7 +278,7 @@
       :file="{name:file.fileName,url:file.url,ext:file_ext}"
       :fileYes="fileYes"
       :supported="supported"
-      :size="roleRouteCondition()?(route.name==='member docs'?'large':'medium'):'small'"
+      :size="roleRouteCondition()?'medium':'small'"
     >
     </FileViewer>
   </div>

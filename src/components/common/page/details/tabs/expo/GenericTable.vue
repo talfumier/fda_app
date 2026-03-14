@@ -67,18 +67,27 @@
     color: #2c3e50;
   }
   ::v-deep(.q-table th.col-name) {
-    width: 300px;
+    /* width: 200px; */
     text-align: left;
   }
   ::v-deep(.q-table tr td) {    
     font-size: 1.5rem;
+    padding:0 5px;
   }
   div.q-table__container {
-    width: 500px;
+    width: 300px;
     height:250px;
   }
   div.q-table__container.award {
     width: 100%;
     height:280px;
+  }
+  @media screen and (min-width: 500px) {
+    ::v-deep(.q-table th.col-name) {
+      width: 300px;
+    }
+    div.q-table__container {
+      width: 480px;
+    }
   }
 </style>
