@@ -167,6 +167,9 @@
   async function handleActions(cs,rowData){
     let status=10 //accept
     switch(cs){
+      case 'candidate':   //Reset to candidate status
+        status=8
+        break
       case 'reject':
         status=9
         break
@@ -175,7 +178,7 @@
     }   
     const cond1=_.filter(rowData.bookingOeuvres,(bo) => {
       if([10,27].includes(status)) return bo.idStatus_bo===15 //no candidate bookingOeuvre when action to 'accept' or 'payment received' the overall booking
-      else return bo.idStatus_bo!==16  //no bookingOeuvre different from rejected when action to 'reject' the overall booking
+      if(status===9) return bo.idStatus_bo!==16  //no bookingOeuvre different from rejected when action to 'reject' the overall booking
     }).length===0 
     const cond2=_.filter(rowData.bookingOeuvres,(bo) => {
       if([10,27].includes(status)) return bo.idStatus_bo===17 //at least 1 candidate bookingOeuvre when action to 'accept' or 'payment received' the overall booking
@@ -194,12 +197,18 @@
     }
     if (!(await confirm($q,t(`comps.form_details.expos.tables.selection.actions.${cs}.confirm`),'cancel'))) return
     const ctrl=newController(inFlight)
-    try {
+    try {      
+      const idx=state.value[0].findIndex((row) => {   //find current row idx
+        return row.idBooking===rowData.idBooking
+      }) 
+      if(status===8)  //update bookingOeuvres to candidate status in database and state
+        rowData.bookingOeuvres.forEach(async(bo,i) => {
+          await updateBoStatus(15,rowData.idBooking,bo.idBookingOeuvre)
+          state.value[0][idx].bookingOeuvres[i].idStatus_bo=15
+        })
       const res=await postEntity('StatusTracking', {idStatus:status,idBooking:rowData.idBooking}, token.value, ctrl.signal) 
       if(res.data.statusCode!==200) return   
-      const idx=state.value[0].findIndex((row) => {   //update state
-        return row.idBooking===rowData.idBooking
-      })
+      // update state
       const oldStatus=state.value[0][idx].idStatus_b    
       state.value[0][idx].idStatus_b=status
       state.value[1].unshift({idBooking:rowData.idBooking,idStatus:status,createdAt:new Date()})

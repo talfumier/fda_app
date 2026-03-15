@@ -27,6 +27,16 @@
     >
       <Tooltip :tt_text="$t('comps.form_details.expos.tables.selection.actions.accept.tt')"></Tooltip>
     </q-btn>
+     <q-btn 
+      flat round dense
+      icon="done_all"
+      color="orange"
+      size="1.4rem"
+      :disable="data.idStatus_b===8"
+      @click="handleActions('candidate')"
+    >
+      <Tooltip :tt_text="$t('comps.form_details.expos.tables.selection.actions.candidate.tt')"></Tooltip>
+    </q-btn>
     <q-btn 
       flat round dense
       icon="euro_symbol"
