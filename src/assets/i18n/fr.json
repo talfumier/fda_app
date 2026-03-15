@@ -312,6 +312,10 @@
                 "tt": "Valider l'inscription.",
                 "confirm": "Merci de confirmer l'acceptation de l'inscription; l'artiste va recevoir un courriel de confirmation qui fera le récap de son inscription, du paiement à effectuer ainsi que les détails de dépôt/retrait des oeuvres."
               },
+              "candidate": {
+                "tt": "Réinitialiser l'inscription au statut candidat.",
+                "confirm": "Merci de confirmer la réinitialisation de l'inscription au statut candidat."
+              },
               "reject": {
                 "tt": "Rejeter l'inscription.",
                 "confirm": "Merci de confirmer le rejet de l'inscription, l'artiste va recevoir un courriel de confirmation."

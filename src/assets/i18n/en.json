@@ -312,6 +312,10 @@
                 "tt": "Accept registration.",
                 "confirm": "Please confirm your acceptance of the registration, confirmation email will be sent out to the artist that will provide the recap of the registration, the amount to be paid and the details for art works deposit & collection."
               },
+              "candidate": {
+                "tt": "Reset registration as candidate.",
+                "confirm": "Please confirm registration reset to candidate status."
+              },
               "reject": {
                 "tt": "Reject registration.",
                 "confirm": "Please confirm your rejection of the registration, confirmation email will be sent out to the artist."
