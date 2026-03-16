@@ -314,7 +314,7 @@
               },
               "candidate": {
                 "tt": "Réinitialiser l'inscription au statut candidat.",
-                "confirm": "Merci de confirmer la réinitialisation de l'inscription au statut candidat."
+                "confirm": "Merci de confirmer la réinitialisation de l'inscription au statut candidat; l'artiste va recevoir un courriel de confirmation."
               },
               "reject": {
                 "tt": "Rejeter l'inscription.",
