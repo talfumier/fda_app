@@ -41,9 +41,6 @@
     display: inline-block;
     cursor: pointer;
   }  
-  li.map {
-    display:none;
-  }
   li.lh,li.rh {
     position:absolute;
     font-family: "Roboto", sans-serif;
@@ -60,11 +57,6 @@
     display: inline-block;
     line-height: 25px;
     margin:0;
-  }
-  @media screen and (min-width: 400px){
-    li.map {
-      display:block;
-    }
   }
   @media screen and (min-width: 600px) {
     ul {

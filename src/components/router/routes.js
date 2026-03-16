@@ -132,12 +132,6 @@ const router = createRouter({
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
-      path: '/public/sitemap',
-      name: 'public sitemap',
-      component: () => import('../general/SiteMap.vue'), //lazy loading
-      meta: { roles: [-1] }, //no specific role requirement, nor authentication
-    },
-    {
       path: '/public/contact',
       name: 'public contact',
       component: () => import('../general/contact/Contact.vue'), //lazy loading

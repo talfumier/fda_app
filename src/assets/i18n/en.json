@@ -314,7 +314,7 @@
               },
               "candidate": {
                 "tt": "Reset registration as candidate.",
-                "confirm": "Please confirm registration reset to candidate status."
+                "confirm": "Please confirm registration reset to candidate status, confirmation email will be sent out to the artist."
               },
               "reject": {
                 "tt": "Reject registration.",
