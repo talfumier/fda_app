@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://festivaldesarts.merville31.fr/api/seo/sitemap.xml
