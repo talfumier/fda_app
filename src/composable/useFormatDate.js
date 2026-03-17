@@ -72,7 +72,7 @@ export function useFormatDate() {
             (parts.weekday ? parts.weekday.charAt(0).toUpperCase() + parts.weekday.slice(1) : '') +
             `${parts.day ? ` ${parts.day}` : ''}` +
             `${parts.month ? ` ${parts.month}` : ''}` +
-            `${fmt === 'dtf' && parts.hour ? ` à ${parts.hour}${parts.minute ? `:${parts.minute}` : ''}` : ''}`
+            `${fmt === 'dtf' && parts.hour ? ` à ${parts.hour}${parts.minute ? `h${parts.minute}` : ''}` : ''}`
           ).trim()
         case 'en':
           return (

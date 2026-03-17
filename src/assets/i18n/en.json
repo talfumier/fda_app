@@ -404,7 +404,7 @@
         },
         "registration": {
           "title": "Artist registration",
-          "text": "To register, each artist must create an account in the member area. For more information, please consult the <a href=/public/faq>FAQ</a>.",
+          "text": "To register, each artist must create an account in the member area.<br/>For more information, please consult the <a href=/public/faq>FAQ</a> page.",
           "opening": "Opening of registrations",
           "closure": "Closing of registrations",
           "response": "Response to applicants",

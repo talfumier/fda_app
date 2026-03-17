@@ -404,7 +404,7 @@
         },
         "registration": {
           "title": "Inscription des artistes",
-          "text": "Pour s'inscrire, chaque artiste doit créer un compte dans l'espace membre. Pour plus d'informations, merci de consulter la <a href=/public/faq>FAQ</a>.",
+          "text": "Pour s'inscrire, chaque artiste doit créer un compte dans l'espace membre.<br/>Pour plus d'informations, merci de consulter la page <a href=/public/faq>FAQ</a>.",
           "opening": "Ouverture des inscriptions",
           "closure": "Fermeture des inscriptions",
           "response": "Réponse aux candidats",
