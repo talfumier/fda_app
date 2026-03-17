@@ -66,7 +66,7 @@
     justify-content: space-around;
     height: 30px;
     min-height: 30px;
-    width:50%;
+    width:150px;
     border: solid 1px grey;
     border-radius: 5px;
     margin: 5px 0;
