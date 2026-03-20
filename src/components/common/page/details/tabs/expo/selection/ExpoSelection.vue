@@ -481,8 +481,8 @@
               <p>{{ bo[`media_${locale}`] }}</p>
             </div>
             <div class="dim">
-              <p>{{$t('comps.form_details.expos.tables.selection.dim.h')}}:&nbsp;{{ bo.width }}&nbsp;cm</p>
-              <p>{{$t('comps.form_details.expos.tables.selection.dim.w')}}:&nbsp;{{ bo.height }}&nbsp;cm</p>
+              <p>{{$t('comps.form_details.expos.tables.selection.dim.h')}}:&nbsp;{{ bo.height }}&nbsp;cm</p>
+              <p>{{$t('comps.form_details.expos.tables.selection.dim.w')}}:&nbsp;{{ bo.width }}&nbsp;cm</p>
               <p v-if="bo.depth">{{$t('comps.form_details.expos.tables.selection.dim.d')}}:&nbsp;{{ bo.depth }}&nbsp;cm</p>
               <p v-if="bo.weight">{{$t('comps.form_details.expos.tables.selection.dim.wt')}}:&nbsp;{{ bo.weight }}&nbsp;Kg</p>
             </div>
