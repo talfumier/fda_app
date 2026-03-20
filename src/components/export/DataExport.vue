@@ -12,14 +12,15 @@
   const inFlight=new Set()
 
   const paramsValues=ref('')
-  const disable=ref({artist_data:true,user_data:false,catalogue:true})
-  const isLoading=ref({artist_data:false,user_data:false,catalogue:false})
-  const errorMessage = ref({artist_data:'',user_data:'',catalogue:''})
-  const successMessage = ref({artist_data:'',user_data:'',catalogue:''})
+  const disable=ref({artist_data:true,user_data:false,catalogue:true,payment_data:true})
+  const isLoading=ref({artist_data:false,user_data:false,catalogue:false,payment_data:false})
+  const errorMessage = ref({artist_data:'',user_data:'',catalogue:'',payment_data:''})
+  const successMessage = ref({artist_data:'',user_data:'',catalogue:'',payment_data:''})
 
   const obj={
     artist_data:{idExpo:0,idStatus:[0,0,0],showRoom:0,screen:0},
-    catalogue:{idExpo:0,idStatus:[0,0,0]}
+    catalogue:{idExpo:0,idStatus:[0,0,0]},
+    payment_data:{idExpo:0}
   }
   
   function handleChange(name,valid,val,cs){
@@ -39,6 +40,7 @@
     }
     disable.value[cs]=false
     if(obj[cs].idExpo===0) disable.value[cs]=true
+    if(cs==='payment_data') return
     if(obj[cs].idStatus.reduce((a, b) => parseInt(a) + parseInt(b), 0)===0) disable.value[cs]=true
     if((obj.artist_data.showRoom+obj.artist_data.screen)===0) disable.value.artist_data=true
     paramsValues.value=`${obj[cs].idExpo};[${obj[cs].idStatus}]`
@@ -54,17 +56,20 @@
           res=await downloadCatalogueZip('export_catalogue',token.value,ctrl.signal,':idExpo,:idStatus,:showRoom,:screen',paramsValues.value)
           break
         case 'user_data':
-          res=await downloadCsv('export_users','user_data',token.value,ctrl.signal)
+          res=await downloadCsv('export_users',-1,'user_data',token.value,ctrl.signal)  //-1 means all idExpo
           break
         case 'catalogue':
           res=await downloadCataloguePDF(token.value,ctrl.signal,window.location.origin,':idExpo,:idStatus',paramsValues.value)
+          break
+        case 'payment_data':
+          res=await downloadCsv('export_payment',obj.payment_data.idExpo,'payment_data',token.value,ctrl.signal)
       }
       // Trigger download in browser
-      const blob = new Blob([res.data], { type: `${cs==='artist_data'?"application/zip":(cs==='user_data'?"text/csv":"application/pdf")}` })
+      const blob = new Blob([res.data], { type: `${cs==='artist_data'?"application/zip":(cs==='user_data' || cs==='payment_data'?"text/csv":"application/pdf")}` })
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${cs}_export.${cs==='artist_data'?"zip":(cs==='user_data'?'csv':'pdf')}`
+      a.download = `${cs}_export.${cs==='artist_data'?"zip":(cs==='user_data' || cs==='payment_data'?'csv':'pdf')}`
       document.body.appendChild(a)
       a.click()
       // Cleanup
@@ -203,6 +208,38 @@
   </fieldset>  
   <fieldset>
     <legend > 
+        {{ $t('comps.infos.export.payment_data.title')}}<DialogInfo :path="$t('comps.infos.export.payment_data.info')"></DialogInfo>
+    </legend>
+    <InputField 
+      name="idExpo" 
+      :label="$t('comps.export.artist_data.select_expo')" 
+      field_type="select" 
+      options="options_expo_export" 
+      :required="false"
+      @change="(name,valid,val) => {
+          handleChange(name,valid,val,'payment_data')
+        }"
+    ></InputField>  
+    <div class="bottom-container">
+      <FieldsetButton 
+        :buttons="[
+          {
+            name: 'export',
+            icon: 'outbox',
+            label_fr: isLoading.payment_data?'Téléchargement en cours ...':'Générer le fichier .csv',
+            label_en: isLoading.payment_data?'Download in progress ...':'Generate .csv file'
+          }
+        ]" 
+        :disabled="{export:disable.payment_data}"
+        :pulse="isLoading.payment_data"
+        @button-action="handleButtonAction('payment_data')"
+      ></FieldsetButton> 
+      <div v-if="errorMessage.payment_data" class="message error">{{ errorMessage.payment_data }}</div>
+      <div v-if="successMessage.payment_data" class="message success">{{ successMessage.payment_data }}</div>
+    </div>  
+  </fieldset> 
+  <fieldset>
+    <legend > 
         {{ $t('comps.infos.export.catalogue.title')}}<DialogInfo :path="$t('comps.infos.export.catalogue.info')"></DialogInfo>
     </legend>
     <InputField 
@@ -270,7 +307,7 @@
   </fieldset>
 </template>
 
-<style scoped>  
+<style scoped> 
   fieldset {
     display:flex;
     flex-direction: column;

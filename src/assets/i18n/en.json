@@ -135,6 +135,10 @@
         "catalogue": {
           "title": "Exhibition catalogue",
           "info": "Creation of the catalogue .pdf document for the selected exhibition."
+        },
+        "payment_data": {
+          "title": "Payment data export",
+          "info": "Registrations payment data export in a .csv file."
         }
       },
       "admin": {
@@ -392,6 +396,10 @@
       "catalogue": {
         "success": "Catalogue PDF document created successfully!",
         "error": "Failed to create catalogue PDF document. Please try again."
+      },
+      "payment_data": {
+        "success": "Registrations payment data exported successfully!",
+        "error": "Failed to export registrations payment data. Please try again."
       }
     },
     "public_site": {
