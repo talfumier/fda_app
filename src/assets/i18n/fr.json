@@ -135,6 +135,10 @@
         "catalogue": {
           "title": "Export du catalogue",
           "info": "Génération du catalogue pour l'exposition sélectionner dans un fichier .pdf."
+        },
+        "payment_data": {
+          "title": "Export des données de paiement",
+          "info": "Export des données de paiement des inscriptions dans un fichier .csv."
         }
       },
       "admin": {
@@ -392,6 +396,10 @@
       "catalogue": {
         "success": "PDF catalogue créé avec succès!",
         "error": "Echec de la création du catalogue PDF . Essayez à nouveau."
+      },
+      "payment_data": {
+        "success": "Données de paiement des inscriptions exportées avec succès!",
+        "error": "Echec de l'export des données de paiement des inscriptions. Essayez à nouveau."
       }
     },
     "public_site": {

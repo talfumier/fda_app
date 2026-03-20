@@ -175,7 +175,7 @@
 <style scoped>
   main.catalogue {
     display:grid;
-    grid-template-columns: auto;
+    grid-template-columns: 100%;
   }  
   nav.toc {
     display:none

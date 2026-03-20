@@ -83,7 +83,7 @@
     display:flex;
     flex-direction: column;
     align-items: center;
-    padding:0 15px;
+    padding:0;
     width:100%;    
     font-family: "Roboto", sans-serif;
     font-size: 1.5rem;
@@ -109,7 +109,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap:20px;
+    gap:10px;
     margin:10px 0;
   }  
    h4.guest::before { 
@@ -171,6 +171,7 @@
   }
   div.social a,div.web a {
     padding:2px 5px;
+    overflow-wrap: anywhere;
   }
   div.web p::before {
     content: "\f0ac";
@@ -209,12 +210,13 @@
   div.resume {   
     text-align: justify;
     margin: 10px 0;
+    padding:0 5px;
     max-width:650px;
   }
   hr {
     border-color: var(--grey);
     border-width: 1px;
-    width:100%;
+    width:90%;
   }
   div.works {
     display:flex;
@@ -277,4 +279,14 @@
     justify-content: center;
     width:100%;
   }
+  @media screen and (min-width: 450px){
+    h4.avatar {  
+      gap:20px;
+    } 
+  } 
+  @media screen and (min-width: 900px){
+    hr {  
+      width:80%;
+    } 
+  } 
 </style>

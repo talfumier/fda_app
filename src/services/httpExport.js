@@ -9,8 +9,9 @@ export function downloadCatalogueZip(stored_proc, token, signal, params, paramsV
     responseType: 'blob',
   })
 }
-export function downloadCsv(stored_proc, filename, token, signal) {
-  return http.get(`${api}/files/download-csv/${stored_proc}/${filename}`, {
+export function downloadCsv(stored_proc, idExpo, filename, token, signal) {
+  //idExpo=-1 > all idExpo
+  return http.get(`${api}/files/download-csv/${stored_proc}/${idExpo}/${filename}`, {
     headers: { 'x-auth-token': token },
     signal,
     responseType: 'blob',
