@@ -669,11 +669,45 @@
         ]
       },
       {
-        "name": "expo_photos",
+        "name": "expo_home_photos",
         "type": "multiple-upload",
-        "legend_fr": "Photos",
-        "legend_en": "Pictures",
+        "dest": "home",
+        "legend_fr": "Photos page d'accueil",
+        "legend_en": "Home page pictures",
         "count": 4,
+        "info": true,
+        "info_path": "comps.infos.picture",
+        "fields": [
+          {
+            "name": "fileName",
+            "label_fr": "Fichier",
+            "label_en": "File",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileSize",
+            "label_fr": "Taille",
+            "label_en": "Size",
+            "field_type": "input",
+            "disabled": true
+          },
+          {
+            "name": "fileLastModified",
+            "label_fr": "Date de modification",
+            "label_en": "Date modified",
+            "field_type": "input",
+            "disabled": true
+          }
+        ]
+      },
+      {
+        "name": "expo_award_photos",
+        "type": "multiple-upload",
+        "dest": "award",
+        "legend_fr": "Photos remise des prix",
+        "legend_en": "Awards ceremony pictures",
+        "count": 10,
         "info": true,
         "info_path": "comps.infos.picture",
         "fields": [

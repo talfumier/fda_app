@@ -21,7 +21,8 @@
     fileYes:{type:Array},
     model:{type:String},
     fields:{type:Array},
-    data:{type:Object}
+    data:{type:Object},
+    dest:{type:String,default:null}
   })
 
   const {t,locale}=useI18n()  
@@ -101,7 +102,7 @@
         let res3=null
         switch(props.model){
           case 'Expo':  //multiple upload
-            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idFile},token.value,ctrl.signal)).data
+            res3=(await postEntity('ExpoImage',{idExpo:props.data.idExpo,idFile,dest:props.dest},token.value,ctrl.signal)).data
             break
           case 'User':  //single upload
           case 'Partner':
