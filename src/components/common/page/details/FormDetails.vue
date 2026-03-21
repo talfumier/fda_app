@@ -146,6 +146,7 @@
           :model="entity.model"
           :fields="item.fields"
           :count="item.count"
+          :dest="item.dest"
           :data="record"
         >
         </FieldsetFiles>

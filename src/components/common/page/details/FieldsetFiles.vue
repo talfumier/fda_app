@@ -8,8 +8,9 @@
     model:{type:String},
     fields:{type:Array},
     count:{type:Number},
-    data:{type:Object}
-  })  
+    data:{type:Object},
+    dest:{type:String,default:null}
+  }) 
   
   const {token}=inject('userCookie')
   const images=ref(null)
@@ -20,8 +21,8 @@
       'list_images_expo',
       token.value,
       ctrl.signal,
-      ':idExpo', 
-      props.data.idExpo
+      ':idExpo,:dest', 
+      `${props.data.idExpo},${props.dest}`
     )
     return res.data[0]
   } 
@@ -41,6 +42,7 @@
       :model="model"
       :fields="fields"
       :data="images[idx-1]?images[idx-1]:{...data,idFile:null}"
+      :dest="dest"
     >
     </FieldsetFile>
   </div>
