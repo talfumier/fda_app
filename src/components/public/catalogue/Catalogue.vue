@@ -143,7 +143,7 @@
 </script>
 
 <template>
-  <main v-if="state.length>0" :class="['catalogue',catalogue && !print?'col2':'']">
+  <main v-if="state.length>0" :class="['catalogue',print?'print':'',catalogue && !print?'col2':'']">
     <Toc v-if="catalogue && !print"
       :domain_artists="domain_artists"
       :idUser="idUser"
@@ -156,13 +156,43 @@
       <section class="cover-page ">
         <img 
           :src="getCoverPage(state[2],!print?(locale==='en'?4:5):6)" 
-          :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'" 
-          loading="lazy">
+          :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'">
         <div v-if="!catalogue && !print" class="banner">
           {{ locale==='en'?'Available from ':'Disponible à partir du '}}{{ formatLocalDate(state[0][0].catalogueReleaseDate,locale,'df') }}
         </div>
       </section>
-      <ArtistBlock v-if="catalogue" v-for="artist in state[1]"
+      <section v-if="print" class="intro">
+        <img 
+          :src="getCoverPage(state[2],7)" 
+          :alt="locale==='en'?'catalogue intro':'intro du catalogue'" >
+      </section>  
+      <br>    
+      <section v-if="print" class="guests break-before">
+        <h2 >Invités d'honneur</h2>
+      </section>  
+      <br>       
+      <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
+        return item.idRole===2    //guests only
+      }).sort((a, b) => (a.domain.fr[0]).localeCompare(b.domain.fr[0]))"
+        :data="artist"
+        :print="print"
+        style="grid-column: 1/-1;"
+      >
+      </ArtistBlock>
+      <br>
+      <section v-if="print" class="artists break-before" 
+        style="grid-column: 1;">          
+        <h2 >Artistes</h2>
+      </section>
+      <br>
+      <ArtistBlock v-if="catalogue && !print" v-for="artist in state[1]"  
+        :data="artist"
+        :print="print"
+      >
+      </ArtistBlock>
+      <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
+        return item.idRole!==2    //guests filtered out
+      })"
         :data="artist"
         :print="print"
       >
@@ -177,6 +207,13 @@
     display:grid;
     grid-template-columns: 100%;
   }  
+  main.catalogue.print {
+    grid-template-columns: auto;
+  }
+  h2 {
+    font-family: Berlin Sans FB Bold;
+    font-size: 8rem;
+  }
   nav.toc {
     display:none
   }
@@ -216,6 +253,23 @@
     object-fit: cover;
     width:80%;
   }
+  section.intro {
+    display:flex;
+    justify-content: center;
+    width:200%;
+  }
+  section.guests, section.artists {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width:200%;
+    text-align: center;
+  }
+  section.intro img {
+    object-fit: cover;
+    width:200%;
+  }
   section.wrapper.print section.cover-page img {
     width:100%;
     height:100%;
@@ -223,6 +277,12 @@
   section.partner.print {
     justify-self: center;
     max-width:50%;
+  }  
+  .break-before {
+    break-before: page;
+  }
+  .break-after {
+    break-after: page;
   }
   @media screen and (min-width: 768px) {  
     main.catalogue.col2 {
@@ -237,12 +297,6 @@
     section.wrapper {
       grid-column: 2;
     }
-  }
-  .break-before {
-    break-before: page;
-  }
-  .break-after {
-    break-after: page;
   }
   @media screen and (min-width: 1200px){
     section.cover-page div.banner {      
