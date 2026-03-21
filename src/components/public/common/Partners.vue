@@ -88,7 +88,7 @@
     cursor: pointer;
   }
   section.print img {
-    height:150px;
+    height:140px;
   }
   @media screen and (min-width: 1200px) {  
     section.print div.logos {

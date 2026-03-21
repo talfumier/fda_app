@@ -14,12 +14,12 @@
 </script>
 
 <template>
-  <section v-if="locale" class="artist" :id="`artist${data.idUser}`">
+  <section v-if="locale" :class="['artist']" :id="`artist${data.idUser}`">
     <hr v-if="!print">
     <div class="bio">
       <h3 class="technique">{{getText(2,data.domain,null,locale)}}</h3>
-      <h4 :class="['avatar',data.idRole===2?'guest':'']">
-        <img v-if="!print && data.public_image && data.u_url":src="adjustImage(70,70,data.u_url)" alt="data.artistname" loading="lazy">
+      <h4 :class="['avatar',!print && data.idRole===2?'guest':'']">
+        <img v-if="(!print || print && data.idRole===2) && data.public_image && data.u_url":src="adjustImage(70,70,data.u_url)" :alt="data.artistname" loading="lazy">
         <p>{{ data.artist }}&nbsp &nbsp{{ data.public_pseudo && data.pseudo!==data.artist && data.pseudo?"'"+data.pseudo+"'":'' }}</p>
       </h4>
       <div class="contact">
@@ -56,11 +56,18 @@
           </a>
         </p>
       </div>
-      <div class="resume" v-if="!print && data[`resume_${locale}`]">{{ toSentenceCase(2,data[`resume_${locale}`] )}}</div>
+      <div 
+        :class="['resume',print && data.idRole===2?'guest':'']" 
+        v-if="(!print || print && data.idRole===2) && data[`resume_${locale}`]"
+      >
+        {{ toSentenceCase(2,data[`resume_${locale}`] )}}
+      </div>
     </div>
-    <div :class="['works',print?'print':'']">
+    <div 
+      :class="['works',print?'print':'',print && data.idRole===2?'guest':'no-guest']"
+    >
       <div v-for="(bo,idx) in _.orderBy(data.bookingOeuvres,['catalogue','artist'],['desc','asc'])" class="work">
-        <img v-if="print && idx===0 || !print" :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" >
+        <img v-if="print && data.idRole===2 && idx<=4 || print && idx===0 || !print" :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" >
         <div v-if="!print" class="details">
           <p class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}</p>
           <p v-if="!print" class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>
@@ -68,7 +75,7 @@
           <p class="dim">{{ getDim(bo,locale) }}</p>
           <p class="price">{{ getPrice(bo,t) }}</p>
         </div>
-        <div v-if="print" class="details">
+        <div v-if="print && data.idRole!==2 || print && data.idRole===2 && idx<=4" class="details">
           <span class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}&nbsp|&nbsp</span>
           <span class="technique-media">{{_.capitalize(getText(1,bo,'tech',locale))}}&nbsp{{`${bo.price||bo.reserved?'|':''}`}}&nbsp</span>
           <span class="price">{{ getPrice(bo,t) }}</span>
@@ -213,6 +220,9 @@
     padding:0 5px;
     max-width:650px;
   }
+  div.resume.guest {
+    max-width:95%;
+  }
   hr {
     border-color: var(--grey);
     border-width: 1px;
@@ -226,7 +236,10 @@
     gap:20px;
     padding:15px;
   }
-  div.works.print {
+  div.works.print.guest {
+    align-items:flex-end;
+  }
+  div.works.print.no-guest {
     flex-direction: column;
     align-items: center;
     gap:5px;

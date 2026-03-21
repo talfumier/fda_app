@@ -1,4 +1,5 @@
 import { createApp, watch } from 'vue'
+import { createHead } from '@unhead/vue/client'
 import { Quasar, Notify, Dialog, ClosePopup, date as qdate } from 'quasar'
 import './assets/css/global.css'
 import 'quasar/src/css/index.sass'
@@ -25,8 +26,11 @@ export const i18n = createI18n({
   messages,
 })
 const app = createApp(App)
+const head = createHead()
 
 app.use(router)
+
+app.use(head) //SEO related
 
 app.use(i18n) //special method **$t** defined by i18n and injected in the app to be used within templates
 
