@@ -2,14 +2,16 @@
   import { ref, onMounted, onUnmounted } from 'vue'
   import { useI18n } from 'vue-i18n'    
   import _ from 'lodash'
-  import { fetch } from './functions'
+  import { fetch } from './functions.js'
   import {
     newController,
     doneController,
     cancelAllInFlight
   } from '@/utilityFunctions.js'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
+  import Carousel from './common/Carousel.vue'
   import Partners from './common/Partners.vue'
+  import { environment } from '@/config/environment.js'
 
   const {t,locale}=useI18n()
   const inFlight = new Set()     
@@ -71,16 +73,38 @@
         </p>
       </div>
     </section>
+    <section v-if="state[3].length>0 && (state[3][0].awardPhotosVisible || !environment.production)" class="carousel">
+      <Carousel
+        :data="state[3]"
+      >
+    </Carousel>
+    </section>
   </main>
   <Partners></Partners>
 </template>
 
 <style scoped>
   main.jury-awards {
+    display:grid;
+    grid-template-rows: 30px repeat(3,auto);
+    grid-template-columns: auto;
     padding:25px;
-    margin:0 30px;
+    margin:0 15px;
+  }
+  h2,h3,h4 {    
+    font-family: 'Berlin Sans FB', Arial;
+    margin:0;
+  }
+  h2 {    
+    grid-row:1;
+    grid-column: 1;
+    font-size: 2.5rem;
+    line-height: 1.9rem;
+    margin-bottom: 15px;
   }
   section.jury {
+    grid-row:2;
+    grid-column: 1;
     width:fit-content;
     min-width:200px;
     margin-left:5px;
@@ -119,15 +143,6 @@
   div.jury-member p.role {
     font-weight: lighter;
   }
-  h2,h3,h4 {    
-    font-family: 'Berlin Sans FB', Arial;
-    margin:0;
-  }
-  h2 {
-    font-size: 2.5rem;
-    line-height: 1.9rem;
-    margin-bottom: 15px;
-  }
   h3 {
     font-size: 2.2rem;
     line-height: 1.9rem;
@@ -139,6 +154,8 @@
     padding: 5px 0;
   }
   section.awards {
+    grid-row:3;
+    grid-column: 1;
     margin-top:20px;
   }
   div.vernissage {    
@@ -192,9 +209,28 @@
   span.not-awarded {
     padding-left: 15px;
   }
-  @media screen and (min-width: 550px) {   
+  section.carousel {
+    grid-row:4;
+    grid-column: 1;
+    margin:30px 0;
+    max-width:500px;
+  }
+  @media screen and (min-width: 550px) { 
+    main.jury-awards {
+      margin:0 30px;
+    }  
     section.jury {
       min-width:500px;
+    }
+  } 
+   @media screen and (min-width: 1200px) { 
+    main.jury-awards {
+      grid-template-columns: repeat(2,600px);
+      margin:0 30px;
+    }  
+    section.carousel {
+      grid-row: 1/-1;
+      grid-column: 2;
     }
   } 
 
