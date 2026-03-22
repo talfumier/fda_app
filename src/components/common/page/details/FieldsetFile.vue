@@ -56,7 +56,7 @@
   async function handleClick(cs){
     switch(cs){
       case 'upload':
-        document.getElementById('select-file').click()  
+        document.getElementById(`select-file-${props.dest}`).click()  
         break
       case 'delete':
         if (!(await confirm($q,t('comps.file_upload.file_delete'),'cancel'))) return false 
@@ -114,7 +114,7 @@
         if(!res3 || res3.statusCode===200) {
           file.value={    //update state
             ...body
-          }   
+          } 
           emit('parentUpdate',file.value)
         }
       }
@@ -241,7 +241,7 @@
         @click="handleClick('upload')"
       >
         <input
-          id="select-file"
+          :id="`select-file-${dest}`"
           class="upload"
           type="file"
           :accept="exts.join(',')"

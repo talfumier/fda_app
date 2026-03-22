@@ -34,9 +34,6 @@
           <div class="title">
             {{ truncate(file[`title_${locale}`],50 ) }}
           </div>
-          <!-- <div v-if="file[`desc_${locale}`]" >
-            {{ truncate(file[`desc_${locale}`],100)}}
-          </div> -->
         </div>
         <q-img
           :src="file.url"
@@ -80,11 +77,11 @@
     width: 100%;
     box-sizing: border-box;
   }
-  main.photos .carousel-wrapper {    /* guest.vue */
+  main.photos .carousel-wrapper { 
       border-width:1px 0 0 0 ;
       border-color:var(--blue);
     }
-  main.photos .q-carousel__slide {  /* guest.vue */
+  main.photos .q-carousel__slide { 
     padding:5px ;
   }
   div.title {
@@ -92,15 +89,11 @@
     font-weight: bolder;
     opacity:.7;
   }
-  .div.description {
-    margin-top: 4px;
-    opacity: 0.8;
-  }
   .slide-image {
     flex: 1 1 auto;
   }  
   @media screen and (min-width: 1000px) { 
-    main.photos .carousel-wrapper {    /* guest.vue */
+    main.photos .carousel-wrapper { 
       border-width:0 0 0 1px ;
     }
 
