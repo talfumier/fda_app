@@ -23,7 +23,10 @@
     "url": "/public/past_events",
     "icon": "history",
     "text": "past_events",
-    "wrap": false
+    "wrap": false,
+    "nested": {
+      "sql": "public_navbar_past_events"
+    }
   },
   {
     "url": "/public/faq",

@@ -1,8 +1,7 @@
 
 <script setup>
   import { ref, onMounted, onUnmounted } from 'vue'
-  import _ from 'lodash'
-  import { fetch,openPdf } from './functions'
+  import { fetch,getExpoDoc,openRulesDoc } from './functions'
   import {
     newController,
     doneController,
@@ -34,14 +33,6 @@
     // clean-up code after component has unmounted
     cancelAllInFlight(inFlight)
   })
-  async function openRulesDoc(){
-    await openPdf(getExpoDoc(2).url)
-  }
-  function getExpoDoc(idType){
-    return _.filter(state.value[2],(item) => {
-      return item.idType===idType
-    })[0]
-  }
 </script>
 
 <template> 
@@ -49,7 +40,7 @@
   <section v-if="state.length>0" :class="['expo',(!state[0][0].expoIsOver && !environment.production || state[0][0].expoIsOver)?'over':'']"> 
     <div class="top" >
       <div class="text">
-        <img :src="getExpoDoc(8).url" :alt="getExpoDoc(8).fileName"/>
+        <img :src="getExpoDoc(8,state[2]).url" :alt="getExpoDoc(8,state[2]).fileName"/>
         <h2>{{ state[0][0][`title_${locale}`] }}</h2>
         <p>{{ state[0][0][`desc_${locale}`] }}</p>
       </div>       
@@ -78,7 +69,7 @@
         <p>{{formatLocalDate(state[0][0].closureDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
         <p>{{formatLocalDate(state[0][0].responseDate,locale,'df')}}</p>  
-        <div v-if="getExpoDoc(2)" class="rules" @click="openRulesDoc">
+        <div v-if="getExpoDoc(2,state[2])" class="rules" @click="openRulesDoc(state[2])">
           <q-icon name="article" size="2.7rem" color="green"></q-icon>
           <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
         </div>  
@@ -131,9 +122,6 @@
     font-family: 'Roboto', Arial;
     font-size:1.5rem;  
   }
-  section.expo.over {
-    /* flex-direction: column; */
-  }  
   h2,h3 {    
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
