@@ -1,7 +1,8 @@
 <script setup>
 
-  defineProps({
-    icon:{type:Boolean}
+  const props=defineProps({
+    icon:{type:Boolean},
+    type:{type:String,default:'notYet'}  //possible values notYet, noData
     })
 
 </script>
@@ -16,7 +17,7 @@
       >
       </q-icon>
     </a>
-    {{ $t('comps.notYet.text') }}
+    {{ $t(`comps.${props.type}.text`) }}
   </div>  
 
 </template>
