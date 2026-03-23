@@ -13,6 +13,11 @@
   import Partners from './common/Partners.vue'
   import { environment } from '@/config/environment.js'
 
+  const props=defineProps({
+    source:{type:String,default:'jury-awards-page'},
+    expoID:{type:Number,default:-1}   //when default value is used, last on-going expo is retrieved in the SQL stored procedure
+  })
+
   const {t,locale}=useI18n()
   const inFlight = new Set()     
   const {formatLocalDate}=useFormatDate()  
@@ -21,7 +26,7 @@
   onMounted(async () => {
     const ctrl = newController(inFlight)
     try {
-      state.value = await fetch('public_jury_awards_details', ctrl.signal)
+      state.value = await fetch('public_jury_awards_details', ctrl.signal,':idExpo',props.expoID)
     } catch (error) {
       console.error('onmounted failed in JuryAwards.vue', error)
       return
@@ -38,7 +43,7 @@
 
 <template>
   <main v-if="state.length>0" class="jury-awards">
-    <h2>{{state[0][0][`title_${locale}`]}}</h2>
+    <h2 v-if="source==='jury-awards-page'">{{state[0][0][`title_${locale}`]}}</h2>
     <section class="jury">
       <h3>{{ $t('comps.public_site.jury_awards.jury.title') }}</h3>
       <div v-if="state[2].length>0" class="jury-members">
@@ -52,8 +57,8 @@
       <div v-else class="jury-members">{{ $t('comps.public_site.jury_awards.jury.not') }}</div>
     </section>
     <section class="awards">
-      <h3>{{ $t('comps.public_site.jury_awards.awards.title') }}</h3>
-      <div class="vernissage">
+      <h3 v-if="source==='jury-awards-page'">{{ $t('comps.public_site.jury_awards.awards.title') }}</h3>
+      <div v-if="source==='jury-awards-page'" class="vernissage">
         <h4>{{ `${t('comps.public_site.home.vernissage.title')}&nbsp:` }}</h4>
         <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
       </div>
@@ -73,14 +78,14 @@
         </p>
       </div>
     </section>
-    <section v-if="state[3].length>0 && (state[3][0].awardPhotosVisible || !environment.production)" class="carousel">
+    <section v-if="state[3]?.length>0 && (state[3][0].awardPhotosVisible || !environment.production) && source==='jury-awards-page'" class="carousel">
       <Carousel
         :data="state[3]"
       >
     </Carousel>
     </section>
   </main>
-  <Partners></Partners>
+  <Partners v-if="source==='jury-awards-page'"></Partners>
 </template>
 
 <style scoped>

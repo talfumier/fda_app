@@ -1,6 +1,6 @@
 <script setup>
-  import { ref,computed,onMounted,onUnmounted } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { ref,onMounted,onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'  
   import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Tooltip from '../../common/Tooltip.vue'
@@ -13,24 +13,21 @@
     // screen:{type:Number,default:-1}  //automatically hide navbar text below a given screen width, default -1 (does nothing)
   })  
   
-  const router=useRouter()
+  const {locale}=useI18n()
 
   const state=ref([])
-  const expand=computed(() => props.item.expand)
   const inFlight=new Set()
 
   async function fetch(signal){
     const {data:res}=await getPublicEntitiesBySql(
-      props.item.sql,
-      signal,
-      props.item.sql_param,
-      props.item.param_value
+      props.item.nested.sql,
+      signal
     )
     if(!res || res.statusCode!==200) return
     return res.data
   }
   onMounted(async () => {  
-    if(!props.item.sql) return
+    if(!props.item.nested) return
     const ctrl=newController(inFlight)
     try {
       state.value = await fetch(ctrl.signal) 
@@ -49,36 +46,33 @@
 </script>
 
 <template>
-  <RouterLink v-if="item && !item.type" :to="item.url" tabindex="-1">
+  <RouterLink v-if="item" :to="item.url" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
-    <div :class="[isRotated?'folded':'',source]">
+    <div :class="['routerLink',isRotated?'folded':'',source]">
       <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" 
         :style="`padding-top:${item.padding_top}px;padding-right:${item.padding_right}px;padding-left:${item.padding_left}px;`"></q-icon>
       <p :style="`padding-top:${item.padding_top-2}px`">{{item.text?$t('comps.navbar.'+item.text):'' }}</p>
     </div>
   </RouterLink>
-  <!-- <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap="item.wrap"></Tooltip> -->
-  <div v-if="item && item.type==='nested' && item.production.includes(environment.production)"
-    :class="['folder',isRotated?'folded':'']"
-    @click="() => {
-        if(isRotated) //in case of nested folder when navbar is folded (small screen devices), navigate to first item in the list
-          router.push(`${item.url}/${state[0][0].idExpo}?idStatus=${state[0][0].idStatus}`)
-        else expand=!expand
-      }"
+  <q-menu
+    v-if="!environment.production && state[0]?.length>0"
+    anchor="bottom end"
+    self="top end"
   >
-    <q-icon v-if="item.icon" :name="item.icon" size="3rem"></q-icon>
-    <p>{{item.text?$t('comps.navbar.'+item.text):'' }}</p>      
-    <q-icon name="keyboard_arrow_down" size="3rem" :class="['arrow',expand?'rotate':'']"></q-icon>
-  </div>
-  <div v-if="item && expand"  class="sub">
-    <li v-for="(link) in state[0]" :class="['dropdown',expand?'visible':'visible']">
-      <RouterLink :to="`${item.url}/${link.idExpo}?idStatus=${link.idStatus}`" >    
-        <div :class="[isRotated?'folded':'']">
-          <p>{{link.short_en }}</p>
-        </div>    
-      </RouterLink>
-    </li> 
-  </div>
+    <q-list dense>
+      <q-item
+        v-for="expo in state[0]"
+        :key="expo.idExpo"
+        clickable
+        v-close-popup
+        :to="{ path: item.url, query: { idExpo: expo.idExpo } }"
+      >
+        <q-item-section>
+          {{ expo[`short_${locale}`] }}
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-menu>
 </template>
 
 <style>
@@ -90,7 +84,7 @@
   }
 </style>
 <style scoped>
-  div {
+  div.routerLink {
     display:flex;
     flex-direction: row;
     align-items: center;
@@ -192,8 +186,17 @@
     color:var(--white);
     font-weight: bolder;
   }
+  .q-list {
+    font-weight: bolder;
+    font-size: 1.6rem;
+    width:150px;    
+  }
+  .q-item {
+    line-height: 3rem;
+    color:rgb(128,128,128);
+  }
   @media screen and (min-width: 1100px) {   
-    p {
+    p,.q-list {
       font-size: 1.8rem;
     }
     li {      

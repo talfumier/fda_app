@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
 export async function fetch(sql, signal, param = null, paramValue = null) {
   const { data: res } = await getPublicEntitiesBySql(sql, signal, param, paramValue)
@@ -9,4 +10,12 @@ export async function openPdf(docUrl) {
   const blob = new Blob([buffer], { type: 'application/pdf' })
   const url = URL.createObjectURL(blob)
   window.open(url, '_blank')
+}
+export async function openRulesDoc(data) {
+  await openPdf(getExpoDoc(2, data).url)
+}
+export function getExpoDoc(idType, data) {
+  return _.filter(data, (item) => {
+    return item.idType === idType
+  })[0]
 }
