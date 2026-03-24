@@ -47,6 +47,18 @@ const router = createRouter({
     },
     { path: '/public/home', name: 'public home', component: Home, meta: { roles: [-1] } }, //no specific role requirement, nor authentication
     {
+      path: '/member/preview/home_print',
+      name: 'member preview home_print',
+      component: Home,
+      meta: { roles: [5, 6, 7] },
+    },
+    {
+      path: '/member/preview/past_events_print',
+      name: 'member preview past_events_print',
+      component: () => import('../public/PastEvents.vue'), //lazy loading
+      meta: { roles: [5, 6, 7] },
+    },
+    {
       path: '/public/catalogue',
       name: 'public catalogue',
       component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading

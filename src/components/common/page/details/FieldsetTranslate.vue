@@ -40,7 +40,7 @@
     <q-btn v-if="preview.home_not_over"
       class="home_not_over"
       tag="a"
-      :href="`/public/home?idExpo=${props.data.idExpo}`"
+      :href="`/member/preview/home_print?idExpo=${props.data.idExpo}`"
       target="_blank"
       push round pulse flat
       icon="home"
@@ -51,7 +51,7 @@
     <q-btn v-if="preview.home_over"
       class="home_over"
       tag="a"
-      :href="`/public/home?idExpo=${props.data.idExpo}&expoIsOver=1`"
+      :href="`/member/preview/home_print?idExpo=${props.data.idExpo}&expoIsOver=1`"
       target="_blank"
       push round pulse flat
       icon="home"
@@ -62,7 +62,7 @@
     <q-btn v-if="preview.past"
       class="past"
       tag="a"
-      :href="`/public/past_events?idExpo=${props.data.idExpo}`"
+      :href="`/member/preview/past_events_print?idExpo=${props.data.idExpo}`"
       target="_blank"
       push round pulse flat
       icon="history"

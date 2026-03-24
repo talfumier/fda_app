@@ -8,7 +8,7 @@
 
   const route=useRoute()
   const isPrint = computed(() =>
-    String(route.name ?? '').includes('catalogue_print')
+    String(route.name ?? '').includes('_print')
   )
   // Search Engine Optimisation
   const siteUrl = 'https://festivaldesarts.merville31.fr'
