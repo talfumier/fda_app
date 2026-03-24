@@ -115,7 +115,8 @@
       "short": "Nom court principalement utilisé dans l'espace membre et les menus du site public.",
       "title": "Nom long et commercial utilisé sur le site public.",
       "openingTimes": "Horaires d'ouverture de l'exposition affichés sur la page d'accueil du site publique.",
-      "expo_desc": "Présentation générale de l'exposition, type d'oeuvres exposées, public concerné ...",
+      "expo_desc": "Présentation générale de l'exposition avant et pendant l'ouverture, type d'oeuvres exposées, public concerné ...",
+      "expo_desc_after": "Présentation générale de l'exposition après sa fermeture, type d'oeuvres exposées, public concerné ...",
       "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. ",
       "picture": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger une image.",
       "file": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger un fichier.",
@@ -238,6 +239,10 @@
     },
     "form_details": {
       "translate": "Traduire",
+      "preview_tt": {
+        "home": "Pré-visualiser en tant que page d'accueil",
+        "past": "Pré-visualiser en tant que page d'édition précédente"
+      },
       "newRec": "Merci de sauvegarder l'enregistrement avant de créer des données qui lui sont liées.",
       "booking": {
         "register": "Merci de confirmer votre demande d'inscription.",

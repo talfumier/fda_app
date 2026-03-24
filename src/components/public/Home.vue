@@ -1,6 +1,7 @@
 
 <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
+  import { useRoute } from 'vue-router' 
   import { fetch,getExpoDoc,openRulesDoc } from './functions'
   import {
     newController,
@@ -11,17 +12,21 @@
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import MapOsm from './maps/MapOsm.vue'
   import Partners from './common/Partners.vue'
-  import { environment } from '@/config/environment.js'
 
   const {locale}=useI18n()
   const inFlight = new Set()     
   const {formatLocalDate}=useFormatDate()  
 
+  const route=useRoute()
+  const expoID = computed(() => Number(route.query.idExpo ?? -1))
+  const expoIsOver = computed(() => Number(route.query.expoIsOver ?? 0))
+
+
   const state = ref([])
   onMounted(async () => {
     const ctrl = newController(inFlight)
     try {
-      state.value = await fetch('public_home_details', ctrl.signal)
+      state.value =await fetch('public_home_details', ctrl.signal,':idExpo',expoID.value)
     } catch (error) {
       console.error('onmounted failed in Home.vue', error)
       return
@@ -36,16 +41,14 @@
 </script>
 
 <template> 
-  <!-- <section v-if="state.length>0" :class="['expo',state[0][0].expoIsOver?'over':'']">  -->
-  <section v-if="state.length>0" :class="['expo',(!state[0][0].expoIsOver && !environment.production || state[0][0].expoIsOver)?'over':'']"> 
+  <section v-if="state.length>0" :class="['expo',(state[0][0].expoIsOver || expoIsOver===1)?'over':'']"> 
     <div class="top" >
       <div class="text">
         <img :src="getExpoDoc(8,state[2]).url" :alt="getExpoDoc(8,state[2]).fileName"/>
         <h2>{{ state[0][0][`title_${locale}`] }}</h2>
         <p>{{ state[0][0][`desc_${locale}`] }}</p>
-      </div>       
-      <!-- <div v-if="!state[0][0].expoIsOver" class="schedule"> -->
-      <div v-if="!state[0][0].expoIsOver && environment.production" class="schedule">
+      </div>  
+      <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="schedule">
         <div class="opening">
           <h3>{{ $t('comps.public_site.home.opening.title') }}</h3>
           <p>{{ state[0][0][`openingTimes_${locale}`] }}</p>
@@ -56,8 +59,7 @@
         </div>
       </div>
     </div>
-    <!-- <div v-if="!state[0][0].expoIsOver" class="middle"> -->
-    <div v-if="!state[0][0].expoIsOver && environment.production" class="middle">
+    <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="middle">
       <div class="text">
         <h2>{{ $t('comps.public_site.home.registration.title') }}</h2>
         <p class="register" v-html="$t('comps.public_site.home.registration.text')"></p>
