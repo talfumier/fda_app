@@ -116,6 +116,7 @@
         <FieldsetTranslate
           v-if="item.type==='translate'"
           :key="idx"
+          :preview="item.preview?item.preview:{home:false,past:false}"
           :fields="item.fields"
           :data="record"
           @change="(name,valid,val) => {

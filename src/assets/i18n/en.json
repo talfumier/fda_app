@@ -115,7 +115,8 @@
       "short": "Short name used in the member area and public site menus.",
       "title": "Longer and more selling name used in the public site.",
       "openingTimes": "Exhibition opening hours that will be displayed in the public site home page.",
-      "expo_desc": "General introduction of the exhibition, type of art works displayed, targetted audience ...",
+      "expo_desc": "General introduction of the exhibition before and during the opening, type of art works displayed, targetted audience ...",
+      "expo_desc_after": "General introduction of the exhibition after closing, type of art works displayed, targetted audience ...",
       "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
       "picture": "Please make sure the record is actually saved before uploading any picture.",
       "file": "Please make sure the record is actually saved before uploading any file.",
@@ -238,6 +239,10 @@
     },
     "form_details": {
       "translate": "Translate",
+      "preview_tt": {
+        "home": "Preview as home page",
+        "past": "Preview as past event page"
+      },
       "newRec": "Please save the record before creating linked data.",
       "booking": {
         "register": "Please confirm submission of your registration.",

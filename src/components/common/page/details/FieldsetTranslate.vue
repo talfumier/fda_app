@@ -1,13 +1,16 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref } from 'vue'
   import _ from 'lodash'
-  import { useI18n } from 'vue-i18n';
-  import InputField from '../../fields/InputField.vue';
+  import { useI18n } from 'vue-i18n'
+  import InputField from '../../fields/InputField.vue'
+  import Tooltip from '../../Tooltip.vue'
 
   const props = defineProps({
+    preview:{type:Object},
     fields:{type:Array},
     data:{type:Object}
   }) 
+  
   const {locale}=useI18n()
   const counters=ref({en:0,fr:0})
 
@@ -34,6 +37,39 @@
 
 <template>
   <div :class="['translate',locale==='en'?'reverse':'']">
+    <q-btn v-if="preview.home_not_over"
+      class="home_not_over"
+      tag="a"
+      :href="`/public/home?idExpo=${props.data.idExpo}`"
+      target="_blank"
+      push round pulse flat
+      icon="home"
+      color="blue"
+      size="1.8rem">
+      <Tooltip :tt_text="$t('comps.form_details.preview_tt.home')"></Tooltip>
+    </q-btn>
+    <q-btn v-if="preview.home_over"
+      class="home_over"
+      tag="a"
+      :href="`/public/home?idExpo=${props.data.idExpo}&expoIsOver=1`"
+      target="_blank"
+      push round pulse flat
+      icon="home"
+      color="blue"
+      size="1.8rem">
+      <Tooltip :tt_text="$t('comps.form_details.preview_tt.home')"></Tooltip>
+    </q-btn>
+    <q-btn v-if="preview.past"
+      class="past"
+      tag="a"
+      :href="`/public/past_events?idExpo=${props.data.idExpo}`"
+      target="_blank"
+      push round pulse flat
+      icon="history"
+      color="blue"
+      size="1.8rem">
+      <Tooltip :tt_text="$t('comps.form_details.preview_tt.past')"></Tooltip>
+    </q-btn>
     <div class="fr">
       <label>{{locale==='fr'?fields[0].label:''}}</label>
       <img src="../../../../assets/images/fr.png" alt="drapeau français">
@@ -84,6 +120,15 @@
     grid-template-rows: auto auto;
     grid-template-columns: 1fr 150px 1fr;
     width:100%;
+    position:relative;
+  }
+  .q-btn.home_not_over,.q-btn.home_over,.q-btn.past {
+    position:absolute;
+    top:-20px;
+    left:-20px;
+  }
+  .q-btn.past {
+    left:10px;
   }
   div.fr,div.en {    
     display:flex;
@@ -112,16 +157,16 @@
   div.input-container {
     padding-top:0;
   }
-  .resume_fr, .title_fr, .openingTimes_fr, .desc_fr, .short_fr, .question_fr, .answer_fr {
+  .resume_fr, .title_fr, .openingTimes_fr, .desc_fr, .desc_after_fr, .short_fr, .question_fr, .answer_fr {
     grid-area: 2/1
   }
-  .reverse .resume_fr,.reverse .title_fr,.reverse .openingTimes_fr, .reverse .desc_fr,.reverse .short_fr, .reverse .question_fr, .reverse .answer_fr {
+  .reverse .resume_fr,.reverse .title_fr,.reverse .openingTimes_fr, .reverse .desc_fr, .reverse .desc_after_fr,.reverse .short_fr, .reverse .question_fr, .reverse .answer_fr {
     grid-area: 2/3;
   }
-  .resume_en, .title_en, .openingTimes_en, .desc_en, .short_en, .question_en, .answer_en {
+  .resume_en, .title_en, .openingTimes_en, .desc_en, .desc_after_en, .short_en, .question_en, .answer_en {
     grid-area: 2/3;
   }
-  .reverse .resume_en, .reverse .title_en, .reverse .openingTimes_en, .reverse .desc_en, .reverse .short_en, .reverse .question_en, .reverse .answer_en {
+  .reverse .resume_en, .reverse .title_en, .reverse .openingTimes_en, .reverse .desc_en, .reverse .desc_after_en, .reverse .short_en, .reverse .question_en, .reverse .answer_en {
     grid-area: 2/1
   }
   div.controls {
@@ -143,6 +188,11 @@
     margin-right: 10px;
     margin-bottom: 5px;
   }
+  @media screen and (min-width: 500px){
+    .q-btn.past {
+      left:15px;
+    }
+  }
   @media screen and (max-width: 900px) {
     div.translate {
       grid-template-rows: repeat(2,auto) 40px repeat(2,auto);
@@ -160,23 +210,23 @@
     .reverse div.en {
       grid-area: 1/1;
     }
-    .resume_fr, .short_fr, .title_fr, .desc_fr, .openingTimes_fr, .question_fr, .answer_fr {
+    .resume_fr, .short_fr, .title_fr, .desc_fr, .desc_after_fr, .openingTimes_fr, .question_fr, .answer_fr {
       grid-area: 2/1
     }
-    .reverse .resume_fr, .reverse .short_fr,.reverse .title_fr, .reverse .desc_fr, .reverse .openingTimes_fr, .reverse .question_fr, .reverse .answer_fr {
+    .reverse .resume_fr, .reverse .short_fr,.reverse .title_fr, .reverse .desc_fr, .reverse .desc_after_fr, .reverse .openingTimes_fr, .reverse .question_fr, .reverse .answer_fr {
       grid-area: 5/1;
     }
-    .resume_en, .short_en, .title_en, .desc_en, .openingTimes_en, .question_en, .answer_en  {
+    .resume_en, .short_en, .title_en, .desc_en, .desc_after_en, .openingTimes_en, .question_en, .answer_en  {
       grid-area: 5/1;
     }
-    .reverse .resume_en, .reverse .short_en, .reverse .title_en, .reverse .desc_en, .reverse .openingTimes_en, .reverse .question_en, .reverse .answer_en {
+    .reverse .resume_en, .reverse .short_en, .reverse .title_en, .reverse .desc_en, .reverse .desc_after_en, .reverse .openingTimes_en, .reverse .question_en, .reverse .answer_en {
       grid-area: 2/1
     }
     div.controls {
       grid-area: 3/1;
       margin-top: 0; 
     }
-    .q-btn {
+    div.controls .q-btn {
       transform: rotate(90deg);
     }
   }

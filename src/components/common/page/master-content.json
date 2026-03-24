@@ -572,8 +572,9 @@
       {
         "name": "desc",
         "type": "translate",
-        "legend_fr": "Présentation *",
-        "legend_en": "Introduction *",
+        "preview": { "home_not_over": true, "home_over": false, "past": false },
+        "legend_fr": "Présentation avant et pendant l'ouverture *",
+        "legend_en": "Introduction before and during opening *",
         "info": true,
         "info_path": "comps.infos.expo_desc",
         "fields": [
@@ -588,6 +589,29 @@
             "field_type": "textarea",
             "rows": 3,
             "max_length": 500
+          }
+        ]
+      },
+      {
+        "name": "desc_after",
+        "type": "translate",
+        "preview": { "home_not_over": false, "home_over": true, "past": true },
+        "legend_fr": "Présentation après fermeture *",
+        "legend_en": "Introduction after closing *",
+        "info": true,
+        "info_path": "comps.infos.expo_desc_after",
+        "fields": [
+          {
+            "name": "desc_after_fr",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 1000
+          },
+          {
+            "name": "desc_after_en",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 1000
           }
         ]
       },
