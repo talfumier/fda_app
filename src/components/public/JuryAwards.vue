@@ -11,7 +11,6 @@
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import Carousel from './common/Carousel.vue'
   import Partners from './common/Partners.vue'
-  import { environment } from '@/config/environment.js'
 
   const props=defineProps({
     source:{type:String,default:'jury-awards-page'},
@@ -78,7 +77,7 @@
         </p>
       </div>
     </section>
-    <section v-if="state[3]?.length>0 && (state[3][0].awardPhotosVisible || !environment.production) && source==='jury-awards-page'" class="carousel">
+    <section v-if="state[3]?.length>0 && state[3][0].awardPhotosVisible && source==='jury-awards-page'" class="carousel">
       <Carousel
         :data="state[3]"
       >

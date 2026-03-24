@@ -12,13 +12,12 @@
   import NotYet from '@/components/general/NotYetDev.vue'  
   import JuryAwards from './JuryAwards.vue'
   import Partners from './common/Partners.vue'
-  import { environment } from '@/config/environment.js'
+  
+  const {locale}=useI18n()
+  const inFlight = new Set() 
 
   const route=useRoute()
-  const {locale}=useI18n()
-  const inFlight = new Set()     
-
-  const expoID = computed(() => Number(useRoute().query.idExpo ?? -1))
+  const expoID = computed(() => Number(route.query.idExpo ?? -1))
 
   const state = ref([])
   onMounted(async () => {
@@ -56,9 +55,7 @@
     >
     </Carousel>
   </section>
-  <NotYet v-if="environment.production || expoID===-1":icon="true" type="noData"></NotYet>
-
-  
+  <NotYet v-if="expoID===-1":icon="true" type="noData"></NotYet>  
   <Partners v-if="expoID!==-1"></Partners>
 </template>
 
