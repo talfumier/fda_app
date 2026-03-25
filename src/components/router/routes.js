@@ -9,8 +9,11 @@ import Master from '../common/page/Master.vue'
 import NotFound from '../notFound/NotFound.vue'
 
 function getUserRole() {
-  if (!cookies.get('user')) return -1
-  const { idRole, idStatus } = decodeJWT(cookies.get('user'))
+  let token = null
+  if (cookies.get('user')) token = cookies.get('user')
+  if (window.__AUTH__) token = window.__AUTH__ //chromium headless for .pdf generation > refer to API download.js
+  if (!token) return -1
+  const { idRole, idStatus } = decodeJWT(token)
   if (idStatus === 2) return parseInt(idRole)
   return -1
 }
@@ -74,13 +77,13 @@ const router = createRouter({
       meta: { roles: [-1] },
     },
     {
-      path: '/public/catalogue_print', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
-      name: 'public catalogue_print', //that reflects the content of catalogue_print page
+      path: '/member/catalogue_print', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
+      name: 'member catalogue_print', //that reflects the content of catalogue_print page
       component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading
       props: () => ({
         print: true,
       }),
-      meta: { roles: [-1] },
+      meta: { roles: [5, 6, 7] },
     },
     {
       path: '/public/jury_awards',

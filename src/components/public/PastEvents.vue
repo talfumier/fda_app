@@ -44,7 +44,7 @@
       <div class="text">
         <img v-if="state[2]?.length>0" :src="getExpoDoc(8,state[2]).url" :alt="getExpoDoc(8,state[2]).fileName"/>
         <h2>{{ state[0][0][`title_${locale}`] }}</h2>
-        <p>{{ state[0][0][`desc_${locale}`] }}</p>
+        <p>{{ state[0][0][`desc_after_${locale}`] }}</p>
       </div> 
     </div>
   </section>
