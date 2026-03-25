@@ -46,7 +46,8 @@
       <div class="text">
         <img :src="getExpoDoc(8,state[2]).url" :alt="getExpoDoc(8,state[2]).fileName"/>
         <h2>{{ state[0][0][`title_${locale}`] }}</h2>
-        <p>{{ state[0][0][`desc_${locale}`] }}</p>
+        <p v-if="!state[0][0].expoIsOver && expoIsOver===0">{{ state[0][0][`desc_${locale}`] }}</p>
+        <p v-else>{{ state[0][0][`desc_after_${locale}`] }}</p>
       </div>  
       <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="schedule">
         <div class="opening">

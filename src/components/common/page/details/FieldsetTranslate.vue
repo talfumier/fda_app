@@ -157,16 +157,16 @@
   div.input-container {
     padding-top:0;
   }
-  .resume_fr, .title_fr, .openingTimes_fr, .desc_fr, .desc_after_fr, .short_fr, .question_fr, .answer_fr {
+  .resume_fr, .title_fr, .openingTimes_fr, .desc_fr, .desc_after_fr, .text_fr, .text_after_fr, .short_fr, .question_fr, .answer_fr {
     grid-area: 2/1
   }
-  .reverse .resume_fr,.reverse .title_fr,.reverse .openingTimes_fr, .reverse .desc_fr, .reverse .desc_after_fr,.reverse .short_fr, .reverse .question_fr, .reverse .answer_fr {
+  .reverse .resume_fr,.reverse .title_fr,.reverse .openingTimes_fr, .reverse .desc_fr, .reverse .desc_after_fr, .reverse .text_fr, .reverse .text_after_fr,.reverse .short_fr, .reverse .question_fr, .reverse .answer_fr {
     grid-area: 2/3;
   }
-  .resume_en, .title_en, .openingTimes_en, .desc_en, .desc_after_en, .short_en, .question_en, .answer_en {
+  .resume_en, .title_en, .openingTimes_en, .desc_en, .desc_after_en, .text_en, .text_after_en, .short_en, .question_en, .answer_en {
     grid-area: 2/3;
   }
-  .reverse .resume_en, .reverse .title_en, .reverse .openingTimes_en, .reverse .desc_en, .reverse .desc_after_en, .reverse .short_en, .reverse .question_en, .reverse .answer_en {
+  .reverse .resume_en, .reverse .title_en, .reverse .openingTimes_en, .reverse .desc_en, .reverse .desc_after_en, .reverse .text_en, .reverse .text_after_en, .reverse .short_en, .reverse .question_en, .reverse .answer_en {
     grid-area: 2/1
   }
   div.controls {
@@ -210,16 +210,16 @@
     .reverse div.en {
       grid-area: 1/1;
     }
-    .resume_fr, .short_fr, .title_fr, .desc_fr, .desc_after_fr, .openingTimes_fr, .question_fr, .answer_fr {
+    .resume_fr, .short_fr, .title_fr, .desc_fr, .desc_after_fr, .text_fr, .text_after_fr, .openingTimes_fr, .question_fr, .answer_fr {
       grid-area: 2/1
     }
-    .reverse .resume_fr, .reverse .short_fr,.reverse .title_fr, .reverse .desc_fr, .reverse .desc_after_fr, .reverse .openingTimes_fr, .reverse .question_fr, .reverse .answer_fr {
+    .reverse .resume_fr, .reverse .short_fr,.reverse .title_fr, .reverse .desc_fr, .reverse .desc_after_fr, .reverse .text_fr, .reverse .text_after_fr, .reverse .openingTimes_fr, .reverse .question_fr, .reverse .answer_fr {
       grid-area: 5/1;
     }
-    .resume_en, .short_en, .title_en, .desc_en, .desc_after_en, .openingTimes_en, .question_en, .answer_en  {
+    .resume_en, .short_en, .title_en, .desc_en, .desc_after_en, .text_en, .text_after_en, .openingTimes_en, .question_en, .answer_en  {
       grid-area: 5/1;
     }
-    .reverse .resume_en, .reverse .short_en, .reverse .title_en, .reverse .desc_en, .reverse .desc_after_en, .reverse .openingTimes_en, .reverse .question_en, .reverse .answer_en {
+    .reverse .resume_en, .reverse .short_en, .reverse .title_en, .reverse .desc_en, .reverse .desc_after_en, .reverse .text_en, .reverse .text_after_en, .reverse .openingTimes_en, .reverse .question_en, .reverse .answer_en {
       grid-area: 2/1
     }
     div.controls {
