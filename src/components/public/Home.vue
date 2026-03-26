@@ -8,16 +8,17 @@
     doneController,
     cancelAllInFlight
   } from '@/utilityFunctions.js'  
-  import { useI18n } from 'vue-i18n'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import MapOsm from './maps/MapOsm.vue'
   import Partners from './common/Partners.vue'
 
-  const {locale}=useI18n()
+  
   const inFlight = new Set()     
   const {formatLocalDate}=useFormatDate()  
 
-  const route=useRoute()
+  const route=useRoute()  
+  const locale = computed(() => route.params.locale || 'fr')
+
   const expoID = computed(() => Number(route.query.idExpo ?? -1))
   const expoIsOver = computed(() => Number(route.query.expoIsOver ?? 0))
 

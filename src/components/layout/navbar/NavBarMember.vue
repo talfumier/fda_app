@@ -1,5 +1,6 @@
 <script setup>
   import { ref,inject,computed, onMounted, onUnmounted } from 'vue'  
+  import { useI18n } from 'vue-i18n'  
   import _ from 'lodash'
   import { environment } from '@/config/environment.js'
   import Tooltip from '../../common/Tooltip.vue'
@@ -10,6 +11,8 @@
   const props = defineProps({
     wrap:{type:Boolean,default:false}
   })  
+
+  const {locale}=useI18n()
   
   const url=ref(null)
   const isRotated = ref(false)
@@ -67,6 +70,7 @@
         <li v-for="(item, idx) in roleFilteredItems" :key="idx">
           <NavBarItem 
             :key="roleFilteredItems"
+            :locale="locale"
             source='member'
             :item="item" 
             :isRotated="isRotated || $q.screen.width<=850" 

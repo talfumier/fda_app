@@ -4,12 +4,12 @@
   import { getText,getDim,getPrice,adjustImage,toSentenceCase,getSocialBrand } from './functions'
 
   const props=defineProps({
+    locale:{type:String},
     data:{type:Object},
     print:{type:Boolean,default:false}
   })
 
-  const {t,locale}=useI18n() 
-  if(props.print) locale.value='fr'
+  const {t}=useI18n() 
   
 </script>
 

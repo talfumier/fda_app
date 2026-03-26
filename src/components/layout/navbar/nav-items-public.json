@@ -1,18 +1,18 @@
 [
   {
-    "url": "/public/home",
+    "url": "/en|fr/home",
     "icon": "home",
     "text": "home",
     "wrap": false
   },
   {
-    "url": "/public/catalogue",
+    "url": "/en|fr/catalogue",
     "icon": "palette",
     "text": "artists",
     "wrap": false
   },
   {
-    "url": "/public/jury_awards",
+    "url": "/en|fr/jury_awards",
     "icon": "fa-solid fa-trophy",
     "size": "2.3rem",
     "padding_top": "4",
@@ -20,7 +20,7 @@
     "wrap": false
   },
   {
-    "url": "/public/past_events",
+    "url": "/en|fr/past_events",
     "icon": "history",
     "text": "past_events",
     "wrap": false,
@@ -29,7 +29,7 @@
     }
   },
   {
-    "url": "/public/faq",
+    "url": "/en|fr/faq",
     "icon": "help",
     "text": "faq",
     "wrap": false

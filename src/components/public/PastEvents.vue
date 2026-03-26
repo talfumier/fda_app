@@ -1,7 +1,6 @@
 <script setup>
   import { ref,computed,onMounted, onUnmounted  } from 'vue'
   import { useRoute } from 'vue-router' 
-  import { useI18n } from 'vue-i18n'  
   import { fetch,getExpoDoc,openRulesDoc } from './functions'
   import {
     newController,
@@ -13,10 +12,10 @@
   import JuryAwards from './JuryAwards.vue'
   import Partners from './common/Partners.vue'
   
-  const {locale}=useI18n()
   const inFlight = new Set() 
 
-  const route=useRoute()
+  const route=useRoute() 
+  const locale = computed(() => route.params.locale || 'fr')
   const expoID = computed(() => Number(route.query.idExpo ?? -1))
 
   const state = ref([])
@@ -51,11 +50,12 @@
   <JuryAwards v-if="expoID!==-1" :expoID="expoID" source="past-events-page"></JuryAwards>
   <section v-if="state[1]?.length>0" class="carousel">
     <Carousel
+      :locale="locale"
       :data="state[1]"
     >
     </Carousel>
   </section>
-  <NotYet v-if="expoID===-1":icon="true" type="noData"></NotYet>  
+  <NotYet v-if="expoID===-1" :locale="locale" :icon="true" type="noData"></NotYet>  
   <Partners v-if="expoID!==-1"></Partners>
 </template>
 

@@ -1,44 +1,73 @@
 <script setup>
-  import { ref, watch,computed } from 'vue'
-  import { useQuasar} from 'quasar'
-  import { useI18n } from 'vue-i18n'
+  import { ref, watch, computed } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'  
+  import { useQuasar } from 'quasar'
   import quasarLangFr from 'quasar/lang/fr.js'
   import quasarLangEn from 'quasar/lang/en-GB.js'
   import frFlag from '../../../assets/images/fr.png'
   import ukFlag from '../../../assets/images/uk.png'
 
-  const props=defineProps({
-    preferred:{type:String}
+  const props = defineProps({
+    preferred: { type: String }
   })
-  
-  const { locale } = useI18n()
+
+  const route = useRoute()
+  const router = useRouter()
   const $q = useQuasar()
+  const { locale } = useI18n()
+
   const quasarLangs = {
     fr: quasarLangFr,
     en: quasarLangEn,
   }
+
   const langOptions = [
     {
       label: 'Français',
       value: 'fr',
       img: frFlag,
-      alt:"drapeau FR"
+      alt: 'drapeau FR'
     },
     {
       label: 'English',
       value: 'en',
       img: ukFlag,
-      alt:"UK flag"
+      alt: 'UK flag'
     }
   ]
-  const selectedLocale = ref(locale.value)
-  // sync with Vue I18n and Quasar on change
+
+  const selectedLocale = ref(route.params.locale || props.preferred || 'fr')
+
   watch(selectedLocale, (val) => {
-    locale.value = val
+    if (!val) return
     localStorage.setItem('locale', val)
+    // Cas 1 : routes publiques localisées
+    if (route.params.locale) {
+      if (val === route.params.locale) return
+      const newPath = route.fullPath.replace(/^\/(fr|en)(?=\/|$)/, `/${val}`)
+      router.push(newPath)
+      return
+    }
+    // Cas 2 : routes membre non localisées
+    locale.value = val
     $q.lang.set(quasarLangs[val])
+    document.documentElement.lang = val
   })
-  if(props.preferred) selectedLocale.value=props.preferred
+
+  watch(
+    () => route.params.locale,
+    (newLocale) => {
+      if (newLocale && newLocale !== selectedLocale.value) {
+        selectedLocale.value = newLocale
+      }
+      if (newLocale && quasarLangs[newLocale]) {
+        $q.lang.set(quasarLangs[newLocale])
+      }
+    },
+    { immediate: true }
+  )
+
   const selectedOption = computed(() => {
     return langOptions.find(opt => opt.value === selectedLocale.value) || langOptions[0]
   })

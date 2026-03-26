@@ -1,5 +1,6 @@
 <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'  
+  import { useRoute } from 'vue-router' 
   import { useI18n } from 'vue-i18n'    
   import _ from 'lodash'
   import { fetch } from './functions.js'
@@ -17,7 +18,10 @@
     expoID:{type:Number,default:-1}   //when default value is used, last on-going expo is retrieved in the SQL stored procedure
   })
 
-  const {t,locale}=useI18n()
+  const route=useRoute()  
+  const locale = computed(() => route.params.locale || 'fr')
+
+  const {t}=useI18n()
   const inFlight = new Set()     
   const {formatLocalDate}=useFormatDate()  
 
@@ -79,6 +83,7 @@
     </section>
     <section v-if="state[3]?.length>0 && state[3][0].awardPhotosVisible && source==='jury-awards-page'" class="carousel">
       <Carousel
+        :locale="locale"
         :data="state[3]"
       >
     </Carousel>

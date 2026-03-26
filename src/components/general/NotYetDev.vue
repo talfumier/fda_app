@@ -1,6 +1,7 @@
 <script setup>
 
   const props=defineProps({
+    locale:{type:String},
     icon:{type:Boolean},
     type:{type:String,default:'notYet'}  //possible values notYet, noData
     })
@@ -9,7 +10,7 @@
 
 <template>
   <div class='not-yet'>
-    <a v-if="icon" href="/public/home">
+    <a v-if="icon" :href="`/${locale}/home`">
       <q-icon  
         name="home"
         size="5.5rem"
