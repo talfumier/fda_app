@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { fetch } from '../functions.js'
@@ -13,8 +13,11 @@
   import supported from '../../common/page/details/supported.json'
   import Partners from '../common/Partners.vue'
 
-  const { locale } = useI18n()
-  const route=useRoute()
+  let locale=null
+  const route=useRoute()  
+  if(route.params.locale) locale = computed(() => route.params.locale)  //public faq route
+  else locale = useI18n().locale  //member faq route
+
   const inFlight = new Set()
 
   const state = ref([])

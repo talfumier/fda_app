@@ -28,10 +28,10 @@
   async function handleLogOut(){    
     if (!(await confirm($q,t('comps.header.power-ico.dialog'),'ok'))) return
     remove('user')
-    router.push({ name: 'public home' })
+    router.push({ name: 'public home',params: { locale: locale.value }})
   }
   function handleClick(){
-    if(route.name.includes('member')) router.push({ name: 'public home' })
+    if(route.name.includes('member')) router.push({ name: 'public home',params: { locale: locale.value }})
     else if(route.name.includes('public')) {
       if(!token.value) openLogin.value=true
       else router.push({ name: 'member home' })

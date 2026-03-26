@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { i18n } from '@/main.js'
 import cookies from 'js-cookie'
 import _ from 'lodash'
 import { decodeJWT } from '@/services/httpUsers.js'
@@ -17,6 +18,12 @@ function getUserRole() {
   if (idStatus === 2) return parseInt(idRole)
   return -1
 }
+function withLocale(path) {
+  return `/:locale(fr|en)${path}` //dynamic route parameter with constraint can be either fr or en
+}
+const SUPPORTED_LOCALES = ['fr', 'en']
+const DEFAULT_LOCALE = 'fr'
+
 let fldsets = null
 const routes = content.map((item) => {
   fldsets = []
@@ -45,10 +52,17 @@ const router = createRouter({
       path: '/',
       name: 'root',
       redirect: () => {
-        return getUserRole() >= 1 ? { name: 'member home' } : { name: 'public home' }
+        return getUserRole() >= 1
+          ? { name: 'member home' }
+          : { name: 'public home', params: { locale: DEFAULT_LOCALE } }
       },
     },
-    { path: '/public/home', name: 'public home', component: Home, meta: { roles: [-1] } }, //no specific role requirement, nor authentication
+    {
+      path: withLocale('/home'),
+      name: 'public home',
+      component: Home,
+      meta: { roles: [-1] }, //no specific role requirement, nor authentication
+    },
     {
       path: '/member/preview/home_print',
       name: 'member preview home_print',
@@ -62,13 +76,13 @@ const router = createRouter({
       meta: { roles: [5, 6, 7] },
     },
     {
-      path: '/public/catalogue',
+      path: withLocale('/catalogue'),
       name: 'public catalogue',
       component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
-      path: '/public/catalogue/:idUser',
+      path: withLocale('/catalogue/:idUser'),
       name: 'public catalogue idUser',
       component: () => import('../public/catalogue/Catalogue.vue'), //lazy loading
       props: (route) => ({
@@ -86,19 +100,19 @@ const router = createRouter({
       meta: { roles: [5, 6, 7] },
     },
     {
-      path: '/public/jury_awards',
+      path: withLocale('/jury_awards'),
       name: 'public jury_awards',
       component: () => import('../public/JuryAwards.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
-      path: '/public/past_events',
+      path: withLocale('/past_events'),
       name: 'public past_events',
       component: () => import('../public/PastEvents.vue'), //lazy loading
       meta: { roles: [-1] },
     },
     {
-      path: '/public/faq',
+      path: withLocale('/faq'),
       name: 'public faq',
       component: () => import('../public/faq/Faq.vue'), //lazy loading
       meta: { roles: [-1] },
@@ -123,37 +137,43 @@ const router = createRouter({
     },
     ...routes, //member pages
     {
-      path: '/public/resetpassword',
+      path: withLocale('/resetpassword'),
       name: 'public resetpassword',
       component: () => import('../login/FormRecover.vue'), //lazy loading
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
-      path: '/public/privacy',
+      path: withLocale('/privacy'),
       name: 'public privacy',
       component: () => import('../general/LegalPrivacy.vue'), //lazy loading
-      props: (route) => ({
+      props: () => ({
         type: 'privacy',
       }),
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
-      path: '/public/legal',
+      path: withLocale('/legal'),
       name: 'public legal',
       component: () => import('../general/LegalPrivacy.vue'), //lazy loading
-      props: (route) => ({
+      props: () => ({
         type: 'legal',
       }),
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
-      path: '/public/contact',
+      path: withLocale('/contact'),
       name: 'public contact',
       component: () => import('../general/contact/Contact.vue'), //lazy loading
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
     },
     {
-      path: '/:pathMatch(.*)*',
+      path: '/:locale(fr|en)/:pathMatch(.*)*', //localized not found
+      name: 'NotFoundLocalized',
+      component: NotFound,
+      meta: { roles: [-1] },
+    },
+    {
+      path: '/:pathMatch(.*)*', //global not found
       name: 'NotFound',
       component: NotFound,
       meta: { roles: [-1] }, //no specific role requirement, nor authentication
@@ -162,11 +182,23 @@ const router = createRouter({
 })
 router.beforeEach((to) => {
   const role = getUserRole()
+  if (to.params.locale) {
+    const locale = String(to.params.locale)
+    if (!SUPPORTED_LOCALES.includes(locale))
+      return { name: 'public home', params: { locale: DEFAULT_LOCALE } }
+    document.documentElement.setAttribute('lang', locale)
+    i18n.global.locale.value = locale
+  }
   // Public routes → always allow (even if authenticated)
   if (to.meta.roles.includes(-1)) return true //all public pages have meta.roles=[-1] >>> return the page regardless of authentication
   // Protected routes → allow only if authenticated with a matching role
   if (role !== -1 && to.meta.roles.includes(role)) return true
   // Otherwise → send to public home
-  if (to.name !== 'public home') return { name: 'public home', query: { redirect: to.fullPath } }
+  if (to.name !== 'public home')
+    return {
+      name: 'public home',
+      params: { locale: DEFAULT_LOCALE },
+      query: { redirect: to.fullPath },
+    }
 })
 export default router
