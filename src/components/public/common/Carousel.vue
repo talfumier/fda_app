@@ -4,6 +4,7 @@
   import { truncate } from '@/utilityFunctions.js'
 
   const props=defineProps({
+    locale:{type:String},
     data:{type:Array}
   })
   

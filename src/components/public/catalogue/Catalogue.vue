@@ -15,14 +15,15 @@
 
   const props=defineProps({
     idUser:{type:String,default:null},   //idUser parameter coming from jury_awards page as a route parameter (ref. to routes.js) >>> vertical scroll to an awarded artist
-    print:{type:Boolean,default:false}   //print parameter coming from routes.js /public/catalogue_print route
+    print:{type:Boolean,default:false}   //print parameter coming from routes.js /member/catalogue_print route
   })
 
-  const {t,locale}=useI18n()   
+  const route=useRoute() 
+  const locale=ref('fr')
+
+  const {t}=useI18n()   
   const {formatLocalDate}=useFormatDate()  
   const inFlight=new Set()
-
-  const route = useRoute();
   
   const state=ref([])
   const catalogue=ref(false)    //indicates whether catalogue is visible or not
@@ -53,9 +54,11 @@
   }  
   const domain_artists=ref({})
   watch(
-    [() => state.value?.[1], () => locale.value],
+    [() => state.value?.[1], () => route.params?.locale],
     ([newVal,newLocale]) => {
       if (!newVal || !catalogue.value) return
+      if(!newLocale) newLocale='fr'
+      else locale.value=route.params.locale
       let domains=`${t('comps.public_site.catalogue.guest')},`
       state.value[1].map((a) => {
         domains=domains+(a.domain[newLocale]).join(',')+','
@@ -174,6 +177,7 @@
       <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
         return item.idRole===2    //guests only
       }).sort((a, b) => (a.domain.fr[0]).localeCompare(b.domain.fr[0]))"
+        :locale="locale"
         :data="artist"
         :print="print"
         style="grid-column: 1/-1;"
@@ -185,7 +189,8 @@
         <h2 >Artistes</h2>
       </section>
       <br>
-      <ArtistBlock v-if="catalogue && !print" v-for="artist in state[1]"  
+      <ArtistBlock v-if="catalogue && !print" v-for="artist in state[1]"       
+        :locale="locale"
         :data="artist"
         :print="print"
       >
@@ -193,6 +198,7 @@
       <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
         return item.idRole!==2    //guests filtered out
       })"
+        :locale="locale"
         :data="artist"
         :print="print"
       >

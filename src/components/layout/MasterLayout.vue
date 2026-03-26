@@ -12,8 +12,12 @@
   const props = defineProps({
     route:{type:Object}
   }) 
-
+  
+  let locale=null
+  if(!props.route.params?.locale) locale=useI18n().locale
+  else locale=props.route.params.locale
   const {t}=useI18n()
+
   const {decoded} = inject('userCookie')
   // handling the case where a user has closed the app without actual log-out
   // and reopen the app with a still valid token  
@@ -30,7 +34,7 @@
 <template>
   <div :class="`layout ${route.name?.includes('member')?'member':'public'}`">
     <header>
-      <RouterLink to="/public/home" tabindex="-1">
+      <RouterLink :to="`/${locale}/home`" tabindex="-1">
         <img src="../../assets/images/logoFda.png" alt="Festival des Arts" class="logo"/>
       </RouterLink>
       <div class="container">
@@ -56,7 +60,10 @@
         <NavBarMember ></NavBarMember>
       </Transition>
     </aside>
-    <NavBarPublic v-if="route.name?.includes('public')"></NavBarPublic>
+    <NavBarPublic v-if="route.name?.includes('public')"
+      :locale="locale"
+    >
+    </NavBarPublic>
     <main class="master">
       <router-view 
         :key="$route.fullPath"

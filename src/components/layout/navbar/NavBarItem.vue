@@ -1,20 +1,17 @@
 <script setup>
   import { ref,onMounted,onUnmounted } from 'vue'
-  import { useI18n } from 'vue-i18n'  
   import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Tooltip from '../../common/Tooltip.vue'
-  import { environment } from '@/config/environment.js'
 
   const props=defineProps({ 
+    locale:{type:String},
     source:{type:String},
     item:{type:Object},
     isRotated:{type:Boolean,default:false},
     // screen:{type:Number,default:-1}  //automatically hide navbar text below a given screen width, default -1 (does nothing)
   })  
   
-  const {locale}=useI18n()
-
   const state=ref([])
   const inFlight=new Set()
 
@@ -46,7 +43,7 @@
 </script>
 
 <template>
-  <RouterLink v-if="item" :to="item.url" tabindex="-1">
+  <RouterLink v-if="item" :to="source==='public'?item.url.replace('en|fr',locale):item.url" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
     <div :class="['routerLink',isRotated?'folded':'',source]">
       <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" 
@@ -55,7 +52,7 @@
     </div>
   </RouterLink>
   <q-menu
-    v-if="!environment.production && state[0]?.length>0"
+    v-if="state[0]?.length>0"
     anchor="bottom end"
     self="top end"
   >
