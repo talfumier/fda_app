@@ -5,10 +5,9 @@
   import NavBarItem from './NavBarItem.vue'
   
   const props = defineProps({
-    locale:{type:String},
     wrap:{type:Boolean,default:false}
   })  
-
+  
   const isRotated=ref(false)
 
   const mediaQuery = window.matchMedia("(max-width: 730px)")
@@ -26,7 +25,6 @@
         <li v-for="(item, idx) in public_items" :key="idx">
           <NavBarItem 
             :key="item"
-            :locale="locale"
             source='public'
             :item="item" 
             :isRotated="isRotated" 
