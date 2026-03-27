@@ -1,17 +1,18 @@
 <script setup>
-  import { ref,onMounted,onUnmounted } from 'vue'
+  import { ref,onMounted,onUnmounted } from 'vue'  
+  import { useI18n } from 'vue-i18n'  
   import { getPublicEntitiesBySql } from '@/services/httpEntities.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import Tooltip from '../../common/Tooltip.vue'
 
   const props=defineProps({ 
-    locale:{type:String},
     source:{type:String},
     item:{type:Object},
     isRotated:{type:Boolean,default:false},
     // screen:{type:Number,default:-1}  //automatically hide navbar text below a given screen width, default -1 (does nothing)
   })  
   
+  const {locale}=useI18n()
   const state=ref([])
   const inFlight=new Set()
 

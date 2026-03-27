@@ -32,7 +32,7 @@
 
 <template>
   <PrintLayout v-if="isPrint" />
-  <MasterLayout v-else :route="route">
+  <MasterLayout v-else>
     <template #footer>
       <Footer></Footer>
     </template>

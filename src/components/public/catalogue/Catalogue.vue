@@ -19,7 +19,7 @@
   })
 
   const route=useRoute() 
-  const locale=ref('fr')
+  const locale=ref('fr')  //catalogue print case
 
   const {t}=useI18n()   
   const {formatLocalDate}=useFormatDate()  
