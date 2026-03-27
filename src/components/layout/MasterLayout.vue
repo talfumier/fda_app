@@ -1,22 +1,20 @@
 <script setup>
-  import {ref,inject,useSlots} from 'vue'
-  import { useRouter,RouterLink} from 'vue-router'
+  import {ref,computed,inject,useSlots} from 'vue'
+  import { useRoute,useRouter,RouterLink} from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { setUpTokenExpiry } from '../login/tokenExpiry.js'
   import HeaderMember from './header/HeaderMember.vue'
   import LangSwitcher from './header/LangSwitcher.vue'
   import NavBarPublic from './navbar/NavBarPublic.vue'
   import NavBarMember from './navbar/NavBarMember.vue'
+
+  const route=useRoute()
   const router=useRouter()
 
-  const props = defineProps({
-    route:{type:Object}
-  }) 
-  
-  let locale=null
-  if(!props.route.params?.locale) locale=useI18n().locale
-  else locale=props.route.params.locale
-  const {t}=useI18n()
+  const {locale:i18nLocale,t}=useI18n()
+	const locale = computed(() => {
+	  return route.params?.locale || i18nLocale.value
+	})
 
   const {decoded} = inject('userCookie')
   // handling the case where a user has closed the app without actual log-out
@@ -60,10 +58,7 @@
         <NavBarMember ></NavBarMember>
       </Transition>
     </aside>
-    <NavBarPublic v-if="route.name?.includes('public')"
-      :locale="locale"
-    >
-    </NavBarPublic>
+    <NavBarPublic v-if="route.name?.includes('public')"></NavBarPublic>
     <main class="master">
       <router-view 
         :key="$route.fullPath"
