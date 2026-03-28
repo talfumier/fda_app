@@ -143,6 +143,10 @@
         "payment_data": {
           "title": "Payment data export",
           "info": "Registrations payment data export in a .csv file."
+        },
+        "deposit_collection_data": {
+          "title": "Deposit/collection document export",
+          "info": "Deposit/collection document export in a .pdf file."
         }
       },
       "admin": {
@@ -408,6 +412,10 @@
       "payment_data": {
         "success": "Registrations payment data exported successfully!",
         "error": "Failed to export registrations payment data. Please try again."
+      },
+      "deposit_collection_data": {
+        "success": "Deposit/collection document exported successfully!",
+        "error": "Failed to export deposit/collection document. Please try again."
       }
     },
     "public_site": {
