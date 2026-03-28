@@ -17,10 +17,10 @@ export function downloadCsv(stored_proc, idExpo, filename, token, signal) {
     responseType: 'blob',
   })
 }
-export async function downloadCataloguePDF(token, signal, source, params, paramsValues) {
+export async function downloadPDF(token, signal, source, url, params, paramsValues) {
   return http.post(
-    `${api}/catalogue`,
-    { source, params, paramsValues },
+    `${api}/downloadPDF`,
+    { source, url, params, paramsValues },
     {
       headers: { 'x-auth-token': token },
       signal,

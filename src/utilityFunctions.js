@@ -66,3 +66,10 @@ export async function bodyCleanUp(model, body, token, signal) {
   })
   return obj
 }
+export function getCloudinaryResizedUrl(url, width, height, crop = 'fill') {
+  if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+    // Add transformations: convert to JPG, resize, and crop
+    return url.replace('/upload/', `/upload/f_jpg,c_${crop},w_${width},h_${height},g_auto,q_auto/`)
+  }
+  return url
+}

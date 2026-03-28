@@ -1,7 +1,7 @@
 <script setup>  
   import { onUnmounted, ref, inject } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { downloadCatalogueZip, downloadCsv,downloadCataloguePDF } from '@/services/httpExport.js'
+  import { downloadCatalogueZip, downloadCsv,downloadPDF } from '@/services/httpExport.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
   import DialogInfo from '../common/DialogInfo.vue'
   import InputField from '../common/fields/InputField.vue'
@@ -59,7 +59,7 @@
           res=await downloadCsv('export_users',-1,'user_data',token.value,ctrl.signal)  //-1 means all idExpo
           break
         case 'catalogue':
-          res=await downloadCataloguePDF(token.value,ctrl.signal,window.location.origin,':idExpo,:idStatus',paramsValues.value)
+          res=await downloadPDF(token.value,ctrl.signal,window.location.origin,'member/catalogue_print',':idExpo,:idStatus',paramsValues.value)
           break
         case 'payment_data':
           res=await downloadCsv('export_payment',obj.payment_data.idExpo,'payment_data',token.value,ctrl.signal)
