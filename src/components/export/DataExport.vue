@@ -12,15 +12,16 @@
   const inFlight=new Set()
 
   const paramsValues=ref('')
-  const disable=ref({artist_data:true,user_data:false,catalogue:true,payment_data:true})
-  const isLoading=ref({artist_data:false,user_data:false,catalogue:false,payment_data:false})
-  const errorMessage = ref({artist_data:'',user_data:'',catalogue:'',payment_data:''})
-  const successMessage = ref({artist_data:'',user_data:'',catalogue:'',payment_data:''})
+  const disable=ref({artist_data:true,user_data:false,deposit_collection_data:true,catalogue:true,payment_data:true})
+  const isLoading=ref({artist_data:false,user_data:false,deposit_collection_data:false,catalogue:false,payment_data:false})
+  const errorMessage = ref({artist_data:'',user_data:'',deposit_collection_data:'',catalogue:'',payment_data:''})
+  const successMessage = ref({artist_data:'',user_data:'',deposit_collection_data:'',catalogue:'',payment_data:''})
 
   const obj={
     artist_data:{idExpo:0,idStatus:[0,0,0],showRoom:0,screen:0},
     catalogue:{idExpo:0,idStatus:[0,0,0]},
-    payment_data:{idExpo:0}
+    payment_data:{idExpo:0},
+    deposit_collection_data:{idExpo:0}
   }
   
   function handleChange(name,valid,val,cs){
@@ -40,7 +41,7 @@
     }
     disable.value[cs]=false
     if(obj[cs].idExpo===0) disable.value[cs]=true
-    if(cs==='payment_data') return
+    if(cs==='payment_data' || cs==='deposit_collection_data') return
     if(obj[cs].idStatus.reduce((a, b) => parseInt(a) + parseInt(b), 0)===0) disable.value[cs]=true
     if((obj.artist_data.showRoom+obj.artist_data.screen)===0) disable.value.artist_data=true
     paramsValues.value=`${obj[cs].idExpo};[${obj[cs].idStatus}]`
@@ -58,8 +59,11 @@
         case 'user_data':
           res=await downloadCsv('export_users',-1,'user_data',token.value,ctrl.signal)  //-1 means all idExpo
           break
+        case 'deposit_collection_data':
+          res=await downloadPDF(token.value,ctrl.signal,window.location.origin,'member/deposit_collection_print/fr','idExpo',obj.deposit_collection_data.idExpo,'Dépôt/retrait des oeuvres')
+          break
         case 'catalogue':
-          res=await downloadPDF(token.value,ctrl.signal,window.location.origin,'member/catalogue_print',':idExpo,:idStatus',paramsValues.value)
+          res=await downloadPDF(token.value,ctrl.signal,window.location.origin,'member/catalogue_print',':idExpo,:idStatus',paramsValues.value,'Catalogue')
           break
         case 'payment_data':
           res=await downloadCsv('export_payment',obj.payment_data.idExpo,'payment_data',token.value,ctrl.signal)
@@ -236,6 +240,38 @@
       ></FieldsetButton> 
       <div v-if="errorMessage.payment_data" class="message error">{{ errorMessage.payment_data }}</div>
       <div v-if="successMessage.payment_data" class="message success">{{ successMessage.payment_data }}</div>
+    </div>  
+  </fieldset> 
+  <fieldset>
+    <legend > 
+        {{ $t('comps.infos.export.deposit_collection_data.title')}}<DialogInfo :path="$t('comps.infos.export.deposit_collection_data.info')"></DialogInfo>
+    </legend>
+    <InputField 
+      name="idExpo" 
+      :label="$t('comps.export.artist_data.select_expo')" 
+      field_type="select" 
+      options="options_expo_export" 
+      :required="false"
+      @change="(name,valid,val) => {
+          handleChange(name,valid,val,'deposit_collection_data')
+        }"
+    ></InputField>  
+    <div class="bottom-container">
+      <FieldsetButton 
+        :buttons="[
+          {
+            name: 'export',
+            icon: 'outbox',
+            label_fr: isLoading.deposit_collection_data?'Téléchargement en cours ...':'Générer le document .pdf',
+            label_en: isLoading.deposit_collection_data?'Download in progress ...':'Generate .pdf document'
+          }
+        ]" 
+        :disabled="{export:disable.deposit_collection_data}"
+        :pulse="isLoading.deposit_collection_data"
+        @button-action="handleButtonAction('deposit_collection_data')"
+      ></FieldsetButton> 
+      <div v-if="errorMessage.deposit_collection_data" class="message error">{{ errorMessage.deposit_collection_data }}</div>
+      <div v-if="successMessage.pdeposit_collection_data" class="message success">{{ successMessage.deposit_collection_data }}</div>
     </div>  
   </fieldset> 
   <fieldset>

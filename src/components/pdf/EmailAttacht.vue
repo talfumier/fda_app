@@ -1,7 +1,6 @@
 <script setup> 
   import {ref,onMounted,onUnmounted} from 'vue'
   import { useRoute } from "vue-router"
-  import _ from 'lodash'
   import { fetch } from '../public/functions'
   import { newController,doneController,cancelAllInFlight,getCloudinaryResizedUrl } from '@/utilityFunctions.js'
   import Header from './Header.vue'
@@ -19,7 +18,6 @@
     try {
       if(!route.query) return
       state.value = await fetch('booking_status_change', ctrl.signal,':idBooking',route.query.idBooking) 
-      console.log(state.value[0])
     } catch (error) {
       console.error('onmounted failed in EmailAttacht.vue', error)
       return
@@ -98,6 +96,9 @@
   table, th, td {
     border: 1px solid black;
     text-align: center;
+  }
+  th {    
+    background-color: rgb(230, 227, 227); 
   }
   table {
     margin-left:50px;

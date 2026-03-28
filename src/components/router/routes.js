@@ -109,6 +109,12 @@ const router = createRouter({
       meta: { roles: [5, 6, 7] },
     },
     {
+      path: '/member/deposit_collection_print/fr', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
+      name: 'member deposit_collection_print', //that reflects the content of deposit_collection_print page
+      component: () => import('../pdf/DepositCollection.vue'), //lazy loading
+      meta: { roles: [5, 6, 7] },
+    },
+    {
       path: withLocale('/jury_awards'),
       name: 'public jury_awards',
       component: () => import('../public/JuryAwards.vue'), //lazy loading
@@ -203,7 +209,7 @@ router.beforeEach((to) => {
   // Protected routes → allow only if authenticated with a matching role
   if (role !== -1 && to.meta.roles.includes(role)) return true
   // Otherwise → send to public home
-  if (to.name !== 'public home')
+  if (to.name !== 'public home' || to.fullPath.includes('public'))
     return {
       name: 'public home',
       params: { locale: DEFAULT_LOCALE },
