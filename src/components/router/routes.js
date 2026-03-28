@@ -100,6 +100,15 @@ const router = createRouter({
       meta: { roles: [5, 6, 7] },
     },
     {
+      path: '/member/email_attacht_print/:locale', //Route called by Chromium headless browser from API back end for printing/exporting pdf file
+      name: 'member email_attacht_print', //that reflects the content of email_attacht_print page
+      component: () => import('../pdf/EmailAttacht.vue'), //lazy loading
+      props: (route) => ({
+        locale: route.params.locale,
+      }),
+      meta: { roles: [5, 6, 7] },
+    },
+    {
       path: withLocale('/jury_awards'),
       name: 'public jury_awards',
       component: () => import('../public/JuryAwards.vue'), //lazy loading
