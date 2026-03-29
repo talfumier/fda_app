@@ -158,7 +158,7 @@
           :required="item.required"
           :field_type="item.field_type"
           :data_type="item.data_type"
-          :label="$t('comps.login.'+item.name)" 
+          :label="$t('comps.login.'+item.name).replace('public',locale)" 
           :format="item.format" 
           :highlight="item.highlight"
           :value="state.data[item.name]"
