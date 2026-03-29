@@ -115,8 +115,10 @@
       "short": "Nom court principalement utilisé dans l'espace membre et les menus du site public.",
       "title": "Nom long et commercial utilisé sur le site public.",
       "openingTimes": "Horaires d'ouverture de l'exposition affichés sur la page d'accueil du site publique.",
-      "expo_desc": "Présentation générale de l'exposition avant et pendant l'ouverture, type d'oeuvres exposées, public concerné ...",
-      "expo_desc_after": "Présentation générale de l'exposition après sa fermeture, type d'oeuvres exposées, public concerné ...",
+      "expo_desc": "Présentation générale de l'exposition (texte affiché sur la page d'accueil avant et pendant l'ouverture), type d'oeuvres exposées, public concerné ...",
+      "expo_desc_after": "Présentation générale de la dernière exposition (texte affiché sur les pages accueil et éditions précédentes après la fermeture), bilan de l'expo ...",
+      "expo_text": "Comment s'inscrire à l'exposition (texte affiché sur la page d'accueil avant et pendant l'ouverture), création de compte ...",
+      "expo_text_after": "Comment s'inscrire à la prochaine exposition (texte affiché sur la page d'accueil après la fermeture).",
       "physical": "Veuillez indiquer les dimensions de l'oeuvre en cm et son poids en Kg. Pour les dessins, peintures ou photographies lesinformations de profondeur et de poids ne sont pas nécessaires. ",
       "picture": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger une image.",
       "file": "Merci de vous assurer que l'enregistrement a été sauvegardé avant de télécharger un fichier.",
@@ -426,9 +428,14 @@
         "vernissage": {
           "title": "Vernissage et remise des prix"
         },
+        "buttons": {
+          "award": "Palmarès",
+          "artist": "Artistes"
+        },
         "registration": {
           "title": "Inscription des artistes",
-          "text": "Pour s'inscrire, chaque artiste doit créer un compte dans l'espace membre.<br/>Pour plus d'informations, merci de consulter la page <a href=/public/faq>FAQ</a>.",
+          "title_after": "Inscription à la prochaine édition",
+          "faq": "Pour plus d'informations, merci de consulter la page <a href=/public/faq>FAQ</a>.",
           "opening": "Ouverture des inscriptions",
           "closure": "Fermeture des inscriptions",
           "response": "Réponse aux candidats",

@@ -50,33 +50,44 @@
         <p v-if="!state[0][0].expoIsOver && expoIsOver===0">{{ state[0][0][`desc_${locale}`] }}</p>
         <p v-else>{{ state[0][0][`desc_after_${locale}`] }}</p>
       </div>  
-      <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="schedule">
-        <div class="opening">
+      <div class="schedule">
+        <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="opening">
           <h3>{{ $t('comps.public_site.home.opening.title') }}</h3>
           <p>{{ state[0][0][`openingTimes_${locale}`] }}</p>
         </div>
-        <div class="vernissage">
+        <div v-if="!state[0][0].expoIsOver && expoIsOver===0"class="vernissage">
           <h3>{{ $t('comps.public_site.home.vernissage.title') }}</h3>
           <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
         </div>
+        <div v-else class="buttons">
+          <q-btn class="award" push :href="`/${locale}/jury_awards`">
+            <q-icon left size="2rem" name="fa-solid fa-trophy" />
+            <div>{{$t('comps.public_site.home.buttons.award')}}&nbsp;{{ state[0][0].vernissageDateTime.slice(0,4) }}</div>
+          </q-btn>
+          <q-btn class="artist" push :href="`/${locale}/catalogue`" >
+            <q-icon left size="2rem" name="palette" />
+            <div>{{$t('comps.public_site.home.buttons.artist')}}&nbsp;{{ state[0][0].vernissageDateTime.slice(0,4) }}</div>
+          </q-btn>
+        </div>
       </div>
     </div>
-    <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="middle">
+    <div class="middle">
       <div class="text">
-        <h2>{{ $t('comps.public_site.home.registration.title') }}</h2>
-        <p class="register" v-html="$t('comps.public_site.home.registration.text')"></p>
+        <h2>{{ $t(`comps.public_site.home.registration.title${state[0][0].expoIsOver || expoIsOver===1?'_after':''}`) }}</h2>
+        <p class="register">{{ state[0][0][`text${state[0][0].expoIsOver || expoIsOver===1?'_after':''}_${locale}`] }}</p>
+        <p class="faq" v-html="$t('comps.public_site.home.registration.faq').replace('public',locale)"></p>
       </div>
-      <div class="register-schedule">
+      <div v-if="!state[0][0].expoIsOver && expoIsOver===0 && getExpoDoc(2,state[2])" class="rules" @click="openRulesDoc(state[2])">
+        <q-icon name="article" size="2.7rem" color="green"></q-icon>
+        <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
+      </div> 
+      <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="register-schedule">
         <h3>{{ $t('comps.public_site.home.registration.opening') }}</h3>
         <p>{{formatLocalDate(state[0][0].openingDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.closure') }}</h3>
         <p>{{formatLocalDate(state[0][0].closureDateTime,locale,'df')}}</p>
         <h3>{{ $t('comps.public_site.home.registration.response') }}</h3>
-        <p>{{formatLocalDate(state[0][0].responseDate,locale,'df')}}</p>  
-        <div v-if="getExpoDoc(2,state[2])" class="rules" @click="openRulesDoc(state[2])">
-          <q-icon name="article" size="2.7rem" color="green"></q-icon>
-          <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
-        </div>  
+        <p>{{formatLocalDate(state[0][0].responseDate,locale,'df')}}</p> 
       </div>
     </div>
     <div class="bottom">
@@ -184,12 +195,27 @@
     margin:5px 0;
     justify-content: left;
   }
+  div.buttons {
+    display:flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap:30px;
+    margin:10px 0;
+    width:100%;
+  }
   div.schedule p,div.middle p:not(.register,.rules) {
     border-left: 5px solid var(--green);
     padding-left: 5px;
   }
   div.vernissage p {
     margin-bottom: 15px;
+  }
+  .q-btn.award {
+    background-color:var(--orange);
+  }
+  .q-btn.artist {
+    background-color:var(--green);
+    color:var(--white);
   }
   div.middle {    
     display:flex;
@@ -199,6 +225,13 @@
     margin:20px;
     border:2px solid var(--green);
     border-radius: 5px;
+    max-height: fit-content;
+  }
+  p.faq {
+    margin-top: 10px;
+  }
+  section.over p.faq {
+    margin-bottom: 15px;
   }
   div.register-schedule {
     position: relative;
@@ -295,12 +328,7 @@
     } 
     div.middle h2 {
       margin-top: 0;
-    }   
-    div.rules {      
-      position:absolute;
-      bottom:40%;
-      right:0;
-    }
+    } 
   }
   @media screen and (min-width: 1700px) {   
     div.top {

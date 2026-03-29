@@ -63,7 +63,7 @@
     </tr>
     <tr v-for="row in state[0]">    
       <td class="art-work" >
-        <img class="oeuvre" :src="getCloudinaryResizedUrl(row.url,50,50)" loading="lazy"></img>
+        <img class="oeuvre" :src="getCloudinaryResizedUrl(row.url,50,50)"></img>
         <p>{{ row[`title_${locale}`] }} <sup v-if="row.catalogue">(1)</sup></p>
       </td>   
       <td ><q-icon :name="`${row.showRoom===0?'close':'check'}`" size="2.2rem" :color="`${row.showRoom===0?'red':'green'}`"/></td>        

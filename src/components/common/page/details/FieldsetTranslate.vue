@@ -16,7 +16,7 @@
 
   const emit=defineEmits(['change','translate'])
   function handleChange(name,valid,val){
-    const count=name.split('_')[1]
+    const count=name.split('_')[name.includes('after')?2:1]
     counters.value[count]=val.length
     emit('change',name,valid,val)
   }

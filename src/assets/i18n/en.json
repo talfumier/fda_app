@@ -115,8 +115,10 @@
       "short": "Short name used in the member area and public site menus.",
       "title": "Longer and more selling name used in the public site.",
       "openingTimes": "Exhibition opening hours that will be displayed in the public site home page.",
-      "expo_desc": "General introduction of the exhibition before and during the opening, type of art works displayed, targetted audience ...",
-      "expo_desc_after": "General introduction of the exhibition after closing, type of art works displayed, targetted audience ...",
+      "expo_desc": "General introduction of the exhibition (text to be displayed on the home page before and during the opening), type of art works displayed, targetted audience ...",
+      "expo_desc_after": "General introduction of the exhibition (text to be displayed on the home and past events pages after closing), last exhibition summary ...",
+      "expo_text": "How to register to the exhibition (text to be displayed on the home page before and during the opening), account creation ...",
+      "expo_text_after": "How to register to the next exhibition (text to be displayed on the home page after closing).",
       "physical": "Please report art work dimensions in cm and weight in Kg. For drawings, paintings or photos depth and weight data are not required. ",
       "picture": "Please make sure the record is actually saved before uploading any picture.",
       "file": "Please make sure the record is actually saved before uploading any file.",
@@ -426,9 +428,14 @@
         "vernissage": {
           "title": "Opening and awards ceremony"
         },
+        "buttons": {
+          "award": "Awards",
+          "artist": "Artists"
+        },
         "registration": {
           "title": "Artist registration",
-          "text": "To register, each artist must create an account in the member area.<br/>For more information, please consult the <a href=/public/faq>FAQ</a> page.",
+          "title_after": "Registration for the next edition",
+          "faq": "For more information, please consult the <a href=/public/faq>FAQ</a> page.",
           "opening": "Opening of registrations",
           "closure": "Closing of registrations",
           "response": "Response to applicants",
