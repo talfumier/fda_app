@@ -593,6 +593,29 @@
         ]
       },
       {
+        "name": "text",
+        "type": "translate",
+        "preview": { "home_not_over": true, "home_over": false, "past": false },
+        "legend_fr": "Inscription avant et pendant l'ouverture *",
+        "legend_en": "Registration before and during opening *",
+        "info": true,
+        "info_path": "comps.infos.expo_text",
+        "fields": [
+          {
+            "name": "text_fr",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 200
+          },
+          {
+            "name": "text_en",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 200
+          }
+        ]
+      },
+      {
         "name": "desc_after",
         "type": "translate",
         "preview": { "home_not_over": false, "home_over": true, "past": true },
@@ -605,13 +628,36 @@
             "name": "desc_after_fr",
             "field_type": "textarea",
             "rows": 3,
-            "max_length": 1000
+            "max_length": 500
           },
           {
             "name": "desc_after_en",
             "field_type": "textarea",
             "rows": 3,
-            "max_length": 1000
+            "max_length": 500
+          }
+        ]
+      },
+      {
+        "name": "text_after",
+        "type": "translate",
+        "preview": { "home_not_over": false, "home_over": true, "past": false },
+        "legend_fr": "Inscription après fermeture *",
+        "legend_en": "Registration after closing *",
+        "info": true,
+        "info_path": "comps.infos.expo_text_after",
+        "fields": [
+          {
+            "name": "text_after_fr",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 200
+          },
+          {
+            "name": "text_after_en",
+            "field_type": "textarea",
+            "rows": 3,
+            "max_length": 200
           }
         ]
       },
