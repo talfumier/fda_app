@@ -20,7 +20,7 @@
   )
   async function loadHtml() {
     const module = await import(`./${props.type}/text_${locale.value}.html?raw`)
-    html.value = module.default
+    html.value = (module.default).replace('en|fr',locale.value)
   }
   onMounted(async() => {
     await loadHtml()    
