@@ -71,7 +71,7 @@
           <span class="winner">
             <router-link
               v-if="p.idUser"
-              :to="{ path:`/public/catalogue/${p.idUser}`}"
+              :to="{ path:`/${locale}/catalogue/${p.idUser}`}"
               class="win"
             >
               <img v-if="p.url" :src="p.url" :alt="p.artist">{{ p.artist }}

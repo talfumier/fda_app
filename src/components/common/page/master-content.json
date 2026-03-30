@@ -1304,8 +1304,8 @@
         "fields": [
           {
             "name": "terms",
-            "label_fr": "J'ai lu et accepte <a href=/public/rules target=blank tabindex=-1>le règlement général de l'exposition</a>",
-            "label_en": "I have read and agree with the <a href=/public/rules target=blank tabindex=-1>exhibition terms & conditions</a>",
+            "label_fr": "J'ai lu et accepte <a href=/en|fr/rules target=blank tabindex=-1>le règlement général de l'exposition</a>",
+            "label_en": "I have read and agree with the <a href=/en|fr/rules target=blank tabindex=-1>exhibition terms & conditions</a>",
             "field_type": "checkbox",
             "data_type": "checkbox",
             "format": "integer",

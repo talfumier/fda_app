@@ -44,7 +44,7 @@
 </script>
 
 <template>
-  <RouterLink v-if="item" :to="source==='public'?item.url.replace('en|fr',locale):item.url" tabindex="-1">
+  <RouterLink v-if="item" :to="item.url.replace('en|fr',locale)" tabindex="-1">
     <Tooltip :class="isRotated?'visible':'hidden'" :tt_text="item.text?$t('comps.navbar.'+item.text):''" :wrap=" item.wrap"></Tooltip>
     <div :class="['routerLink',isRotated?'folded':'',source]">
       <q-icon v-if="item.icon" :name="item.icon" :size="item.size?item.size:'3rem'" 
