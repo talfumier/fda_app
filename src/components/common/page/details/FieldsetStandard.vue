@@ -51,6 +51,7 @@
     :lock="item.lock"
     :showInfos="item.showInfos"
     :listMaster="item.listMaster"
+    :idExpo="item.name==='terms'?data.idExpo:-1"
     @change="handleChange"
     @icon-click="handleIconClick(item.data_type,data[item.name])"
   >  

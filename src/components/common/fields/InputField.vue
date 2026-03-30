@@ -5,6 +5,7 @@
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import {validate} from"./validation.js"
   import { getEntitiesBySql } from '@/services/httpEntities.js'
+  import { fetch,openPdf } from '@/components/public/functions.js'
   import { newController,doneController,cancelAllInFlight } from '@/utilityFunctions.js'
 
   const props=defineProps({
@@ -26,9 +27,10 @@
     options:{type:[String,Array]},  //String >>> sql stored procedure
     lock:{type:Boolean,default:false},
     showInfos:{type:Boolean,default:false},  //display select value and infos in dropdown
-    listMaster:{type:Boolean,default:false}
+    listMaster:{type:Boolean,default:false},
+    idExpo:{type:Number,default:-1} //used with terms&conditions field in Booking model
   })  
-  
+    
   const {token,decoded}=inject('userCookie')
   const { t,locale } = useI18n()    
   const {formatDate,formatDateTime}=useFormatDate()  
@@ -82,7 +84,19 @@
     })  
     handleChange(data.value,'init')   //necessary because async operation completes after standard handleChange init
   }
-  onMounted(() => {  
+  const rules=ref([])
+  onMounted(async() => {  
+    if(props.idExpo!==-1){      
+        const ctrl = newController(inFlight)
+        try {
+          rules.value=await fetch('expo_rules', ctrl.signal,':idExpo',props.idExpo)
+        } catch (err) {
+          console.error('InputField mounted fetch failed:', err)
+        } 
+        finally {
+          doneController(ctrl, inFlight)
+        }
+    }
     if(!props.options) return
     if(Array.isArray(props.options)) options.value=props.options //options array provided directly by props
     else { //options data loaded from a stored procedure
@@ -192,9 +206,14 @@
 <template>
   <div :class="['input-container',`${name}`,`${highlight?'highlight':''}`]" >
     <label v-if="label"
-      :for="name"
+      :for="idExpo===-1?name:''"
       :class="[`${type==='checkbox'?'checkbox':''}`]" 
-      v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`.replace('en|fr',locale)"
+      v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`
+        .replace('en|fr',locale)"
+      @click="async (e) => {
+        if(idExpo===-1) return
+        if (e.target.closest('.link-style')) await openPdf(rules[0][0].url)
+      }"
     >
     </label>
     <q-icon  v-if="(format==='date' || format==='date-time')"
@@ -275,8 +294,7 @@
       v-model="data" :true-value="1" :false-value="0"
       :value="data"
       :disabled="disabled" 
-      @change="handleChange($event.target.value)"
-      
+      @change="handleChange($event.target.value)"      
     />
     
     <textarea v-if="field_type==='textarea'"
