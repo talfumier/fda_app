@@ -194,7 +194,7 @@
     <label v-if="label"
       :for="name"
       :class="[`${type==='checkbox'?'checkbox':''}`]" 
-      v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`"
+      v-html="`${label}${required && !name.includes('_fr') && !name.includes('_en')&& type !== 'checkbox' ? ' *' : ''}`.replace('en|fr',locale)"
     >
     </label>
     <q-icon  v-if="(format==='date' || format==='date-time')"
