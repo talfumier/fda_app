@@ -7,9 +7,11 @@
     doneController,
     cancelAllInFlight
   } from '@/utilityFunctions.js' 
+  import Catalogue from './catalogue/Catalogue.vue'
   import Carousel from './common/Carousel.vue'
   import NotYet from '@/components/general/NotYetDev.vue'  
   import JuryAwards from './JuryAwards.vue'
+  import LocationMap from './maps/LocationMap.vue'
   import Partners from './common/Partners.vue'
   
   const inFlight = new Set() 
@@ -38,34 +40,46 @@
 </script>
 
 <template>
-  <section v-if="state.length>0" :class="['expo','over']"> 
-    <div class="top" >
+  <main class="past-events">
+    <section v-if="state.length>0" class="expo"> 
       <div class="text">
         <img v-if="state[2]?.length>0" :src="getExpoDoc(8,state[2]).url" :alt="getExpoDoc(8,state[2]).fileName"/>
         <h2>{{ state[0][0][`title_${locale}`] }}</h2>
         <p>{{ state[0][0][`desc_after_${locale}`] }}</p>
-      </div> 
-    </div>
-  </section>
-  <JuryAwards v-if="expoID!==-1" :expoID="expoID" source="past-events-page"></JuryAwards>
-  <section v-if="state[1]?.length>0" class="carousel">
-    <Carousel
-      :locale="locale"
-      :data="state[1]"
-    >
-    </Carousel>
-  </section>
-  <NotYet v-if="expoID===-1" :locale="locale" :icon="true" type="noData"></NotYet>  
-  <Partners v-if="expoID!==-1"></Partners>
+      </div>
+    </section>
+    <JuryAwards v-if="expoID!==-1" :expoID="expoID" source="past-events-page"></JuryAwards>
+    <Catalogue :past="true"></Catalogue>
+    <section v-if="state[1]?.length>0" class="carousel">
+      <h2>{{$t('comps.public_site.past_events.titles.photos') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
+      <Carousel
+        :locale="locale"
+        :data="state[1]"
+        class="past-carousel"
+      >
+      </Carousel>
+    </section>
+    <NotYet v-if="expoID===-1" :locale="locale" :icon="true" type="noData"></NotYet>   
+  </main>
+    <LocationMap v-if="state.length>0":data="state[0][0]"></LocationMap>
+    <Partners v-if="expoID!==-1"></Partners>
 </template>
 
 <style scoped>
-  section {
+  main.past-events {
     display:flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+  }
+  section.expo,section.carousel {    
+    display:flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    gap:10px;
     font-family: 'Roboto', Arial;
     font-size:1.5rem;  
+    padding:20px 20px 20px;
   }
   h2,h3 {    
     font-family: 'Berlin Sans FB', Arial;
@@ -73,7 +87,7 @@
   }
   h2 {
     font-size: 2.3rem;
-    line-height: 1.9rem;
+    line-height: 2.2rem;
     margin-bottom: 10px;
   }
   h3 {
@@ -84,22 +98,12 @@
   p {
     white-space: pre-line;
     line-height: 1.9rem;
+    font-size:1.8rem;
     margin:0;
   }
-  div.top {
-    display:grid;
-    grid-template-rows: repeat(3,auto);
-    grid-template-columns: repeat(2,auto);
-    gap:10px;
-    margin:20px;
-    border:none;
-  }  
-  section.expo.over div.top {
-   min-width:90%;
-  }
   div.text {
-    grid-row: 1/span 2;
-    grid-column: 1/span 2;
+    width:90%;
+    max-width: 1000px;
   }
   div.text p {
     text-align: justify;
@@ -110,36 +114,13 @@
     float: left;
     margin-right: 15px;
   }
-  div.rules {
-    display:flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    margin-top:10px;    
-    cursor: pointer;
-  }
-  p.rules {
-    padding:0 5px;
-  }
-  section.carousel {
-    margin:30px auto;
-    max-width:700px;
-  }
-  @media screen and (min-width: 700px){    
-     div.top {
-      position:relative;
-      max-width:50%;
+  @media screen and (min-width: 768px){    
+    section.carousel {
+      padding:5px 20px 20px;
     }
   }
-  @media screen and (min-width: 1200px){
-    div.text img {
-      width:27%;
-    }
-    section.over div.text img {
-      max-width: 200px;
-    }    
-    section.expo.over div.top {
-      min-width:70%;
-    }
+  @media screen and (min-width: 1000px){
+   
     section {
       font-size:1.7rem;  
       line-height: 2rem;
@@ -152,29 +133,18 @@
       font-size: 2rem;
       line-height: 1.7rem;
     }
-    div.rules {      
-      position:absolute;
-      bottom:40%;
-      right:0;
-    }
   }
   @media screen and (min-width: 1700px) {   
-    div.top {
-      max-width:44%;
-    }
-    div.text {
-      grid-row: 1;
-      grid-column:1/span 2;
-    }
+     section.expo {
+      max-width:50%;
+    } 
     div.text img {
-      grid-row:1/span 2;
+      width:27%;
+      max-width: 200px;
+    } 
+    div.text img {
       width:40%;
-    }
-    section.over div.text img {
       max-width: 250px;
-    }
-    section.expo.over div.top {
-      min-width:55%;
     }
   }
 </style>

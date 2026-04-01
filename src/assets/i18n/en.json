@@ -449,6 +449,12 @@
           "label": "Thanks to our partners"
         }
       },
+      "past_events": {
+        "titles": {
+          "jury_awards": "Award winners",
+          "photos": "Photos gallery"
+        }
+      },
       "catalogue": {
         "toc": "Table of Content",
         "price": "Price",

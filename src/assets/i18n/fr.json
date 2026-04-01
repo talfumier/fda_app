@@ -449,6 +449,12 @@
           "label": "Merci à nos partenaires"
         }
       },
+      "past_events": {
+        "titles": {
+          "jury_awards": "Lauréats",
+          "photos": "Galerie photos"
+        }
+      },
       "catalogue": {
         "toc": "Sommaire",
         "price": "Prix",

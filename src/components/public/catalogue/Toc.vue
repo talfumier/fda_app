@@ -1,9 +1,33 @@
 <script setup>  
+  import { ref,watch } from 'vue'
   import { scrollToSection } from './functions'
 
   const props=defineProps({
-    domain_artists:{type:Object}
+    domain_artists:{type:Object},
+    past:{type:Boolean}
   })
+
+  const search=ref(null)
+  watch(   
+    () => search.value,              // <-- getter function required for primitive value
+    (v) => { 
+      if(!v) {
+        scrollToSection('top-catalogue')
+        return
+      }
+      for(const domain of Object.keys(props.domain_artists)) {
+        let result=null
+        result=props.domain_artists[domain].artists.find((artist) => {
+          return artist.artist.toLowerCase().includes(v.toLowerCase())
+        })  
+        if(result) {  
+          scrollToSection(`artist${result.idUser}`)
+          break
+        }
+      }
+    },
+    { immediate: false }
+  )
 
   const emit = defineEmits(['expand'])
 
@@ -14,8 +38,25 @@
 </script>
 
 <template>
-  <nav class="toc">
-    <h2 @click="scrollToSection('top-catalogue')">{{ $t('comps.public_site.catalogue.toc') }}</h2>
+  <nav :class="['toc',past?'past':'']">
+    <ul class="search">
+      <q-input
+          dense
+          filled
+          debounce="300"
+          v-model="search"
+          :placeholder="$t('common.search')"
+          hide-bottom-space
+        >
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+          <template v-slot:append>
+            <q-icon name="cancel" @click="search=''" class="cursor-pointer" />
+          </template>
+      </q-input> 
+      <i class="fa-solid fa-arrow-up" @click="scrollToSection('top-catalogue')"></i>
+    </ul>
     <ul v-for="(domain,idx) in Object.keys(domain_artists)" :key="domain">
       <li :class="['domain',idx===0?'guest':'']"
         @click="toggle(domain)"
@@ -44,7 +85,7 @@
 <style scoped>
   nav {
     position: sticky;
-    top: 35px;
+    top: 0;
     min-width:250px;
     max-width:250px;
     max-height:550px;
@@ -53,25 +94,8 @@
     font-family: "Roboto", sans-serif;
     font-size: 1.5rem;;
   }
-  h2 {
-    position:fixed;
-    top:165px;
-    font-size: 2rem;
-    padding:15px 15px 10px;
-    margin:0;
-    line-height: 20px;
-    cursor: pointer;
-    font-weight: 900;
-    opacity:0.5;
-  }
-  h2::after {
-    content: "\f062";
-    font-family: "Font Awesome 6 Free";
-    font-style: normal; 
-    font-size: 2rem;
-    font-weight: 900;
-    padding-left: 10px;
-    opacity:0.9;
+  nav.toc.past {
+    top:0;
   }
   ul { 
     display:grid;
@@ -81,6 +105,23 @@
     list-style-type: none;
     padding: 0 15px;
     margin:0;
+  }
+  ul.search {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap:10px;
+    padding:10px 5px;
+  }
+  nav.toc.past ul.search {
+    /* padding-top:50px; */
+    margin-left: 10px;
+  }
+  ul.search i {
+    cursor: pointer;
+    font-size: 25px;
+    opacity: 0.9;
   }
   li {
     cursor: pointer;

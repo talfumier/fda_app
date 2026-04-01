@@ -76,11 +76,11 @@
       a.download = `${cs}_export.${cs==='artist_data'?"zip":(cs==='user_data' || cs==='payment_data'?'csv':'pdf')}`
       document.body.appendChild(a)
       a.click()
-      // Cleanup
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
       successMessage.value[`${cs}`] = t(`comps.export.${cs}.success`)
       setTimeout(() => {
+        // Cleanup
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
         successMessage.value[`${cs}`]=''
       },3000)
     } catch (err) {
