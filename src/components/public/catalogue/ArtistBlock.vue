@@ -20,7 +20,7 @@
       <h3 class="technique">{{getText(2,data.domain,null,locale)}}</h3>
       <h4 :class="['avatar',!print && data.idRole===2?'guest':'']">
         <img v-if="(!print || print && data.idRole===2) && data.public_image && data.u_url"
-          :src="adjustImage(70,70,data.u_url)" :alt="data.artistname" :loading="print?'eager':'lazy'">
+          :src="adjustImage(70,70,data.u_url)" :alt="data.artistname">
         <p>{{ data.artist }}&nbsp &nbsp{{ data.public_pseudo && data.pseudo!==data.artist && data.pseudo?"'"+data.pseudo+"'":'' }}</p>
       </h4>
       <div class="contact">
@@ -69,7 +69,7 @@
     >
       <div v-for="(bo,idx) in _.orderBy(data.bookingOeuvres,['catalogue','artist'],['desc','asc'])" class="work">
         <img v-if="print && data.idRole===2 && idx<=4 || print && idx===0 || !print" 
-          :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')" :loading="print?'eager':'lazy'">
+          :src="adjustImage(300,300,bo.o_url)" :alt="getText(1,bo,'title')">
         <div v-if="!print" class="details">
           <p class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}</p>
           <p v-if="!print" class="desc">{{toSentenceCase(2,getText(1,bo,'desc',locale))}}</p>

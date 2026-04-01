@@ -45,14 +45,15 @@
 </script>
 
 <template>
-  <main v-if="state.length>0" class="jury-awards">
+  <main v-if="state.length>0" :class="['jury-awards',source==='past-events-page'?'past':'']">
     <h2 v-if="source==='jury-awards-page'">{{state[0][0][`title_${locale}`]}}</h2>
+    <h2 v-if="source==='past-events-page'">{{$t('comps.public_site.past_events.titles.jury_awards') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
     <section class="jury">
       <h3>{{ $t('comps.public_site.jury_awards.jury.title') }}</h3>
       <div v-if="state[2].length>0" class="jury-members">
         <div v-for="j in state[2]" class="jury-member">
           <img v-if="j.url" :src="j.url" :alt="j.jury">
-          <q-icon v-else size="7rem" class="fa-solid fa-user-tie"></q-icon>
+          <div v-else>?</div>
           <p>{{ j.jury }}</p>
           <p class="role" >{{ _.capitalize(j[`role_${locale}`] )}}</p>
         </div>
@@ -65,8 +66,8 @@
         <h4>{{ `${t('comps.public_site.home.vernissage.title')}&nbsp:` }}</h4>
         <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
       </div>
-      <div v-for="p in state[1]"class="prizes">
-        <p>
+      <div class="prizes">
+        <p v-for="p in state[1]">
           <span class="prize">{{ p[`prize_${locale}`] }}</span>
           <span class="winner">
             <router-link
@@ -95,10 +96,12 @@
 <style scoped>
   main.jury-awards {
     display:grid;
-    grid-template-rows: 30px repeat(3,auto);
+    grid-template-rows: 50px repeat(3,auto);
     grid-template-columns: auto;
-    padding:25px;
-    margin:0 15px;
+    margin:5px 15px;
+  }
+  main.jury-awards.past {
+    grid-template-rows: repeat(3,auto);
   }
   h2,h3,h4 {    
     font-family: 'Berlin Sans FB', Arial;
@@ -107,9 +110,16 @@
   h2 {    
     grid-row:1;
     grid-column: 1;
-    font-size: 2.5rem;
-    line-height: 1.9rem;
+    font-size: 2.3rem;
+    line-height: 2.4rem;
     margin-bottom: 15px;
+  }
+  main.past h2 {
+    text-align: center;
+  }
+  h3 {
+    font-size: rem;
+    line-height: 1.7rem;
   }
   section.jury {
     grid-row:2;
@@ -121,11 +131,12 @@
     border:2px solid var(--green);
     border-radius: 5px;
   }
+  main.past section.jury {
+    margin:0 auto;
+  }
   div.jury-members {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2,auto);
     gap:20px;
     font-size: 1.8rem;
     padding:10px;
@@ -137,17 +148,26 @@
     font-size: smaller;
     font-weight: bolder;
   }
-  div.jury-member img,div.jury-member .q-icon {
+  div.jury-member img{
     object-fit: cover;
     width:70px;
     height:70px;
     margin-bottom: 5px;
   }
-  div.jury-member .q-icon {
+  div.jury-member div {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width:70px;
+    height:70px;
+    border:solid 1px var(--black);
+    font-size: 3rem;
+    font-weight: bolder;
     opacity: .7;
   }
   div.jury-member p {
     margin:0;
+    text-align: center;
   }
   div.jury-member p.role {
     font-weight: lighter;
@@ -182,16 +202,26 @@
     font-size: 1.7rem;
     line-height: 2rem;
     padding-top: 3px;;
-    margin: 0;    
+    margin: 0;   
   }
   div.prizes {
-    padding-left: 15px;;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:left;
+    row-gap:5px;
+    column-gap: 20px;
+    padding-left: 15px;
+  }
+  main.past div.prizes {    
+    justify-content:center;
   }
   div.prizes p {
     display:flex;
     flex-direction: column;
+    justify-content: space-between;
     margin-bottom: 5px;
-    margin-left: -3px;;
+    margin-left: -3px;
+    width:250px;
   }
   span.prize {
     font-weight: bolder;
@@ -224,19 +254,44 @@
     margin:30px 0;
     max-width:500px;
   }
+  @media screen and (min-width: 414px) { 
+    main.jury-awards {
+      grid-template-rows: 45px repeat(3,auto);
+    } 
+    main.jury-awards.past {      
+      grid-template-rows: repeat(3,auto);
+    }
+    div.jury-members {
+      grid-template-columns: repeat(3,auto);
+    } 
+  } 
   @media screen and (min-width: 550px) { 
     main.jury-awards {
-      margin:0 30px;
+      margin:0px 25px;
     }  
     section.jury {
       min-width:500px;
     }
   } 
-   @media screen and (min-width: 1200px) { 
+  @media screen and (min-width: 840px) { 
+    div.jury-members {
+      grid-template-columns: repeat(4,auto);
+    } 
+  } 
+  @media screen and (min-width: 1000px){
+    h2 {
+      font-size: 2.5rem;      
+      padding-top:10px;
+    }
+    h3 {
+      font-size: 2rem;
+      line-height: 1.7rem;
+    }
+  }
+  @media screen and (min-width: 1200px) { 
     main.jury-awards {
-      grid-template-columns: repeat(2,600px);
-      margin:0 30px;
-    }  
+      max-width:50%;
+    } 
     section.carousel {
       grid-row: 1/-1;
       grid-column: 2;

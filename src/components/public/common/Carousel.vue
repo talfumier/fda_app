@@ -10,18 +10,18 @@
   
   const {locale}=useI18n() 
   const slide=ref(0)
-  const autoplay=ref(false)
+  const autoplay=ref(true)
 
 </script>
 
 <template>
-  <div class="q-pa-md carousel-wrapper">
+  <div class="carousel-wrapper">
     <q-carousel
       class="full-width full-height"
       swipeable
       animated
       v-model="slide"
-      :autoplay="autoplay"
+      :autoplay="autoplay ? 3000 : false"
       ref="carousel"
       infinite
     >
@@ -49,8 +49,7 @@
           class="text-white rounded-borders"
           style="background: rgba(0, 0, 0, .3); padding: 4px 8px;"
         >
-          <q-toggle dense dark color="orange" v-model="autoplay" 
-                :true-value="3000" :false-value="false" label="Auto Play" />
+          <q-toggle dense dark color="orange" v-model="autoplay" label="Auto Play" />
         </q-carousel-control>
         <q-carousel-control
           position="bottom-right"
@@ -75,13 +74,13 @@
   .carousel-wrapper {
     padding: 0 5px;
     border: 1px solid grey;
-    width: 100%;
-    box-sizing: border-box;
+    width:calc(100vw - 40px);
+    max-width:700px;
   }
   main.photos .carousel-wrapper { 
-      border-width:1px 0 0 0 ;
-      border-color:var(--blue);
-    }
+    border-width:1px 0 0 0 ;
+    border-color:var(--blue);
+  }
   main.photos .q-carousel__slide { 
     padding:5px ;
   }
