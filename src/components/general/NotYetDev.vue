@@ -31,7 +31,7 @@
     font-family: 'Berlin Sans FB', Arial;
     font-size:2.5rem;
     opacity:0.7;
-    height:80%;
+    height:350px;
   }
   .q-icon {
     opacity:1;

@@ -9,7 +9,7 @@
     cancelAllInFlight
   } from '@/utilityFunctions.js'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
-  import MapOsm from './maps/MapOsm.vue'
+  import LocationMap from './maps/LocationMap.vue'
   import Partners from './common/Partners.vue'
 
   
@@ -94,38 +94,7 @@
       <img v-for="(item,idx) in state[1]" :key="item.fileName" :src="item.url" :alt="item.fileName">
     </div>
   </section>
-  <section v-if="state.length>0" class="visit">
-    <div class="text">
-      <h2>{{ $t('comps.public_site.home.visit.title') }}</h2>
-      <address>
-        <h3 class="building">{{ state[0][0].building }}</h3>
-        <q-icon name="fa fa-home" size="2rem"></q-icon>
-        <div class="address">
-          <p >{{ state[0][0].address }}</p>
-          <p>{{ `${state[0][0].zipCode} ${state[0][0].city}` }}</p>
-          <p>{{ state[0][0].country }}</p>
-        </div>
-        <q-icon name="fa fa-globe" size="2rem"></q-icon>        
-        <p>{{ `Latitude : ${state[0][0].gpsLat}° | Longitude : ${state[0][0].gpsLong}°` }}</p>
-        <h3>{{ $t('comps.public_site.home.visit.info') }}</h3>
-        <q-icon name="fa fa-envelope" size="2rem"></q-icon>  
-        <a href="mailto:festivaldesarts@merville31.fr">festivaldesarts@merville31.fr</a>
-        <q-icon name="fa fa-phone" size="2rem"></q-icon>  
-        <p>0562134116</p>
-      </address>
-    </div>
-    <MapOsm 
-      :lat="Number(state[0][0].gpsLat)"
-      :lng="Number(state[0][0].gpsLong)"
-      :markers="[{
-        id:1,
-        lat:Number(state[0][0].gpsLat),
-        lng:Number(state[0][0].gpsLong),
-        label:state[0][0].building
-      }]"
-    >
-    </MapOsm>
-  </section>  
+  <LocationMap v-if="state.length>0":data="state[0][0]"></LocationMap>
   <Partners></Partners>
 </template>
 
@@ -259,34 +228,6 @@
     width:300px;
     height:250px;
     transition: transform 0.5s ease;
-  }
-  section.visit {
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap:50px;
-    width: 100%;
-    padding:10px 0;
-    background-color: var(--orange);
-  }
-  address {
-    display:grid;
-    grid-template-rows: auto;
-    grid-template-columns: 30px auto;
-    gap:5px;
-    font-style: normal;
-  }
-  address h3 {
-    grid-column: 1/span 2;
-    padding:5px 0;
-  }
-  div.address {
-    display:flex;
-    flex-direction: column;
-  }
-  div.visit .q-icon {
-    justify-self: center;
-    opacity: 0.7;
   }
   @media screen and (min-width: 700px){    
      div.top {

@@ -15,7 +15,8 @@
 
   const props=defineProps({
     idUser:{type:String,default:null},   //idUser parameter coming from jury_awards page as a route parameter (ref. to routes.js) >>> vertical scroll to an awarded artist
-    print:{type:Boolean,default:false}   //print parameter coming from routes.js /member/catalogue_print route
+    print:{type:Boolean,default:false},   //print parameter coming from routes.js /member/catalogue_print route
+    past:{type:Boolean,default:false},    //parameter indicating Catalogue component is called the past events page
   })
 
   const route=useRoute() 
@@ -24,6 +25,8 @@
   const {t}=useI18n()   
   const {formatLocalDate}=useFormatDate()  
   const inFlight=new Set()
+
+  const expand=ref(false)
   
   const state=ref([])
   const catalogue=ref(false)    //indicates whether catalogue is visible or not
@@ -94,10 +97,15 @@
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
-      // ':idExpo,:idStatus','-1;[8,10,27]')  >> retrieve all data from the last on-going expo, status=candidateaccepted|payment received   
-      // route query coming from API back-end during catalogue export in PDF (selection criteria for export,idExpo, idStatus)
-      state.value = await fetch('public_expo_catalogue', ctrl.signal,':idExpo,:idStatus',
-        `${route.query && route.query.paramsValues?route.query.paramsValues:'-1;[8,10,27]'}`)  
+      // ':idExpo,:idStatus','-1;[8,10,27]')  >> retrieve all data from the last on-going expo, status=candidate|accepted|payment received  
+      let paramsValues=null
+      if(props.print) // route query coming from API back-end during catalogue export in PDF (selection criteria for export,idExpo, idStatus)
+        paramsValues=`${route.query && route.query.paramsValues?route.query.paramsValues:'-1;[8,10,27]'}`
+      else if(props.past)  //url query parameter ?idExpo=xxx
+        paramsValues=`${route.query.idExpo};[10,27]`
+      else //last on-going expo >>> catalogue main page on public site
+        paramsValues='-1;[10,27]'
+      state.value = await fetch('public_expo_catalogue', ctrl.signal,':idExpo,:idStatus',paramsValues)  
       if(!environment.production) catalogue.value=true    //in dev or test environment, catalogue is always visible (whatever is the current date vs response date)
       else if (state.value[0][0].catalogueReleased===1 || props.print) {   //in production environment, on line catalogue is visible when current date exceeds response date by one day
         catalogue.value=true 
@@ -146,17 +154,33 @@
 </script>
 
 <template>
-  <main v-if="state.length>0" :class="['catalogue',print?'print':'',catalogue && !print?'col2':'']">
-    <Toc v-if="catalogue && !print"
+  <main v-if="state.length>0" :class="['catalogue',print?'print':'',catalogue && !print?'col2':'',past?'past':'']">
+    <div v-if="past && route.query.idExpo" class="artist-button">
+        <q-btn 
+          class="artist" push
+          @click="expand = !expand"
+        >
+          <q-icon left size="2rem" name="palette" />
+          <div>{{$t('comps.public_site.home.buttons.artist')}}&nbsp;{{state[0][0].catalogueReleaseDate.slice(0,4) }}</div>
+          <q-icon right
+            name="keyboard_arrow_down"
+            size="3rem"
+            :style="`transform: rotate(${expand ? '-180deg' : '0deg'});transition: 0.6s ease;`"
+          >
+          </q-icon>
+        </q-btn>
+      </div>
+    <Toc v-if="(!past && catalogue && !print) || (past && expand)"
       :domain_artists="domain_artists"
       :idUser="idUser"
+      :past="past"
       @expand="(domain) => {
         domain_artists[domain].expand=!domain_artists[domain].expand
       }"
     >
     </Toc>
-    <section :class="['wrapper',print?'print':'']" id="top-catalogue">
-      <section class="cover-page ">
+    <section :class="['wrapper',print?'print':'',past?'past':'']" id="top-catalogue">
+      <section v-if="!past" class="cover-page ">
         <img 
           :src="getCoverPage(state[2],!print?(locale==='en'?4:5):6)" 
           :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'">
@@ -168,12 +192,12 @@
         <img 
           :src="getCoverPage(state[2],7)" 
           :alt="locale==='en'?'catalogue intro':'intro du catalogue'" >
-      </section>  
-      <br>    
+      </section> 
+      <br v-if="!past">    
       <section v-if="print" class="guests break-before">
         <h2 >Invités d'honneur</h2>
       </section>  
-      <br>       
+      <br v-if="!past">       
       <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
         return item.idRole===2    //guests only
       }).sort((a, b) => (a.domain.fr[0]).localeCompare(b.domain.fr[0]))"
@@ -183,13 +207,13 @@
         style="grid-column: 1/-1;"
       >
       </ArtistBlock>
-      <br>
+      <br v-if="!past">
       <section v-if="print" class="artists break-before" 
         style="grid-column: 1;">          
         <h2 >Artistes</h2>
       </section>
-      <br>
-      <ArtistBlock v-if="catalogue && !print" v-for="artist in state[1]"       
+      <br v-if="!past">
+      <ArtistBlock v-if="(!past && catalogue && !print) || (past && expand)" v-for="artist in state[1]"       
         :locale="locale"
         :data="artist"
         :print="print"
@@ -205,14 +229,15 @@
       </ArtistBlock>
     </section>
   </main>  
-  <Partners :print="print" class="break-before"></Partners>
+  <Partners v-if="!past" :print="print" class="break-before"></Partners>
 </template>
 
 <style scoped>
   main.catalogue {
     display:grid;
     grid-template-columns: 100%;
-  }  
+    max-width:90%;
+  } 
   main.catalogue.print {
     grid-template-columns: auto;
   }
@@ -223,12 +248,28 @@
   nav.toc {
     display:none
   }
+  div.artist-button {
+    display:flex;
+    justify-content: center;
+    height:100%;
+    position:sticky;
+    top:-20px;   
+    z-index: 10000;
+  }
+  div.artist-button .q-btn.artist {
+    background-color:var(--green);
+    color:var(--white); 
+    margin-top:20px;
+  }
   section.wrapper {
     grid-column: 1;
     display:flex;
     flex-direction: column;
     align-items: center;
-    padding:15px;
+    padding:20px;
+  }
+  section.wrapper.past {
+    padding-top:0;;
   }
   section.wrapper.print {
     display:grid;
@@ -293,15 +334,17 @@
   @media screen and (min-width: 768px) {  
     main.catalogue.col2 {
       grid-template-columns: 250px auto;
-    }      
+    } 
     nav.toc {
       display:block;
       grid-column: 1;
-      position:sticky;
       width:250px;
     }
     section.wrapper {
       grid-column: 2;
+    }
+    div.artist-button {
+      grid-column: 1/-1;
     }
   }
   @media screen and (min-width: 1200px){
