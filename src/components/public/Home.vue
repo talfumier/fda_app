@@ -77,11 +77,11 @@
         <p class="register">{{ state[0][0][`text${state[0][0].expoIsOver || expoIsOver===1?'_after':''}_${locale}`] }}</p>
         <p class="faq" v-html="$t('comps.public_site.home.registration.faq').replace('public',locale)"></p>
       </div>
-      <div v-if="!state[0][0].expoIsOver && expoIsOver===0 && getExpoDoc(2,state[2])" class="rules" @click="openRulesDoc(state[2])">
+      <div v-if="!state[0][0].expoIsOver && expoIsOver===0 && getExpoDoc(2,state[2])" class="rules">
         <q-icon name="article" size="2.7rem" color="green"></q-icon>
         <p class="rules">
           {{ $t('comps.public_site.home.registration.rules.text') }}
-          <span class=link-style>{{ $t('comps.public_site.home.registration.rules.link') }}</span>
+          <span class=link-style @click="openRulesDoc(state[2])">{{ $t('comps.public_site.home.registration.rules.link') }}</span>
         </p>
       </div> 
       <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="register-schedule">
@@ -214,7 +214,6 @@
     flex-wrap: nowrap;
     align-items: center;
     margin-top:10px;    
-    cursor: pointer;
   }
   p.rules {
     padding:0 5px;
