@@ -9,7 +9,7 @@
 
 <template>
   <ul>
-    <li class="lh"><img src="../../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></li>
+    <li class="lh"><a href="https://www.merville31.fr/" target="_blank"><img src="../../../assets/images/logo-mairie.png" alt="logo mairie de Merville"></a></li>
     <li v-for="(item, idx) in items" :key="idx" :class="item.text">
       <NavBarItem 
         :key="item"
@@ -47,6 +47,9 @@
     font-size: 1.5rem;
     color:var(--white);
     display:none;
+  }
+  li.rh {
+    cursor:auto;
   }
   img {
     width:70px;
