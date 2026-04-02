@@ -417,8 +417,8 @@ import { clone } from 'lodash'
                 'list_images_expo',
                 token.value,
                 ctrl.signal,
-                ':idExpo', 
-                selectedId.value
+                ':idExpo,:dest', 
+                `${selectedId.value},-1`    //-1 means dest=[home,award]
               )).data
               if(selectedId.value>0) {  //delete record in texpo >>> record(s) in texpo_image deleted by cascade delete from tExpo
                 res=await deleteEntity('Expo',selectedId.value,token.value, ctrl.signal) 
