@@ -435,11 +435,14 @@
         "registration": {
           "title": "Inscription des artistes",
           "title_after": "Inscription à la prochaine édition",
-          "faq": "Pour plus d'informations, merci de consulter la page <a href=/public/faq>FAQ</a>.",
+          "faq": "Pour plus d'informations, merci de consulter la page <a href=/public/faq class=link-style>FAQ</a>.",
           "opening": "Ouverture des inscriptions",
           "closure": "Fermeture des inscriptions",
           "response": "Réponse aux candidats",
-          "rules": "Consulter le règlement en cliquant ici."
+          "rules": {
+            "text": "Consulter le règlement en ",
+            "link": "cliquant ici."
+          }
         },
         "visit": {
           "title": "Venir au Festival",
