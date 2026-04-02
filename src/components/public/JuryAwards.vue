@@ -164,6 +164,7 @@
     font-size: 3rem;
     font-weight: bolder;
     opacity: .7;
+    margin-bottom: 5px;
   }
   div.jury-member p {
     margin:0;

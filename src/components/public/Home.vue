@@ -79,7 +79,10 @@
       </div>
       <div v-if="!state[0][0].expoIsOver && expoIsOver===0 && getExpoDoc(2,state[2])" class="rules" @click="openRulesDoc(state[2])">
         <q-icon name="article" size="2.7rem" color="green"></q-icon>
-        <p class="rules">{{ $t('comps.public_site.home.registration.rules') }}</p>
+        <p class="rules">
+          {{ $t('comps.public_site.home.registration.rules.text') }}
+          <span class=link-style>{{ $t('comps.public_site.home.registration.rules.link') }}</span>
+        </p>
       </div> 
       <div v-if="!state[0][0].expoIsOver && expoIsOver===0" class="register-schedule">
         <h3>{{ $t('comps.public_site.home.registration.opening') }}</h3>
