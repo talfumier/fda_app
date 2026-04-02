@@ -82,7 +82,7 @@ label {
 .q-dialog__inner--minimized>.q-card {
   max-width: 300px;
 }
-span.link-style { /* style used in master-content.json > v-html in InputField.vue */
+span.link-style, a.link-style { /* style used in master-content.json > v-html in InputField.vue */
   color: blue;
   text-decoration: underline;
   cursor: pointer;

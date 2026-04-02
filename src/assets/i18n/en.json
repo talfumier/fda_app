@@ -435,11 +435,14 @@
         "registration": {
           "title": "Artist registration",
           "title_after": "Registration for the next edition",
-          "faq": "For more information, please consult the <a href=/public/faq>FAQ</a> page.",
+          "faq": "For more information, please consult the <a href=/public/faq class=link-style>FAQ</a> page.",
           "opening": "Opening of registrations",
           "closure": "Closing of registrations",
           "response": "Response to applicants",
-          "rules": "Display the rules by clicking here."
+          "rules": {
+            "text": "Display the rules by ",
+            "link": "clicking here."
+          }
         },
         "visit": {
           "title": "Come to the Festival",
