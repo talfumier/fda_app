@@ -38,7 +38,7 @@ export function useBarOptions() {
         },
       },
       scales: {
-        x: { stacked: true, ticks: { maxRotation: 0, autoSkip: false } },
+        x: { stacked: true, ticks: { maxRotation: 60, autoSkip: false } },
         y: {
           stacked: true,
           beginAtZero: true,
