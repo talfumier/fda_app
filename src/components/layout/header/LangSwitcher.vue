@@ -37,7 +37,7 @@
     }
   ]
 
-  const selectedLocale = ref(route.params.locale || props.preferred || 'fr')
+  const selectedLocale = ref(route.params && route.params.locale?route.params.locale:(props.preferred || localStorage.getItem('locale')))
 
   watch(selectedLocale, (val) => {
     if (!val) return
