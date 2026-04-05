@@ -35,7 +35,7 @@
 <template>
   <section :class="['partner',print?'print':'']"> 
     <br v-if="print"><br v-if="print"><br v-if="print"> 
-    <h2>{{ $t('comps.public_site.home.partner.label') }}</h2>
+    <h2>{{ $t('comps.public_site.home.partner.label', undefined, print ? { locale: 'fr' } : undefined) }}</h2>
     <br v-if="print"><br v-if="print"><br v-if="print"> 
     <div class="logos">
       <div v-for="item in state" class="logo">
@@ -79,7 +79,7 @@
     width:100%;
   }
   section.print div.logo {  
-    padding:20px 30px;  
+    padding:20px 20px;  
     margin:0 auto;
   }
   img {

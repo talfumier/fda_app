@@ -20,9 +20,20 @@ export function getDim(bo, locale) {
   if (dim.startsWith(' |')) dim = dim.slice(2)
   return dim
 }
-export function getPrice(bo, t) {
-  if (bo.reserved) return t('comps.public_site.catalogue.reserved')
-  if (bo.price) return t('comps.public_site.catalogue.price') + ': ' + bo.price + ' €'
+export function getPrice(bo, t, print = null) {
+  if (bo.reserved)
+    return t(
+      'comps.public_site.catalogue.reserved',
+      undefined,
+      print ? { locale: 'fr' } : undefined,
+    )
+  if (bo.price)
+    return (
+      t('comps.public_site.catalogue.price', undefined, print ? { locale: 'fr' } : undefined) +
+      ': ' +
+      bo.price +
+      ' €'
+    )
   return ''
 }
 export function toSentenceCase(cs, str) {

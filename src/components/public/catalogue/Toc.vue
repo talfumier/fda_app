@@ -1,5 +1,5 @@
 <script setup>  
-  import { ref,watch } from 'vue'
+  import { ref,watch, nextTick } from 'vue'
   import { scrollToSection } from './functions'
 
   const props=defineProps({
@@ -29,11 +29,17 @@
     { immediate: false }
   )
 
-  const emit = defineEmits(['expand'])
+  const emit = defineEmits(['expand','closeMenu'])
 
   function toggle(domain){
     emit('expand',domain)
   } 
+  async function handleMenuClick(id) {
+    emit('closeMenu') 
+    setTimeout(() => {
+      scrollToSection(`artist${id}`) 
+    },100)
+  }
 
 </script>
 
@@ -58,7 +64,7 @@
       <i class="fa-solid fa-arrow-up" @click="scrollToSection('top-catalogue')"></i>
     </ul>
     <ul v-for="(domain,idx) in Object.keys(domain_artists)" :key="domain">
-      <li :class="['domain',idx===0?'guest':'']"
+      <li :class="['domain',idx===0?'guest':'']" 
         @click="toggle(domain)"
       >
         <q-icon
@@ -73,7 +79,7 @@
         <li v-for="da in domain_artists[domain].artists" 
           class="name"
           :key="da.artist.idUser"
-          @click="scrollToSection(`artist${da.idUser}`)"
+          @click="handleMenuClick(da.idUser)"
           >
           {{ da.artist }}
         </li>
@@ -92,7 +98,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     font-family: "Roboto", sans-serif;
-    font-size: 1.5rem;;
+    font-size: 1.5rem;
   }
   nav.toc.past {
     top:0;
@@ -122,6 +128,7 @@
     cursor: pointer;
     font-size: 25px;
     opacity: 0.9;
+    padding-right:5px;
   }
   li {
     cursor: pointer;
