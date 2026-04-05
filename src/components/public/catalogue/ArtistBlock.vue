@@ -80,7 +80,7 @@
         <div v-if="print && data.idRole!==2 || print && data.idRole===2 && idx<=4" class="details">
           <span class="title">{{toSentenceCase(1,getText(1,bo,'title',locale))}}&nbsp|&nbsp</span>
           <span class="technique-media">{{_.capitalize(getText(1,bo,'tech',locale))}}&nbsp{{`${bo.price||bo.reserved?'|':''}`}}&nbsp</span>
-          <span class="price">{{ getPrice(bo,t) }}</span>
+          <span class="price">{{ getPrice(bo,t,print) }}</span>
         </div>
       </div>
     </div>

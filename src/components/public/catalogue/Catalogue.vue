@@ -94,6 +94,8 @@
       })
     })
   }
+  const menuOpen = ref(false)
+
   onMounted(async () => {  
     const ctrl=newController(inFlight)
     try {
@@ -156,21 +158,39 @@
 <template>
   <main v-if="state.length>0" :class="['catalogue',print?'print':'',catalogue && !print?'col2':'',past?'past':'']">
     <div v-if="past && route.query.idExpo" class="artist-button">
-        <q-btn 
-          class="artist" push
-          @click="expand = !expand"
+      <q-btn 
+        class="artist" push
+        @click="expand = !expand"
+      >
+        <q-icon left size="2rem" name="palette" />
+        <div>{{$t('comps.public_site.home.buttons.artist')}}&nbsp;{{state[0][0].catalogueReleaseDate.slice(0,4) }}</div>
+        <q-icon right
+          name="keyboard_arrow_down"
+          size="3rem"
+          :style="`transform: rotate(${expand ? '-180deg' : '0deg'});transition: 0.6s ease;`"
         >
-          <q-icon left size="2rem" name="palette" />
-          <div>{{$t('comps.public_site.home.buttons.artist')}}&nbsp;{{state[0][0].catalogueReleaseDate.slice(0,4) }}</div>
-          <q-icon right
-            name="keyboard_arrow_down"
-            size="3rem"
-            :style="`transform: rotate(${expand ? '-180deg' : '0deg'});transition: 0.6s ease;`"
-          >
-          </q-icon>
-        </q-btn>
-      </div>
-    <Toc v-if="(!past && catalogue && !print) || (past && expand)"
+        </q-icon>
+      </q-btn>
+    </div>    
+    <div class="hamburger-menu">
+      <q-btn flat round icon="menu" size="2rem">
+        <q-menu v-model="menuOpen">
+          <q-list class="toc-small" dense >
+            <Toc 
+              :domain_artists="domain_artists"
+              :idUser="idUser"
+              :past="past"
+              @expand="(domain) => {
+                domain_artists[domain].expand=!domain_artists[domain].expand
+              }"
+              @close-menu="menuOpen=!menuOpen"
+            >
+            </Toc>                 
+          </q-list>
+        </q-menu>
+      </q-btn>
+    </div>
+    <Toc class="toc-large" v-if="(!past && catalogue && !print) || (past && expand)"
       :domain_artists="domain_artists"
       :idUser="idUser"
       :past="past"
@@ -237,6 +257,7 @@
     display:grid;
     grid-template-columns: 100%;
     max-width:90%;
+    margin:0 auto;
   } 
   main.catalogue.print {
     grid-template-columns: auto;
@@ -245,8 +266,24 @@
     font-family: Berlin Sans FB Bold;
     font-size: 8rem;
   }
-  nav.toc {
+  .toc-small nav {
+    font-size: 1.2rem;
+  }
+  .toc-small li.domain {  
+    font-weight: 400;
+   
+  }
+  .toc-large {
     display:none
+  }
+  div.hamburger-menu {
+    position:sticky;
+    top:0;
+    height:0;
+    margin:-15px;
+  }
+  div.hamburger-menu button.q-btn {
+    align-items: flex-start;
   }
   div.artist-button {
     display:flex;
@@ -334,8 +371,12 @@
   @media screen and (min-width: 768px) {  
     main.catalogue.col2 {
       grid-template-columns: 250px auto;
+      margin-left:10px;
     } 
-    nav.toc {
+    div.hamburger-menu {
+      display:none;
+    }
+    .toc-large  {
       display:block;
       grid-column: 1;
       width:250px;
