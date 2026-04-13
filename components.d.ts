@@ -56,6 +56,8 @@ declare module 'vue' {
     LegalPrivacy: typeof import('./src/components/general/LegalPrivacy.vue')['default']
     ListItems: typeof import('./src/components/common/page/list/ListItems.vue')['default']
     LocationMap: typeof import('./src/components/public/maps/LocationMap.vue')['default']
+    LocationSelect: typeof import('./src/components/common/page/details/tabs/expo/selection/LocationSelect.vue')['default']
+    LocationSelect0: typeof import('./src/components/common/page/details/tabs/expo/selection/LocationSelect0.vue')['default']
     MapGoogle: typeof import('./src/components/public/maps/MapGoogle.vue')['default']
     MapOsm: typeof import('./src/components/public/maps/MapOsm.vue')['default']
     Master: typeof import('./src/components/common/page/Master.vue')['default']

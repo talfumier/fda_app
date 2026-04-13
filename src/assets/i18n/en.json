@@ -349,6 +349,10 @@
                 "rejected": "Each individual art work has to be rejected."
               }
             },
+            "location": {
+              "placeholder": "Location ...",
+              "no_position": "No more available slot"
+            },
             "filters": {
               "status1": {
                 "on": "accepted or rejected",

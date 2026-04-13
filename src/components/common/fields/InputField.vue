@@ -76,7 +76,7 @@
     let obj=null
     res.data[0].map((item) => {
       obj={value:item[keys[0]],text:{fr:item[keys[1]],en:item[keys[2]]},data:{}}
-      if(item[keys[3]]) obj.infos=item[keys[3]]        
+      if(item[keys[3]]) obj.infos=item[keys[4]]   //keys[4]=startDate     
       keys.map((key,idx) => { //additional data used to update state in Master.vue
         if(idx>=1) obj.data[key]=item[key]
       })

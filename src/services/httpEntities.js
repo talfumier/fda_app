@@ -18,6 +18,17 @@ export function getEntitiesBySql(stored_proc, token, signal, params, paramsValue
     signal,
   })
 }
+
+export function postEntitiesBySql(stored_proc, token, signal, params, paramsValues) {
+  return http.post(
+    `${api}/sql-entities/member/${stored_proc}/${params}/${paramsValues}`,
+    null, //empty body
+    {
+      headers: { 'x-auth-token': token },
+      signal,
+    },
+  )
+}
 export function getPublicEntitiesBySql(stored_proc, signal, params, paramsValues) {
   if (!params)
     return http.get(`${api}/sql-entities/public/noparams/${stored_proc}`, {

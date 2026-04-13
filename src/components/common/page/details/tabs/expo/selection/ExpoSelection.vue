@@ -14,6 +14,7 @@
   import { confirm } from '@/components/common/dialog/dialog.js'
   import SelectionActions from './SelectionActions.vue'
   import BookingInfos from '@/components/common/page/list/actions/booking/BookingInfos.vue'
+  import LocationSelect from './LocationSelect.vue'
 
   const props=defineProps({    
     idExpo:{type:Number}
@@ -35,7 +36,7 @@
   })
   
   const fields={
-    booking:['idBooking','idUser','idRole','artist','u_url','u_fileName','idStatus_b','priceShowRoom','priceScreen'],
+    booking:['idBooking','idUser','idRole','artist','u_url','u_fileName','idStatus_b','priceShowRoom','priceScreen','idExpoLoc','idLoc','occupied'],
     bookingOeuvres:['idBookingOeuvre','idOeuvre','selected','showRoom','screen','catalogue','idStatus_bo',
       'classic_modern','idDomain','domain_fr','domain_en','tech_fr','tech_en','media_fr','media_en',
       'width','height','depth','weight','title_fr','title_en','o_url','o_fileName']
@@ -251,6 +252,39 @@
       doneController(ctrl,inFlight)
     } 
   }
+  async function updateLocation(idExpoLoc,boID){
+    const ctrl=newController(inFlight)
+    try {          
+      const idx0=state.value[0].findIndex((row) => {
+        return row.idBooking===boID
+      }) 
+      let idx7=-1
+      if(state.value[0][idx0].idExpoLoc!==null){  //existing idExpoLoc in selected booking
+        idx7=state.value[7].findIndex((item) => {
+          return item.idExpoLoc===state.value[0][idx0].idExpoLoc
+        })         
+        const {data:res}=await patchEntity('ExpoLocation',state.value[0][idx0].idExpoLoc,{occupied:0},token.value,ctrl.signal)
+        if(res.statusCode!==200) return 
+        state.value[7][idx7].occupied=0
+      }
+      if(idExpoLoc!==null){      //parameter idExpoLoc not null
+        idx7=state.value[7].findIndex((item) => {
+          return item.idExpoLoc===idExpoLoc
+        }) 
+        const {data:res}=await patchEntity('ExpoLocation',idExpoLoc,{occupied:1},token.value,ctrl.signal)
+        if(res.statusCode!==200) return 
+        state.value[7][idx7].occupied=1
+      }
+      const {data:res}=await patchEntity('Booking',boID,{idExpoLoc},token.value,ctrl.signal)
+      if(res.statusCode!==200) return 
+      state.value[0][idx0].idExpoLoc=idExpoLoc      
+    } catch (error) {
+        console.error(error)
+    }
+    finally {
+      doneController(ctrl,inFlight)
+    } 
+  }
 
   const getBookingOeuvreToggleLabel = (idStatus)=>{
     switch(idStatus){
@@ -451,6 +485,17 @@
           >
           </SelectionActions>
         </p>  
+        <LocationSelect v-if="slotProps.row.selected"
+          :data="{idExpoLoc:slotProps.row.idExpoLoc,idLoc:slotProps.row.idLoc}"
+          :options="_.filter(state[7],(item) => {
+            return item.occupied===0
+          })"
+          :placeholder="$t('comps.form_details.expos.tables.selection.location.placeholder')"
+          @change-location="(option) => {
+              updateLocation(option?option.idExpoLoc:null,slotProps.row.idBooking)
+            }"
+        >
+        </LocationSelect>
       </template>
       <template #body="slotProps"> 
         <q-td :class="[slotProps.rowIndex===0?'first':'']">
