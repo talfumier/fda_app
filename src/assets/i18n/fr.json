@@ -349,6 +349,10 @@
                 "rejected": "Chaque oeuvre doit être rejetée."
               }
             },
+            "location": {
+              "placeholder": "Repère plan ...",
+              "no_position": "Aucun repère disponible"
+            },
             "filters": {
               "status1": {
                 "on": "accepté ou rejeté",
