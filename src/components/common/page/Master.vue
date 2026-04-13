@@ -5,7 +5,7 @@
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
   import { parse } from 'date-fns'
-  import { getEntitiesBySql,postEntity,patchEntity,deleteEntity, getEntityFields } from '@/services/httpEntities.js'
+  import { getEntitiesBySql,postEntitiesBySql,postEntity,patchEntity,deleteEntity, getEntityFields } from '@/services/httpEntities.js'
   import { deleteInCloud } from '@/services/httpCloudinary.js'
   import { forgotPassword } from '@/services/httpUsers.js'
   import ListItems from './list/ListItems.vue'
@@ -399,7 +399,8 @@ import { clone } from 'lodash'
           case "activation":
             //database update
             try {
-              res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrl.signal)              
+              res=await postEntity('StatusTracking', {idStatus:status,idExpo:selectedId.value}, token.value, ctrl.signal)   
+              await postEntitiesBySql('create_expo_location',token.value,ctrl.signal,':idExpo', selectedId.value)    //100 records creation in texpo_location       
             } catch (error) {
                 console.error(error)
             }

@@ -7,11 +7,12 @@
   const props = defineProps({
     data:{type:Object}
   })
+  
   const {locale,t}=useI18n()  
   computed(() => props.data.bookingOeuvre)
   const bookingOeuvre=computed(() => props.data.bookingOeuvre)  
   const columns=computed(() => {
-    if(!props.data || !props.data.bookingOeuvre) return []
+    if(!props.data || !props.data.bookingOeuvre || props.data.bookingOeuvre.length===0) return []
     let keys=[]
     Object.keys(props.data.bookingOeuvre[0]).map((key) => {
       if(key.endsWith('_fr') || key.endsWith('_en')) keys.push(`${key.split('_')[0]}_${locale.value}`)
