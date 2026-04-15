@@ -73,3 +73,7 @@ export function getCloudinaryResizedUrl(url, width, height, crop = 'fill') {
   }
   return url
 }
+export async function getGender(name) {
+  const res = await fetch(`https://api.genderize.io?name=${name}`)
+  return await res.json()
+}

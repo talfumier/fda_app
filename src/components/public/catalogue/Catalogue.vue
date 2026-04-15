@@ -32,7 +32,7 @@
   const catalogue=ref(false)    //indicates whether catalogue is visible or not
   
   const fields={
-    booking:['idBooking','idUser','idRole','role_fr','role_en','artist','resume_fr','resume_en','public_name','pseudo','public_pseudo','email','public_email','phone','public_phone',
+    booking:['idBooking','idUser','idRole','idLoc','role_fr','role_en','artist','resume_fr','resume_en','public_name','pseudo','public_pseudo','email','public_email','phone','public_phone',
     'u_url','u_fileName','public_image','idStatus_b','web1','web2','social1','social2'],
     bookingOeuvres:['idBookingOeuvre','idOeuvre','selected','showRoom','screen','idStatus_bo','title_fr','title_en','desc_en','desc_fr',
       'classic_modern','price','reserved','idDomain','domain_fr','domain_en','tech_fr','tech_en','media_fr','media_en',
@@ -46,6 +46,8 @@
     group.selected=false
     group.domain={en:[],fr:[]}
     group.bookingOeuvres=[]
+    group.showRoom=0
+    group.screen=0
     return group
   }
   function getItem(row){
@@ -87,6 +89,17 @@
     },
     { deep: true }
   )
+  function updateTotals(){  //totals element {showRoom:...,screen: ....} 
+    let showRoom=null,screen=null,flg=null //showRoom flag   
+    state.value[1].forEach((row) => {
+      flg=false,showRoom=0,screen=0
+      row.bookingOeuvres.forEach((bo) => {
+        showRoom+=bo.showRoom===1?1:0
+        screen+=bo.screen===1 ?1:0
+      })
+      row.showRoom=showRoom,row.screen=screen
+    })
+  }
   function filterBookingOeuvres() {
     _.cloneDeep(state.value[1]).map((b,idx) => {
       state.value[1][idx].bookingOeuvres=_.filter(state.value[1][idx].bookingOeuvres,(bo) => {
@@ -135,6 +148,7 @@
         } 
       })
       state.value[1]=_.orderBy(Object.values(groupsById), ['artist'], ['asc'])
+      updateTotals()
     } catch (error) {
       console.error('onmounted failed in Catalogue.vue', error)
       return
@@ -172,7 +186,7 @@
         </q-icon>
       </q-btn>
     </div>    
-    <div class="hamburger-menu">
+    <div v-if="!print" class="hamburger-menu">
       <q-btn flat round icon="menu" size="2rem">
         <q-menu v-model="menuOpen">
           <q-list class="toc-small" dense >
@@ -200,7 +214,7 @@
     >
     </Toc>
     <section :class="['wrapper',print?'print':'',past?'past':'']" id="top-catalogue">
-      <section v-if="!past" class="cover-page ">
+      <section v-if="!past && state[2]" class="cover-page ">
         <img 
           :src="getCoverPage(state[2],!print?(locale==='en'?4:5):6)" 
           :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'">
@@ -208,10 +222,15 @@
           {{ locale==='en'?'Available from ':'Disponible à partir du '}}{{ formatLocalDate(state[0][0].catalogueReleaseDate,locale,'df') }}
         </div>
       </section>
-      <section v-if="print" class="intro">
+      <section v-if="print && state[2]" class="intro">
         <img 
           :src="getCoverPage(state[2],7)" 
-          :alt="locale==='en'?'catalogue intro':'intro du catalogue'" >
+          :alt="locale==='en'?'catalogue intro':'intro du catalogue - mot du maire'" >
+      </section>       
+      <section v-if="print && state[2]" class="map">
+        <img 
+          :src="getCoverPage(state[2],9)" 
+          :alt="locale==='en'?'exhibition map':'plan de l\'exposition'" >
       </section> 
       <br v-if="!past">    
       <section v-if="print" class="guests break-before">
@@ -228,8 +247,7 @@
       >
       </ArtistBlock>
       <br v-if="!past">
-      <section v-if="print" class="artists break-before" 
-        style="grid-column: 1;">          
+      <section v-if="print" class="artists break-before">          
         <h2 >Artistes</h2>
       </section>
       <br v-if="!past">
@@ -239,17 +257,23 @@
         :print="print"
       >
       </ArtistBlock>
-      <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
+      <ArtistBlock v-if="print" v-for="(artist,idx) in _.filter(state[1],(item) => {
         return item.idRole!==2    //guests filtered out
       })"
         :locale="locale"
         :data="artist"
         :print="print"
+        :class="idx===0?'first':''"
       >
       </ArtistBlock>
     </section>
   </main>  
-  <Partners v-if="!past" :print="print" class="break-before"></Partners>
+  <section v-if="print && state[2]" class="last">
+    <img 
+      :src="getCoverPage(state[2],10)" 
+      :alt="locale==='en'?'last page with partners':'dernière page avec les partenaires'" >
+  </section>  
+  <Partners v-if="!past && !print" :print="print" class="break-before"></Partners>
 </template>
 
 <style scoped>
@@ -260,6 +284,7 @@
     margin:0 auto;
   } 
   main.catalogue.print {
+    max-width:100%;
     grid-template-columns: auto;
   }
   h2 {
@@ -337,22 +362,27 @@
     object-fit: cover;
     width:80%;
   }
-  section.intro {
+  section.intro,section.map,section.last {
+    grid-column: 1/-1;
     display:flex;
     justify-content: center;
-    width:200%;
+    width:100%;
   }
   section.guests, section.artists {
+    grid-column: 1/-1;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width:200%;
+    width:100%;
     text-align: center;
   }
-  section.intro img {
+  section.wrapper.print .first {
+    grid-column: 1;
+  }
+  section.intro img,section.map img,section.last img {
     object-fit: cover;
-    width:200%;
+    width:100%;
   }
   section.wrapper.print section.cover-page img {
     width:100%;
