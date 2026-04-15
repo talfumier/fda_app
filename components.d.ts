@@ -55,6 +55,7 @@ declare module 'vue' {
     LangSwitcher: typeof import('./src/components/layout/header/LangSwitcher.vue')['default']
     LegalPrivacy: typeof import('./src/components/general/LegalPrivacy.vue')['default']
     ListItems: typeof import('./src/components/common/page/list/ListItems.vue')['default']
+    LocationBadge: typeof import('./src/components/common/page/details/tabs/expo/selection/LocationBadge.vue')['default']
     LocationMap: typeof import('./src/components/public/maps/LocationMap.vue')['default']
     LocationSelect: typeof import('./src/components/common/page/details/tabs/expo/selection/LocationSelect.vue')['default']
     LocationSelect0: typeof import('./src/components/common/page/details/tabs/expo/selection/LocationSelect0.vue')['default']

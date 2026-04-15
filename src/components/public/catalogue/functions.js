@@ -62,9 +62,11 @@ export function getSocialBrand(url) {
   return result
 }
 export function getCoverPage(data, idType) {
-  return data.filter((item) => {
+  const results = data.filter((item) => {
     return item.idType === idType
-  })[0].url
+  })
+  if (results.length === 1) return results[0].url
+  return null
 }
 export function scrollToSection(id) {
   const el = document.getElementById(id)

@@ -8,6 +8,7 @@
     visible:{type:Array},
     rowKey:{type:String}
   })
+
   const attrs = useAttrs() // allow passing any extra QTable props from parent
   const emit=defineEmits(['selected'])
 
@@ -48,7 +49,7 @@
         </template>
         <template v-slot:body="slotProps">
           <q-tr>
-            <q-td :class="['checkbox',slotProps.rowIndex===0?'first':'']">  
+            <q-td :class="['checkbox',slotProps.rowIndex===0?'first':'']" :key="slotProps.row.idBooking">  
               <div class="row-header">       
                 <q-checkbox 
                   v-model="slotProps.row.selected" 

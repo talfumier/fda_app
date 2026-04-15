@@ -7,7 +7,8 @@
   import {
     newController,
     doneController,
-    cancelAllInFlight
+    cancelAllInFlight,
+    getGender
   } from '@/utilityFunctions.js'  
   import { useFormatDate } from '@/composable/useFormatDate.js'
   import Carousel from './common/Carousel.vue'
@@ -30,6 +31,15 @@
     const ctrl = newController(inFlight)
     try {
       state.value = await fetch('public_jury_awards_details', ctrl.signal,':idExpo',props.expoID)
+      state.value[2].forEach(async(j) => {
+        if(j.idRole===8) {
+          const gender=(await getGender(j.jury)).gender
+          if(gender==='female') {
+            j.role_en='Chairwoman'
+            j.role_fr='Présidente'
+          }
+        }
+      })
     } catch (error) {
       console.error('onmounted failed in JuryAwards.vue', error)
       return

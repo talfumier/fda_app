@@ -15,6 +15,7 @@
   import SelectionActions from './SelectionActions.vue'
   import BookingInfos from '@/components/common/page/list/actions/booking/BookingInfos.vue'
   import LocationSelect from './LocationSelect.vue'
+  import LocationBadge from './LocationBadge.vue'
 
   const props=defineProps({    
     idExpo:{type:Number}
@@ -231,7 +232,7 @@
       const price=updateTotals(bookingID)
       const {data:res2}=await patchEntity('Booking',bookingID,{price},token.value,ctrl.signal)
       if(res2.statusCode!==200) return   
-      state[7]=updateSynthesis()             
+      state.value[7]=updateSynthesis()             
     } catch (error) {
         console.error(error)
     }
@@ -252,11 +253,14 @@
       doneController(ctrl,inFlight)
     } 
   }
-  async function updateLocation(idExpoLoc,boID){
+  async function updateLocation(option,bookingID){
     const ctrl=newController(inFlight)
-    try {          
+    try {        
+      const idExpoLoc = option ? option.idExpoLoc : null
+      const idLoc = option ? option.idLoc : null
+
       const idx0=state.value[0].findIndex((row) => {
-        return row.idBooking===boID
+        return row.idBooking===bookingID
       }) 
       let idx7=-1
       if(state.value[0][idx0].idExpoLoc!==null){  //existing idExpoLoc in selected booking
@@ -275,15 +279,22 @@
         if(res.statusCode!==200) return 
         state.value[7][idx7].occupied=1
       }
-      const {data:res}=await patchEntity('Booking',boID,{idExpoLoc},token.value,ctrl.signal)
+      const {data:res}=await patchEntity('Booking',bookingID,{idExpoLoc},token.value,ctrl.signal)
       if(res.statusCode!==200) return 
-      state.value[0][idx0].idExpoLoc=idExpoLoc      
+      state.value[0][idx0].idExpoLoc=idExpoLoc  
+      state.value[0][idx0].idLoc = idLoc    
     } catch (error) {
         console.error(error)
     }
     finally {
       doneController(ctrl,inFlight)
     } 
+  }
+  function getLocationBadge(bookingID){
+    const idx0=state.value[0].findIndex((row) => {
+      return row.idBooking===bookingID
+    })
+    return  state.value[0][idx0]
   }
 
   const getBookingOeuvreToggleLabel = (idStatus)=>{
@@ -318,7 +329,7 @@
   const filtered=computed(() => {  
     return _.filter(state.value[0],(item) => {
       let cond=[],result=true
-      cond.push(JSON.stringify(item).toLowerCase().includes(filter.value.search.toLowerCase()))
+      cond.push(item.artist.toLowerCase().includes(filter.value.search.toLowerCase()))
       cond.push(filter.value.status1?item.idStatus_b==9 || item.idStatus_b==10:
         (filter.value.status1===false?item.idStatus_b==8:item.idStatus_b>=8))        
       cond.push(filter.value.status2?item.idStatus_b==27:
@@ -381,9 +392,9 @@
             <div class="col-header">{{ $t('comps.form_details.expos.tables.selection.synthesis.domain') }}</div>
             <div v-for="status in state[5]" class="col-header">
               <div class="title">
-                <q-badge  :color="status.idStatus===15?'warning':(status.idStatus===16?'negative':'positive')" :label="state[7][status.idStatus].showRoom" />
+                <q-badge  :color="status.idStatus===15?'warning':(status.idStatus===16?'negative':'positive')" :label="state[8][status.idStatus].showRoom" />
                 {{ _.capitalize(status[`title_${locale}`] )}}
-                <q-badge :color="status.idStatus===15?'warning':(status.idStatus===16?'negative':'positive')" :label="state[7][status.idStatus].screen" />              
+                <q-badge :color="status.idStatus===15?'warning':(status.idStatus===16?'negative':'positive')" :label="state[8][status.idStatus].screen" />              
               </div>
               <div class="show-screen">
                 <p>{{$t('comps.form_details.booking_oeuvre.showRoom')}}</p>
@@ -492,7 +503,7 @@
           })"
           :placeholder="$t('comps.form_details.expos.tables.selection.location.placeholder')"
           @change-location="(option) => {
-              updateLocation(option?option.idExpoLoc:null,slotProps.row.idBooking)
+              updateLocation(option,slotProps.row.idBooking)
             }"
         >
         </LocationSelect>
@@ -501,6 +512,9 @@
         <q-td :class="[slotProps.rowIndex===0?'first':'']">
           <div class="show-price">
             <q-badge  v-if="slotProps.row.idRole===2" color='positive' class='guest' :label="$t('comps.form_details.expos.tabs.guest')" /> 
+            <LocationBadge 
+              :data="getLocationBadge(slotProps.row.idBooking)"
+            ></LocationBadge>
             <p class="total"><span>{{$t('comps.form_details.expos.tables.selection.show-price.room')}}:&nbsp;</span><span>{{ slotProps.row.showRoom }}</span></p>          
             <p class="total"><span>{{$t('comps.form_details.expos.tables.selection.show-price.screen')}}:&nbsp;</span><span>{{ slotProps.row.screen }}</span></p>        
             <p v-if="slotProps.row.idRole!==2" class="total">
@@ -766,8 +780,7 @@
   div.show-price {
     display:flex;
     flex-direction: column;
-    align-items:flex-start;  
-
+    align-items:flex-start; 
   }
   div.show-price .q-badge {
     align-self: center;
@@ -777,7 +790,6 @@
     min-width:80px;
     white-space: normal;
     text-align: center;
-    margin-bottom: 20px;
   }
   p.total {
     display:flex;

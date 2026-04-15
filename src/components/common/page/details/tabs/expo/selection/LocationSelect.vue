@@ -23,7 +23,7 @@
   })
 
   const displayValue=computed(() => {
-    return model.value.idExpoLoc == null ? '' : String(model.value.idLoc)
+    return model.value?.idExpoLoc == null ? '' : String(model.value.idLoc)
   })
   const emit=defineEmits(['changeLocation'])
   function selectOption (option) {
@@ -83,7 +83,7 @@
   }
 
   onMounted(() => {
-    model.value=props.data
+    if(props.data) model.value=props.data
     document.addEventListener('click', handleClickOutside)
   })
   onBeforeUnmount(() => {
@@ -96,14 +96,14 @@
     <div class="input-wrapper">
       <input
         v-model="search"
-        :placeholder="model.idExpoLoc == null ? placeholder : displayValue"
+        :placeholder="model?.idExpoLoc == null ? placeholder : displayValue"
         class="search-input"
         type="text"
         @focus="openDropdown"
         @input="onInput"
         @keydown="onKeydown"
       >
-      <q-icon v-if="model.idExpoLoc != null || search" name="cancel" 
+      <q-icon v-if="model?.idExpoLoc != null || search" name="cancel" 
         @click="clearSelection" class="cursor-pointer" size="2.3rem" 
       />
     </div>

@@ -2,6 +2,7 @@
   import { useI18n } from 'vue-i18n'
   import _ from 'lodash'
   import { getText,getDim,getPrice,adjustImage,toSentenceCase,getSocialBrand } from './functions'
+  import LocationBadge from '@/components/common/page/details/tabs/expo/selection/LocationBadge.vue'
 
   const props=defineProps({
     locale:{type:String},
@@ -19,6 +20,8 @@
     <div class="bio">
       <h3 class="technique">{{getText(2,data.domain,null,locale)}}</h3>
       <h4 :class="['avatar',!print && data.idRole===2?'guest':'']">
+        <q-badge  v-if="!print && data.idRole===2" color='positive' class='guest' :label="$t('comps.form_details.expos.tabs.guest')" /> 
+        <LocationBadge v-if="print" :data="data"></LocationBadge>
         <img v-if="(!print || print && data.idRole===2) && data.public_image && data.u_url"
           :src="adjustImage(70,70,data.u_url)" :alt="data.artistname">
         <p>{{ data.artist }}&nbsp &nbsp{{ data.public_pseudo && data.pseudo!==data.artist && data.pseudo?"'"+data.pseudo+"'":'' }}</p>
@@ -121,14 +124,16 @@
     gap:10px;
     margin:10px 0;
   }  
-   h4.guest::before { 
-    content: "\f0a3 ";
-    font-family: "Font Awesome 6 Free";
-    font-style: normal; 
-    font-size: 3rem;
-    font-weight: 900;
-    color:red;
-    opacity:0.9;
+  h4.avatar .q-badge {    
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    max-width:70px;
+    white-space: normal;
+    text-align: center;
+    line-height: 15px;
+    display: flex;
+    justify-content: center;
   }
   h4.avatar img {
     width:70px;
