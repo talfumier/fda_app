@@ -37,14 +37,6 @@
             "listMaster": true
           },
           {
-            "name": "pseudo",
-            "label_fr": "Nom d'artiste",
-            "label_en": "Alias",
-            "field_type": "textarea",
-            "required": false,
-            "rows": 1
-          },
-          {
             "name": "email",
             "label_fr": "Courriel",
             "label_en": "Email",
@@ -56,45 +48,20 @@
         ]
       },
       {
-        "name": "location",
-        "type": "address",
-        "legend_fr": "Adresse - Téléphone",
-        "legend_en": "Address - Phone",
+        "name": "public_name",
+        "type": "standard",
+        "roles": [1, 2],
+        "legend_fr": "Nom d'artiste",
+        "legend_en": "Artist name",
+        "info": true,
+        "info_path": "comps.infos.artist_name",
+        "info_color": "negative",
         "fields": [
           {
-            "name": "address",
-            "label_fr": "Adresse",
-            "label_en": "Address",
+            "name": "pseudo",
             "field_type": "textarea",
+            "required": true,
             "rows": 2
-          },
-          {
-            "name": "zipCode",
-            "label_fr": "Code postal",
-            "label_en": "Zip code",
-            "field_type": "textarea",
-            "rows": 1
-          },
-          {
-            "name": "city",
-            "label_fr": "Ville",
-            "label_en": "City",
-            "field_type": "textarea",
-            "rows": 2
-          },
-          {
-            "name": "country",
-            "label_fr": "Pays",
-            "label_en": "Country",
-            "field_type": "textarea",
-            "rows": 1
-          },
-          {
-            "name": "phone",
-            "label_fr": "Téléphone",
-            "label_en": "Phone",
-            "field_type": "textarea",
-            "rows": 1
           }
         ]
       },
@@ -196,7 +163,7 @@
           {
             "name": "public_pseudo",
             "label_fr": "Nom d'artiste",
-            "label_en": "Alias",
+            "label_en": "Artist name",
             "field_type": "checkbox",
             "data_type": "checkbox",
             "format": "integer",

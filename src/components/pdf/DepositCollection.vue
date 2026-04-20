@@ -20,6 +20,7 @@
     group.price=row.price
     group.idStatus_b=row.idStatus_b
     group.bookingOeuvres=[]
+    group.screen=0
     return group
   }
   onMounted(async () => {  
@@ -31,7 +32,8 @@
       state.value[0].forEach(row => {
         const id = row.idBooking
         if (!groupsById[id]) groupsById[id] = getGroup(row)
-        groupsById[id].bookingOeuvres.push({title:row.title_fr,url:getCloudinaryResizedUrl(row.o_url,50,50)})        
+        groupsById[id].bookingOeuvres.push({showRoom:row.showRoom,title:row.title_fr,url:getCloudinaryResizedUrl(row.o_url,50,50)})   
+        if(row.screen===1) groupsById[id].screen+=1     
       })
       state.value[0]=_.orderBy(Object.values(groupsById), ['artist'], ['asc'])
     } catch (error) {
@@ -68,7 +70,11 @@
         <td >
           <table>
             <tr v-for="bo in row.bookingOeuvres">
-              <td class="art-work"><img class="oeuvre" :src="bo.url"></img>{{ bo.title }}</td>
+              <td v-if="bo.showRoom==1" class="art-work"><img class="oeuvre" :src="bo.url"></img>{{ bo.title }}</td>
+            </tr> 
+            <tr v-if="row.screen>0" class="screen">
+              <div class="screen">{{ row.screen }}</div>
+              <q-icon  class="screen" name="desktop_windows" size="4rem" color="primary" ></q-icon>
             </tr>
           </table>
         </td>
@@ -112,6 +118,21 @@
     gap:10px;
     padding:5px;
     border: none;
+    min-width:100%;
+  }
+  tr.screen {
+    position:relative;
+    display: flex;
+    justify-content: left;
+    margin-left:8px;
+  }
+  div.screen {
+    position:absolute;
+    left:15px;
+    top:5px;
+    color:blue;
+    font-weight: bolder;
+    font-size: 15px;
   }
   img {
     object-fit: cover;

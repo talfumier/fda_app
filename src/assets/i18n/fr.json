@@ -94,7 +94,7 @@
     },
     "validation": {
       "fields": {
-        "not_null": "<span>Champs obligatoire !</span>",
+        "not_null": "<span>Champ obligatoire !</span>",
         "pwd": "<span>Mot de passe non valide {'>>>'} 8 caractères minimum,</span><br/><span>1 caractère spécial, 1 majuscule, 1 chiffre !</span>",
         "pwd_match": "<span>Les mots de passe saisis sont différents !</span>",
         "email": "<span>Email non valide !</span>",
@@ -106,6 +106,7 @@
       }
     },
     "infos": {
+      "artist_name": "Merci d'indiquer le nom qui sera utilisé sur le site internet ainsi que dans les différentes publications de l'exposition comme nom public.\nCe champ est obligatoire; s'il n'est pas renseigné, la valeur par défaut NOM Prénom sera utilisée.\nD'autre part, n'oubliez pas d'AUTORISER la publication de votre nom d'artiste dans la section 'Publication des données personnelles' ci-dessous.",
       "resume": "Description de vous-même, de vos activités ... afin de le publier sur notre site.",
       "resume-partner": "Description des activités de l'entreprise ... afin de les publier sur le site.",
       "account": "Choisissez votre langue préférée et cochez la case pour vous inscrire à la newsletter et rester informé de l'activité du festival.",
@@ -153,9 +154,9 @@
       },
       "admin": {
         "orgExcluded": "Paramètre admininistrateur définissant la liste des rôles disponibles au moment de la création de compte.",
-        "domain_tech_media": "Paramètres admininistrateur pour la définition des domaines, techniques et supports.A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('oeuvres'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
-        "prize": "Paramètres admininistrateur pour la définition des prix. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('remise des 'prix'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
-        "faq": "Paramètres admininistrateur pour la définition des rubriques FAQ. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('FAQ'). Le champs 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables."
+        "domain_tech_media": "Paramètres admininistrateur pour la définition des domaines, techniques et supports.A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('oeuvres'). Le champ 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
+        "prize": "Paramètres admininistrateur pour la définition des prix. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('remise des 'prix'). Le champ 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables.",
+        "faq": "Paramètres admininistrateur pour la définition des rubriques FAQ. A utiliser avec précaution, toute modification affectera immédiatement TOUS les enregistrements déjà existants ('FAQ'). Le champ 'order' définit l'ordre de tri dans lequel sont listés les éléments dans les menus déroulants ou tables."
       }
     },
     "file_upload": {
