@@ -73,7 +73,20 @@ export function getCloudinaryResizedUrl(url, width, height, crop = 'fill') {
   }
   return url
 }
+const TTL = 1000 * 60 * 60 * 24 // 24h
+const genderCache = new Map(JSON.parse(localStorage.getItem('genderCache') || '[]'))
 export async function getGender(name) {
-  const res = await fetch(`https://api.genderize.io?name=${name}`)
-  return await res.json()
+  const cached = genderCache.get(name)
+  if (cached && Date.now() - cached.timestamp < TTL) {
+    return cached.data
+  }
+  const res = await fetch(`https://api.genderize.io?name=${encodeURIComponent(name)}`)
+  if (!res.ok) return { gender: null }
+  const data = await res.json()
+  genderCache.set(name, {
+    data,
+    timestamp: Date.now(),
+  })
+  localStorage.setItem('genderCache', JSON.stringify([...genderCache]))
+  return data
 }
