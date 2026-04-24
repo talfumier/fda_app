@@ -17,7 +17,7 @@
     @click="menu = true" />
   <q-menu >
     <q-card>
-      <q-card-section :class="[menu?'visible':'hidden',color==='negative'?color:'']">
+      <q-card-section :class="[menu?'visible':'hidden',color==='negative'?color:'']" >
         {{ $t(path) }}
       </q-card-section>
     </q-card>
@@ -30,6 +30,7 @@
   }
   .q-card__section {
     padding:5px 10px;
+    white-space: pre-line;
   }
   .q-card__section.negative {
     color:red;
