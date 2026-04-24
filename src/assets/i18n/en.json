@@ -106,6 +106,7 @@
       }
     },
     "infos": {
+      "artist_name": "Please provide the name that will be used throughout this website and various publications as your public name.\nThis field is mandatory; if left empty, default value LAST NAME First Name will be used.\nIn addition, don't forget to AUTHORIZE the publication of your artist name in the 'Personal data publication' section below.",
       "resume": "Provide a short description of yourself, your activities ... to be published on our web site.",
       "resume-partner": "Provide a short description of company's activities ... to be published on our web site.",
       "account": "Choose your preferred language and subscribe to the newsletter to keep in touch with the festival latest news.",

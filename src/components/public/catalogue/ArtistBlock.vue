@@ -24,7 +24,8 @@
         <LocationBadge v-if="print" :data="data"></LocationBadge>
         <img v-if="(!print || print && data.idRole===2) && data.public_image && data.u_url"
           :src="adjustImage(70,70,data.u_url)" :alt="data.artistname">
-        <p>{{ data.artist }}&nbsp &nbsp{{ data.public_pseudo && data.pseudo!==data.artist && data.pseudo?"'"+data.pseudo+"'":'' }}</p>
+        <p v-if="data.public_pseudo && data.pseudo">{{ data.pseudo}}</p>
+        <p v-else>{{ data.artist }}</p>
       </h4>
       <div class="contact">
         <p v-if="data.public_email" class="mail">
