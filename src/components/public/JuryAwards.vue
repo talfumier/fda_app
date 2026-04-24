@@ -26,6 +26,8 @@
   const inFlight = new Set()     
   const {formatLocalDate}=useFormatDate()  
 
+  const emit=defineEmits(['scrollTo'])
+
   const state = ref([])
   onMounted(async () => {
     const ctrl = newController(inFlight)
@@ -52,12 +54,22 @@
     cancelAllInFlight(inFlight)
   })
 
+  function linkTo(idUser){
+    if(props.source==='jury-awards-page') return `/${locale.value}/catalogue/${idUser}`
+    return null
+  }
+
 </script>
 
 <template>
   <main v-if="state.length>0" :class="['jury-awards',source==='past-events-page'?'past':'']">
-    <h2 v-if="source==='jury-awards-page'">{{state[0][0][`title_${locale}`]}}</h2>
-    <h2 v-if="source==='past-events-page'">{{$t('comps.public_site.past_events.titles.jury_awards') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
+    <section class="top">
+      <h2 >{{ $t('comps.public_site.jury_awards.awards.title') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
+      <div v-if="source==='jury-awards-page'" class="vernissage">
+        <h3>{{ `${t('comps.public_site.home.vernissage.title')}&nbsp:` }}</h3>
+        <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
+      </div>
+    </section>
     <section class="jury">
       <h3>{{ $t('comps.public_site.jury_awards.jury.title') }}</h3>
       <div v-if="state[2].length>0" class="jury-members">
@@ -71,22 +83,14 @@
       <div v-else class="jury-members">{{ $t('comps.public_site.jury_awards.jury.not') }}</div>
     </section>
     <section class="awards">
-      <h3 v-if="source==='jury-awards-page'">{{ $t('comps.public_site.jury_awards.awards.title') }}</h3>
-      <div v-if="source==='jury-awards-page'" class="vernissage">
-        <h4>{{ `${t('comps.public_site.home.vernissage.title')}&nbsp:` }}</h4>
-        <p>{{formatLocalDate(state[0][0].vernissageDateTime,locale,'dtf')}}</p>
-      </div>
+      <h2 >{{$t('comps.public_site.past_events.titles.jury_awards') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
       <div class="prizes">
         <p v-for="p in state[1]">
           <span class="prize">{{ p[`prize_${locale}`] }}</span>
           <span class="winner">
-            <router-link
-              v-if="p.idUser"
-              :to="{ path:`/${locale}/catalogue/${p.idUser}`}"
-              class="win"
-            >
+            <a v-if="p.idUser" :href="linkTo(p.idUser)" class="win" @click="emit('scrollTo',p.idUser)">
               <img v-if="p.url" :src="p.url" :alt="p.artist">{{ p.artist }}
-            </router-link>
+            </a>
           </span>
           <span v-if="!p.idUser" class="not-awarded">{{ $t(('comps.public_site.jury_awards.awards.not')) }}</span>
         </p>
@@ -106,7 +110,7 @@
 <style scoped>
   main.jury-awards {
     display:grid;
-    grid-template-rows: 50px repeat(3,auto);
+    grid-template-rows: repeat(3,auto);
     grid-template-columns: auto;
     margin:5px 15px;
   }
@@ -117,9 +121,7 @@
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
   }
-  h2 {    
-    grid-row:1;
-    grid-column: 1;
+  h2 {   
     font-size: 2.3rem;
     line-height: 2.4rem;
     margin-bottom: 15px;
@@ -130,6 +132,10 @@
   h3 {
     font-size: rem;
     line-height: 1.7rem;
+  }
+  section.top {
+    grid-row:1;
+    grid-column: 1;
   }
   section.jury {
     grid-row:2;
@@ -145,11 +151,11 @@
     margin:0 auto;
   }
   div.jury-members {
-    display: grid;
-    grid-template-columns: repeat(2,auto);
+    display: flex;
+    flex-wrap: wrap;
     gap:20px;
     font-size: 1.8rem;
-    padding:10px;
+    padding:10px 0;
   }
   div.jury-member {
     display:flex;
@@ -157,6 +163,7 @@
     align-items: center;
     font-size: smaller;
     font-weight: bolder;
+    width:120px;
   }
   div.jury-member img{
     object-fit: cover;
@@ -217,8 +224,7 @@
   }
   div.prizes {
     display:flex;
-    flex-wrap: wrap;
-    justify-content:left;
+    flex-direction: column;
     row-gap:5px;
     column-gap: 20px;
     padding-left: 15px;
@@ -228,11 +234,15 @@
   }
   div.prizes p {
     display:flex;
-    flex-direction: column;
-    justify-content: space-between;
+    justify-content: left;
+    align-items: center;
     margin-bottom: 5px;
     margin-left: -3px;
-    width:250px;
+  }
+   div.prizes p img {
+    object-fit: cover;
+    width:50px;
+    height:50px;
   }
   span.prize {
     font-weight: bolder;
@@ -245,6 +255,8 @@
   a.win {
     display:flex;
     align-items: center;
+    width:100%;
+    cursor: pointer;
   }
   span.winner a.win:hover{ 
     text-decoration: underline; 
@@ -267,7 +279,7 @@
   }
   @media screen and (min-width: 414px) { 
     main.jury-awards {
-      grid-template-rows: 45px repeat(3,auto);
+      grid-template-rows: repeat(3,auto);
     } 
     main.jury-awards.past {      
       grid-template-rows: repeat(3,auto);
@@ -284,11 +296,11 @@
       min-width:500px;
     }
   } 
-  @media screen and (min-width: 840px) { 
-    div.jury-members {
-      grid-template-columns: repeat(4,auto);
-    } 
-  } 
+  @media screen and (min-width: 800px){
+    section.carousel {
+      margin:30px;
+    }
+  }
   @media screen and (min-width: 1000px){
     h2 {
       font-size: 2.5rem;      
@@ -300,13 +312,9 @@
     }
   }
   @media screen and (min-width: 1200px) { 
-    main.jury-awards {
-      max-width:50%;
+    div.jury-member {      
+      width:150px;
     } 
-    section.carousel {
-      grid-row: 1/-1;
-      grid-column: 2;
-    }
   } 
 
 </style>

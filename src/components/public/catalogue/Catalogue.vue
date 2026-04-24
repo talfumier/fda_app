@@ -171,8 +171,9 @@
 
 <template>
   <main v-if="state.length>0" :class="['catalogue',print?'print':'',catalogue && !print?'col2':'',past?'past':'']">
-    <div v-if="past && route.query.idExpo" class="artist-button">
+    <div v-if="past && route.query.idExpo" class="artist-button" >
       <q-btn 
+        :id="`${!expand?'artist-button':null}`"
         class="artist" push
         @click="expand = !expand"
       >
@@ -186,7 +187,7 @@
         </q-icon>
       </q-btn>
     </div>    
-    <div v-if="!print" class="hamburger-menu">
+    <div v-if="!print && !past" class="hamburger-menu">
       <q-btn flat round icon="menu" size="2rem">
         <q-menu v-model="menuOpen">
           <q-list class="toc-small" dense >
@@ -315,7 +316,7 @@
     justify-content: center;
     height:100%;
     position:sticky;
-    top:-20px;   
+    top:-20px;  
     z-index: 10000;
   }
   div.artist-button .q-btn.artist {
@@ -400,8 +401,8 @@
   }
   @media screen and (min-width: 768px) {  
     main.catalogue.col2 {
-      grid-template-columns: 250px auto;
-      margin-left:10px;
+      grid-template-columns: 250px calc(100vw - 250px);
+      margin-left:0px;
     } 
     div.hamburger-menu {
       display:none;

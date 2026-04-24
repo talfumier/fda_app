@@ -99,6 +99,7 @@
     overflow-y: auto;
     font-family: "Roboto", sans-serif;
     font-size: 1.5rem;
+    z-index:12000;
   }
   nav.toc.past {
     top:0;

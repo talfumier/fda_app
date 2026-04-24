@@ -1,7 +1,8 @@
 <script setup>
   import { ref,computed,onMounted, onUnmounted  } from 'vue'
   import { useRoute } from 'vue-router' 
-  import { fetch,getExpoDoc,openRulesDoc } from './functions'
+  import { fetch,getExpoDoc } from './functions'
+  import { scrollToSection } from './catalogue/functions'
   import {
     newController,
     doneController,
@@ -36,6 +37,14 @@
   onUnmounted(() => {    
     cancelAllInFlight(inFlight)   // clean-up code after component has unmounted
   })
+  function scrollTo(id){
+    try {
+      document.getElementById(`artist-button`).click()      
+    } catch (error) {}
+    setTimeout(() => {
+      scrollToSection(`artist${id}`) 
+    },100)
+  }
 
 </script>
 
@@ -48,7 +57,11 @@
         <p>{{ state[0][0][`desc_after_${locale}`] }}</p>
       </div>
     </section>
-    <JuryAwards v-if="expoID!==-1" :expoID="expoID" source="past-events-page"></JuryAwards>
+    <JuryAwards v-if="expoID!==-1" :expoID="expoID" source="past-events-page" 
+      @scroll-to="(idUser) => {
+        scrollTo(idUser)
+      }"
+    ></JuryAwards>
     <Catalogue :past="true"></Catalogue>
     <section v-if="state[1]?.length>0" class="carousel">
       <h2>{{$t('comps.public_site.past_events.titles.photos') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
@@ -74,9 +87,9 @@
   section.expo,section.carousel {    
     display:flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-    gap:10px;
+    /* gap:10px; */
     font-family: 'Roboto', Arial;
     font-size:1.5rem;  
     padding:20px 20px 20px;
