@@ -117,7 +117,7 @@
   main.jury-awards.past {
     grid-template-rows: repeat(3,auto);
   }
-  h2,h3,h4 {    
+  h2,h3 {    
     font-family: 'Berlin Sans FB', Arial;
     margin:0;
   }
@@ -193,12 +193,6 @@
   h3 {
     font-size: 2.2rem;
     line-height: 1.9rem;
-    margin-bottom: 10px;
-  }
-  h4 {
-    font-size: 2rem;
-    line-height: 2rem;
-    padding: 5px 0;
   }
   section.awards {
     grid-row:3;
@@ -213,7 +207,7 @@
     gap:5px;
     border-left: 5px solid var(--green);
     padding-left: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   div.vernissage p,div.prizes p {
     white-space: pre-line;
