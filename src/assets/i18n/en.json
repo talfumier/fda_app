@@ -74,6 +74,7 @@
       "bookings": "My bookings",
       "partners": "Partner forms",
       "docs": "Documents",
+      "reviews": "Reviews",
       "data_export": "Export",
       "admin_settings": "Administration",
       "privacy": "Privacy policy",
@@ -83,6 +84,7 @@
       "home": "Home",
       "artists": "Exhibiting artists",
       "jury_awards": "Jury & awards",
+      "golden_book": "Golden Book",
       "past_events": "Former exhibitions",
       "rules": "Exhibition rules",
       "faq": "FAQ",
@@ -240,6 +242,20 @@
             "drafting": "Please confirm FAQ setting in draft mode.",
             "publication": "Please confirm FAQ setting in publication mode.",
             "deletion": "Please confirm FAQ permanent deletion."
+          }
+        },
+        "comment": {
+          "created": "Created",
+          "candidate": "Candidate",
+          "rejected": "Rejected",
+          "published": "Published",
+          "publication": "Review publication.",
+          "rejection": "Review rejection.",
+          "delete": "Delete review.",
+          "confirm": {
+            "rejection": "Please confirm review rejection.",
+            "publication": "Please confirm review publication.",
+            "deletion": "Please confirm review permanent deletion."
           }
         }
       }
@@ -456,6 +472,14 @@
         "partner": {
           "label": "Thanks to our partners"
         }
+      },
+      "golden_book": {
+        "new_btn": "Raise a review",
+        "no_comment": "No reviews yet, be the first to leave one !",
+        "email": "Email *",
+        "comment_lbl": "Feedback/comment",
+        "post": "Send",
+        "cancel": "Cancel"
       },
       "past_events": {
         "titles": {

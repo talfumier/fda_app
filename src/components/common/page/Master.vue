@@ -17,7 +17,7 @@
   import { translate } from '@/services/httpGoogleServices.js'
   import { newController,doneController,cancelAllInFlight,getRandomInt, getFileExtension,bodyCleanUp } from '@/utilityFunctions.js'
   import { orgExcluded, setGlobals, statusText } from '@/globals/globals.js'
-import { clone } from 'lodash'
+import { concat } from 'lodash'
 
   const props=defineProps({
     entity:{type:Object},
@@ -311,7 +311,7 @@ import { clone } from 'lodash'
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
-          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          cond.push(`${item.lastName}${item.firstName}${item.email}`.toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
           cond.push(listItemsFilter.value.user_status?item.idStatus===2 || item.idStatus===3:
             (listItemsFilter.value.user_status===false?item.idStatus===1:item.idStatus>=1))        
           cond.push(listItemsFilter.value.user_role?item.idRole>=3:
@@ -367,7 +367,7 @@ import { clone } from 'lodash'
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
-          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          cond.push(`${item.short_en}${item.short_fr}`.toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
           cond.push(listItemsFilter.value.expo_status?item.idStatus===11 || item.idStatus===12:
             (listItemsFilter.value.expo_status===false?item.idStatus===13:item.idStatus>=11)) 
           cond.map((cnd) => {
@@ -450,7 +450,7 @@ import { clone } from 'lodash'
       filteredList=computed(() => {  
         return _.filter(state.value[0],(item) => {
           let cond=[],result=true
-          cond.push(JSON.stringify(item).toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          cond.push(`${item.lastName}${item.firstName}${item.title_fr}${item.title_en}`.toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
           // cond.push(listItemsFilter.value.expo_status?item.idStatus===10 || item.idStatus===11:
           //   (listItemsFilter.value.expo_status===false?item.idStatus===12:item.idStatus>=10)) 
           cond.map((cnd) => {
@@ -560,6 +560,60 @@ import { clone } from 'lodash'
             // state update
             if(res.data.statusCode!==200) return
             state.value[1].unshift({idFaq:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})  //array.unshift >>> adds record at idx=0
+            state.value[0][idx].idStatus=status
+            break
+          case "deletion":
+            handleDelete(idx)          
+        }
+      }  
+      break
+    case 'ExpoComment':
+      listItemsFilter=ref({search:'',expocomment_status:''})       
+      filteredList=computed(() => {  
+        return _.filter(state.value[0],(item) => {
+          let cond=[],result=true
+          cond.push(`${item.lastName}${item.firstName}${item.email}`.toLowerCase().includes(listItemsFilter.value.search.toLowerCase()))
+          cond.push(listItemsFilter.value.expocomment_status?item.idStatus===29:
+            (listItemsFilter.value.expocomment_status===false?item.idStatus===28:item.idStatus>=28)) 
+          cond.map((cnd) => {
+            result=result && cnd
+          })
+          return result
+        })
+      })  
+      toggleOn = ref({status:false})
+      getToggleLabel = (toggle)=>{
+        switch(listItemsFilter.value[`expocomment_${toggle}`]){
+          case true:
+            toggleOn.value[toggle]=true
+            return t(`comps.list_items.actions_menu.comment.published`) 
+          case false:
+            toggleOn.value[toggle]=false
+            return t(`comps.list_items.actions_menu.comment.candidate`)
+          default:
+            return t(`comps.list_items.actions_menu.user.${toggle}.indeterminate`)
+        }
+      } 
+      handleAction = async(cs)=>{   
+        const ctrl=newController(inFlight)
+        let res=null,status=29
+        const idx=getIndex()
+        switch(cs){      
+          case "rejection":
+            status=30
+          case "publication":
+            //database update
+            try {
+              res=await postEntity('StatusTracking', {idStatus:status,idExpoComment:selectedId.value}, token.value, ctrl.signal)              
+            } catch (error) {
+                console.error(error)
+            }
+            finally {
+              doneController(ctrl,inFlight)
+            }  
+            // state update
+            if(res.data.statusCode!==200) return
+            state.value[1].unshift({idExpoComment:selectedId.value,idStatus:status,createdAt:new Date(Date.now())})  //array.unshift >>> adds record at idx=0
             state.value[0][idx].idStatus=status
             break
           case "deletion":
@@ -1010,7 +1064,7 @@ import { clone } from 'lodash'
         </q-input> 
         <span v-if="!isRotated">{{ `${filteredList.length}/${state[0].length}` }}</span>
         <div class="toggle"
-          v-if="entity.model==='User' || entity.model==='Expo' || entity.model==='Faq'"
+          v-if="entity.model==='User' || entity.model==='Expo' || entity.model==='Faq' || entity.model==='ExpoComment'"
         > 
           <q-toggle
             v-model="listItemsFilter[`${entity.model.toLowerCase()}_status`]"
@@ -1067,6 +1121,7 @@ import { clone } from 'lodash'
         @expo-action="handleAction"
         @oeuvre-action="handleAction"
         @faq-action="handleAction"
+        @comment-action="handleAction"
       >
       </ListItems>
     </aside>

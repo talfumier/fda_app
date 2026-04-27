@@ -489,6 +489,12 @@
   div.input-container.pseudo textarea {
     width: 320px;
   }
+   div.input-container.rating input {
+    width: 80px;
+  }
+  div.input-container.text textarea {
+    width: 300px;
+  }
   div.input-container.lang select {
     width:170px;
   }

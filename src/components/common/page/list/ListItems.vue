@@ -11,6 +11,8 @@
   import BookingInfos from './actions/booking/BookingInfos.vue'
   import FaqInfos from './actions/faq/FaqInfos.vue'
   import FaqActions from './actions/faq/FaqActions.vue'
+  import ReviewInfos from './actions/review/ReviewInfos.vue'
+  import ReviewActions from './actions/review/ReviewActions.vue'
 
   const props=defineProps({
     entity:{type:Object},
@@ -21,7 +23,7 @@
     infos:{type:Array},
   })
   
-  const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction','faqAction'])
+  const emit=defineEmits(['openDetails','userAction','expoAction','oeuvreAction','faqAction','commentAction'])
   const selected=ref({})
   props.data.map((item) => {  //selected.value initialization
     selected.value[item[`id${props.entity.model}`]]=false
@@ -143,6 +145,13 @@
               })"
             >
             </FaqInfos>
+            <ReviewInfos
+              v-if="entity.model==='ExpoComment'"
+              :data="_.filter(infos,(info) => {
+                return info.idExpoComment==item.idExpoComment
+              })"
+            >
+            </ReviewInfos>
           </template>
           <template #actions> <!--named scoped slot -->
             <UserActions
@@ -166,6 +175,13 @@
                 emit('faqAction',cs)
               }"
             ></FaqActions>
+            <ReviewActions
+              v-if="entity.model==='ExpoComment'"
+              :data="item"
+              @comment-action="(cs) => {
+                emit('commentAction',cs)
+              }"
+            ></ReviewActions>
           </template>
         </ActionMenu>
       </div>
