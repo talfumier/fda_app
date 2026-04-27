@@ -35,15 +35,18 @@
         case 8:
         case 11:
         case 25:
+        case 28:
           return [1,'warning']
         case 2:
         case 10:
         case 12:
         case 26:
+        case 29:
           return [2,'positive']
         case 3:
         case 9:
         case 13:
+        case 30:
           return [3,'negative']
         default:
           return []

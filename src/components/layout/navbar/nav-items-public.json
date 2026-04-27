@@ -20,6 +20,14 @@
     "wrap": false
   },
   {
+    "url": "/en|fr/golden_book",
+    "icon": "fa-solid fa-book-open",
+    "size": "2.3rem",
+    "padding_top": "4",
+    "text": "golden_book",
+    "wrap": false
+  },
+  {
     "url": "/en|fr/past_events",
     "icon": "history",
     "text": "past_events",

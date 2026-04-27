@@ -1,37 +1,33 @@
 <script setup>
-
   const props = defineProps({
     data:{type:Array}
   })
   
-  const text={250:'created',251:'draft',26:"published"}
-  const status={...text,25:'draft'}
-  function getTextIndex(statusID,idx){
-    switch(statusID){
-      case 25:
-        if(idx===props.data.length-1) return 250
-        else return 251
-      default:
-        return statusID
-    }
-  }
+  const text={28:'candidate',29:'published',30:'rejected'}
+  const status={...text,28:'candidate'}
+  
 </script>
 
-<template>  
+<template>
   <div v-if="data.length>=1">
-    <p :class="['type',data[0].idStatus===25?'warning':'green']" >
-      <span>{{ $t(`comps.list_items.actions_menu.faq.${status[data[0].idStatus]}`)}}</span> 
+    <p :class="['comment',data[0].idStatus===28?'warning':(data[0].idStatus===29?'green':'red')]" >
+      <span>{{ $t(`comps.list_items.actions_menu.comment.${status[data[0].idStatus]}`)}}</span> 
     </p>
     <p v-for="(item,idx) in data" :key="idx" class="date">
-      <span >{{ $t(`comps.list_items.actions_menu.faq.${text[getTextIndex(item.idStatus,idx)]}`)}}</span>
+      <span >{{ $t(`comps.list_items.actions_menu.comment.${text[item.idStatus]}`)}}</span>
       <span>:&nbsp</span>    
       <span >{{$formatDateTime(item.createdAt)}}</span>
     </p>
   </div>
-
 </template>
 
 <style scoped>
+  div {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width:fit-content;
+  }
   .green {
     color:var(--green)
   }
@@ -45,7 +41,7 @@
     font-size:1.3rem;
     text-wrap: nowrap;
   }
-  p.type {
+  p.comment {
     font-weight:bolder;
     text-align: center;
     text-transform: capitalize;
