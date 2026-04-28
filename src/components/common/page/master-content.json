@@ -1890,19 +1890,15 @@
       },
       {
         "name": "comment",
-        "type": "standard",
+        "type": "standard_rating",
         "legend_fr": "Avis",
         "legend_en": "Review",
         "fields": [
           {
-            "name": "rating",
-            "label_fr": "Note",
-            "label_en": "Rating"
+            "name": "rating"
           },
           {
             "name": "text",
-            "label_fr": "Texte",
-            "label_en": "Text",
             "field_type": "textarea",
             "rows": 3
           }

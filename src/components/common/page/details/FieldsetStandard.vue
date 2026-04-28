@@ -14,7 +14,8 @@
   const filteredFields=computed(() => {
     return _.filter(props.fields,(fld) => {
       if(fld.optional) return fld.name.slice(-2)===locale.value
-      else return true      
+      if(fld.name==='rating') return false
+      return true      
     })
   })
   
@@ -30,7 +31,14 @@
   }
 </script>
 
-<template>
+<template>  
+  <q-rating v-if="fields[0].name==='rating'"
+    v-model="data.rating"
+    max="5"
+    size="25px"
+    color="positive"
+    :disable="true"
+  />
   <InputField 
     v-for="(item) in filteredFields" 
     :key="item.name"
@@ -59,5 +67,8 @@
 </template>
 
 <style scoped>
+  .q-rating {
+    margin-top: 10px;
+  }
 
 </style>
