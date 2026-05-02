@@ -237,6 +237,8 @@
     object-fit: cover;
     width:50px;
     height:50px;
+    padding:0;
+    margin-right:5px;
   }
   span.prize {
     font-weight: bolder;

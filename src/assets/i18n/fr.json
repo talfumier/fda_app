@@ -74,6 +74,7 @@
       "bookings": "Mes inscriptions",
       "partners": "Fiches partenaires",
       "docs": "Documents",
+      "reviews": "Avis",
       "data_export": "Export",
       "admin_settings": "Administration",
       "privacy": "Confidentialité",
@@ -82,6 +83,7 @@
       "contact": "Contact",
       "home": "Accueil",
       "artists": "Exposants",
+      "golden_book": "Livre d'Or",
       "jury_awards": "Jury & prix",
       "past_events": "Editions précédentes",
       "rules": "Règlement",
@@ -240,6 +242,20 @@
             "drafting": "Merci de confirmer le passage en mode 'brouillon'.",
             "publication": "Merci de confirmer le passage en mode 'publié'.",
             "deletion": "Merci de confirmer la suppression définitive de la FAQ."
+          }
+        },
+        "comment": {
+          "created": "Créé",
+          "candidate": "Candidat",
+          "published": "Publié",
+          "rejected": "Rejeté.",
+          "publication": "Publication de l'avis.",
+          "rejection": "Rejet de l'avis.",
+          "delete": "Suppression de l'avis.",
+          "confirm": {
+            "rejection": "Merci de confirmer le rejet de l'avis.",
+            "publication": "Merci de confirmer la publication de l'avis.",
+            "deletion": "Merci de confirmer la suppression définitive de l'avis."
           }
         }
       }
@@ -461,6 +477,18 @@
         "titles": {
           "jury_awards": "Lauréats",
           "photos": "Galerie photos"
+        }
+      },
+      "golden_book": {
+        "new_btn": "Ecrire un avis",
+        "no_comment": "Pas encore d'avis, soyez le premier à en déposer un !",
+        "email": "Courriel *",
+        "comment_lbl": "Avis/commentaire",
+        "post": "Envoyer",
+        "cancel": "Annuler",
+        "public_name": {
+          "accept": "J'autorise la publication de mes Nom/Prénom",
+          "reject": "Je refuse la publication de mes Nom/Prénom"
         }
       },
       "catalogue": {

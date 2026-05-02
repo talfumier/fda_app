@@ -96,7 +96,7 @@
             {{ item[`legend_${locale}`] }}<DialogInfo v-if="item.info" :path="item.info_path" :color="item.info_color"></DialogInfo>
         </legend>
         <FieldsetStandard
-          v-if="item.type==='standard'"
+          v-if="item.type==='standard' || item.type==='standard_rating'"
           :key="getUniqueKey()"
           :fields="item.fields"
           :data="record"
@@ -364,6 +364,9 @@
   }
   fieldset.unknown {
     display:none;
+  }
+  fieldset.standard_rating {
+    flex-direction: column;
   }
   legend {
     font-size:1.7rem;

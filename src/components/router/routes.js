@@ -121,6 +121,12 @@ const router = createRouter({
       meta: { roles: [-1] },
     },
     {
+      path: withLocale('/golden_book'),
+      name: 'public golden_book',
+      component: () => import('../public/comments/GoldenBook.vue'), //lazy loading
+      meta: { roles: [-1] },
+    },
+    {
       path: withLocale('/past_events'),
       name: 'public past_events',
       component: () => import('../public/PastEvents.vue'), //lazy loading

@@ -90,3 +90,8 @@ export async function getGender(name) {
   localStorage.setItem('genderCache', JSON.stringify([...genderCache]))
   return data
 }
+export function htmlToText(html) {
+  const div = document.createElement('div')
+  div.innerHTML = html
+  return div.innerText
+}

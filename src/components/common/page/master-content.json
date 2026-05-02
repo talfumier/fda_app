@@ -1829,5 +1829,104 @@
         ]
       }
     ]
+  },
+  {
+    "entity": {
+      "idx": 10,
+      "url": "/member/reviews",
+      "name": "member reviews",
+      "roles": [5, 6, 7],
+      "model": "ExpoComment",
+      "sql": "list_items_reviews",
+      "orderBy": { "field": "lastName", "order": "asc" },
+      "newRecord": false,
+      "noList": false,
+      "listType": ["simple"]
+    },
+    "fieldsets": [
+      {
+        "name": "expo",
+        "type": "standard",
+        "legend_fr": "Exposition",
+        "legend_en": "Exhibition",
+        "fields": [
+          {
+            "name": "short_fr",
+            "disabled": true
+          }
+        ]
+      },
+      {
+        "name": "personalia",
+        "type": "standard",
+        "legend_fr": "Emetteur",
+        "legend_en": "Reviewer",
+        "fields": [
+          {
+            "name": "lastName",
+            "label_fr": "Nom de famille",
+            "label_en": "Last name",
+            "field_type": "textarea",
+            "disabled": true,
+            "rows": 1,
+            "listMaster": true
+          },
+          {
+            "name": "firstName",
+            "label_fr": "Prénom",
+            "label_en": "First name",
+            "field_type": "textarea",
+            "disabled": true,
+            "rows": 1,
+            "listMaster": true
+          },
+          {
+            "name": "email",
+            "label_fr": "Courriel",
+            "label_en": "Email",
+            "field_type": "textarea",
+            "disabled": true,
+            "rows": 2,
+            "format": "email",
+            "listMaster": true
+          },
+          {
+            "name": "public_name",
+            "field_type": "option-group",
+            "options": [
+              {
+                "label_fr": "Publication Nom/Prénom autorisée",
+                "label_en": "Last/First name publication authorized",
+                "value": 1
+              },
+              {
+                "label_fr": "Publication Nom/Prénom refusée",
+                "label_en": "Last/First name publication not authorized",
+                "value": 0
+              }
+            ],
+            "disabled": true,
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "comment",
+        "type": "standard_rating",
+        "legend_fr": "Avis",
+        "legend_en": "Review",
+        "fields": [
+          {
+            "name": "rating"
+          },
+          {
+            "name": "text",
+            "field_type": "textarea",
+            "disabled": true,
+            "rows": 3
+          }
+        ]
+      }
+    ]
   }
 ]
