@@ -485,7 +485,11 @@
         "email": "Courriel *",
         "comment_lbl": "Avis/commentaire",
         "post": "Envoyer",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "public_name": {
+          "accept": "J'autorise la publication de mes Nom/Prénom",
+          "reject": "Je refuse la publication de mes Nom/Prénom"
+        }
       },
       "catalogue": {
         "toc": "Sommaire",
