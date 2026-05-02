@@ -100,6 +100,7 @@ declare module 'vue' {
     QMenu: typeof import('quasar')['QMenu']
     QOptionGroup: typeof import('quasar')['QOptionGroup']
     QPopupProxy: typeof import('quasar')['QPopupProxy']
+    QRadio: typeof import('quasar')['QRadio']
     QRating: typeof import('quasar')['QRating']
     QSelect: typeof import('quasar')['QSelect']
     QSeparator: typeof import('quasar')['QSeparator']

@@ -479,7 +479,11 @@
         "email": "Email *",
         "comment_lbl": "Feedback/comment",
         "post": "Send",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "public_name": {
+          "accept": "I do accept publication of my last/first name",
+          "reject": "I do not accept publication of my last/first name"
+        }
       },
       "past_events": {
         "titles": {

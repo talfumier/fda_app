@@ -340,6 +340,7 @@
       v-model="data"
       :options="group_options"
       type='radio'
+      :disabled="disabled"
       @update:model-value="handleChange"
     />
   </div>

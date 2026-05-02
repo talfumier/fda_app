@@ -1851,7 +1851,8 @@
         "legend_en": "Exhibition",
         "fields": [
           {
-            "name": "short_fr"
+            "name": "short_fr",
+            "disabled": true
           }
         ]
       },
@@ -1866,6 +1867,7 @@
             "label_fr": "Nom de famille",
             "label_en": "Last name",
             "field_type": "textarea",
+            "disabled": true,
             "rows": 1,
             "listMaster": true
           },
@@ -1874,6 +1876,7 @@
             "label_fr": "Prénom",
             "label_en": "First name",
             "field_type": "textarea",
+            "disabled": true,
             "rows": 1,
             "listMaster": true
           },
@@ -1882,9 +1885,28 @@
             "label_fr": "Courriel",
             "label_en": "Email",
             "field_type": "textarea",
+            "disabled": true,
             "rows": 2,
             "format": "email",
             "listMaster": true
+          },
+          {
+            "name": "public_name",
+            "field_type": "option-group",
+            "options": [
+              {
+                "label_fr": "Publication Nom/Prénom autorisée",
+                "label_en": "Last/First name publication authorized",
+                "value": 1
+              },
+              {
+                "label_fr": "Publication Nom/Prénom refusée",
+                "label_en": "Last/First name publication not authorized",
+                "value": 0
+              }
+            ],
+            "disabled": true,
+            "required": false
           }
         ]
       },
@@ -1900,6 +1922,7 @@
           {
             "name": "text",
             "field_type": "textarea",
+            "disabled": true,
             "rows": 3
           }
         ]

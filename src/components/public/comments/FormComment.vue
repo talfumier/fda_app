@@ -22,9 +22,9 @@
 
   const emit=defineEmits(['closeForm'])
 
-  const empty={lastName:'',firstName:'',email:'',rating:0,text:''}
+  const empty={lastName:'',firstName:'',email:'',public_name:1,rating:0,text:''}
   const comment=ref({...empty})
-  const valid=ref({lastName:false,firstName:false,email:false,text:false})
+  const valid=ref({lastName:false,firstName:false,email:false,public_name:true,text:false})
 
   
   function sanitizeEmail(email) {
@@ -37,6 +37,7 @@
       lastName: DOMPurify.sanitize(raw.lastName, { ALLOWED_TAGS: [] }),
       firstName: DOMPurify.sanitize(raw.firstName, { ALLOWED_TAGS: [] }),
       email: sanitizeEmail(raw.email),
+      public_name:raw.public_name,
       rating: raw.rating,
       text: DOMPurify.sanitize(raw.text, {
         ALLOWED_TAGS: ['b', 'i', 'p', 'br'],
@@ -119,6 +120,14 @@
             <q-icon name="close" @click="comment.email = ''" class="cursor-pointer" />
           </template>
         </q-input>
+        <q-radio v-model="comment.public_name" :val="1" 
+          :label="`${$t('comps.public_site.golden_book.public_name.accept')}`" 
+          dense 
+        />
+        <q-radio v-model="comment.public_name" :val="0" 
+          :label="`${$t('comps.public_site.golden_book.public_name.reject')}`" 
+          dense 
+        />
       </div>
       <q-rating
         v-model="comment.rating"
@@ -177,6 +186,9 @@
   }
   .q-input,:deep(.q-field__native) {
     font-size: 1.7rem;
+  }
+  .q-rating {
+    margin:0 auto;
   }
   .text :deep(.q-field__native) {
     height: 90px;

@@ -105,6 +105,7 @@
             {{ `${_.capitalize(item.firstName.slice(0,1))}${_.capitalize(item.lastName.slice(0,1))}` }}
           </q-avatar>
           <div class="details">
+            <p v-if="item.public_name" class="name">{{ `${_.capitalize(item.firstName)} ${item.lastName.toUpperCase()}`  }}</p>
             <p class="date">{{$formatDateTime(item.createdAt)}}</p>
             <q-rating
               v-model="item.rating"
@@ -200,7 +201,7 @@
   }
   p.name {
     color:blue;
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
   p.date {
     font-size: 1.3rem;
