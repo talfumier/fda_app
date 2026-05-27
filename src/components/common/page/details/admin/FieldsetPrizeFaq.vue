@@ -37,7 +37,7 @@
 
   let newRowId=0
  
-  const pagination = { rowsPerPage: 0 }
+  let pagination = { rowsPerPage: 0 }
 
   const emit=defineEmits(['change','deleteRow'])
 
