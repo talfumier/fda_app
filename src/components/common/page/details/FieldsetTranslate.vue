@@ -23,14 +23,20 @@
   function handleTranslate(dir){
     let params=null
     const name=props.fields[0].name.split('_fr')[0]
+    let focus=null
     switch(dir){
       case "west":
+        focus=locale.value==='en'?props.fields[1].name:props.fields[0].name
         params=locale.value==='en'?{from:'fr',to:'en',rootName:name}:{from:'en',to:'fr',rootName:name}
         break
-      case 'east':        
+      case 'east':   
+        focus=locale.value==='en'?props.fields[0].name:props.fields[1].name     
         params=locale.value==='en'?{from:'en',to:'fr',rootName:name}:{from:'fr',to:'en',rootName:name}
     }
     emit('translate',params)
+    setTimeout(() => {    //set focus on field that has just been updated with the translated text.
+      document.querySelector(`[name=${focus}]`).focus();
+    },50)    
   }
 
 </script>

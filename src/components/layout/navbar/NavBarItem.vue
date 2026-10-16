@@ -63,7 +63,7 @@
         :key="expo.idExpo"
         clickable
         v-close-popup
-        :to="{ path: item.url, query: { idExpo: expo.idExpo } }"
+        :to="{ path: item.url.replace('en|fr',locale), query: { idExpo: expo.idExpo } }"
       >
         <q-item-section>
           {{ expo[`short_${locale}`] }}
