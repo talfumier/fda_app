@@ -113,6 +113,7 @@
     grid-template-rows: repeat(3,auto);
     grid-template-columns: auto;
     margin:5px 15px;
+    flex:1;
   }
   main.jury-awards.past {
     grid-template-rows: repeat(3,auto);

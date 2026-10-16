@@ -16,7 +16,8 @@
   const props=defineProps({
     idUser:{type:String,default:null},   //idUser parameter coming from jury_awards page as a route parameter (ref. to routes.js) >>> vertical scroll to an awarded artist
     print:{type:Boolean,default:false},   //print parameter coming from routes.js /member/catalogue_print route
-    past:{type:Boolean,default:false},    //parameter indicating Catalogue component is called the past events page
+    past:{type:Boolean,default:false},    //parameter indicating Catalogue component is called from the past events page
+    last_archived:{type:Number,default:-1}, //when Catalogue component called from the past events page, provide most recently archived idExpo
   })
 
   const route=useRoute() 
@@ -117,7 +118,7 @@
       if(props.print) // route query coming from API back-end during catalogue export in PDF (selection criteria for export,idExpo, idStatus)
         paramsValues=`${route.query && route.query.paramsValues?route.query.paramsValues:'-1;[8,10,27]'}`
       else if(props.past)  //url query parameter ?idExpo=xxx
-        paramsValues=`${route.query.idExpo};[10,27]`
+        paramsValues=`${route.query.idExpo??props.last_archived};[10,27]`
       else //last on-going expo >>> catalogue main page on public site
         paramsValues='-1;[10,27]'
       state.value = await fetch('public_expo_catalogue', ctrl.signal,':idExpo,:idStatus',paramsValues)  
@@ -171,7 +172,7 @@
 
 <template>
   <main v-if="state.length>0" :class="['catalogue',print?'print':'',catalogue && !print?'col2':'',past?'past':'']">
-    <div v-if="past && route.query.idExpo" class="artist-button" >
+    <div v-if="past" class="artist-button" >
       <q-btn 
         :id="`${!expand?'artist-button':null}`"
         class="artist" push
@@ -214,9 +215,9 @@
       }"
     >
     </Toc>
-    <section :class="['wrapper',print?'print':'',past?'past':'']" id="top-catalogue">
+    <section :class="['wrapper',print?'print':'',past?'past':'',catalogue?'no-banner':'banner']" id="top-catalogue">
       <section v-if="!past && state[2]" class="cover-page ">
-        <img 
+        <img v-if="catalogue"
           :src="getCoverPage(state[2],!print?(locale==='en'?4:5):6)" 
           :alt="locale==='en'?'catalogue cover page':'page de garde du catalogue'">
         <div v-if="!catalogue && !print" class="banner">
@@ -233,11 +234,11 @@
           :src="getCoverPage(state[2],9)" 
           :alt="locale==='en'?'exhibition map':'plan de l\'exposition'" >
       </section> 
-      <br v-if="!past">    
+      <br v-if="catalogue && !past">    
       <section v-if="print" class="guests break-before">
         <h2 >Invités d'honneur</h2>
       </section>  
-      <br v-if="!past">       
+      <br v-if="catalogue && !past">       
       <ArtistBlock v-if="print" v-for="artist in _.filter(state[1],(item) => {
         return item.idRole===2    //guests only
       }).sort((a, b) => (a.domain.fr[0]).localeCompare(b.domain.fr[0]))"
@@ -247,11 +248,11 @@
         style="grid-column: 1/-1;"
       >
       </ArtistBlock>
-      <br v-if="!past">
+      <br v-if="catalogue && !past">
       <section v-if="print" class="artists break-before">          
         <h2 >Artistes</h2>
       </section>
-      <br v-if="!past">
+      <br v-if="catalogue && !past">
       <ArtistBlock v-if="(!past && catalogue && !print) || (past && expand)" v-for="artist in state[1]"       
         :locale="locale"
         :data="artist"
@@ -283,6 +284,7 @@
     grid-template-columns: 100%;
     max-width:90%;
     margin:0 auto;
+    flex: 1;
   } 
   main.catalogue.print {
     max-width:100%;
@@ -331,6 +333,16 @@
     align-items: center;
     padding:20px;
   }
+  section.wrapper.banner {    
+     grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    height: 300px;
+    box-sizing: border-box;
+  }
   section.wrapper.past {
     padding-top:0;;
   }
@@ -353,6 +365,7 @@
     align-items: center;
   }
   section.cover-page div.banner {   
+    grid-column: 1;
     background: red;
     color: white;
     padding: 10px 20px;
@@ -401,7 +414,7 @@
   }
   @media screen and (min-width: 768px) {  
     main.catalogue.col2 {
-      grid-template-columns: 250px calc(100vw - 250px);
+      grid-template-columns: 250px calc(100vw - 265px);
       margin-left:0px;
     } 
     div.hamburger-menu {
@@ -412,7 +425,7 @@
       grid-column: 1;
       width:250px;
     }
-    section.wrapper {
+    section.wrapper.no-banner {
       grid-column: 2;
     }
     div.artist-button {

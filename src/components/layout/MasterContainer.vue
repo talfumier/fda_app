@@ -23,10 +23,24 @@
   const isTestHost = computed(() => window.location.hostname === 'test.festivaldesarts.merville31.fr')
   const shouldNoindex = computed(() => isMemberPage.value || isPrint.value || isTestHost.value)
   const canonicalUrl = computed(() => `${siteUrl}${normalizedPath.value}`)
+  const alternateLang = computed(() =>
+    normalizedPath.value.startsWith('/fr') ? 'en' : 'fr'
+  )
+  const alternateUrl = computed(() =>
+    `${siteUrl}${normalizedPath.value.replace(/^\/(fr|en)/, `/${alternateLang.value}`)}`
+  )
+  const currentLang = computed(() =>
+    normalizedPath.value.startsWith('/fr') ? 'fr' : 'en'
+  )
 
   useHead(() => ({
     meta: shouldNoindex.value?[{ name: 'robots', content: 'noindex,nofollow'}]:[],
-    link: !shouldNoindex.value?[{ rel: 'canonical', href: canonicalUrl.value}]:[],
+    link: !shouldNoindex.value?[
+      { rel: 'canonical', href: canonicalUrl.value },
+      { rel: 'alternate', hreflang: currentLang.value, href: canonicalUrl.value },
+      { rel: 'alternate', hreflang: alternateLang.value, href: alternateUrl.value },
+      { rel: 'alternate', hreflang: 'x-default', href: `${siteUrl}/fr${normalizedPath.value.replace(/^\/(fr|en)/, '')}` },
+    ]:[],
   }))
 </script>
 
