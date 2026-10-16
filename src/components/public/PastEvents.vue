@@ -19,14 +19,15 @@
 
   const route=useRoute() 
   const locale = computed(() => route.params.locale || 'fr')
-  const expoID = computed(() => Number(route.query.idExpo ?? -1))
+  const expoID = ref(Number(route.query.idExpo??-1))
 
   const state = ref([])
   onMounted(async () => {
-    if(expoID.value===-1) return
     const ctrl = newController(inFlight)
     try {
-      state.value = await fetch('public_past_events_details', ctrl.signal,':idExpo',expoID.value)
+      state.value = await fetch('public_past_events_details', ctrl.signal,':idExpo',expoID.value) //if expoID=-1, last archived expo is retrieved in the stored procedure
+      if(expoID.value===-1) expoID.value=state.value[3][0].expoID  //last archived
+
     } catch (error) {
       console.error('onmounted failed in PastEvents.vue', error)
       return
@@ -62,7 +63,7 @@
         scrollTo(idUser)
       }"
     ></JuryAwards>
-    <Catalogue :past="true"></Catalogue>
+    <Catalogue v-if="state[3]?.length>0" :past="true" :last_archived="expoID"></Catalogue>
     <section v-if="state[1]?.length>0" class="carousel">
       <h2>{{$t('comps.public_site.past_events.titles.photos') }}&nbsp;&nbsp;{{state[0][0].vernissageDateTime.slice(0,4)}}</h2>
       <Carousel

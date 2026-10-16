@@ -152,7 +152,9 @@
     background-color: var(--grey-light);
     height:100%;
     overflow-y:auto;
-    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
   div.layout.public main.master {
     grid-row: 3;

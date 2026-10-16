@@ -56,6 +56,7 @@
     align-items: center;
     background-color: var(--white);
     width:100%;
+    flex-shrink: 0;
   }
   h2 {
     font-family: 'Montserrat', sans-serif;
