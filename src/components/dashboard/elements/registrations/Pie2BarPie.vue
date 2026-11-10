@@ -40,8 +40,8 @@
   })
 
   const PAYMENT_COLORS = {
-    due: "#f28e2b",
-    received: "#22C55E",
+    due: STATUS_COLORS[8],
+    received: STATUS_COLORS[27],
   }
   const pies2=computed(() => {
     return paymentData(PAYMENT_COLORS,props.data[2], props.t, props.locale,props.guest)
@@ -97,8 +97,8 @@
             <Bar :data="expo.screenChart" :options="barOptions" />
           </div>
         </div>  
-        <div class="v-sep"></div>      
-        <div v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0" class="chart-block pie2">
+        <div class="v-sep"></div>     
+        <div v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0 && pies2[idx].id=== expo.id" class="chart-block pie2"> 
           <div class="pie-header">
             <h3>{{ idRole>=5?$t('comps.dashboard.payments.title'):$t('comps.dashboard.payments.title').replaceAll('s','') }}</h3>
             <q-badge v-if="pies2[idx].badge"
@@ -116,8 +116,8 @@
         <div class="expo-legend1">
           <div class="legend-items">
             <div v-for="it in legendItems1" :key="it.id" class="legend-item">
-              <span v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0?true:it.id!==27" class="swatch" :style="{ backgroundColor: it.color }"></span>
-              <span v-if="pies2[idx] && pies2[idx].chartData.datasets[0].data.length>0?true:it.id!==27" class="label">{{ it.label }}</span>
+              <span class="swatch" :style="{ backgroundColor: it.color }"></span>
+              <span class="label">{{ it.label }}</span>
             </div>
           </div>
         </div>
