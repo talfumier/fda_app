@@ -14,7 +14,10 @@ export function registrationData(STATUS_COLORS, rows, locale) {
   const pies = groupedByExpo.map(({ idExpo, items }) => {
     const byStatus = new Map(items.map((r) => [Number(r.idStatus), r]))
     const ordered = STATUS_ORDER.filter((id) => byStatus.has(id)).map((id) => byStatus.get(id))
-    const expoTotal = ordered.reduce((sum, r) => sum + Number(r.nb_reg || 0), 0)
+    const expoTotal = ordered.reduce(
+      (sum, r) => sum + Number(r.idStatus !== 9 ? r.nb_reg : 0 || 0),
+      0,
+    )
     return {
       id: `expo_${idExpo}`,
       title: expoTitle(items[0]),
@@ -94,8 +97,14 @@ export function oeuvresShowRoomScreenData(rows, locale, t, barThickness) {
     return { labels, datasets }
   }
   const expos = groupedByExpo.map(({ idExpo, items }) => {
-    const totalShow = items.reduce((s, r) => s + Number(r.nb_showRoom || 0), 0)
-    const totalScreen = items.reduce((s, r) => s + Number(r.nb_screen || 0), 0)
+    const totalShow = items.reduce(
+      (s, r) => s + Number(r.idStatus !== 16 ? r.nb_showRoom : 0 || 0),
+      0,
+    )
+    const totalScreen = items.reduce(
+      (s, r) => s + Number(r.idStatus !== 16 ? r.nb_screen : 0 || 0),
+      0,
+    )
     // Legend ALWAYS all statuses (even if unused)
     const legendItems = STATUSES.map((s) => ({
       id: s.id,
